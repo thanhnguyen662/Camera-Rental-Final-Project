@@ -1,0 +1,46 @@
+{
+  "name": "jwt-project",
+  "version": "1.0.0",
+  "description": "JWT Authentication with React-Redux; PERN",
+  "main": "src/index.js",
+  "prisma": {
+    "schema": "src/app/models/schema.prisma"
+  },
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thanhnguyen662/JWT.git"
+  },
+  "keywords": [
+    "JWT"
+  ],
+  "author": "ThanhNguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thanhnguyen662/JWT/issues"
+  },
+  "homepage": "https://github.com/thanhnguyen662/JWT#readme",
+  "dependencies": {
+    "@prisma/client": "^2.24.1",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^5.0.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "prisma": "^2.24.1",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "node-sass": "^6.0.0",
+    "nodemon": "^2.0.7"
+  }
+}
