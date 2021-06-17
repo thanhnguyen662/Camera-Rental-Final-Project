@@ -3,179 +3,227 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const initPassportLocal = require('../auth/PassportLocal');
 const {
-  getToken,
-  COOKIE_OPTIONS,
-  getRefreshToken,
-  verifyRefreshToken,
+   getToken,
+   COOKIE_OPTIONS,
+   getRefreshToken,
+   verifyRefreshToken,
 } = require('../../utils/authenticate');
 
 initPassportLocal();
 
 class AccountController {
-  register = async (req, res, next) => {
-    try {
-      const response = await prisma.user.create({
-        data: {
-          email: req.body.email,
-          password: await bcrypt.hash(req.body.password, 10),
-          name: req.body.name,
-        },
-      });
-
-      res.json(response);
-    } catch (error) {
-      return next(error);
-    }
-  };
-
-  login = async (req, res, next) => {
-    passport.authenticate('local', async (err, user) => {
+   getUser = async (req, res, next) => {
+      const userId = req.query.userId;
+      const email = req.query.email;
       try {
-        //check userInDb
-        if (err) return next(err);
+         if (userId) {
+            const getByUserId = await prisma.user.findUnique({
+               where: {
+                  id: Number(userId),
+               },
+            });
 
-        if (!user) res.status(401).send('Incorrect username or password');
+            const jsonGetByUserId = {
+               id: getByUserId.id,
+               email: getByUserId.email,
+               name: getByUserId.name,
+            };
 
-        //if everything is ok, create token and refreshToken for user
-        req.login(user, { session: false }, async (error) => {
-          if (error) return next(error);
+            return res.status(200).json(jsonGetByUserId);
+         } else {
+            const getUserByEmail = await prisma.user.findFirst({
+               where: {
+                  email: email,
+               },
+            });
 
-          //take user information in Db
-          const body = {
-            id: user.id,
-            email: user.email,
-            username: user.username,
-          };
+            const jsonGetByEmailId = {
+               id: getUserByEmail.id,
+               email: getUserByEmail.email,
+               name: getUserByEmail.name,
+            };
 
-          //import user information to token with secret code, then create token
-          const token = getToken({ user: body });
-
-          //import user information to refreshToken with secret code, then create refresh token
-          const refreshToken = getRefreshToken({ user: body });
-
-          console.log('----------------------------------');
-          console.log('TOKEN: ', token);
-          console.log('----------------------------------');
-          console.log('REFRESH-TOKEN: ', refreshToken);
-          console.log('----------------------------------');
-
-          //import refreshToken to User table
-          await prisma.user.update({
-            data: { refreshToken: refreshToken },
-            where: { id: user.id },
-          });
-
-          //them import it to cookie with signed
-          res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-
-          return res.status(200).send({ token, user: body });
-        });
+            return res.status(200).json(jsonGetByEmailId);
+         }
       } catch (error) {
-        return next(error);
+         return next(error);
       }
-    })(req, res, next);
-  };
+   };
 
-  refreshToken = async (req, res, next) => {
-    //access a signed cookie, take refreshToken from cookie
-    const refreshTokenInCookie = req.signedCookies['refreshToken'];
-    if (!refreshTokenInCookie)
-      return res.status(401).send('Unauthorized - Cookie is not available');
-
-    try {
-      //decryption refreshToken
-      const payload = verifyRefreshToken(refreshTokenInCookie);
-
-      //take userId from token
-      const userId = payload.user.id;
-
-      //check userId in db by token payload
-      const userInDb = await prisma.user.findUnique({
-        where: { id: Number(userId) },
-      });
-
-      if (!userInDb)
-        return res
-          .status(401)
-          .send('Unauthorized - User is not available in Db');
-
-      //if user is exists, check refreshToken in Db again
-      const findTokenInDb = await prisma.user.findFirst({
-        where: { refreshToken: refreshTokenInCookie },
-      });
-
-      if (!findTokenInDb)
-        return res
-          .status(401)
-          .send(
-            'Unauthorized - Unauthorized - Refresh Token is not available in Db'
-          );
-
-      const body = {
-        id: findTokenInDb.id,
-        username: findTokenInDb.username,
-        email: findTokenInDb.email,
-      };
-
-      //if everything is ok (user is exists in Db and refreshToken is exists in Db)
-      //create new Token, and refreshToken
+   register = async (req, res, next) => {
       try {
-        const token = getToken({ user: body });
-        const newRefreshToken = getRefreshToken({ user: body });
+         const checkUserInDb = await prisma.user.findUnique({
+            where: {
+               email: req.body.email,
+            },
+         });
 
-        console.log('----------------------------------');
-        console.log('NEW-TOKEN: ', token);
-        console.log('----------------------------------');
-        console.log('NEW-REFRESH-TOKEN: ', newRefreshToken);
-        console.log('----------------------------------');
+         if (checkUserInDb) return res.send({ message: 'Exist' });
 
-        await prisma.user.update({
-          data: { refreshToken: newRefreshToken },
-          where: { id: userId },
-        });
+         const response = await prisma.user.create({
+            data: {
+               email: req.body.email,
+               password: await bcrypt.hash(req.body.password, 10),
+               name: req.body.name,
+            },
+         });
 
-        res.cookie('refreshToken', newRefreshToken, COOKIE_OPTIONS);
-
-        return res.send({ success: true, token });
+         res.status(200).send({ user: response, message: 'OK' });
       } catch (error) {
-        return next(error);
+         return next(error);
       }
-    } catch (error) {
-      return next(error);
-    }
-  };
+   };
 
-  logout = async (req, res, next) => {
-    try {
+   login = async (req, res, next) => {
+      passport.authenticate('local', async (err, user) => {
+         try {
+            //check userInDb
+            if (err) return next(err);
+
+            if (!user) res.status(401).send('Incorrect username or password');
+
+            //if everything is ok, create token and refreshToken for user
+            req.login(user, { session: false }, async (error) => {
+               if (error) return next(error);
+
+               //take user information in Db
+               const body = {
+                  id: user.id,
+                  email: user.email,
+                  username: user.username,
+               };
+
+               //import user information to token with secret code, then create token
+               const token = getToken({ user: body });
+
+               //import user information to refreshToken with secret code, then create refresh token
+               const refreshToken = getRefreshToken({ user: body });
+
+               console.log('----------------------------------');
+               console.log('TOKEN: ', token);
+               console.log('----------------------------------');
+               console.log('REFRESH-TOKEN: ', refreshToken);
+               console.log('----------------------------------');
+
+               //import refreshToken to User table
+               await prisma.user.update({
+                  data: { refreshToken: refreshToken },
+                  where: { id: user.id },
+               });
+
+               //them import it to cookie with signed
+               res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
+
+               return res.status(200).send({ token, user: body });
+            });
+         } catch (error) {
+            return next(error);
+         }
+      })(req, res, next);
+   };
+
+   refreshToken = async (req, res, next) => {
+      //access a signed cookie, take refreshToken from cookie
       const refreshTokenInCookie = req.signedCookies['refreshToken'];
-
-      const checkRefreshTokenInUser = await prisma.user.findFirst({
-        where: { refreshToken: refreshTokenInCookie },
-      });
-
-      //take id form refreshToken in Cookie
-      const userId = checkRefreshTokenInUser.id;
-
-      if (!checkRefreshTokenInUser)
-        return res
-          .status(401)
-          .send('Unauthorized - Refresh Token not available in User table');
-
       if (!refreshTokenInCookie)
-        return res
-          .status(401)
-          .send('Unauthorized - Refresh Token not available in Cookie');
+         return res.status(401).send('Unauthorized - Cookie is not available');
 
-      await prisma.user.update({
-        where: { id: userId },
-        data: { refreshToken: '' },
-      });
+      try {
+         //decryption refreshToken
+         const payload = verifyRefreshToken(refreshTokenInCookie);
 
-      res.clearCookie('refreshToken').send('clearCookie is OK');
-    } catch (error) {
-      next(error);
-    }
-  };
+         //take userId from token
+         const userId = payload.user.id;
+
+         //check userId in db by token payload
+         const userInDb = await prisma.user.findUnique({
+            where: { id: Number(userId) },
+         });
+
+         if (!userInDb)
+            return res
+               .status(401)
+               .send('Unauthorized - User is not available in Db');
+
+         //if user is exists, check refreshToken in Db again
+         const findTokenInDb = await prisma.user.findFirst({
+            where: { refreshToken: refreshTokenInCookie },
+         });
+
+         if (!findTokenInDb)
+            return res
+               .status(401)
+               .send(
+                  'Unauthorized - Unauthorized - Refresh Token is not available in Db'
+               );
+
+         const body = {
+            id: findTokenInDb.id,
+            username: findTokenInDb.username,
+            email: findTokenInDb.email,
+         };
+
+         //if everything is ok (user is exists in Db and refreshToken is exists in Db)
+         //create new Token, and refreshToken
+         try {
+            const token = getToken({ user: body });
+            const newRefreshToken = getRefreshToken({ user: body });
+
+            console.log('----------------------------------');
+            console.log('NEW-TOKEN: ', token);
+            console.log('----------------------------------');
+            console.log('NEW-REFRESH-TOKEN: ', newRefreshToken);
+            console.log('----------------------------------');
+
+            await prisma.user.update({
+               data: { refreshToken: newRefreshToken },
+               where: { id: userId },
+            });
+
+            res.cookie('refreshToken', newRefreshToken, COOKIE_OPTIONS);
+
+            return res.send({ success: true, token });
+         } catch (error) {
+            return next(error);
+         }
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   logout = async (req, res, next) => {
+      try {
+         const refreshTokenInCookie = req.signedCookies['refreshToken'];
+
+         const checkRefreshTokenInUser = await prisma.user.findFirst({
+            where: { refreshToken: refreshTokenInCookie },
+         });
+
+         //take id form refreshToken in Cookie
+         const userId = checkRefreshTokenInUser.id;
+
+         if (!checkRefreshTokenInUser)
+            return res
+               .status(401)
+               .send(
+                  'Unauthorized - Refresh Token not available in User table'
+               );
+
+         if (!refreshTokenInCookie)
+            return res
+               .status(401)
+               .send('Unauthorized - Refresh Token not available in Cookie');
+
+         await prisma.user.update({
+            where: { id: userId },
+            data: { refreshToken: '' },
+         });
+         req.logout();
+         res.clearCookie('refreshToken').send('clearCookie is OK');
+      } catch (error) {
+         next(error);
+      }
+   };
 }
 
 module.exports = new AccountController();

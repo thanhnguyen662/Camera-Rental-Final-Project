@@ -1,23 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import { FastField, Form, Formik } from 'formik';
-import { Button } from 'reactstrap';
-import InputField from '../../../../custom-fields/Input-Field';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
+import InputField from '../../../../custom-fields/Input-Field';
 import './LoginForm.scss';
 
 LoginForm.propTypes = {
    onLoginFormSubmit: PropTypes.func,
-   onClick: PropTypes.func,
 };
 
 LoginForm.defaultProps = {
    onLoginFormSubmit: null,
-   onClick: null,
 };
 
 function LoginForm(props) {
-   const { onLoginFormSubmit, onClick } = props;
+   const { onLoginFormSubmit } = props;
 
    const initialValues = {
       email: '',
@@ -43,39 +43,46 @@ function LoginForm(props) {
       }
    };
 
-   const onButtonClick = () => {
-      onClick();
-   };
-
    return (
       <div>
          <h1>Login Page</h1>
-         <Button onClick={onButtonClick}>Logout</Button>
          <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleOnSubmit}
          >
-            {() => {
+            {(formikProps) => {
+               // const { values, errors, touched, submitCount } = formikProps;
+               // console.log({ values, errors, touched, submitCount });
+
                return (
-                  <Form>
+                  <Form name='normal_login' className='login-form'>
                      <FastField
                         name='email'
                         component={InputField}
                         type='email'
-                        label='Email'
+                        placeholder='Email'
+                        prefix={
+                           <UserOutlined className='site-form-item-icon' />
+                        }
                      />
-
                      <FastField
                         name='password'
                         component={InputField}
                         type='password'
-                        label='Password'
+                        placeholder='Password'
+                        prefix={
+                           <LockOutlined className='site-form-item-icon' />
+                        }
                      />
-
-                     <Button className='mt-2' type='submit'>
+                     <Button
+                        type='primary'
+                        htmlType='submit'
+                        className='login-form-button'
+                     >
                         Login
                      </Button>
+                     Or <Link to='/register'>register now!</Link>
                   </Form>
                );
             }}

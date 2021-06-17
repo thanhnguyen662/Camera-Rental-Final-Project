@@ -10,10 +10,47 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authorId    Int
+  author      User     @relation(fields: [authorId], references: [id])
+
+  @@map("Products")
+}
+
 model User {
-  id           Int     @id @default(autoincrement())
-  email        String? @unique
+  id           Int       @id @default(autoincrement())
+  email        String?   @unique
   name         String?
   password     String?
   refreshToken String?
+  products     Product[]
+
+  @@map("Users")
+}
+
+model Conversation {
+  id        Int       @id @default(autoincrement())
+  members   String[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+
+  @@map("Conversations")
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  text           String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  conversationId Int
+  sender         String
+  conversations  Conversation @relation(fields: [conversationId], references: [id])
+
+  @@map("Messages")
 }

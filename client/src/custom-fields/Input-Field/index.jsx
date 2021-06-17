@@ -1,55 +1,54 @@
-import React from 'react';
+import { Form, Input } from 'antd';
 import PropTypes from 'prop-types';
-import { FormFeedback, FormGroup, Input, Label } from 'reactstrap';
-import { ErrorMessage } from 'formik';
+import React from 'react';
 
 InputField.propTypes = {
-    field: PropTypes.object.isRequired,
-    form: PropTypes.object.isRequired,
+   field: PropTypes.object.isRequired,
+   form: PropTypes.object.isRequired,
 
-    type: PropTypes.string,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    disabled: PropTypes.bool
+   type: PropTypes.string,
+   label: PropTypes.string,
+   placeholder: PropTypes.string,
+   disabled: PropTypes.bool,
 };
 
 InputField.defaultProps = {
-    type: 'text',
-    label: '',
-    placeholder: '',
-    disabled: false
-}
+   type: 'text',
+   label: '',
+   placeholder: '',
+   disabled: false,
+   prefix: '',
+};
 
 function InputField(props) {
-    const {
-        field, form,
-        type, label, placeholder, disabled
-    } = props;
+   const { field, form, placeholder, prefix } = props;
 
-    const { name, value, onChange, onBlur } = field
-    const {errors, touched } = form
-    const showErrors = errors[name] && touched[name]
+   const { name } = field;
+   const { errors, touched, submitCount, hasFeedback } = form;
 
-    return (
-        <FormGroup>
-            {label && <Label for={name}>{label}</Label>}
+   const hasTouched = touched[name];
+   const submitted = submitCount > 0;
+   const hasError = errors[name];
+   const submittedError = hasError && submitted;
+   const touchedError = hasError && hasTouched;
 
-            <Input
-                id={name}
-                name={name}
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-
-                type={type}
-                disabled={disabled}
-                placeholder={placeholder}
-
-                invalid={showErrors}
-            />
-            <ErrorMessage name={name} component={FormFeedback} />
-        </FormGroup>
-    );
+   return (
+      <div>
+         <Form.Item
+            hasFeedback={
+               (hasFeedback && submitted) || (hasFeedback && hasTouched)
+                  ? true
+                  : false
+            }
+            help={submittedError || touchedError ? hasError : false}
+            validateStatus={
+               submittedError || touchedError ? 'error' : 'success'
+            }
+         >
+            <Input {...field} placeholder={placeholder} prefix={prefix} />
+         </Form.Item>
+      </div>
+   );
 }
 
 export default InputField;

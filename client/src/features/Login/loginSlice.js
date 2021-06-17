@@ -13,7 +13,8 @@ const login = createSlice({
    name: 'user',
    initialState: {
       loginStatus: localStorage.getItem('token') ? true : false,
-      user: {},
+      email: '',
+      id: '',
    },
    reducers: {
       addUserInfo: (state, action) => {
@@ -23,7 +24,8 @@ const login = createSlice({
    },
    extraReducers: {
       [getMe.fulfilled]: (state, action) => {
-         state.user = action.payload;
+         state.email = action.payload.user.email;
+         state.id = action.payload.user.id;
       },
    },
 });

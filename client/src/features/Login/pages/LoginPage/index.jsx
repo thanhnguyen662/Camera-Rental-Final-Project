@@ -29,24 +29,9 @@ function LoginPage(props) {
       }
    }
 
-   async function onLogoutButtonClick() {
-      try {
-         const response = await userApi.logout();
-         console.log('Logout successful ', response);
-         localStorage.removeItem('token');
-
-         window.location = '/';
-      } catch (error) {
-         console.log('Fail: ', error.message);
-      }
-   }
-
    return (
       <>
-         <LoginForm
-            onLoginFormSubmit={onLoginFormSubmit}
-            onClick={onLogoutButtonClick}
-         />
+         <LoginForm onLoginFormSubmit={onLoginFormSubmit} />
       </>
    );
 }

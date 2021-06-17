@@ -1,12 +1,10 @@
-import './App.css';
-import Navbar from './components/Navbar';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from './features/Login';
-import Register from './features/Register';
-import { useDispatch } from 'react-redux';
-import { getMe } from './features/Login/loginSlice';
-import { useEffect } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+import './App.css';
+import { getMe } from './features/Login/loginSlice';
+import Routers from './router';
 
 function App() {
    const dispatch = useDispatch();
@@ -26,13 +24,7 @@ function App() {
 
    return (
       <Router>
-         <Navbar />
-         <div className='App'>
-            <Switch>
-               <Route path='/login' component={Login} />
-               <Route path='/register' component={Register} />
-            </Switch>
-         </div>
+         <Routers />
       </Router>
    );
 }

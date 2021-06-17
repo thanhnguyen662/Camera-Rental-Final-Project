@@ -36,6 +36,13 @@ const userApi = {
          withCredentials: true,
       });
    },
+
+   getUserByIdOrUserName: (params) => {
+      const url = '/account';
+      return axiosClient.get(url, params, {
+         withCredentials: true,
+      });
+   },
 };
 
 export default userApi;

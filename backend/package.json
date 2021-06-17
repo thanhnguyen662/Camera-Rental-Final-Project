@@ -36,7 +36,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "prisma": "^2.24.1",
+    "prisma": "^2.25.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
