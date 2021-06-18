@@ -6,7 +6,7 @@ class MessageController {
          const newMessage = await prisma.message.create({
             data: {
                text: req.body.text,
-               sender: req.body.sender,
+               sender: String(req.body.sender),
                conversationId: Number(req.body.conversationId),
             },
          });

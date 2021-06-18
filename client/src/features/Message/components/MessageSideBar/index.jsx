@@ -17,15 +17,23 @@ SideBar.defaultProps = {
 };
 
 function SideBar(props) {
-   const { conversations } = props;
+   const { conversations, onClickUser } = props;
 
    return (
       <>
          <Sidebar position='left' scrollable={false}>
             <Search placeholder='Search...' />
             <ConversationList>
-               {conversations.map((c) => (
-                  <MessageConversationList key={c.id} conversation={c} />
+               {conversations.map((conversation) => (
+                  <div
+                     onClick={() => onClickUser(conversation)}
+                     key={conversation.id}
+                  >
+                     <MessageConversationList
+                        key={conversation.id}
+                        conversation={conversation}
+                     />
+                  </div>
                ))}
             </ConversationList>
          </Sidebar>

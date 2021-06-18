@@ -3,7 +3,6 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import userApi from '../../../../api/userApi';
 
 function Message(props) {
    const { conversation } = props;
@@ -17,14 +16,14 @@ function Message(props) {
 
       const getUser = async () => {
          try {
-            const res = await axios.get(
-               'http://localhost:4000/account?userId=' + friendId,
+            const response = await axios.get(
+               `http://localhost:4000/account?userId=${friendId}`,
                { withCredentials: true }
             );
-            console.log(res.data);
-            setUser(res.data);
-         } catch (err) {
-            console.log(err);
+            console.log(response.data);
+            setUser(response.data);
+         } catch (error) {
+            console.log(error);
          }
       };
 
