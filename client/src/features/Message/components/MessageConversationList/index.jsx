@@ -16,6 +16,7 @@ function Message(props) {
 
       const getUser = async () => {
          try {
+            if (!friendId) return;
             const response = await axios.get(
                `http://localhost:4000/account?userId=${friendId}`,
                { withCredentials: true }
