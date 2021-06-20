@@ -9,6 +9,8 @@ function Product(props) {
    return (
       <Switch>
          <Route exact path={match.url} component={ProductPage} />
+
+         {/* <Route exact path={`${match.url}/:photoId`} component={ProductPage} /> */}
       </Switch>
    );
 }

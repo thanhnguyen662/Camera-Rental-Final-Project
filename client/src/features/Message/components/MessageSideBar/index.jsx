@@ -1,7 +1,7 @@
 import {
    ConversationList,
-   Search,
    Sidebar,
+   Search,
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import PropTypes from 'prop-types';

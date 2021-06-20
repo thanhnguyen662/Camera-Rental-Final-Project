@@ -16,7 +16,7 @@ function Routers(props) {
          <Switch>
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
-            <Route path='/message' component={Message} />
+            {/* <Route path='/message' component={Message} /> */}
 
             <Route>
                <MainLayout>
@@ -32,6 +32,10 @@ function Routers(props) {
                         <ProfileLayout>
                            <Profile />
                         </ProfileLayout>
+                     </Route>
+
+                     <Route exact path='/message'>
+                        <Message />
                      </Route>
                   </Switch>
                </MainLayout>

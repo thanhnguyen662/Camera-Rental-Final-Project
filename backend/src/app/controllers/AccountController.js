@@ -80,7 +80,7 @@ class AccountController {
             //check userInDb
             if (err) return next(err);
 
-            if (!user) res.status(401).send('Incorrect username or password');
+            if (!user) return res.status(401).send({ message: 'Incorrect' });
 
             //if everything is ok, create token and refreshToken for user
             req.login(user, { session: false }, async (error) => {
@@ -106,10 +106,14 @@ class AccountController {
                console.log('----------------------------------');
 
                //import refreshToken to User table
-               await prisma.user.update({
-                  data: { refreshToken: refreshToken },
-                  where: { id: user.id },
-               });
+               try {
+                  await prisma.user.update({
+                     data: { refreshToken: refreshToken },
+                     where: { id: user.id },
+                  });
+               } catch (error) {
+                  console.log('Fail: ', error);
+               }
 
                //them import it to cookie with signed
                res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);

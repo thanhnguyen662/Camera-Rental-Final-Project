@@ -8,6 +8,8 @@ import {
    EllipsisButton,
    Avatar,
    VideoCallButton,
+   ExpansionPanel,
+   Sidebar,
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import axios from 'axios';
@@ -15,7 +17,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import MessageChat from '../../components/MessageChat';
-import SideBar from '../../components/MessageSideBar';
+import SideBarLeft from '../../components/MessageSideBar';
 var uniqid = require('uniqid');
 
 function MessagePage(props) {
@@ -34,14 +36,12 @@ function MessagePage(props) {
          setArrivalMessage({
             sender: data.senderId,
             text: data.text,
-            createAd: Date.now(),
+            createAt: Date.now(),
          });
          console.log('getMessage data: ', data);
       });
    }, []);
 
-   console.log('arrivalMessage: ', arrivalMessage);
-   console.log('members: ', currentChat?.members);
    useEffect(() => {
       if (!currentChat?.members) console.log('Wait a minutes');
       if (!arrivalMessage) console.log('Wait a minutes');
@@ -141,8 +141,7 @@ function MessagePage(props) {
                `http://localhost:4000/account?userId=${receiverIdInGroup}`
             );
 
-            console.log('getUsernameById', response.data.name);
-            setGetUsernameById(response.data.name);
+            setGetUsernameById(response.data);
          } catch (error) {
             console.log(error);
          }
@@ -152,23 +151,24 @@ function MessagePage(props) {
 
    return (
       <>
-         <div style={{ height: '600px', position: 'relative' }}>
+         <div style={{ height: '800px', position: 'relative' }}>
             <MainContainer>
-               <SideBar
+               <SideBarLeft
                   conversations={conversation}
                   onClickUser={onClickUser}
                />
                <ChatContainer>
                   {currentChat && (
                      <ConversationHeader>
-                        <ConversationHeader.Back />
+                        <ConversationHeader.Back
+                           onClick={() => setCurrentChat(null)}
+                        />
                         <Avatar
                            src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'
                            name=''
                         />
                         <ConversationHeader.Content
-                           userName={getUsernameById}
-                           info='Active 10 mins ago'
+                           userName={getUsernameById?.name}
                         />
                         <ConversationHeader.Actions>
                            <VoiceCallButton />
@@ -177,7 +177,7 @@ function MessagePage(props) {
                         </ConversationHeader.Actions>
                      </ConversationHeader>
                   )}
-                  {currentChat && (
+                  {currentChat ? (
                      <MessageList>
                         {messages.map((m) => (
                            <div key={uniqid()}>
@@ -187,6 +187,21 @@ function MessagePage(props) {
                               />
                            </div>
                         ))}
+                     </MessageList>
+                  ) : (
+                     <MessageList>
+                        <MessageList.Content
+                           style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'center',
+                              height: '100%',
+                              textAlign: 'center',
+                              fontSize: '1.2em',
+                           }}
+                        >
+                           Choose conversation to start chat
+                        </MessageList.Content>
                      </MessageList>
                   )}
                   ,
@@ -199,6 +214,28 @@ function MessagePage(props) {
                      />
                   )}
                </ChatContainer>
+               {currentChat && (
+                  <Sidebar position='right'>
+                     <ExpansionPanel
+                        open
+                        title='INFO'
+                        style={{ textAlign: 'center', alignItems: 'center' }}
+                     >
+                        <p>
+                           <Avatar
+                              src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'
+                              name=''
+                              style={{ marginLeft: '30px' }}
+                           />
+                        </p>
+                        <p>{getUsernameById?.name}</p>
+                        <p>{getUsernameById?.email}</p>
+                     </ExpansionPanel>
+                     <ExpansionPanel title='TEXT'>
+                        <p>Dummy Text</p>
+                     </ExpansionPanel>
+                  </Sidebar>
+               )}
             </MainContainer>
          </div>
       </>

@@ -28,19 +28,16 @@ function Message(props) {
          }
       };
 
+      // const friendsIsOnline =
+
       getUser();
    }, [userId, conversation]);
 
    return (
-      <Conversation
-         name={user?.name}
-         lastSenderName={user?.name}
-         info='Yes i can do it for you'
-      >
+      <Conversation name={user?.name}>
          <Avatar
             src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'
             name='Lilly'
-            status='available'
          />
       </Conversation>
    );

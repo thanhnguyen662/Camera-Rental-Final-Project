@@ -9,6 +9,7 @@ let users = [];
 const addUser = (userId, socketId) => {
    !users.some((user) => parseInt(user.id) === parseInt(userId)) &&
       users.push({ userId, socketId });
+
    console.log('USER IN ARRAY: ', users);
 };
 
