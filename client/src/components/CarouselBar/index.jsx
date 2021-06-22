@@ -2,9 +2,9 @@ import { Carousel } from 'antd';
 import React from 'react';
 
 const contentStyle = {
-   height: '250px',
+   height: '400px',
    color: '#fff',
-   lineHeight: '250px',
+   lineHeight: '400px',
    textAlign: 'center',
    background: '#364d79',
 };
@@ -12,7 +12,7 @@ const contentStyle = {
 function CarouseBar(props) {
    return (
       <>
-         <Carousel autoplay style={{ height: '250px' }}>
+         <Carousel autoplay style={{ margin: '25px 160px' }}>
             <div>
                <h3 style={contentStyle}>1</h3>
             </div>
@@ -21,6 +21,9 @@ function CarouseBar(props) {
             </div>
             <div>
                <h3 style={contentStyle}>3</h3>
+            </div>
+            <div>
+               <h3 style={contentStyle}>4</h3>
             </div>
             <div>
                <h3 style={contentStyle}>4</h3>

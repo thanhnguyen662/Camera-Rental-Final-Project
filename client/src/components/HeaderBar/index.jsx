@@ -1,11 +1,10 @@
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Col, Layout, Menu, Row, Avatar } from 'antd';
-import { useSelector } from 'react-redux';
+import { Avatar, Button, Col, Layout, Menu, Row } from 'antd';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import './HeaderBar.scss';
 import userApi from '../../api/userApi';
-import Search from '../../features/Search';
+import './HeaderBar.scss';
 
 const { Header } = Layout;
 const { SubMenu } = Menu;
@@ -29,6 +28,9 @@ function HeaderBar(props) {
    return (
       <Header className='site-layout-background' style={{ padding: 0 }}>
          <Row>
+            <Col span={2} offset={3}>
+               LOGO
+            </Col>
             <Col span={6}>
                <Menu mode='horizontal'>
                   <Menu.Item key='1'>
@@ -40,10 +42,8 @@ function HeaderBar(props) {
                   <Menu.Item key='3'>nav 3</Menu.Item>
                </Menu>
             </Col>
-            <Col span={14}>
-               <Search />
-            </Col>
-            <Col span={4}>
+
+            <Col span={4} offset={8}>
                {loginStatus === false ? (
                   <>
                      <Button type='link' size='large'>

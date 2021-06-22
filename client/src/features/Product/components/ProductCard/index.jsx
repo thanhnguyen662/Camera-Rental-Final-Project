@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Card, Avatar, Row, Col } from 'antd';
 import {
    EditOutlined,
    EllipsisOutlined,
    HeartOutlined,
 } from '@ant-design/icons';
+import Text from 'antd/lib/typography/Text';
 
 const { Meta } = Card;
 
@@ -19,6 +21,7 @@ ProductCard.defaultProps = {
 
 function ProductCard(props) {
    const { products } = props;
+
    return (
       <>
          <Row gutter={[25, 25]} justify='center'>
@@ -41,10 +44,19 @@ function ProductCard(props) {
                      ]}
                   >
                      <Meta
+                        style={{
+                           color: 'black',
+                        }}
                         avatar={
                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
                         }
-                        title={product.name}
+                        title={
+                           <Text strong>
+                              <Link to={`/product/${product.slug}`}>
+                                 {product.name}
+                              </Link>
+                           </Text>
+                        }
                         description={product.description}
                      />
                   </Card>

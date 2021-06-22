@@ -3,6 +3,16 @@ const prisma = require('../models/prisma');
 class ConversationController {
    createConversation = async (req, res, next) => {
       try {
+         const checkConversationIsExist = await prisma.conversation.findFirst({
+            where: {
+               members: {
+                  hasEvery: [req.body.senderId, req.body.receiverId],
+               },
+            },
+         });
+
+         if (checkConversationIsExist) return res.send({ message: 'Exist' });
+
          const newConversation = await prisma.conversation.create({
             data: {
                members: [req.body.senderId, req.body.receiverId],

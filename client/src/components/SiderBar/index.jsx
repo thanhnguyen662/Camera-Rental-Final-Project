@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 function SiderBar(props) {
    const { SubMenu } = Menu;
    const { Sider } = Layout;
-   const [collapsed, onCollapsed] = useState(false);
+   const [collapsed, onCollapsed] = useState(true);
 
    return (
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapsed}>

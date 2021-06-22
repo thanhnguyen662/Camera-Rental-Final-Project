@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import CarouselBar from '../components/CarouselBar';
 import Login from '../features/Login';
+import Message from '../features/Message';
+import Product from '../features/Product';
 import Profile from '../features/Profile';
 import Register from '../features/Register';
-import Message from '../features/Message';
 import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
-import Product from '../features/Product';
 import ProfileLayout from '../layouts/Profile';
-import CarouselBar from '../components/CarouselBar';
 
 function Routers(props) {
    return (
@@ -16,7 +16,6 @@ function Routers(props) {
          <Switch>
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
-            {/* <Route path='/message' component={Message} /> */}
 
             <Route>
                <MainLayout>
@@ -28,13 +27,17 @@ function Routers(props) {
                         </ContentLayout>
                      </Route>
 
-                     <Route exact path='/profile'>
+                     <Route path='/product'>
+                        <Product />
+                     </Route>
+
+                     <Route path='/profile'>
                         <ProfileLayout>
                            <Profile />
                         </ProfileLayout>
                      </Route>
 
-                     <Route exact path='/message'>
+                     <Route path='/message'>
                         <Message />
                      </Route>
                   </Switch>

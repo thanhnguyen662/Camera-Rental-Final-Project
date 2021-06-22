@@ -9,8 +9,8 @@ function ContentLayout({ children }) {
       <Content style={{ margin: '0 16px' }}>
          {/* <BreadcrumbBar /> */}
          <div
-            // className='site-layout-background'
-            style={{ padding: 27, minHeight: 360 }}
+         // className='site-layout-background'
+         // style={{ padding: 27, minHeight: 360 }}
          >
             {children}
          </div>

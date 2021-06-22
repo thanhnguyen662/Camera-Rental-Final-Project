@@ -7,7 +7,7 @@ const io = require('socket.io')(8900, {
 let users = [];
 
 const addUser = (userId, socketId) => {
-   !users.some((user) => parseInt(user.id) === parseInt(userId)) &&
+   !users.some((user) => parseInt(user.userId) === parseInt(userId)) &&
       users.push({ userId, socketId });
 
    console.log('USER IN ARRAY: ', users);
