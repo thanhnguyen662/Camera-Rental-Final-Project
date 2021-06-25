@@ -14,9 +14,14 @@ function SiderBar(props) {
    const [collapsed, onCollapsed] = useState(true);
 
    return (
-      <Sider collapsible collapsed={collapsed} onCollapse={onCollapsed}>
+      <Sider
+         collapsible
+         collapsed={collapsed}
+         theme='dark'
+         onCollapse={onCollapsed}
+      >
          <div className='logo' />
-         <Menu theme='dark' defaultSelectedKeys={['1']} mode='inline'>
+         <Menu theme='dark' mode='inline'>
             <Menu.Item key='1' icon={<PieChartOutlined />}>
                Option 1
             </Menu.Item>

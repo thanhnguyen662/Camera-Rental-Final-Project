@@ -6,7 +6,7 @@ Login.propTypes = {};
 
 function Login(props) {
    const match = useRouteMatch();
-   console.log({ match });
+   console.log('Login: ', { match });
 
    return (
       <Switch>

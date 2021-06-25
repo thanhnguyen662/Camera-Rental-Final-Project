@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const messageController = require('../app/controllers/MessageController');
-const { verifyUser } = require('../utils/authenticate');
+const authMiddleware = require('../firebase/auth-middleware');
 
-router.get('/:conversationId', verifyUser, messageController.findMessage);
-router.post('/', verifyUser, messageController.createMessage);
+router.get('/:conversationId', authMiddleware, messageController.findMessage);
+router.post('/', authMiddleware, messageController.createMessage);
 
 module.exports = router;

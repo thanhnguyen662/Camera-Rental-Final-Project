@@ -1,27 +1,29 @@
 import {
+   Avatar,
    ChatContainer,
+   ConversationHeader,
+   EllipsisButton,
+   ExpansionPanel,
    MainContainer,
    MessageInput,
    MessageList,
-   ConversationHeader,
-   VoiceCallButton,
-   EllipsisButton,
-   Avatar,
-   VideoCallButton,
-   ExpansionPanel,
    Sidebar,
+   VideoCallButton,
+   VoiceCallButton,
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
+import conversationApi from '../../../../api/conversationApi';
+import userApi from '../../../../api/userApi';
 import MessageChat from '../../components/MessageChat';
 import SideBarLeft from '../../components/MessageSideBar';
-var uniqid = require('uniqid');
+const uniqid = require('uniqid');
 
 function MessagePage(props) {
-   const userId = useSelector((state) => state.users.id);
+   // const userId = useSelector((state) => state.users.id);
+   const userId = localStorage.getItem('providerData');
+
    const socket = useRef();
    const [conversation, setConversation] = useState([]);
    const [currentChat, setCurrentChat] = useState(null);
@@ -44,7 +46,6 @@ function MessagePage(props) {
 
    useEffect(() => {
       if (!currentChat?.members) console.log('Wait a minutes');
-      if (!arrivalMessage) console.log('Wait a minutes');
 
       arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
    }, [arrivalMessage, currentChat]);
@@ -57,20 +58,17 @@ function MessagePage(props) {
       });
    }, [userId]);
 
-   const onClickUser = (conversation) => {
-      setCurrentChat(conversation);
-      console.log('conversation is', conversation);
-   };
-
    useEffect(() => {
       const getConversation = async () => {
          try {
             if (!userId) return;
-            const response = await axios.get(
-               `http://localhost:4000/conversation/${userId}`
-            );
-            console.log('Conversation: ', response.data);
-            setConversation(response.data);
+            // const response = await axios.get(
+            //    `http://localhost:4000/conversation/${userId}`
+            // );
+
+            const response = await conversationApi.getConversation(userId);
+            console.log('Conversation: ', response);
+            setConversation(response);
          } catch (error) {
             console.log('Fail: ', error);
          }
@@ -78,16 +76,22 @@ function MessagePage(props) {
       getConversation();
    }, [userId]);
 
+   const onClickUser = (conversation) => {
+      setCurrentChat(conversation);
+      console.log('conversation is', conversation);
+   };
+
    useEffect(() => {
       const getMessage = async () => {
          const currentId = currentChat?.id;
          if (!currentId) return;
          try {
-            const response = await axios.get(
-               `http://localhost:4000/message/${currentId}`
-            );
+            // const response = await axios.get(
+            //    `http://localhost:4000/message/${currentId}`
+            // );
 
-            setMessages(response.data);
+            const response = await conversationApi.getMessage(currentId);
+            setMessages(response);
             console.log(messages);
          } catch (err) {
             console.log(err);
@@ -107,23 +111,24 @@ function MessagePage(props) {
       };
 
       const receiverId = currentChat.members.find(
-         (member) => parseInt(member) !== parseInt(userId)
+         (member) => member !== userId
       );
-      console.log('receiverId sendMessage: ', parseInt(receiverId));
+      console.log('receiverId sendMessage: ', receiverId);
       console.log('userId sendMessage: ', userId);
       console.log('text sendMessage: ', newMessage);
       socket.current.emit('sendMessage', {
-         senderId: parseInt(userId),
-         receiverId: parseInt(receiverId),
+         senderId: userId,
+         receiverId: receiverId,
          text: newMessage,
       });
 
       try {
-         const response = await axios.post(
-            'http://localhost:4000/message',
-            message
-         );
-         setMessages([...messages, response.data]);
+         // const response = await axios.post(
+         //    'http://localhost:4000/message',
+         //    message
+         // );
+         const response = await conversationApi.sendMessage(message);
+         setMessages([...messages, response]);
          setNewMessage('');
       } catch (error) {
          console.log('error: ', error);
@@ -132,16 +137,21 @@ function MessagePage(props) {
 
    useEffect(() => {
       const receiverIdInGroup = currentChat?.members.filter(
-         (user) => parseInt(user) !== parseInt(userId)
+         (user) => user !== userId
       );
+      console.log('receiverIdInGroup: ', receiverIdInGroup);
       const getUsernameByIdFunction = async () => {
          try {
             if (!receiverIdInGroup) return;
-            const response = await axios.get(
-               `http://localhost:4000/account?userId=${receiverIdInGroup}`
-            );
+            // const response = await axios.get(
+            //    `http://localhost:4000/account?userId=${receiverIdInGroup}`
+            // );
 
-            setGetUsernameById(response.data);
+            const response = await userApi.getFriendsId({
+               uid: receiverIdInGroup,
+            });
+
+            setGetUsernameById(response);
          } catch (error) {
             console.log(error);
          }
@@ -168,7 +178,7 @@ function MessagePage(props) {
                            name=''
                         />
                         <ConversationHeader.Content
-                           userName={getUsernameById?.name}
+                           userName={getUsernameById?.email}
                         />
                         <ConversationHeader.Actions>
                            <VoiceCallButton />
@@ -183,7 +193,7 @@ function MessagePage(props) {
                            <div key={uniqid()}>
                               <MessageChat
                                  message={m}
-                                 own={parseInt(m.sender) === parseInt(userId)}
+                                 own={m.sender === userId}
                               />
                            </div>
                         ))}

@@ -20,14 +20,24 @@ const userApi = {
       });
    },
 
-   profile: () => {
-      const url = '/account/profile';
-      const token = localStorage.getItem('token');
-      return axiosClient.get(url, {
-         headers: {
-            Authorization: `Bearer ${token}`,
-         },
-      });
+   // profile: () => {
+   //    const url = '/account/profile';
+   //    const token = localStorage.getItem('token');
+   //    return axiosClient.get(url, {
+   //       headers: {
+   //          Authorization: `Bearer ${token}`,
+   //       },
+   //    });
+   // },
+
+   getMe: (params) => {
+      const url = '/account/getUserByUid';
+      return axiosClient.get(url, { params });
+   },
+
+   getFriendsId: (params) => {
+      const url = '/account/getUserByUid';
+      return axiosClient.get(url, { params });
    },
 
    logout: () => {

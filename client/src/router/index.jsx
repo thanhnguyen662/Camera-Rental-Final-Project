@@ -9,6 +9,8 @@ import Register from '../features/Register';
 import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
 import ProfileLayout from '../layouts/Profile';
+import Lading from '../features/Lading';
+import SignIn from '../features/Auth';
 
 function Routers(props) {
    return (
@@ -16,6 +18,7 @@ function Routers(props) {
          <Switch>
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
+            <Route path='/account' component={SignIn} />
 
             <Route>
                <MainLayout>
@@ -24,6 +27,13 @@ function Routers(props) {
                         <CarouselBar />
                         <ContentLayout>
                            <Product />
+                        </ContentLayout>
+                     </Route>
+
+                     <Route path='/lading'>
+                        <CarouselBar />
+                        <ContentLayout>
+                           <Lading />
                         </ContentLayout>
                      </Route>
 

@@ -5,12 +5,11 @@ import {
 } from '@ant-design/icons';
 import { Avatar, Card, Typography, Row, Col, Divider, Tag } from 'antd';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 const { Title, Text } = Typography;
 
 function ProfileInfoCard(props) {
-   const userEmail = useSelector((state) => state.users.email);
+   const { email } = props;
 
    return (
       <>
@@ -27,7 +26,7 @@ function ProfileInfoCard(props) {
             <Row justify='center'>
                <Col>
                   <Title level={4} style={{ margin: '3px 0px 1px' }}>
-                     {userEmail}
+                     {email}
                   </Title>
                </Col>
             </Row>

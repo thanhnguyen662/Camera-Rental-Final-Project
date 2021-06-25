@@ -2,6 +2,7 @@ const prisma = require('../models/prisma');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const initPassportLocal = require('../auth/PassportLocal');
+
 const {
    getToken,
    COOKIE_OPTIONS,
@@ -12,6 +13,9 @@ const {
 initPassportLocal();
 
 class AccountController {
+   test = async (res) => {
+      console.log('LOGGED');
+   };
    getUser = async (req, res, next) => {
       const userId = req.query.userId;
       const email = req.query.email;

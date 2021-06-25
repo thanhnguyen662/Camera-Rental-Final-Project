@@ -1,4 +1,5 @@
 import { unwrapResult } from '@reduxjs/toolkit';
+import firebase from 'firebase/app';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -22,10 +23,26 @@ function App() {
       getCurrentUser();
    }, [dispatch]);
 
+   useEffect(() => {
+      const unregisterAuthObserver = firebase
+         .auth()
+         .onAuthStateChanged(async (user) => {
+            if (!user) {
+               console.log('User is not logged in');
+               return;
+            }
+            localStorage.setItem('providerData', user.uid);
+         });
+
+      return () => unregisterAuthObserver();
+   }, []);
+
    return (
-      <Router>
-         <Routers />
-      </Router>
+      <div className='App'>
+         <Router>
+            <Routers />
+         </Router>
+      </div>
    );
 }
 

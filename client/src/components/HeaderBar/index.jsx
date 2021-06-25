@@ -1,9 +1,9 @@
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Layout, Menu, Row } from 'antd';
+import firebase from 'firebase/app';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import userApi from '../../api/userApi';
 import './HeaderBar.scss';
 
 const { Header } = Layout;
@@ -15,9 +15,10 @@ function HeaderBar(props) {
 
    async function onLogoutButtonClick() {
       try {
-         const response = await userApi.logout();
-         console.log('Logout successful ', response);
-         localStorage.removeItem('token');
+         await firebase
+            .auth()
+            .signOut()
+            .then(() => localStorage.removeItem('providerData'));
 
          window.location = '/';
       } catch (error) {
@@ -34,12 +35,15 @@ function HeaderBar(props) {
             <Col span={6}>
                <Menu mode='horizontal'>
                   <Menu.Item key='1'>
-                     <Link to='/'>Home</Link>
+                     <Link to='/'>
+                        <b>Home</b>
+                     </Link>
                   </Menu.Item>
                   <Menu.Item key='2'>
-                     <Link to='message'>Message</Link>
+                     <Link to='/message'>
+                        <b>Messenger</b>
+                     </Link>
                   </Menu.Item>
-                  <Menu.Item key='3'>nav 3</Menu.Item>
                </Menu>
             </Col>
 
@@ -47,10 +51,10 @@ function HeaderBar(props) {
                {loginStatus === false ? (
                   <>
                      <Button type='link' size='large'>
-                        <Link to='/login'>Login</Link>
+                        <Link to='/account/login'>Login</Link>
                      </Button>
                      <Button type='primary' shape='round' size='large'>
-                        <Link to='/register'>Register</Link>
+                        <Link to='/account/register'>Register</Link>
                      </Button>
                   </>
                ) : (

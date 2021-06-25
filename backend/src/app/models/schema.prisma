@@ -29,6 +29,7 @@ model User {
   name         String?
   password     String?
   refreshToken String?
+  googleId     String?
   products     Product[]
 
   @@map("Users")

@@ -1,20 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import userApi from '../../api/userApi';
 
-export const getMe = createAsyncThunk(
-   'user/getMe',
-   async (params, thunkAPI) => {
-      const response = await userApi.profile();
-      return response;
-   }
-);
+export const getMe = createAsyncThunk('user/getMe', async (thunkAPI) => {
+   const params = { uid: localStorage.getItem('providerData') };
+   const response = await userApi.getMe(params);
+   return response;
+});
 
 const login = createSlice({
    name: 'user',
    initialState: {
-      loginStatus: localStorage.getItem('token') ? true : false,
+      loginStatus: localStorage.getItem('providerData') ? true : false,
       email: '',
       id: '',
+      name: '',
    },
    reducers: {
       addUserInfo: (state, action) => {
@@ -24,8 +23,9 @@ const login = createSlice({
    },
    extraReducers: {
       [getMe.fulfilled]: (state, action) => {
-         state.email = action.payload.user.email;
-         state.id = action.payload.user.id;
+         state.email = action.payload.email;
+         state.id = action.payload.uid;
+         state.name = action.payload.displayName;
       },
    },
 });

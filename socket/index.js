@@ -7,7 +7,7 @@ const io = require('socket.io')(8900, {
 let users = [];
 
 const addUser = (userId, socketId) => {
-   !users.some((user) => parseInt(user.userId) === parseInt(userId)) &&
+   !users.some((user) => user.userId === userId) &&
       users.push({ userId, socketId });
 
    console.log('USER IN ARRAY: ', users);
@@ -20,7 +20,7 @@ const removeUser = (socketId) => {
 const getUser = (userId) => {
    console.log('USER IN ARRAY getUser: ', users);
    console.log('userId in getUser: ', userId);
-   return users.find((user) => parseInt(user.userId) === parseInt(userId));
+   return users.find((user) => user.userId === userId);
 };
 
 io.on('connection', (socket) => {

@@ -6,11 +6,13 @@ Profile.propTypes = {};
 
 function Profile(props) {
    const match = useRouteMatch();
-   console.log({ match });
+   console.log('Profile: ', { match });
 
    return (
       <Switch>
          <Route exact path={match.url} component={ProfilePage} />
+
+         <Route path={`${match.url}/:profileId`} component={ProfilePage} />
       </Switch>
    );
 }

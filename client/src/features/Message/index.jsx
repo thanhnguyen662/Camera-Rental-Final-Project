@@ -4,7 +4,7 @@ import MessagePage from './pages/MessagePage';
 
 function Message(props) {
    const match = useRouteMatch();
-   console.log({ match });
+   console.log('Message: ', { match });
 
    return (
       <Switch>

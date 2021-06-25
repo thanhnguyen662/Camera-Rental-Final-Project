@@ -2,11 +2,12 @@ import { Button } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import { FastField, Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import CheckboxField from '../../../../custom-fields/Checkbox-Field';
 import InputField from '../../../../custom-fields/Input-Field';
 import './RegisterForm.scss';
+import { storage } from '../../../../firebase';
 
 RegisterForm.propTypes = {
    onRegisterFormSubmit: PropTypes.func,
@@ -17,6 +18,9 @@ RegisterForm.defaultProps = {
 };
 
 function RegisterForm(props) {
+   const [image, setImage] = useState(null);
+   const [progress, setProgress] = useState(0);
+
    const { onRegisterFormSubmit } = props;
    const initialValues = {
       email: '',
@@ -50,9 +54,45 @@ function RegisterForm(props) {
       }
    };
 
+   const handleChange = (e) => {
+      if (e.target.files[0]) {
+         setImage(e.target.files[0]);
+      }
+   };
+
+   console.log('Image: ', image);
+
+   const handleUpload = () => {
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      uploadTask.on(
+         'state_changed',
+         (snapshot) => {
+            const progress = Math.round(
+               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setProgress(progress);
+         },
+         (error) => {
+            console.log(error);
+         },
+         () => {
+            storage
+               .ref('images')
+               .child(image.name)
+               .getDownloadURL()
+               .then((url) => {
+                  console.log(url);
+               });
+         }
+      );
+   };
+
    return (
       <div>
          <h1>Register Page</h1>
+         <progress value={progress} max='100' />
+         <input type='file' onChange={handleChange} />
+         <button onClick={handleUpload}>Upload</button>
          <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}

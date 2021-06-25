@@ -3,9 +3,7 @@ import axiosClient from './axiosClient';
 const conversationApi = {
    getConversation: (userId) => {
       const url = `/conversation/${userId}`;
-      return axiosClient.get(url, {
-         withCredentials: true,
-      });
+      return axiosClient.get(url);
    },
 
    getMessage: async (chatId) => {
@@ -13,6 +11,11 @@ const conversationApi = {
       return await axiosClient.get(url, {
          withCredentials: true,
       });
+   },
+
+   sendMessage: async (message) => {
+      const url = `/message`;
+      return await axiosClient.post(url, message);
    },
 };
 
