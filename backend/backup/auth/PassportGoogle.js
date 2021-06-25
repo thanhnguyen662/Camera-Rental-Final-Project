@@ -6,10 +6,9 @@ let initGoogleLocal = (res) => {
    passport.use(
       new GoogleStrategy(
          {
-            clientID:
-               '954370791076-l7jqpa5fo69gjsqjvbdva4cc2a9n217d.apps.googleusercontent.com',
-            clientSecret: 'HXrb0fsQXvP43M5ZsZvBqs73',
-            callbackURL: '/account/login/google/callback',
+            clientID: '',
+            clientSecret: '',
+            callbackURL: '',
          },
 
          async (token, tokenSecret, profile, done) => {

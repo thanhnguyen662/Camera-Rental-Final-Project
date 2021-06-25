@@ -1,4 +1,4 @@
-const firebase = require('./admin');
+const firebase = require('../admin');
 
 function authMiddleware(request, response, next) {
    const headerToken = request.headers.authorization;
@@ -7,7 +7,7 @@ function authMiddleware(request, response, next) {
    }
 
    if (headerToken && headerToken.split(' ')[0] !== 'Bearer') {
-      response.send({ message: 'Invalid token' }).status(401);
+      response.status(401).send({ message: 'Invalid token' });
    }
 
    const token = headerToken.split(' ')[1];
@@ -16,7 +16,7 @@ function authMiddleware(request, response, next) {
       .verifyIdToken(token)
       .then(() => next())
       .catch(() =>
-         response.send({ message: 'Could not authorize' }).status(403)
+         response.status(403).send({ message: 'Could not authorize' })
       );
 }
 

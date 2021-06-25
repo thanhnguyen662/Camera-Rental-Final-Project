@@ -1,14 +1,14 @@
-const prisma = require('../models/prisma');
+const prisma = require('../src/app/models/prisma');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const initPassportLocal = require('../auth/PassportLocal');
+const initPassportLocal = require('../src/app/auth/PassportLocal');
 
 const {
    getToken,
    COOKIE_OPTIONS,
    getRefreshToken,
    verifyRefreshToken,
-} = require('../../utils/authenticate');
+} = require('../src/utils/authenticate');
 
 initPassportLocal();
 

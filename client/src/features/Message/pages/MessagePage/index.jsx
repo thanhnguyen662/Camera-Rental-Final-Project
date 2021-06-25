@@ -13,6 +13,7 @@ import {
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import conversationApi from '../../../../api/conversationApi';
 import userApi from '../../../../api/userApi';
@@ -21,8 +22,7 @@ import SideBarLeft from '../../components/MessageSideBar';
 const uniqid = require('uniqid');
 
 function MessagePage(props) {
-   // const userId = useSelector((state) => state.users.id);
-   const userId = localStorage.getItem('providerData');
+   const userId = useSelector((state) => state.users.id);
 
    const socket = useRef();
    const [conversation, setConversation] = useState([]);

@@ -1,5 +1,6 @@
 #backend
 backend/node_modules
+backend/src/firebase/credentials.json
 backend/src/public/css
 backend/.vscode
 backend/.env

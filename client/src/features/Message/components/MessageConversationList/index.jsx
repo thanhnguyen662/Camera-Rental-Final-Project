@@ -1,11 +1,12 @@
 import { Avatar, Conversation } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import userApi from '../../../../api/userApi';
 
 function Message(props) {
    const { conversation } = props;
-   const userId = localStorage.getItem('providerData');
+   const userId = useSelector((state) => state.users.id);
    const [user, setUser] = useState(null);
 
    useEffect(() => {
