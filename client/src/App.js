@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
-import { getMe } from './features/Login/loginSlice';
+import { getMe } from './features/Auth/loginSlice';
 import Routers from './router';
 
 function App() {

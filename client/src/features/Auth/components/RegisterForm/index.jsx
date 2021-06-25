@@ -1,7 +1,8 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
+import { storage } from '../../../../firebase';
 
 RegisterForm.propTypes = {
    handleRegisterFunction: PropTypes.func,
@@ -13,12 +14,49 @@ RegisterForm.defaultProps = {
 
 function RegisterForm(props) {
    const { handleRegisterFunction } = props;
+   const [image, setImage] = useState(null);
+   const [progress, setProgress] = useState(0);
+
+   const handleChange = (e) => {
+      if (e.target.files[0]) {
+         setImage(e.target.files[0]);
+      }
+   };
+   console.log('Image: ', image);
+   const handleUpload = () => {
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      uploadTask.on(
+         'state_changed',
+         (snapshot) => {
+            const progress = Math.round(
+               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setProgress(progress);
+         },
+         (error) => {
+            console.log(error);
+         },
+         () => {
+            storage
+               .ref('images')
+               .child(image.name)
+               .getDownloadURL()
+               .then((url) => {
+                  console.log(url);
+               });
+         }
+      );
+   };
+
    const onFinish = (values) => {
       handleRegisterFunction(values);
    };
 
    return (
       <>
+         <progress value={progress} max='100' />
+         <input type='file' onChange={handleChange} />
+         <button onClick={handleUpload}>Upload</button>
          <Form
             name='normal_login'
             className='login-form'

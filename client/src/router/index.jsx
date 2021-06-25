@@ -1,23 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CarouselBar from '../components/CarouselBar';
-import Login from '../features/Login';
+import SignIn from '../features/Auth';
+import Lading from '../features/Lading';
 import Message from '../features/Message';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
-import Register from '../features/Register';
 import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
 import ProfileLayout from '../layouts/Profile';
-import Lading from '../features/Lading';
-import SignIn from '../features/Auth';
 
 function Routers(props) {
    return (
       <Router>
          <Switch>
-            <Route path='/login' component={Login} />
-            <Route path='/register' component={Register} />
             <Route path='/account' component={SignIn} />
 
             <Route>
