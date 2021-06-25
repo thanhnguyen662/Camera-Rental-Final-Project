@@ -1,35 +1,24 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import userApi from '../../api/userApi';
-
-export const getMe = createAsyncThunk('user/getMe', async (thunkAPI) => {
-   const params = { uid: localStorage.getItem('providerData') };
-   const response = await userApi.getMe(params);
-   return response;
-});
+import { createSlice } from '@reduxjs/toolkit';
 
 const login = createSlice({
    name: 'user',
    initialState: {
-      loginStatus: localStorage.getItem('providerData') ? true : false,
+      loginStatus: false,
       email: '',
       id: '',
       name: '',
    },
    reducers: {
-      addUserInfo: (state, action) => {
-         const { loginStatus } = action.payload;
+      userInfo: (state, action) => {
+         const { email, uid, displayName, loginStatus } = action.payload;
+         state.email = email;
+         state.id = uid;
+         state.name = displayName;
          state.loginStatus = loginStatus;
-      },
-   },
-   extraReducers: {
-      [getMe.fulfilled]: (state, action) => {
-         state.email = action.payload.email;
-         state.id = action.payload.uid;
-         state.name = action.payload.displayName;
       },
    },
 });
 
 const { reducer, actions } = login;
-export const { addUserInfo } = actions;
+export const { userInfo } = actions;
 export default reducer;

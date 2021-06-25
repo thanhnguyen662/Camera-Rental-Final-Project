@@ -1,27 +1,13 @@
-import { unwrapResult } from '@reduxjs/toolkit';
 import firebase from 'firebase/app';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
-import { getMe } from './features/Auth/loginSlice';
+import { userInfo } from './features/Auth/loginSlice';
 import Routers from './router';
 
 function App() {
    const dispatch = useDispatch();
-
-   useEffect(() => {
-      const getCurrentUser = async () => {
-         try {
-            const actionResult = await dispatch(getMe());
-            const currentUser = unwrapResult(actionResult);
-            console.log('User Information: ', currentUser);
-         } catch (error) {
-            console.log('Fail: ', error);
-         }
-      };
-      getCurrentUser();
-   }, [dispatch]);
 
    useEffect(() => {
       const unregisterAuthObserver = firebase
@@ -31,11 +17,21 @@ function App() {
                console.log('User is not logged in');
                return;
             }
-            localStorage.setItem('providerData', user.uid);
+
+            const action = userInfo({
+               email: user.email,
+               displayName: user.displayName,
+               uid: user.uid,
+               loginStatus: true,
+            });
+            dispatch(action);
+
+            console.log('User is logged in: ', user);
+            localStorage.setItem('providerData', true);
          });
 
       return () => unregisterAuthObserver();
-   }, []);
+   }, [dispatch]);
 
    return (
       <div className='App'>
