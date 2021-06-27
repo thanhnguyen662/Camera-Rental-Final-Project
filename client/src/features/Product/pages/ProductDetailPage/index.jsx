@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import productApi from '../../../../api/productApi';
 import ProductDetail from '../../components/ProductDetail';
 
 function ProductDetailPage(props) {
@@ -12,12 +12,10 @@ function ProductDetailPage(props) {
    useEffect(() => {
       const getProductDetail = async () => {
          try {
-            const response = await axios(
-               `http://localhost:4000/product/${slug}`
-            );
-            setProductDetail(response.data);
+            const response = await productApi.getProductDetail(slug);
+            setProductDetail(response);
 
-            console.log(response.data);
+            console.log(response);
          } catch (error) {
             console.log('Fail: ', error);
          }

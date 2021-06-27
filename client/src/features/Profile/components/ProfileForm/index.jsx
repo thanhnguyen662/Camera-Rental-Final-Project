@@ -12,7 +12,7 @@ function ProfileForm(props) {
       <>
          <Content style={{ margin: '0 16px' }}>
             <div style={{ paddingTop: 24, minHeight: 360 }}>
-               <Row gutter={[24, 0]}>
+               <Row gutter={[12, 0]}>
                   <Col span={8}>
                      <ProfileInfoCard email={email} />
                   </Col>

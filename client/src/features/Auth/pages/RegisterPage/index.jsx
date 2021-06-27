@@ -11,9 +11,13 @@ function RegisterPage(props) {
             .createUserWithEmailAndPassword(values.email, values.password)
             .then((user) => {
                console.log(user);
-            })
-            .catch((error) => {
-               console.log(error);
+            });
+
+         await firebase
+            .auth()
+            .currentUser.sendEmailVerification()
+            .then(() => {
+               console.log('Email was sent to your email');
             });
       } catch (error) {
          console.log(error);

@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Progress } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { storage } from '../../../../firebase';
@@ -22,7 +22,7 @@ function RegisterForm(props) {
          setImage(e.target.files[0]);
       }
    };
-   console.log('Image: ', image);
+   console.log(image);
    const handleUpload = () => {
       const uploadTask = storage.ref(`images/${image.name}`).put(image);
       uploadTask.on(
@@ -54,7 +54,7 @@ function RegisterForm(props) {
 
    return (
       <>
-         <progress value={progress} max='100' />
+         <Progress percent={progress} status='active' />
          <input type='file' onChange={handleChange} />
          <button onClick={handleUpload}>Upload</button>
          <Form

@@ -27,9 +27,9 @@ function HeaderBar(props) {
    }
 
    return (
-      <Header className='site-layout-background' style={{ padding: 0 }}>
+      <Header className='site-layout-background' style={{ padding: '0 16px' }}>
          <Row>
-            <Col span={2} offset={3}>
+            <Col span={2} offset={2}>
                LOGO
             </Col>
             <Col span={6}>
@@ -47,7 +47,7 @@ function HeaderBar(props) {
                </Menu>
             </Col>
 
-            <Col span={4} offset={8}>
+            <Col span={5} offset={9}>
                {loginStatus === false ? (
                   <>
                      <Button type='link' size='large'>
