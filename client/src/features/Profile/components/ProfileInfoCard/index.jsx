@@ -9,7 +9,7 @@ import React from 'react';
 const { Title, Text } = Typography;
 
 function ProfileInfoCard(props) {
-   const { email } = props;
+   const { email, photoURL, name } = props;
 
    return (
       <>
@@ -18,7 +18,7 @@ function ProfileInfoCard(props) {
                <Col>
                   <Avatar
                      size={80}
-                     src='https://image.flaticon.com/icons/png/512/147/147144.png'
+                     src={photoURL}
                      style={{ marginBottom: '10px' }}
                   />
                </Col>
@@ -26,13 +26,13 @@ function ProfileInfoCard(props) {
             <Row justify='center'>
                <Col>
                   <Title level={4} style={{ margin: '3px 0px 1px' }}>
-                     {email}
+                     {name}
                   </Title>
                </Col>
             </Row>
             <Row justify='center'>
                <Col>
-                  <Text italic='true'>Lorem ipsum dolor sit</Text>
+                  <Text italic='true'>{email}</Text>
                </Col>
             </Row>
             <Row style={{ marginTop: '20px' }}>

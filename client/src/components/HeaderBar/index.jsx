@@ -11,7 +11,8 @@ const { SubMenu } = Menu;
 
 function HeaderBar(props) {
    const loginStatus = useSelector((state) => state.users.loginStatus);
-   const email = useSelector((state) => state.users.email);
+   const name = useSelector((state) => state.users.name);
+   const photoURL = useSelector((state) => state.users.photoURL);
 
    async function onLogoutButtonClick() {
       try {
@@ -64,12 +65,9 @@ function HeaderBar(props) {
                            key='SubMenu'
                            title={
                               <>
-                                 <Avatar
-                                    size={38}
-                                    src='https://image.flaticon.com/icons/png/512/147/147144.png'
-                                 />
+                                 <Avatar size={38} src={photoURL} />
                                  <label style={{ marginLeft: '10px' }}>
-                                    {email}
+                                    {name}
                                  </label>
                               </>
                            }

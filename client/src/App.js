@@ -19,10 +19,11 @@ function App() {
             }
 
             const action = userInfo({
+               loginStatus: true,
                email: user.email,
                displayName: user.displayName,
                uid: user.uid,
-               loginStatus: true,
+               photoURL: user.photoURL,
             });
             dispatch(action);
 

@@ -1,7 +1,12 @@
-import { Form, Input, Layout, Upload, Spin, Button } from 'antd';
+import { Col, Layout, Row, notification, Button } from 'antd';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { storage } from '../../../../firebase';
+import ProfileEditAvatarCard from '../../components/ProfileEditAvatarCard';
+import ProfileEditInfoCard from '../../components/ProfileEditInfoCard';
+import ProfileEditTree from '../../components/ProfileEditTree';
 
 ProfileEditPage.propTypes = {};
 
@@ -12,19 +17,42 @@ function ProfileEditPage(props) {
    const [url, setUrl] = useState('');
    const userEmail = useSelector((state) => state.users.email);
    const userName = useSelector((state) => state.users.name);
+   const uid = useSelector((state) => state.users.id);
+   const photoURL = useSelector((state) => state.users.photoURL);
+
    const userData = {
       email: userEmail,
       displayName: userName,
+      id: uid,
    };
 
-   const onFinish = (values) => {
+   const onFinish = async (values) => {
       console.log('Received values of form: ', values);
+      const currentUser = firebase.auth().currentUser;
+      currentUser
+         .updateProfile({
+            displayName: values.displayName,
+         })
+         .then(() => {
+            console.log('Updated Info');
+         })
+         .then(() => {
+            openNotificationWithIcon(
+               'success',
+               'Change Information',
+               'Successful, reload page to take effect'
+            );
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
 
    const uploadImage = async (options) => {
       const { onSuccess, onError, file, onProgress } = options;
-      console.log('TEST: ', file);
-      const uploadTask = storage.ref(`avatars/${file.name}`).put(file);
+      const uploadTask = storage
+         .ref(`avatars/${userEmail}/avatar/${file.name}`)
+         .put(file);
       uploadTask.on(
          'state_changed',
          (snapshot) => {
@@ -37,13 +65,21 @@ function ProfileEditPage(props) {
          },
          () => {
             storage
-               .ref('avatars')
+               .ref(`avatars/${userEmail}/avatar/`)
                .child(file.name)
                .getDownloadURL()
                .then((url) => {
                   console.log(url);
                   setUrl(url);
                   onSuccess();
+                  onFinishChangeAvatar(url);
+               })
+               .then(() => {
+                  openNotificationWithIcon(
+                     'success',
+                     'Change Avatar',
+                     'Successful, reload page to take effect'
+                  );
                })
                .catch((error) => {
                   console.log(error);
@@ -51,6 +87,20 @@ function ProfileEditPage(props) {
                });
          }
       );
+   };
+
+   const onFinishChangeAvatar = async (url) => {
+      const currentUser = firebase.auth().currentUser;
+      currentUser
+         .updateProfile({
+            photoURL: url,
+         })
+         .then(() => {
+            console.log('Updated Avatar');
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
 
    const handleOnChange = ({ fileList }) => {
@@ -62,58 +112,54 @@ function ProfileEditPage(props) {
       window.open(src);
    };
 
+   const openNotificationWithIcon = (type, message, description) => {
+      const btn = (
+         <Button
+            type='primary'
+            size='small'
+            onClick={() => window.location.reload()}
+         >
+            Reload page
+         </Button>
+      );
+      notification[type]({
+         message: message,
+         description: description,
+         btn,
+      });
+   };
+
    return (
       <>
-         <Content style={{ margin: '20px 16px' }}>
-            <div
-               className='site-layout-background'
-               style={{ padding: 27, minHeight: 360 }}
-            >
-               {!userEmail || !userName ? (
-                  <Spin />
-               ) : (
-                  <Form
-                     name='register'
-                     onFinish={onFinish}
-                     scrollToFirstError
-                     initialValues={userData}
-                  >
-                     <Form.Item
-                        name='displayName'
-                        label='Nickname'
-                        tooltip='What do you want others to call you?'
-                     >
-                        <Input />
-                     </Form.Item>
-
-                     <Form.Item
-                        name='email'
-                        label='Email'
-                        tooltip='What do you want others to call you?'
-                     >
-                        {!userEmail ? <Spin /> : <Input />}
-                     </Form.Item>
-                     <Button type='primary' htmlType='submit'>
-                        Submit
-                     </Button>
-                  </Form>
-               )}
-
-               <div>
-                  <Upload
-                     accept='image/*'
-                     customRequest={uploadImage}
-                     onChange={handleOnChange}
-                     listType='picture-card'
-                     defaultFileList={defaultFileList}
-                     onPreview={onPreview}
-                     className='image-upload-grid'
-                  >
-                     {defaultFileList.length >= 1 ? null : (
-                        <div>Upload Avatar</div>
-                     )}
-                  </Upload>
-               </div>
+         <Content style={{ margin: '0px 16px' }}>
+            <div style={{ paddingTop: 24, minHeight: 360 }}>
+               <Row gutter={[12, 0]}>
+                  <Col span={5}>
+                     <ProfileEditTree
+                        userEmail={userEmail}
+                        photoURL={photoURL}
+                        userName={userName}
+                     />
+                  </Col>
+                  <Col span={13}>
+                     <ProfileEditInfoCard
+                        userEmail={userEmail}
+                        userName={userName}
+                        uid={uid}
+                        userData={userData}
+                        onFinish={onFinish}
+                     />
+                  </Col>
+                  <Col flex='auto' style={{ textAlign: 'center' }}>
+                     <ProfileEditAvatarCard
+                        uploadImage={uploadImage}
+                        handleOnChange={handleOnChange}
+                        defaultFileList={defaultFileList}
+                        onPreview={onPreview}
+                        photoURL={photoURL}
+                     />
+                  </Col>
+               </Row>
             </div>
          </Content>
       </>

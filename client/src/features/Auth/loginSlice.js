@@ -7,14 +7,17 @@ const login = createSlice({
       email: '',
       id: '',
       name: '',
+      photoURL: '',
    },
    reducers: {
       userInfo: (state, action) => {
-         const { email, uid, displayName, loginStatus } = action.payload;
+         const { email, uid, displayName, loginStatus, photoURL } =
+            action.payload;
+         state.loginStatus = loginStatus;
          state.email = email;
          state.id = uid;
          state.name = displayName;
-         state.loginStatus = loginStatus;
+         state.photoURL = photoURL;
       },
    },
 });
