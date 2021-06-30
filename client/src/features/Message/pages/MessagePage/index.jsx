@@ -62,9 +62,6 @@ function MessagePage(props) {
       const getConversation = async () => {
          try {
             if (!userId) return;
-            // const response = await axios.get(
-            //    `http://localhost:4000/conversation/${userId}`
-            // );
 
             const response = await conversationApi.getConversation(userId);
             console.log('Conversation: ', response);
@@ -86,10 +83,6 @@ function MessagePage(props) {
          const currentId = currentChat?.id;
          if (!currentId) return;
          try {
-            // const response = await axios.get(
-            //    `http://localhost:4000/message/${currentId}`
-            // );
-
             const response = await conversationApi.getMessage(currentId);
             setMessages(response);
             console.log(messages);
@@ -123,10 +116,6 @@ function MessagePage(props) {
       });
 
       try {
-         // const response = await axios.post(
-         //    'http://localhost:4000/message',
-         //    message
-         // );
          const response = await conversationApi.sendMessage(message);
          setMessages([...messages, response]);
          setNewMessage('');
@@ -143,9 +132,6 @@ function MessagePage(props) {
       const getUsernameByIdFunction = async () => {
          try {
             if (!receiverIdInGroup) return;
-            // const response = await axios.get(
-            //    `http://localhost:4000/account?userId=${receiverIdInGroup}`
-            // );
 
             const response = await userApi.getFriendsId({
                uid: receiverIdInGroup,
@@ -174,8 +160,8 @@ function MessagePage(props) {
                            onClick={() => setCurrentChat(null)}
                         />
                         <Avatar
-                           src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'
-                           name=''
+                           src={getUsernameById?.photoURL}
+                           name={getUsernameById?.displayName}
                         />
                         <ConversationHeader.Content
                            userName={getUsernameById?.email}
@@ -233,8 +219,8 @@ function MessagePage(props) {
                      >
                         <p>
                            <Avatar
-                              src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'
-                              name=''
+                              src={getUsernameById?.photoURL}
+                              name={getUsernameById?.displayName}
                               style={{ marginLeft: '30px' }}
                            />
                         </p>

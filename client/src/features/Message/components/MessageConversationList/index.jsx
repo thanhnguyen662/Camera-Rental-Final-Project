@@ -14,11 +14,7 @@ function Message(props) {
       const getUser = async () => {
          try {
             if (!friendId) return;
-            // const response = await axios.get(
-            //    `http://localhost:4000/account/getUserByUid?uid=${friendId}`,
-            //    { withCredentials: true }
-            // );
-            // const params = { uid: friendId };
+
             const response = await userApi.getFriendsId({ uid: friendId });
             setUser(response);
          } catch (error) {
@@ -26,17 +22,11 @@ function Message(props) {
          }
       };
 
-      // const friendsIsOnline =
-
       getUser();
    }, [userId, conversation]);
-
    return (
       <Conversation name={user?.email}>
-         <Avatar
-            src='https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'
-            name='Lilly'
-         />
+         <Avatar src={user?.photoURL} name={user?.displayName} />
       </Conversation>
    );
 }
