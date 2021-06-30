@@ -1,8 +1,7 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Progress } from 'antd';
+import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { storage } from '../../../../firebase';
+import React from 'react';
 
 RegisterForm.propTypes = {
    handleRegisterFunction: PropTypes.func,
@@ -14,39 +13,6 @@ RegisterForm.defaultProps = {
 
 function RegisterForm(props) {
    const { handleRegisterFunction } = props;
-   const [image, setImage] = useState(null);
-   const [progress, setProgress] = useState(0);
-
-   const handleChange = (e) => {
-      if (e.target.files[0]) {
-         setImage(e.target.files[0]);
-      }
-   };
-   console.log(image);
-   const handleUpload = () => {
-      const uploadTask = storage.ref(`images/${image.name}`).put(image);
-      uploadTask.on(
-         'state_changed',
-         (snapshot) => {
-            const progress = Math.round(
-               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setProgress(progress);
-         },
-         (error) => {
-            console.log(error);
-         },
-         () => {
-            storage
-               .ref('images')
-               .child(image.name)
-               .getDownloadURL()
-               .then((url) => {
-                  console.log(url);
-               });
-         }
-      );
-   };
 
    const onFinish = (values) => {
       handleRegisterFunction(values);
@@ -54,9 +20,6 @@ function RegisterForm(props) {
 
    return (
       <>
-         <Progress percent={progress} status='active' />
-         <input type='file' onChange={handleChange} />
-         <button onClick={handleUpload}>Upload</button>
          <Form
             name='normal_login'
             className='login-form'
@@ -66,7 +29,12 @@ function RegisterForm(props) {
             <Form.Item
                name='email'
                hasFeedback
-               rules={[{ required: true, message: 'Please input your Email!' }]}
+               rules={[
+                  {
+                     required: true,
+                     message: 'Please input your Email!',
+                  },
+               ]}
             >
                <Input
                   prefix={<UserOutlined className='site-form-item-icon' />}
@@ -78,7 +46,10 @@ function RegisterForm(props) {
                name='password'
                hasFeedback
                rules={[
-                  { required: true, message: 'Please input your Password!' },
+                  {
+                     required: true,
+                     message: 'Please input your Password!',
+                  },
                ]}
             >
                <Input

@@ -39,7 +39,7 @@ function ProfileInfoCard(props) {
                <Col flex='28px' offset={2}>
                   <IdcardOutlined />
                </Col>
-               <Col flex='270px'>
+               <Col flex='auto'>
                   <Text>But I must explain to</Text>
                </Col>
             </Row>
@@ -47,7 +47,7 @@ function ProfileInfoCard(props) {
                <Col flex='28px' offset={2}>
                   <ClusterOutlined />
                </Col>
-               <Col flex='270px'>
+               <Col flex='auto'>
                   <Text>Lorem ipsum dolor sit amet, consectetuer</Text>
                </Col>
             </Row>
@@ -55,7 +55,7 @@ function ProfileInfoCard(props) {
                <Col flex='28px' offset={2}>
                   <HomeOutlined />
                </Col>
-               <Col flex='270px'>
+               <Col flex='auto'>
                   <Text>Far far away</Text>
                </Col>
             </Row>

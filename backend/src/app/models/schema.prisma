@@ -17,20 +17,19 @@ model Product {
   slug        String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  authorId    Int
-  author      User     @relation(fields: [authorId], references: [id])
 
   @@map("Products")
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String?   @unique
-  name         String?
-  password     String?
-  refreshToken String?
-  googleId     String?
-  products     Product[]
+  id            Int     @id @default(autoincrement())
+  firebaseId    String  @unique
+  age           Int?
+  gender        String?
+  rate          Int?    @default(0)
+  address       String?
+  favouriteGear String?
+  hasTag        String?
 
   @@map("Users")
 }

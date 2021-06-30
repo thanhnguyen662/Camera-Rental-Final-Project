@@ -1,12 +1,14 @@
 import { Col, Layout, Row, notification, Button } from 'antd';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { storage } from '../../../../firebase';
 import ProfileEditAvatarCard from '../../components/ProfileEditAvatarCard';
 import ProfileEditInfoCard from '../../components/ProfileEditInfoCard';
 import ProfileEditTree from '../../components/ProfileEditTree';
+import ProfileEditProfileCard from '../../components/ProfileEditProfileCard';
+import userApi from '../../../../api/userApi';
 
 ProfileEditPage.propTypes = {};
 
@@ -15,6 +17,8 @@ const { Content } = Layout;
 function ProfileEditPage(props) {
    const [defaultFileList, setDefaultFileList] = useState([]);
    const [url, setUrl] = useState('');
+   const [current, setCurrent] = useState(1);
+   const [userProfile, setUserProfile] = useState();
    const userEmail = useSelector((state) => state.users.email);
    const userName = useSelector((state) => state.users.name);
    const uid = useSelector((state) => state.users.id);
@@ -26,6 +30,13 @@ function ProfileEditPage(props) {
       id: uid,
    };
 
+   function handleClick(e) {
+      setCurrent(parseInt(e.key));
+   }
+
+   console.log(current);
+
+   // [FIREBASE] CHANGE ACCOUNT INFORMATION
    const onFinish = async (values) => {
       console.log('Received values of form: ', values);
       const currentUser = firebase.auth().currentUser;
@@ -48,6 +59,7 @@ function ProfileEditPage(props) {
          });
    };
 
+   // [FIREBASE] CHANGE USER AVATAR
    const uploadImage = async (options) => {
       const { onSuccess, onError, file, onProgress } = options;
       const uploadTask = storage
@@ -129,28 +141,78 @@ function ProfileEditPage(props) {
       });
    };
 
+   // [DATABASE] CHANGE USER PROFILE
+   const onProfileFinish = async (values) => {
+      console.log(values);
+      try {
+         const formValues = {
+            firebaseId: uid,
+            age: parseInt(values.age),
+            gender: values.gender,
+            address: values.address,
+            gear: values.gear,
+            favouriteGear: values.favouriteGear,
+            hasTag: values.hasTag,
+         };
+
+         const response = await userApi.addUserInfo(formValues);
+         console.log(response);
+      } catch (error) {
+         return console.log('Fail: ', error);
+      }
+   };
+
+   useEffect(() => {
+      const getUserProfile = async () => {
+         try {
+            if (!uid) return;
+            const response = await userApi.getUserProfile({
+               firebaseId: uid,
+            });
+            setUserProfile(response);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getUserProfile();
+   }, [uid]);
+
    return (
       <>
          <Content style={{ margin: '0px 16px' }}>
             <div style={{ paddingTop: 24, minHeight: 360 }}>
                <Row gutter={[12, 0]}>
-                  <Col span={5}>
+                  <Col span={4}>
                      <ProfileEditTree
                         userEmail={userEmail}
                         photoURL={photoURL}
                         userName={userName}
+                        handleClick={handleClick}
                      />
                   </Col>
-                  <Col span={13}>
-                     <ProfileEditInfoCard
-                        userEmail={userEmail}
-                        userName={userName}
-                        uid={uid}
-                        userData={userData}
-                        onFinish={onFinish}
-                     />
+                  <Col span={14}>
+                     {current === 1 && (
+                        <ProfileEditInfoCard
+                           userEmail={userEmail}
+                           userName={userName}
+                           uid={uid}
+                           userData={userData}
+                           onFinish={onFinish}
+                        />
+                     )}
+                     {current === 2 && (
+                        <ProfileEditProfileCard
+                           onProfileFinish={onProfileFinish}
+                           userProfile={userProfile}
+                        />
+                     )}
                   </Col>
-                  <Col flex='auto' style={{ textAlign: 'center' }}>
+                  <Col
+                     flex='auto'
+                     style={{
+                        textAlign: 'center',
+                     }}
+                  >
                      <ProfileEditAvatarCard
                         uploadImage={uploadImage}
                         handleOnChange={handleOnChange}

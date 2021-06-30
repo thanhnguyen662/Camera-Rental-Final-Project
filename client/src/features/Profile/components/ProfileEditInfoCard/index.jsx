@@ -1,5 +1,4 @@
 import { Button, Card, Form, Input, Spin, Divider, Typography } from 'antd';
-import 'firebase/auth';
 import React from 'react';
 import PropTypes from 'prop-types';
 
