@@ -1,9 +1,8 @@
 import { Col, Layout, Row, notification, Button } from 'antd';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { storage } from '../../../../firebase';
+import { auth } from '../../../../firebase';
 import ProfileEditAvatarCard from '../../components/ProfileEditAvatarCard';
 import ProfileEditInfoCard from '../../components/ProfileEditInfoCard';
 import ProfileEditTree from '../../components/ProfileEditTree';
@@ -39,7 +38,7 @@ function ProfileEditPage(props) {
    // [FIREBASE] CHANGE ACCOUNT INFORMATION
    const onFinish = async (values) => {
       console.log('Received values of form: ', values);
-      const currentUser = firebase.auth().currentUser;
+      const currentUser = auth.currentUser;
       currentUser
          .updateProfile({
             displayName: values.displayName,
@@ -102,7 +101,7 @@ function ProfileEditPage(props) {
    };
 
    const onFinishChangeAvatar = async (url) => {
-      const currentUser = firebase.auth().currentUser;
+      const currentUser = auth.currentUser;
       currentUser
          .updateProfile({
             photoURL: url,

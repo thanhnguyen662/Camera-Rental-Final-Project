@@ -1,5 +1,4 @@
 import { Card, Image, Spin, Upload } from 'antd';
-import 'firebase/auth';
 import React from 'react';
 import PropTypes from 'prop-types';
 

@@ -6,12 +6,11 @@ import {
    UserOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Steps } from 'antd';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import userApi from '../../../../api/userApi';
 import { storage } from '../../../../firebase';
+import { auth } from '../../../../firebase';
 import ProfileEditAvatarCard from '../../../Profile/components/ProfileEditAvatarCard';
 import ProfileEditInfoCard from '../../../Profile/components/ProfileEditInfoCard';
 import ProfileEditProfileCard from '../../../Profile/components/ProfileEditProfileCard';
@@ -50,7 +49,7 @@ function RegisterPage(props) {
    //Handle form from account edit in firebase
    const onFinish = async (values) => {
       console.log('Received values of form: ', values);
-      const currentUser = firebase.auth().currentUser;
+      const currentUser = auth.currentUser;
       currentUser
          .updateProfile({
             displayName: values.displayName,
@@ -70,20 +69,16 @@ function RegisterPage(props) {
    const handleRegisterFunction = async (values) => {
       console.log('Values Register Form: ', values);
       try {
-         await firebase
-            .auth()
+         await auth
             .createUserWithEmailAndPassword(values.email, values.password)
             .then((user) => {
                console.log(user);
                next();
             });
 
-         await firebase
-            .auth()
-            .currentUser.sendEmailVerification()
-            .then(() => {
-               console.log('Email was sent to your email');
-            });
+         await auth.currentUser.sendEmailVerification().then(() => {
+            console.log('Email was sent to your email');
+         });
       } catch (error) {
          console.log(error);
       }
@@ -166,7 +161,7 @@ function RegisterPage(props) {
 
    //update avatar in account
    const onFinishChangeAvatar = async (url) => {
-      const currentUser = firebase.auth().currentUser;
+      const currentUser = auth.currentUser;
       currentUser
          .updateProfile({
             photoURL: url,

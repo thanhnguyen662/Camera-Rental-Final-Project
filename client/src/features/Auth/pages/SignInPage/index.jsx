@@ -3,6 +3,7 @@ import 'firebase/auth';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import LoginForm from '../../components/LoginForm';
+import { auth } from '../../../../firebase';
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -14,8 +15,7 @@ const uiConfig = {
 const handleLoginFunction = async (values) => {
    console.log('Values Login Form: ', values);
    try {
-      await firebase
-         .auth()
+      await auth
          .signInWithEmailAndPassword(values.email, values.password)
          .then((user) => {
             console.log(user);
@@ -30,10 +30,7 @@ const handleLoginFunction = async (values) => {
 function SignInPage(props) {
    return (
       <>
-         <StyledFirebaseAuth
-            uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
-         />
+         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
 
          <LoginForm handleLoginFunction={handleLoginFunction} />
       </>

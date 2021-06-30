@@ -1,13 +1,12 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { auth } from '../firebase';
 // Set up default config for http requests here
 
 // Please have a look at here `https://github.com/axios/axios#request-
 // config` for the full list of configs
 const getFirebaseToken = async () => {
-   const currentUser = firebase.auth().currentUser;
+   const currentUser = auth.currentUser;
    if (currentUser) return currentUser.getIdToken();
 
    // Not logged in
@@ -21,19 +20,17 @@ const getFirebaseToken = async () => {
          console.log('Reject timeout');
       }, 10000);
 
-      const unregisterAuthObserver = firebase
-         .auth()
-         .onAuthStateChanged(async (user) => {
-            if (!user) {
-               reject(null);
-            }
+      const unregisterAuthObserver = auth.onAuthStateChanged(async (user) => {
+         if (!user) {
+            reject(null);
+         }
 
-            const token = await user.getIdToken();
-            resolve(token);
+         const token = await user.getIdToken();
+         resolve(token);
 
-            unregisterAuthObserver();
-            clearTimeout(waitTimer);
-         });
+         unregisterAuthObserver();
+         clearTimeout(waitTimer);
+      });
    });
 };
 
@@ -44,20 +41,6 @@ const axiosClient = axios.create({
    },
    paramsSerializer: (params) => queryString.stringify(params),
 });
-
-// axios.interceptors.request.use(
-//    async (config) => {
-//       const token = localStorage.getItem('token');
-//       if (token) {
-//          config.headers['Authorization'] = 'Bearer ' + token;
-//       }
-
-//       return config;
-//    },
-//    (error) => {
-//       Promise.reject(error);
-//    }
-// );
 
 axiosClient.interceptors.request.use(async (config) => {
    const token = await getFirebaseToken();

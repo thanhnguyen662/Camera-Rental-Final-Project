@@ -1,6 +1,6 @@
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Layout, Menu, Row } from 'antd';
-import firebase from 'firebase/app';
+import { auth } from '../../firebase';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -16,8 +16,7 @@ function HeaderBar(props) {
 
    async function onLogoutButtonClick() {
       try {
-         await firebase
-            .auth()
+         await auth
             .signOut()
             .then(() => localStorage.removeItem('providerData'));
 

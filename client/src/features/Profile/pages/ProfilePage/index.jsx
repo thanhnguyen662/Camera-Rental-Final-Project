@@ -1,13 +1,25 @@
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ProfileInfoCard from '../../components/ProfileInfoCard';
 import ProfileRelationCard from '../../components/ProfileRelationCard';
+import userApi from '../../../../api/userApi';
 
 function ProfilePage(props) {
    const email = useSelector((state) => state.users.email);
    const name = useSelector((state) => state.users.name);
    const photoURL = useSelector((state) => state.users.photoURL);
+   const uid = useSelector((state) => state.users.id);
+   const [userProfile, setUserProfile] = useState();
+
+   useEffect(() => {
+      const getUserProfile = async () => {
+         if (!uid) return console.log('WAIT');
+         const response = await userApi.getUserProfile({ firebaseId: uid });
+         setUserProfile(response);
+      };
+      getUserProfile();
+   }, [uid]);
 
    return (
       <>
@@ -18,6 +30,7 @@ function ProfilePage(props) {
                      email={email}
                      photoURL={photoURL}
                      name={name}
+                     userProfile={userProfile}
                   />
                </Col>
                <Col flex='auto'>
