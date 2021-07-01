@@ -84,6 +84,13 @@ function ProfileEditPage(props) {
                   setUrl(url);
                   onSuccess();
                   onFinishChangeAvatar(url);
+                  const updatePhotoURLToDb = async () => {
+                     await userApi.addUserInfo({
+                        photoURL: url,
+                        firebaseId: uid,
+                     });
+                  };
+                  updatePhotoURLToDb();
                })
                .then(() => {
                   openNotificationWithIcon(
@@ -143,6 +150,7 @@ function ProfileEditPage(props) {
    // [DATABASE] CHANGE USER PROFILE
    const onProfileFinish = async (values) => {
       console.log(values);
+
       try {
          const formValues = {
             firebaseId: uid,
@@ -152,10 +160,12 @@ function ProfileEditPage(props) {
             gear: values.gear,
             favouriteGear: values.favouriteGear,
             hasTag: values.hasTag,
+            description: values.description,
+            photoURL: values.photoURL,
          };
 
          const response = await userApi.addUserInfo(formValues);
-         console.log(response);
+         console.log('Finish: ', response);
       } catch (error) {
          return console.log('Fail: ', error);
       }
@@ -203,6 +213,7 @@ function ProfileEditPage(props) {
                         <ProfileEditProfileCard
                            onProfileFinish={onProfileFinish}
                            userProfile={userProfile}
+                           photoURL={photoURL}
                         />
                      )}
                   </Col>

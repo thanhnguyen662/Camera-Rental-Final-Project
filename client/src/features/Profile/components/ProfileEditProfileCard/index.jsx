@@ -6,7 +6,7 @@ ProfileEditProfileCard.propTypes = {};
 const { Title, Text } = Typography;
 
 function ProfileEditProfileCard(props) {
-   const { onProfileFinish, userProfile } = props;
+   const { onProfileFinish, userProfile, photoURL } = props;
    console.log(userProfile);
 
    const formItemLayout = {
@@ -55,8 +55,13 @@ function ProfileEditProfileCard(props) {
                      address: userProfile.address,
                      gender: userProfile.gender,
                      hasTag: userProfile.hasTag,
+                     description: userProfile.description,
+                     photoURL: photoURL,
                   }}
                >
+                  <Form.Item name='photoURL' label='Photo'>
+                     <Input disabled />
+                  </Form.Item>
                   <Form.Item name='age' label='Age'>
                      <Input />
                   </Form.Item>
@@ -70,6 +75,9 @@ function ProfileEditProfileCard(props) {
                      <Input />
                   </Form.Item>
                   <Form.Item name='hasTag' label='HasTag'>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item name='description' label='About'>
                      <Input />
                   </Form.Item>
 

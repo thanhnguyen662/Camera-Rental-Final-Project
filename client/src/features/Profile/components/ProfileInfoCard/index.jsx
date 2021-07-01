@@ -21,8 +21,6 @@ function ProfileInfoCard(props) {
       }
    }, [userProfile?.hasTag]);
 
-   console.log('splitStr: ', split);
-
    return (
       <>
          <Card>
@@ -65,7 +63,7 @@ function ProfileInfoCard(props) {
                         <ClusterOutlined />
                      </Col>
                      <Col flex='auto'>
-                        <Text>Lorem ipsum dolor sit amet, consectetuer</Text>
+                        <Text>{userProfile?.description}</Text>
                      </Col>
                   </Row>
                   <Row>

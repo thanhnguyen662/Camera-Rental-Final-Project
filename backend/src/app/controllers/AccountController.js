@@ -11,6 +11,8 @@ class AccountController {
                address: req.body.address,
                favouriteGear: req.body.favouriteGear,
                hasTag: req.body.hasTag,
+               description: req.body.description,
+               photoURL: String(req.body.photoURL),
             },
             update: {
                age: req.body.age,
@@ -19,6 +21,8 @@ class AccountController {
                favouriteGear: req.body.favouriteGear,
                hasTag: req.body.hasTag,
                rate: req.body.rate,
+               description: req.body.description,
+               photoURL: String(req.body.photoURL),
             },
             where: {
                firebaseId: req.body.firebaseId,
@@ -33,7 +37,7 @@ class AccountController {
 
    getUserInfo = async (req, res, next) => {
       try {
-         const getUserInfoInDb = await prisma.user.findUnique({
+         const getUserInfoInDb = await prisma.user.findFirst({
             where: {
                firebaseId: req.query.firebaseId,
             },

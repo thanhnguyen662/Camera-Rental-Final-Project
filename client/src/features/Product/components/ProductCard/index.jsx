@@ -48,8 +48,12 @@ function ProductCard(props) {
                            color: 'black',
                         }}
                         avatar={
-                           <Link to={`/profile/${product.authorId}`}>
-                              <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                           <Link to={`/profile/${product.firebaseId}`}>
+                              {!product.User?.photoURL ? (
+                                 <></>
+                              ) : (
+                                 <Avatar src={product.User?.photoURL} />
+                              )}
                            </Link>
                         }
                         title={

@@ -5,7 +5,11 @@ const shortid = require('shortid');
 class ProductController {
    getProducts = async (req, res, next) => {
       try {
-         const getProducts = await prisma.product.findMany();
+         const getProducts = await prisma.product.findMany({
+            include: {
+               User: true,
+            },
+         });
 
          res.json(getProducts);
       } catch (error) {
@@ -33,7 +37,7 @@ class ProductController {
             data: {
                name: req.body.name,
                description: req.body.description,
-               authorId: Number(req.user.id),
+               firebaseId: req.user.id,
                slug: `${slugify(req.body.name)}-${shortid.generate()}`,
             },
          });
