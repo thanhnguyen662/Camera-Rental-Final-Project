@@ -24,7 +24,6 @@ model Product {
 }
 
 model User {
-  // id            Int     @id @default(autoincrement())
   firebaseId    String    @id
   age           Int?
   gender        String?

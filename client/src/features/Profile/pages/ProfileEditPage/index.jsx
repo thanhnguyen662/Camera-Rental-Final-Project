@@ -58,6 +58,13 @@ function ProfileEditPage(props) {
          });
    };
 
+   const updatePhotoURLToDb = async (url) => {
+      await userApi.addUserInfo({
+         photoURL: url,
+         firebaseId: uid,
+      });
+   };
+
    // [FIREBASE] CHANGE USER AVATAR
    const uploadImage = async (options) => {
       const { onSuccess, onError, file, onProgress } = options;
@@ -84,13 +91,7 @@ function ProfileEditPage(props) {
                   setUrl(url);
                   onSuccess();
                   onFinishChangeAvatar(url);
-                  const updatePhotoURLToDb = async () => {
-                     await userApi.addUserInfo({
-                        photoURL: url,
-                        firebaseId: uid,
-                     });
-                  };
-                  updatePhotoURLToDb();
+                  updatePhotoURLToDb(url);
                })
                .then(() => {
                   openNotificationWithIcon(

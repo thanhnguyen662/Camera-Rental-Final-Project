@@ -9,8 +9,7 @@ import { Button, Layout, Steps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import userApi from '../../../../api/userApi';
-import { storage } from '../../../../firebase';
-import { auth } from '../../../../firebase';
+import { auth, storage } from '../../../../firebase';
 import ProfileEditAvatarCard from '../../../Profile/components/ProfileEditAvatarCard';
 import ProfileEditInfoCard from '../../../Profile/components/ProfileEditInfoCard';
 import ProfileEditProfileCard from '../../../Profile/components/ProfileEditProfileCard';
@@ -97,6 +96,7 @@ function RegisterPage(props) {
             gear: values.gear,
             favouriteGear: values.favouriteGear,
             hasTag: values.hasTag,
+            photoURL: values.photoURL,
          };
 
          const response = await userApi.addUserInfo(formValues);
@@ -122,6 +122,17 @@ function RegisterPage(props) {
       };
       getUserProfile();
    }, [uid]);
+
+   const updatePhotoURLToDb = async (url) => {
+      try {
+         await userApi.addUserInfo({
+            photoURL: url,
+            firebaseId: uid,
+         });
+      } catch (error) {
+         return console.log('Error: ', error);
+      }
+   };
 
    // [FIREBASE] CHANGE USER AVATAR
    // handle avatar change in firebase
@@ -150,6 +161,7 @@ function RegisterPage(props) {
                   setUrl(url);
                   onSuccess();
                   onFinishChangeAvatar(url);
+                  updatePhotoURLToDb(url);
                })
                .catch((error) => {
                   console.log(error);

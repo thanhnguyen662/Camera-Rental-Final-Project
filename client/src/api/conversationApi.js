@@ -17,6 +17,11 @@ const conversationApi = {
       const url = `/message`;
       return await axiosClient.post(url, message);
    },
+
+   createConversation: (conversation) => {
+      const url = '/conversation';
+      return axiosClient.post(url, conversation);
+   },
 };
 
 export default conversationApi;

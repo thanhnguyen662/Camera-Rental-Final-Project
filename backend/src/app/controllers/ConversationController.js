@@ -11,7 +11,12 @@ class ConversationController {
             },
          });
 
-         if (checkConversationIsExist) return res.send({ message: 'Exist' });
+         if (checkConversationIsExist)
+            return res.send({
+               message: 'Exist',
+               id: checkConversationIsExist.id,
+               members: checkConversationIsExist.members,
+            });
 
          const newConversation = await prisma.conversation.create({
             data: {

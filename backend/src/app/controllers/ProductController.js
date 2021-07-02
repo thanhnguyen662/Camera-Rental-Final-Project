@@ -11,7 +11,7 @@ class ProductController {
             },
          });
 
-         res.json(getProducts);
+         res.status(200).json(getProducts);
       } catch (error) {
          return next(error);
       }

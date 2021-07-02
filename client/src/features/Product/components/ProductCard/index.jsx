@@ -50,7 +50,7 @@ function ProductCard(props) {
                         avatar={
                            <Link to={`/profile/${product.firebaseId}`}>
                               {!product.User?.photoURL ? (
-                                 <></>
+                                 <Avatar></Avatar>
                               ) : (
                                  <Avatar src={product.User?.photoURL} />
                               )}

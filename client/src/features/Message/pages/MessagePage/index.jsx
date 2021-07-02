@@ -24,9 +24,15 @@ const uniqid = require('uniqid');
 function MessagePage(props) {
    const userId = useSelector((state) => state.users.id);
 
+   // const location = useLocation();
+   // const newMessageComing = location.state?.newMessageComing;
+   // console.log('currentSelectedChat: ', newMessageComing);
+
    const socket = useRef();
    const [conversation, setConversation] = useState([]);
-   const [currentChat, setCurrentChat] = useState(null);
+   const [currentChat, setCurrentChat] = useState(
+      JSON.parse(localStorage.getItem('selectedConversation'))
+   );
    const [messages, setMessages] = useState([]);
    const [newMessage, setNewMessage] = useState('');
    const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -40,14 +46,18 @@ function MessagePage(props) {
             text: data.text,
             createAt: Date.now(),
          });
-         console.log('getMessage data: ', data);
       });
    }, []);
 
-   useEffect(() => {
-      if (!currentChat?.members) console.log('Wait a minutes');
+   console.log('Arrival message: ', arrivalMessage);
+   console.log('SocketId: ', socket.current?.id);
 
-      arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
+   useEffect(() => {
+      console.log('currentChat?.members: ', currentChat?.members);
+      console.log('arrivalMessage: ', arrivalMessage);
+      arrivalMessage &&
+         currentChat?.members.includes(arrivalMessage.sender) &&
+         setMessages((prev) => [...prev, arrivalMessage]);
    }, [arrivalMessage, currentChat]);
 
    useEffect(() => {
@@ -71,7 +81,7 @@ function MessagePage(props) {
          }
       };
       getConversation();
-   }, [userId]);
+   }, [userId, arrivalMessage]);
 
    const onClickUser = (conversation) => {
       setCurrentChat(conversation);
@@ -106,9 +116,11 @@ function MessagePage(props) {
       const receiverId = currentChat.members.find(
          (member) => member !== userId
       );
+
       console.log('receiverId sendMessage: ', receiverId);
       console.log('userId sendMessage: ', userId);
       console.log('text sendMessage: ', newMessage);
+
       socket.current.emit('sendMessage', {
          senderId: userId,
          receiverId: receiverId,
@@ -144,6 +156,8 @@ function MessagePage(props) {
       };
       getUsernameByIdFunction();
    }, [userId, currentChat?.members]);
+
+   localStorage.removeItem('selectedConversation');
 
    return (
       <>

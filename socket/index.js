@@ -37,11 +37,12 @@ io.on('connection', (socket) => {
    socket.on('sendMessage', ({ senderId, receiverId, text }) => {
       console.log('USER IN ARRAY sendMessage: ', users);
       const user = getUser(receiverId);
+      console.log('to SOCKET: ', user?.socketId);
       if (!user) return console.log('User is offline');
 
       console.log('senderId in sendMessage: ', senderId);
       console.log('text in sendMessage: ', text);
-      io.to(user.socketId).emit('getMessage', {
+      io.to(user?.socketId).emit('getMessage', {
          senderId,
          text,
       });
