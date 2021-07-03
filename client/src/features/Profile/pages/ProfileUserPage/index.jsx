@@ -19,6 +19,7 @@ function ProfileUserPage(props) {
                firebaseId: firebaseId,
             });
             setUserInfo(response);
+            console.log('getUserByParams', response);
          } catch (error) {
             return console.log('Error: ', error);
          }
@@ -49,8 +50,9 @@ function ProfileUserPage(props) {
          };
          const response = await conversationApi.createConversation(formValues);
          console.log('Conversation created: ', response);
+
          localStorage.setItem('selectedConversation', JSON.stringify(response));
-         window.location = '/message/';
+         window.location = '/message';
       } catch (error) {
          return console.log('Error: ', error);
       }

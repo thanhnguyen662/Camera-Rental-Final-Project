@@ -49,12 +49,12 @@ function MessagePage(props) {
       });
    }, []);
 
-   console.log('Arrival message: ', arrivalMessage);
-   console.log('SocketId: ', socket.current?.id);
+   // console.log('Arrival message: ', arrivalMessage);
+   // console.log('SocketId: ', socket.current?.id);
 
    useEffect(() => {
-      console.log('currentChat?.members: ', currentChat?.members);
-      console.log('arrivalMessage: ', arrivalMessage);
+      // console.log('currentChat?.members: ', currentChat?.members);
+      // console.log('arrivalMessage: ', arrivalMessage);
       arrivalMessage &&
          currentChat?.members.includes(arrivalMessage.sender) &&
          setMessages((prev) => [...prev, arrivalMessage]);
@@ -63,9 +63,9 @@ function MessagePage(props) {
    useEffect(() => {
       if (!userId) return;
       socket.current.emit('addUser', userId);
-      socket.current.on('getUsers', (users) => {
-         console.log('User is online: ', users);
-      });
+      // socket.current.on('getUsers', (users) => {
+      //    console.log('User is online: ', users);
+      // });
    }, [userId]);
 
    useEffect(() => {
@@ -74,7 +74,7 @@ function MessagePage(props) {
             if (!userId) return;
 
             const response = await conversationApi.getConversation(userId);
-            console.log('Conversation: ', response);
+            // console.log('Conversation: ', response);
             setConversation(response);
          } catch (error) {
             console.log('Fail: ', error);
@@ -95,15 +95,17 @@ function MessagePage(props) {
          try {
             const response = await conversationApi.getMessage(currentId);
             setMessages(response);
-            console.log(messages);
+            console.log('Message: ', response);
          } catch (err) {
             console.log(err);
          }
       };
       getMessage();
-      console.log('currentChat', currentChat);
-      // eslint-disable-next-line
-   }, [currentChat]);
+      // console.log('currentChat', currentChat);
+   }, [
+      currentChat,
+      // arrivalMessage
+   ]);
 
    const handleMessageInputSubmit = async () => {
       if (!userId) return;
@@ -143,7 +145,12 @@ function MessagePage(props) {
       console.log('receiverIdInGroup: ', receiverIdInGroup);
       const getUsernameByIdFunction = async () => {
          try {
-            if (!receiverIdInGroup) return;
+            if (
+               !userId ||
+               !receiverIdInGroup ||
+               receiverIdInGroup.includes(userId)
+            )
+               return;
 
             const response = await userApi.getFriendsId({
                uid: receiverIdInGroup,

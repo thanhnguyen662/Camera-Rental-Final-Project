@@ -40,9 +40,12 @@ function HeaderBar(props) {
                      </Link>
                   </Menu.Item>
                   <Menu.Item key='2'>
-                     <Link to='/message'>
+                     {/* <Link to='/message'>
                         <b>Messenger</b>
-                     </Link>
+                     </Link> */}
+                     <b>
+                        <a href='http://localhost:3000/message'>Message</a>
+                     </b>
                   </Menu.Item>
                </Menu>
             </Col>

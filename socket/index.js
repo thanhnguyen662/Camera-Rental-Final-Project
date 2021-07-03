@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
    //take userId & socketId from user
    socket.on('addUser', (userId) => {
       addUser(userId, socket.id);
-      io.emit('getUsers', users);
+      // io.emit('getUsers', users);
    });
 
    //send and get messages
