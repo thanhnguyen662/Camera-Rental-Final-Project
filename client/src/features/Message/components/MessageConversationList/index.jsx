@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import userApi from '../../../../api/userApi';
 
 function Message(props) {
-   const { conversation } = props;
+   const { conversation, lastMessage } = props;
    const userId = useSelector((state) => state.users.id);
    const [user, setUser] = useState(null);
 
@@ -24,8 +24,15 @@ function Message(props) {
 
       getUser();
    }, [userId, conversation]);
+
    return (
-      <Conversation name={user?.email}>
+      <Conversation
+         name={user?.email}
+         info={
+            conversation.messages[lastMessage]?.text ||
+            'No message in conversation'
+         }
+      >
          <Avatar src={user?.photoURL} name={user?.displayName} />
       </Conversation>
    );

@@ -74,14 +74,14 @@ function MessagePage(props) {
             if (!userId) return;
 
             const response = await conversationApi.getConversation(userId);
-            // console.log('Conversation: ', response);
+
             setConversation(response);
          } catch (error) {
             console.log('Fail: ', error);
          }
       };
       getConversation();
-   }, [userId, arrivalMessage]);
+   }, [userId, arrivalMessage, messages]);
 
    const onClickUser = (conversation) => {
       setCurrentChat(conversation);

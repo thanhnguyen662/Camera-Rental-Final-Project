@@ -38,6 +38,9 @@ class ConversationController {
                   has: String(req.params.userId),
                },
             },
+            include: {
+               messages: true,
+            },
          });
 
          res.status(200).json(findUserConversation);

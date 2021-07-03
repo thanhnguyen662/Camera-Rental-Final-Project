@@ -32,6 +32,7 @@ function SideBar(props) {
                      <MessageConversationList
                         key={conversation.id}
                         conversation={conversation}
+                        lastMessage={conversation.messages?.length - 1}
                      />
                   </div>
                ))}
