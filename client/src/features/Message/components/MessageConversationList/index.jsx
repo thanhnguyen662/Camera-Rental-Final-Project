@@ -1,11 +1,12 @@
 import { Avatar, Conversation } from '@chatscope/chat-ui-kit-react';
+import Loader from '@chatscope/chat-ui-kit-react/dist/cjs/Loader';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import userApi from '../../../../api/userApi';
 
 function Message(props) {
-   const { conversation, lastMessage } = props;
+   const { conversation, lastMessage, activeConversation } = props;
    const userId = useSelector((state) => state.users.id);
    const [user, setUser] = useState(null);
 
@@ -25,16 +26,31 @@ function Message(props) {
       getUser();
    }, [userId, conversation]);
 
+   const active = conversation?.id === activeConversation?.id && {
+      active: 'active',
+   };
+
    return (
-      <Conversation
-         name={user?.email}
-         info={
-            conversation.messages[lastMessage]?.text ||
-            'No message in conversation'
-         }
-      >
-         <Avatar src={user?.photoURL} name={user?.displayName} />
-      </Conversation>
+      <>
+         {!user ? (
+            <Loader
+               style={{
+                  margin: '12px 20px 10px 20px',
+               }}
+            />
+         ) : (
+            <Conversation
+               name={user?.email}
+               info={
+                  conversation.messages[lastMessage]?.text ||
+                  'No message in conversation'
+               }
+               {...active}
+            >
+               <Avatar src={user?.photoURL} name={user?.displayName} />
+            </Conversation>
+         )}
+      </>
    );
 }
 

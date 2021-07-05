@@ -17,7 +17,9 @@ SideBar.defaultProps = {
 };
 
 function SideBar(props) {
-   const { conversations, onClickUser } = props;
+   const { conversations, onClickUser, activeConversation } = props;
+
+   console.log('activeConversation: ', activeConversation);
 
    return (
       <>
@@ -33,6 +35,7 @@ function SideBar(props) {
                         key={conversation.id}
                         conversation={conversation}
                         lastMessage={conversation.messages?.length - 1}
+                        activeConversation={activeConversation}
                      />
                   </div>
                ))}

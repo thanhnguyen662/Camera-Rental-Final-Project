@@ -173,6 +173,7 @@ function MessagePage(props) {
                <SideBarLeft
                   conversations={conversation}
                   onClickUser={onClickUser}
+                  activeConversation={currentChat}
                />
                <ChatContainer>
                   {currentChat && (
@@ -180,10 +181,13 @@ function MessagePage(props) {
                         <ConversationHeader.Back
                            onClick={() => setCurrentChat(null)}
                         />
-                        <Avatar
-                           src={getUsernameById?.photoURL}
-                           name={getUsernameById?.displayName}
-                        />
+                        {!getUsernameById ? null : (
+                           <Avatar
+                              src={getUsernameById?.photoURL}
+                              name={getUsernameById?.displayName}
+                           />
+                        )}
+
                         <ConversationHeader.Content
                            userName={getUsernameById?.email}
                         />
@@ -238,15 +242,19 @@ function MessagePage(props) {
                         title='INFO'
                         style={{ textAlign: 'center', alignItems: 'center' }}
                      >
-                        <p>
-                           <Avatar
-                              src={getUsernameById?.photoURL}
-                              name={getUsernameById?.displayName}
-                              style={{ marginLeft: '30px' }}
-                           />
-                        </p>
-                        <p>{getUsernameById?.name}</p>
-                        <p>{getUsernameById?.email}</p>
+                        {!getUsernameById ? null : (
+                           <>
+                              <p>
+                                 <Avatar
+                                    src={getUsernameById?.photoURL}
+                                    name={getUsernameById?.displayName}
+                                    style={{ marginLeft: '30px' }}
+                                 />
+                              </p>
+                              <p>{getUsernameById?.name}</p>
+                              <p>{getUsernameById?.email}</p>
+                           </>
+                        )}
                      </ExpansionPanel>
                      <ExpansionPanel title='TEXT'>
                         <p>Dummy Text</p>
