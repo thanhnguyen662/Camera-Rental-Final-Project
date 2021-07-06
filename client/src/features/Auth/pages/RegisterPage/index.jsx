@@ -8,6 +8,7 @@ import {
 import { Button, Layout, Steps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import userApi from '../../../../api/userApi';
 import { auth, storage } from '../../../../firebase';
 import ProfileEditAvatarCard from '../../../Profile/components/ProfileEditAvatarCard';
@@ -19,9 +20,12 @@ const { Content } = Layout;
 const { Step } = Steps;
 
 function RegisterPage(props) {
+   const location = useLocation();
+   const { currentStep } = location.state || false;
+
    const [defaultFileList, setDefaultFileList] = useState([]);
    const [url, setUrl] = useState('');
-   const [current, setCurrent] = useState(1);
+   const [current, setCurrent] = useState(currentStep || 1);
    const [userProfile, setUserProfile] = useState();
    const userEmail = useSelector((state) => state.users.email);
    const userName = useSelector((state) => state.users.name);

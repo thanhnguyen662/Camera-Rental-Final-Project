@@ -6,7 +6,7 @@ const { Content } = Layout;
 
 function ContentLayout({ children }) {
    return (
-      <Content style={{ margin: '0 16px' }}>
+      <Content style={{ marginTop: '18px' }}>
          {/* <BreadcrumbBar /> */}
          <div
          // className='site-layout-background'

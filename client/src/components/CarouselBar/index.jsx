@@ -15,7 +15,7 @@ function CarouseBar(props) {
       <>
          <Carousel
             autoplay
-            style={{ margin: '25px 110px', borderRadius: '16px' }}
+            // style={{ margin: '25px 110px', borderRadius: '16px' }}
          >
             <div>
                <h3 style={contentStyle}>1</h3>

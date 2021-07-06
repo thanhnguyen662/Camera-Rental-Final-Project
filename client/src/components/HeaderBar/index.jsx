@@ -11,14 +11,15 @@ const { SubMenu } = Menu;
 
 function HeaderBar(props) {
    const loginStatus = useSelector((state) => state.users.loginStatus);
-   const name = useSelector((state) => state.users.name);
+   // const name = useSelector((state) => state.users.name);
    const photoURL = useSelector((state) => state.users.photoURL);
 
    async function onLogoutButtonClick() {
       try {
          await auth
             .signOut()
-            .then(() => localStorage.removeItem('providerData'));
+            .then(() => localStorage.removeItem('providerData'))
+            .then(() => localStorage.removeItem('isExist'));
 
          window.location = '/';
       } catch (error) {
@@ -40,9 +41,6 @@ function HeaderBar(props) {
                      </Link>
                   </Menu.Item>
                   <Menu.Item key='2'>
-                     {/* <Link to='/message'>
-                        <b>Messenger</b>
-                     </Link> */}
                      <b>
                         <a href='http://localhost:3000/message'>Message</a>
                      </b>
@@ -68,9 +66,9 @@ function HeaderBar(props) {
                            title={
                               <>
                                  <Avatar size={38} src={photoURL} />
-                                 <label style={{ marginLeft: '10px' }}>
+                                 {/* <label style={{ marginLeft: '10px' }}>
                                     {name}
-                                 </label>
+                                 </label> */}
                               </>
                            }
                         >

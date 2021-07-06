@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import userApi from './api/userApi';
 import './App.css';
 import { userInfo } from './features/Auth/loginSlice';
 import { auth } from './firebase';
@@ -8,6 +8,8 @@ import Routers from './router';
 
 function App() {
    const dispatch = useDispatch();
+   const userId = useSelector((state) => state.users.id);
+   const [profileIsExist, setProfileIsExist] = useState(true);
 
    useEffect(() => {
       const unregisterAuthObserver = auth.onAuthStateChanged(async (user) => {
@@ -15,7 +17,6 @@ function App() {
             console.log('User is not logged in');
             return;
          }
-
          const action = userInfo({
             loginStatus: true,
             email: user.email,
@@ -32,11 +33,27 @@ function App() {
       return () => unregisterAuthObserver();
    }, [dispatch]);
 
+   useEffect(() => {
+      const checkUserProfileInDb = async () => {
+         try {
+            if (!userId || localStorage.getItem('isExist')) return;
+            const response = await userApi.getUserProfile({
+               firebaseId: userId,
+            });
+            setProfileIsExist(response.data === null ? false : response);
+            console.log('Hello');
+            if (response.data === null ? false : response)
+               return localStorage.setItem('isExist', true);
+         } catch (error) {
+            return console.log('Error: ', error);
+         }
+      };
+      checkUserProfileInDb();
+   }, [userId]);
+
    return (
       <div className='App'>
-         <Router>
-            <Routers />
-         </Router>
+         <Routers profileIsExist={profileIsExist} />
       </div>
    );
 }

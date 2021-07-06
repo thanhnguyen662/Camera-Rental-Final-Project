@@ -35,7 +35,7 @@ function Message(props) {
          {!user ? (
             <Loader
                style={{
-                  margin: '12px 20px 10px 20px',
+                  margin: '14px 21px 10px 21px',
                }}
             />
          ) : (

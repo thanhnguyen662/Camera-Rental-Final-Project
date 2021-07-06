@@ -12,6 +12,7 @@ import {
    VoiceCallButton,
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+import { Row, Col } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
@@ -240,20 +241,23 @@ function MessagePage(props) {
                      <ExpansionPanel
                         open
                         title='INFO'
-                        style={{ textAlign: 'center', alignItems: 'center' }}
+                        // style={{ textAlign: 'center', alignItems: 'center' }}
                      >
                         {!getUsernameById ? null : (
-                           <>
-                              <p>
-                                 <Avatar
-                                    src={getUsernameById?.photoURL}
-                                    name={getUsernameById?.displayName}
-                                    style={{ marginLeft: '30px' }}
-                                 />
-                              </p>
-                              <p>{getUsernameById?.name}</p>
-                              <p>{getUsernameById?.email}</p>
-                           </>
+                           <Row justify='center' style={{ marginTop: '5px' }}>
+                              <Col span={7}>
+                                 <p>
+                                    <Avatar
+                                       src={getUsernameById?.photoURL}
+                                       name={getUsernameById?.displayName}
+                                       style={{ marginLeft: '30px' }}
+                                    />
+                                 </p>
+                              </Col>
+                              <Col flex='auto' style={{ marginTop: '10px' }}>
+                                 <p>{getUsernameById?.email}</p>
+                              </Col>
+                           </Row>
                         )}
                      </ExpansionPanel>
                      <ExpansionPanel title='TEXT'>

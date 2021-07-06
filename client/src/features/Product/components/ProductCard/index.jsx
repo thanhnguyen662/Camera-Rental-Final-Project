@@ -30,7 +30,7 @@ function ProductCard(props) {
                   <Card
                      size='small'
                      hoverable
-                     style={{ width: 300 }}
+                     style={{ width: 287 }}
                      cover={
                         <img
                            alt='example'

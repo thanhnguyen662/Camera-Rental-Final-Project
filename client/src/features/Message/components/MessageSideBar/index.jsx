@@ -19,8 +19,6 @@ SideBar.defaultProps = {
 function SideBar(props) {
    const { conversations, onClickUser, activeConversation } = props;
 
-   console.log('activeConversation: ', activeConversation);
-
    return (
       <>
          <Sidebar position='left' scrollable={false}>
