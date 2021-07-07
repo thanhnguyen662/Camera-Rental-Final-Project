@@ -1,5 +1,9 @@
-import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Layout, Menu, Row } from 'antd';
+import {
+   LogoutOutlined,
+   UserOutlined,
+   ShoppingCartOutlined,
+} from '@ant-design/icons';
+import { Avatar, Button, Col, Layout, Menu, Row, Badge } from 'antd';
 import { auth } from '../../firebase';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -13,6 +17,7 @@ function HeaderBar(props) {
    const loginStatus = useSelector((state) => state.users.loginStatus);
    // const name = useSelector((state) => state.users.name);
    const photoURL = useSelector((state) => state.users.photoURL);
+   const productInCartCount = useSelector((state) => state.cart.length);
 
    async function onLogoutButtonClick() {
       try {
@@ -61,6 +66,14 @@ function HeaderBar(props) {
                ) : (
                   <>
                      <Menu mode='horizontal' subMenuCloseDelay='0.5'>
+                        <Menu.Item key='test'>
+                           <Badge count={productInCartCount} size='small'>
+                              <ShoppingCartOutlined
+                                 style={{ fontSize: '160%' }}
+                              />
+                           </Badge>
+                           <Link to='/product/cart' />
+                        </Menu.Item>
                         <SubMenu
                            key='SubMenu'
                            title={

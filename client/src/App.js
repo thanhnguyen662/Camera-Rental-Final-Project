@@ -41,7 +41,6 @@ function App() {
                firebaseId: userId,
             });
             setProfileIsExist(response.data === null ? false : response);
-            console.log('Hello');
             if (response.data === null ? false : response)
                return localStorage.setItem('isExist', true);
          } catch (error) {

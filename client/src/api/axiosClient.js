@@ -17,7 +17,6 @@ const getFirebaseToken = async () => {
    return new Promise((resolve, reject) => {
       const waitTimer = setTimeout(() => {
          reject(null);
-         console.log('Reject timeout');
       }, 10000);
 
       const unregisterAuthObserver = auth.onAuthStateChanged(async (user) => {

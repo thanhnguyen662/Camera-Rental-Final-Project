@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Card, Avatar, Row, Col } from 'antd';
 import {
-   EditOutlined,
+   PlusOutlined,
    EllipsisOutlined,
    HeartOutlined,
 } from '@ant-design/icons';
@@ -13,14 +13,16 @@ const { Meta } = Card;
 
 ProductCard.propTypes = {
    products: PropTypes.array,
+   onClickToAddProduct: PropTypes.func,
 };
 
 ProductCard.defaultProps = {
    products: [],
+   onClickToAddProduct: null,
 };
 
 function ProductCard(props) {
-   const { products } = props;
+   const { products, onClickToAddProduct } = props;
 
    return (
       <>
@@ -28,6 +30,7 @@ function ProductCard(props) {
             {products.map((product) => (
                <Col flex='none' key={product.id}>
                   <Card
+                     key={product.id}
                      size='small'
                      hoverable
                      style={{ width: 287 }}
@@ -39,11 +42,15 @@ function ProductCard(props) {
                      }
                      actions={[
                         <HeartOutlined key='heart' />,
-                        <EditOutlined key='edit' />,
+                        <PlusOutlined
+                           key='plus'
+                           onClick={() => onClickToAddProduct(product)}
+                        />,
                         <EllipsisOutlined key='ellipsis' />,
                      ]}
                   >
                      <Meta
+                        key={product.id}
                         style={{
                            color: 'black',
                         }}
