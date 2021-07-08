@@ -1,19 +1,13 @@
 // import PropTypes from 'prop-types';
 import { Button, Space, Table } from 'antd';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeProductFromCart } from '../../productSlice';
+import { useSelector } from 'react-redux';
 
 ProductCartTable.propTypes = {};
 
 function ProductCartTable(props) {
+   const { onClickRemoveItem } = props;
    const productInCart = useSelector((state) => state.cart);
-   const dispatch = useDispatch();
-
-   const onClickRemoveItem = (product) => {
-      const action = removeProductFromCart(product);
-      dispatch(action);
-   };
 
    const columns = [
       {
