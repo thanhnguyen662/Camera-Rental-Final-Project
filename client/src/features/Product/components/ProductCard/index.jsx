@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Card, Avatar, Row, Col } from 'antd';
 import {
-   PlusOutlined,
    EllipsisOutlined,
    HeartOutlined,
+   PlusOutlined,
 } from '@ant-design/icons';
+import { Avatar, Card, Col, Row } from 'antd';
 import Text from 'antd/lib/typography/Text';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const { Meta } = Card;
 

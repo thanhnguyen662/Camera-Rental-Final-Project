@@ -1,3 +1,3 @@
-get http://localhost:4000/account/getUserProfileByUid?firebaseId=syNDFbP6svMicgO4uxFo9UtvHEk1
+get http://localhost:4000/cart/getCart?firebaseId=S1nGHB06yfVXV344QHesu21Nl5s1
 Content-Type: application/json
 

@@ -19,6 +19,7 @@ model Product {
   updatedAt   DateTime @updatedAt
   User        User?    @relation(fields: [firebaseId], references: [firebaseId])
   firebaseId  String?
+  carts       Cart[]
 
   @@map("Products")
 }
@@ -34,6 +35,7 @@ model User {
   description   String?
   photoURL      String?
   products      Product[]
+  carts         Cart[]
 
   @@map("Users")
 }
@@ -58,4 +60,14 @@ model Message {
   conversations  Conversation @relation(fields: [conversationId], references: [id])
 
   @@map("Messages")
+}
+
+model Cart {
+  id         Int      @id @default(autoincrement())
+  User       User?    @relation(fields: [firebaseId], references: [firebaseId])
+  firebaseId String?
+  Product    Product? @relation(fields: [productId], references: [id])
+  productId  Int?
+
+  @@map("Carts")
 }

@@ -4,13 +4,16 @@ import userApi from './api/userApi';
 import './App.css';
 import { userInfo } from './features/Auth/loginSlice';
 import { auth } from './firebase';
+import { getCart } from './features/Product/productSlice';
 import Routers from './router';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 function App() {
    const dispatch = useDispatch();
    const userId = useSelector((state) => state.users.id);
    const [profileIsExist, setProfileIsExist] = useState(true);
 
+   //[FIREBASE] get user info and store at Redux
    useEffect(() => {
       const unregisterAuthObserver = auth.onAuthStateChanged(async (user) => {
          if (!user) {
@@ -33,6 +36,7 @@ function App() {
       return () => unregisterAuthObserver();
    }, [dispatch]);
 
+   //[DATABASE] check user info if user info not available -> redirect user to register page
    useEffect(() => {
       const checkUserProfileInDb = async () => {
          try {
@@ -49,6 +53,20 @@ function App() {
       };
       checkUserProfileInDb();
    }, [userId]);
+
+   useEffect(() => {
+      const getCartAsyncThunk = () => {
+         try {
+            if (!userId) return;
+            const actionResult = dispatch(getCart({ firebaseId: userId }));
+
+            unwrapResult(actionResult);
+         } catch (error) {
+            return console.log('Error: ', error);
+         }
+      };
+      getCartAsyncThunk();
+   }, [dispatch, userId]);
 
    return (
       <div className='App'>

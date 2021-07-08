@@ -1,5 +1,5 @@
 // import PropTypes from 'prop-types';
-import { Space, Table, Button } from 'antd';
+import { Button, Space, Table } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeProductFromCart } from '../../productSlice';

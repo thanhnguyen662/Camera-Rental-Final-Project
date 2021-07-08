@@ -23,11 +23,17 @@ function ProductPage(props) {
       return split;
    };
 
-   const handleOnClickToAddProduct = (product) => {
+   const handleOnClickToAddProduct = async (product) => {
       const productToCart = addKeyToProduct(product);
 
       const action = addProductToCart(productToCart);
       dispatch(action);
+
+      // try {
+      //    const response = await productApi.
+      // } catch (error) {
+      //    return console.log('Error: ', error);
+      // }
    };
 
    return (
