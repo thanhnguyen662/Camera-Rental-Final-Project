@@ -43,6 +43,23 @@ class CartController {
          return next(error);
       }
    };
+
+   removeItemFromCart = async (req, res, next) => {
+      try {
+         console.log(req.body.firebaseId);
+         console.log(req.body.productId);
+         const deleteProduct = await prisma.cart.deleteMany({
+            where: {
+               firebaseId: req.body.firebaseId,
+               productId: Number(req.body.productId),
+            },
+         });
+
+         return res.status(200).json(deleteProduct);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new CartController();
