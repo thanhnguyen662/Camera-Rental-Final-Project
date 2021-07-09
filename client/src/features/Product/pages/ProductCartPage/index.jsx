@@ -12,13 +12,12 @@ function ProductCardPage(props) {
    const handleOnClickRemoveItem = async (product) => {
       const action = removeProductFromCart(product);
       dispatch(action);
-      console.log(product.id);
+
       try {
          const data = {
             firebaseId: userId,
             productId: parseInt(product.id),
          };
-         console.log(data);
          const response = await cartApi.removeProductFromCart(data);
 
          console.log('Item removed successfully: ', response);

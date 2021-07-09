@@ -1,0 +1,43 @@
+.content{
+   background: white;
+   width: 88%;
+   padding: 20px 20px;
+   border-radius: 12px;
+   box-shadow: 0 0 15px 2px rgb(226, 226, 226);
+}
+
+b{
+   margin-left: 14px;
+}
+
+p{
+   margin-left: 14px;
+   margin-bottom: -2px;
+}
+
+
+.list{
+   background: white;
+   margin-top: 20px;
+   width: 88%;
+   padding: 20px 20px;
+   border-radius: 12px;
+   box-shadow: 0 0 15px 2px rgb(226, 226, 226);
+}
+
+.input{
+   background: white;
+   width: 94%;
+   padding: 20px 20px;
+   border-radius: 12px;
+   box-shadow: 0 0 15px 2px rgb(226, 226, 226);
+}
+
+button{
+   margin-top: 2px;
+   border-radius: 20px;
+}
+
+.ant-btn-round.ant-btn-lg {
+   border-radius: 16px
+}

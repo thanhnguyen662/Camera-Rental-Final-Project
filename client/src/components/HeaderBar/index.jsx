@@ -2,6 +2,7 @@ import {
    LogoutOutlined,
    UserOutlined,
    ShoppingCartOutlined,
+   EditOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Col, Layout, Menu, Row, Badge } from 'antd';
 import { auth } from '../../firebase';
@@ -15,7 +16,6 @@ const { SubMenu } = Menu;
 
 function HeaderBar(props) {
    const loginStatus = useSelector((state) => state.users.loginStatus);
-   // const name = useSelector((state) => state.users.name);
    const photoURL = useSelector((state) => state.users.photoURL);
    const productInCartCount = useSelector((state) => state.cart.length);
 
@@ -38,22 +38,8 @@ function HeaderBar(props) {
             <Col span={2} offset={2}>
                LOGO
             </Col>
-            <Col span={6}>
-               <Menu mode='horizontal'>
-                  <Menu.Item key='1'>
-                     <Link to='/'>
-                        <b>Home</b>
-                     </Link>
-                  </Menu.Item>
-                  <Menu.Item key='2'>
-                     <b>
-                        <a href='http://localhost:3000/message'>Message</a>
-                     </b>
-                  </Menu.Item>
-               </Menu>
-            </Col>
 
-            <Col span={5} offset={9}>
+            <Col span={4} offset={16}>
                {loginStatus === false ? (
                   <>
                      <Button type='link' size='large'>
@@ -79,17 +65,17 @@ function HeaderBar(props) {
                            title={
                               <>
                                  <Avatar size={38} src={photoURL} />
-                                 {/* <label style={{ marginLeft: '10px' }}>
-                                    {name}
-                                 </label> */}
                               </>
                            }
                         >
                            <Menu.Item key='setting:1' icon={<UserOutlined />}>
                               <Link to='/profile'>Profile</Link>
                            </Menu.Item>
+                           <Menu.Item key='setting:2' icon={<EditOutlined />}>
+                              <Link to='/profile/edit'>Edit</Link>
+                           </Menu.Item>
                            <Menu.Item
-                              key='setting:2'
+                              key='setting:3'
                               icon={<LogoutOutlined />}
                               onClick={() => {
                                  onLogoutButtonClick();

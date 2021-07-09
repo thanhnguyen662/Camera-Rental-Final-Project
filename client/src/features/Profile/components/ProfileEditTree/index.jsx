@@ -1,5 +1,5 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Card, Comment, Menu, Spin } from 'antd';
+import { Comment, Menu, Spin } from 'antd';
 import React from 'react';
 
 const { SubMenu } = Menu;
@@ -15,13 +15,14 @@ function ProfileEditTree(props) {
             <Spin />
          ) : (
             <>
-               <Card hoverable={true}>
+               <div style={{ background: 'white' }}>
                   <Comment
+                     style={{ padding: '8px 25px' }}
                      author={userEmail}
                      avatar={photoURL}
                      content={userName}
                   />
-               </Card>
+               </div>
                <Menu
                   onClick={(e) => handleClick(e)}
                   style={{ width: 235, marginTop: 15 }}

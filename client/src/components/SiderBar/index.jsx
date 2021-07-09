@@ -1,15 +1,16 @@
 import {
-   DesktopOutlined,
-   FileOutlined,
-   PieChartOutlined,
-   TeamOutlined,
-   UserOutlined,
+   MessageOutlined,
+   // FileOutlined,
+   HomeOutlined,
+   // TeamOutlined,
+   // UserOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function SiderBar(props) {
-   const { SubMenu } = Menu;
+   // const { SubMenu } = Menu;
    const { Sider } = Layout;
    const [collapsed, onCollapsed] = useState(true);
 
@@ -22,13 +23,13 @@ function SiderBar(props) {
       >
          <div className='logo' />
          <Menu theme='dark' mode='inline'>
-            <Menu.Item key='1' icon={<PieChartOutlined />}>
-               Option 1
+            <Menu.Item key='1' icon={<HomeOutlined />} title='Home'>
+               <Link to='/'>Home</Link>
             </Menu.Item>
-            <Menu.Item key='2' icon={<DesktopOutlined />}>
-               Option 2
+            <Menu.Item key='2' icon={<MessageOutlined />} title='Messenger'>
+               <a href='http://localhost:3000/message'>Messenger</a>
             </Menu.Item>
-            <SubMenu key='sub1' icon={<UserOutlined />} title='User'>
+            {/* <SubMenu key='sub1' icon={<UserOutlined />} title='User'>
                <Menu.Item key='3'>Tom</Menu.Item>
                <Menu.Item key='4'>Bill</Menu.Item>
                <Menu.Item key='5'>Alex</Menu.Item>
@@ -39,7 +40,7 @@ function SiderBar(props) {
             </SubMenu>
             <Menu.Item key='9' icon={<FileOutlined />}>
                Files
-            </Menu.Item>
+            </Menu.Item> */}
          </Menu>
       </Sider>
    );

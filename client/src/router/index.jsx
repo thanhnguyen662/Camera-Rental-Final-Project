@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import CarouselBar from '../components/CarouselBar';
 import SignIn from '../features/Auth';
-// import Lading from '../features/Lading';
+import Lading from '../features/Lading';
 import Message from '../features/Message';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
@@ -42,12 +42,11 @@ function Routers(props) {
                         </div>
                      </Route>
 
-                     {/* <Route path='/lading'>
-                        <CarouselBar />
+                     <Route path='/lading'>
                         <ContentLayout>
                            <Lading />
                         </ContentLayout>
-                     </Route> */}
+                     </Route>
 
                      <Route path='/product'>
                         <Product />
