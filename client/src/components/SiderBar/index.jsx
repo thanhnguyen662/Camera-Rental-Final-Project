@@ -1,5 +1,6 @@
 import {
    MessageOutlined,
+   HeartOutlined,
    // FileOutlined,
    HomeOutlined,
    // TeamOutlined,
@@ -28,6 +29,9 @@ function SiderBar(props) {
             </Menu.Item>
             <Menu.Item key='2' icon={<MessageOutlined />} title='Messenger'>
                <a href='http://localhost:3000/message'>Messenger</a>
+            </Menu.Item>
+            <Menu.Item key='3' icon={<HeartOutlined />} title='Social'>
+               <Link to='/lading'>Social</Link>
             </Menu.Item>
             {/* <SubMenu key='sub1' icon={<UserOutlined />} title='User'>
                <Menu.Item key='3'>Tom</Menu.Item>

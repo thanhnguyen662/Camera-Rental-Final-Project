@@ -1,5 +1,5 @@
 import './Lading.scss';
-import { Col, Layout, Row, Avatar, List, Typography, Button } from 'antd';
+import { Col, Layout, Row, Avatar, List, Button, Input, Image } from 'antd';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -10,7 +10,6 @@ import {
 } from '@ant-design/icons';
 
 const { Content } = Layout;
-const { Text } = Typography;
 
 function LadingPage(props) {
    const photoURL = useSelector((state) => state.users.photoURL);
@@ -91,21 +90,18 @@ function LadingPage(props) {
 
                <Col span={14}>
                   <Row span={24}>
-                     <div className='input'>
+                     <div className='postStatus'>
                         <Row span={24}>
-                           <Col flex='auto'>
+                           <Col flex='50px'>
                               <Avatar size={45} src={photoURL} />
-                              <Text
-                                 strong
-                                 style={{
-                                    marginLeft: '20px',
-                                    color: '#b6b6b6',
-                                 }}
-                              >
-                                 What's news, {userName}
-                              </Text>
                            </Col>
-                           <Col offset={12}>
+                           <Col span={18}>
+                              <Input
+                                 className='input'
+                                 placeholder={`What's news, ${userName}?`}
+                              />
+                           </Col>
+                           <Col span={4}>
                               <Button
                                  type='primary'
                                  shape='round'
@@ -115,6 +111,26 @@ function LadingPage(props) {
                                  Post it
                               </Button>
                            </Col>
+                        </Row>
+                     </div>
+                  </Row>
+                  <Row span={24}>
+                     <div className='post'>
+                        <Row span={24}>
+                           <Col flex='50px'>
+                              <Avatar size={45} src={photoURL} />
+                           </Col>
+                           <Col span={18}>
+                              <b>{userName}</b>
+                              <p>10 minutes ago</p>
+                           </Col>
+                        </Row>
+                        <Row span={24}>
+                           <Image
+                              className='postImage'
+                              width={200}
+                              src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                           />
                         </Row>
                      </div>
                   </Row>

@@ -189,10 +189,10 @@ function ProfileEditPage(props) {
 
    return (
       <>
-         <Content style={{ margin: '0px 16px' }}>
-            <div style={{ paddingTop: 24, minHeight: 360 }}>
-               <Row gutter={[12, 0]}>
-                  <Col span={4}>
+         <Content>
+            <div style={{ minHeight: 360 }}>
+               <Row gutter={[25, 25]}>
+                  <Col span={5}>
                      <ProfileEditTree
                         userEmail={userEmail}
                         photoURL={photoURL}
@@ -219,7 +219,7 @@ function ProfileEditPage(props) {
                      )}
                   </Col>
                   <Col
-                     flex='auto'
+                     span={5}
                      style={{
                         textAlign: 'center',
                      }}

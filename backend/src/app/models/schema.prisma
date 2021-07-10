@@ -11,15 +11,20 @@ generator client {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String?
-  description String?
-  slug        String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User?    @relation(fields: [firebaseId], references: [firebaseId])
-  firebaseId  String?
-  carts       Cart[]
+  id              Int      @id @default(autoincrement())
+  name            String?
+  description     String?
+  slug            String   @unique
+  brand           String?
+  price           String?
+  stock           Int?
+  qualityRate     Int?
+  productPhotoURL String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  User            User?    @relation(fields: [firebaseId], references: [firebaseId])
+  firebaseId      String?
+  carts           Cart[]
 
   @@map("Products")
 }

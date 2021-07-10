@@ -35,11 +35,11 @@ function HeaderBar(props) {
    return (
       <Header className='site-layout-background' style={{ padding: '0 16px' }}>
          <Row>
-            <Col span={2} offset={2}>
+            <Col span={2} style={{ marginLeft: '130px' }}>
                LOGO
             </Col>
 
-            <Col span={4} offset={16}>
+            <Col span={5} offset={13}>
                {loginStatus === false ? (
                   <>
                      <Button type='link' size='large'>
@@ -51,7 +51,11 @@ function HeaderBar(props) {
                   </>
                ) : (
                   <>
-                     <Menu mode='horizontal' subMenuCloseDelay='0.5'>
+                     <Menu
+                        mode='horizontal'
+                        subMenuCloseDelay='0.5'
+                        style={{ marginLeft: '150px' }}
+                     >
                         <Menu.Item key='test'>
                            <Badge count={productInCartCount} size='small'>
                               <ShoppingCartOutlined

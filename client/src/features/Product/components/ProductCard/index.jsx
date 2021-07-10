@@ -1,15 +1,8 @@
-import {
-   EllipsisOutlined,
-   HeartOutlined,
-   PlusOutlined,
-} from '@ant-design/icons';
-import { Avatar, Card, Col, Row } from 'antd';
-import Text from 'antd/lib/typography/Text';
+import { Col, Image, Progress, Rate, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-const { Meta } = Card;
+import './ProductCard.scss';
 
 ProductCard.propTypes = {
    products: PropTypes.array,
@@ -26,53 +19,45 @@ function ProductCard(props) {
 
    return (
       <>
-         <Row gutter={[25, 25]} justify='center'>
+         <Row gutter={[30, 30]} justify='center'>
             {products.map((product) => (
                <Col flex='none' key={product.id}>
-                  <Card
-                     key={product.id}
-                     size='small'
-                     hoverable
-                     style={{ width: 287 }}
-                     cover={
-                        <img
-                           alt='example'
-                           src='https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-                        />
-                     }
-                     actions={[
-                        <HeartOutlined key='heart' />,
-                        <PlusOutlined
-                           key='plus'
-                           onClick={() => onClickToAddProduct(product)}
-                        />,
-                        <EllipsisOutlined key='ellipsis' />,
-                     ]}
-                  >
-                     <Meta
-                        key={product.id}
-                        style={{
-                           color: 'black',
-                        }}
-                        avatar={
-                           <Link to={`/profile/${product.firebaseId}`}>
-                              {!product.User?.photoURL ? (
-                                 <Avatar></Avatar>
-                              ) : (
-                                 <Avatar src={product.User?.photoURL} />
-                              )}
-                           </Link>
-                        }
-                        title={
-                           <Text strong>
-                              <Link to={`/product/${product.slug}`}>
-                                 {product.name}
-                              </Link>
-                           </Text>
-                        }
-                        description={product.description}
+                  <div className='productCard'>
+                     <Row span={24}>
+                        <div className='productImage'>
+                           <Image
+                              style={{ objectFit: 'cover' }}
+                              height={150}
+                              width={166}
+                              src={product.productPhotoURL}
+                           ></Image>
+                        </div>
+                     </Row>
+                     <h3>{product.brand}</h3>
+                     <p>
+                        <Link to={`/product/${product.slug}`}>
+                           {product.name}
+                        </Link>
+                     </p>
+                     <Rate
+                        value={product.qualityRate}
+                        style={{ marginLeft: '-2px', fontSize: '14px' }}
                      />
-                  </Card>
+                     <h4>{product.qualityRate}</h4>
+                     <h1>${product.price}</h1>
+                     <div className='stockStatus'>
+                        <Progress
+                           style={{ width: '30%' }}
+                           percent={product.stock}
+                           showInfo={false}
+                           size='small'
+                           status='active'
+                        />
+                        <h5 onClick={() => onClickToAddProduct(product)}>
+                           {product.stock} in Stock
+                        </h5>
+                     </div>
+                  </div>
                </Col>
             ))}
          </Row>

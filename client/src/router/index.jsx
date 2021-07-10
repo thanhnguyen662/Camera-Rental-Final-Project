@@ -13,7 +13,7 @@ import Product from '../features/Product';
 import Profile from '../features/Profile';
 import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
-import ProfileLayout from '../layouts/Profile';
+// import ProfileLayout from '../layouts/Profile';
 
 function Routers(props) {
    const { profileIsExist } = props;
@@ -34,7 +34,7 @@ function Routers(props) {
                <MainLayout>
                   <Switch>
                      <Route exact path='/'>
-                        <div style={{ margin: '25px 144px' }}>
+                        <div style={{ margin: '25px 125px' }}>
                            <CarouselBar />
                            <ContentLayout>
                               <Product />
@@ -53,9 +53,9 @@ function Routers(props) {
                      </Route>
 
                      <Route path='/profile'>
-                        <ProfileLayout>
+                        <div style={{ margin: '25px 125px' }}>
                            <Profile />
-                        </ProfileLayout>
+                        </div>
                      </Route>
 
                      <Route path='/message'>

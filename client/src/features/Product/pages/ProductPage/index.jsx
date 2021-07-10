@@ -13,6 +13,7 @@ function ProductPage(props) {
    useEffect(() => {
       async function getProduct() {
          const response = await productApi.getAllProducts();
+         console.log(response);
          setProduct(response);
       }
       getProduct();

@@ -1,10 +1,11 @@
 import { Carousel } from 'antd';
 import React from 'react';
+import './CarouselBar.scss';
 
 const contentStyle = {
-   height: '480px',
+   height: '400px',
    color: '#fff',
-   lineHeight: '480px',
+   lineHeight: '400px',
    textAlign: 'center',
    background: '#364d79',
    // borderRadius: '16px',
@@ -12,28 +13,17 @@ const contentStyle = {
 
 function CarouseBar(props) {
    return (
-      <>
+      <div className='carouselBar'>
          <Carousel
-            autoplay
-            // style={{ margin: '25px 110px', borderRadius: '16px' }}
+         // className='carouselBar'
+         // autoplay
+         // style={{ margin: '25px 110px', borderRadius: '16px' }}
          >
             <div>
                <h3 style={contentStyle}>1</h3>
             </div>
-            <div>
-               <h3 style={contentStyle}>2</h3>
-            </div>
-            <div>
-               <h3 style={contentStyle}>3</h3>
-            </div>
-            <div>
-               <h3 style={contentStyle}>4</h3>
-            </div>
-            <div>
-               <h3 style={contentStyle}>4</h3>
-            </div>
          </Carousel>
-      </>
+      </div>
    );
 }
 
