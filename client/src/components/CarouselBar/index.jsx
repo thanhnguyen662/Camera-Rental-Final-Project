@@ -3,7 +3,7 @@ import React from 'react';
 import './CarouselBar.scss';
 
 const contentStyle = {
-   height: '400px',
+   height: '500px',
    color: '#fff',
    lineHeight: '400px',
    textAlign: 'center',

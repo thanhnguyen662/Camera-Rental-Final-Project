@@ -19,7 +19,8 @@ function ProductCard(props) {
 
    return (
       <>
-         <Row gutter={[30, 30]} justify='center'>
+         <h1 style={{ marginTop: '45px' }}>Recent Discounts</h1>
+         <Row gutter={[30, 30]}>
             {products.map((product) => (
                <Col flex='none' key={product.id}>
                   <div className='productCard'>
@@ -28,9 +29,9 @@ function ProductCard(props) {
                            <Image
                               style={{ objectFit: 'cover' }}
                               height={150}
-                              width={166}
+                              width={165}
                               src={product.productPhotoURL}
-                           ></Image>
+                           />
                         </div>
                      </Row>
                      <h3>{product.brand}</h3>
@@ -41,21 +42,29 @@ function ProductCard(props) {
                      </p>
                      <Rate
                         value={product.qualityRate}
-                        style={{ marginLeft: '-2px', fontSize: '14px' }}
+                        style={{
+                           fontSize: '14px',
+                           color: 'rgb(255, 155, 61)',
+                           marginLeft: '-5px',
+                        }}
                      />
                      <h4>{product.qualityRate}</h4>
                      <h1>${product.price}</h1>
                      <div className='stockStatus'>
                         <Progress
-                           style={{ width: '30%' }}
+                           className='progressBar'
+                           strokeColor={{
+                              '0%': '#108ee9',
+                              '100%': '#87d068',
+                           }}
                            percent={product.stock}
                            showInfo={false}
                            size='small'
-                           status='active'
                         />
                         <h5 onClick={() => onClickToAddProduct(product)}>
-                           {product.stock} in Stock
+                           {product.stock}%
                         </h5>
+                        <h6>in stock</h6>
                      </div>
                   </div>
                </Col>

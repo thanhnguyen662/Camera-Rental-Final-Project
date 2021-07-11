@@ -7,10 +7,12 @@ import {
 } from 'react-router-dom';
 import CarouselBar from '../components/CarouselBar';
 import SignIn from '../features/Auth';
+import Category from '../features/Category';
 import Lading from '../features/Lading';
 import Message from '../features/Message';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
+import Promotion from '../features/Promotion';
 import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
 // import ProfileLayout from '../layouts/Profile';
@@ -30,14 +32,17 @@ function Routers(props) {
                   }}
                />
             )}
+
             <Route>
                <MainLayout>
                   <Switch>
                      <Route exact path='/'>
+                        <CarouselBar />
                         <div style={{ margin: '25px 125px' }}>
-                           <CarouselBar />
                            <ContentLayout>
+                              <Category />
                               <Product />
+                              <Promotion />
                            </ContentLayout>
                         </div>
                      </Route>

@@ -1,9 +1,5 @@
-import {
-   LogoutOutlined,
-   UserOutlined,
-   ShoppingCartOutlined,
-   EditOutlined,
-} from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
+import { RiShoppingBag2Line } from 'react-icons/ri';
 import { Avatar, Button, Col, Layout, Menu, Row, Badge } from 'antd';
 import { auth } from '../../firebase';
 import React from 'react';
@@ -56,14 +52,6 @@ function HeaderBar(props) {
                         subMenuCloseDelay='0.5'
                         style={{ marginLeft: '150px' }}
                      >
-                        <Menu.Item key='test'>
-                           <Badge count={productInCartCount} size='small'>
-                              <ShoppingCartOutlined
-                                 style={{ fontSize: '160%' }}
-                              />
-                           </Badge>
-                           <Link to='/product/cart' />
-                        </Menu.Item>
                         <SubMenu
                            key='SubMenu'
                            title={
@@ -88,6 +76,19 @@ function HeaderBar(props) {
                               Logout
                            </Menu.Item>
                         </SubMenu>
+
+                        <Menu.Item key='setting'>
+                           <Link to='/product/cart'>
+                              <Badge count={productInCartCount} size='small'>
+                                 <RiShoppingBag2Line
+                                    style={{
+                                       fontSize: '160%',
+                                       marginBottom: '-7px',
+                                    }}
+                                 />
+                              </Badge>
+                           </Link>
+                        </Menu.Item>
                      </Menu>
                   </>
                )}
