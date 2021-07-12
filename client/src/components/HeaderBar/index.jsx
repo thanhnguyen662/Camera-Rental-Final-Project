@@ -29,7 +29,7 @@ function HeaderBar(props) {
    }
 
    return (
-      <Header className='site-layout-background' style={{ padding: '0 16px' }}>
+      <Header className='headerBar' style={{ padding: '0 16px' }}>
          <Row>
             <Col span={2} style={{ marginLeft: '130px' }}>
                LOGO

@@ -4,23 +4,19 @@ import './CarouselBar.scss';
 
 const contentStyle = {
    height: '500px',
-   color: '#fff',
+   color: '#271380',
    lineHeight: '400px',
    textAlign: 'center',
-   background: '#364d79',
-   // borderRadius: '16px',
+   background: 'linear-gradient(135deg, #230F77, #4230B5)',
+   borderRadius: '10px',
 };
 
 function CarouseBar(props) {
    return (
       <div className='carouselBar'>
-         <Carousel
-         // className='carouselBar'
-         // autoplay
-         // style={{ margin: '25px 110px', borderRadius: '16px' }}
-         >
+         <Carousel style={{ paddingTop: '130px ' }}>
             <div>
-               <h3 style={contentStyle}>1</h3>
+               <h3 style={contentStyle}> </h3>
             </div>
          </Carousel>
       </div>

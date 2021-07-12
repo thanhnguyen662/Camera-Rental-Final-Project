@@ -1,6 +1,6 @@
 .productCard{
    background: white;
-   padding: 24px 24px 18px 24px;
+   padding: 25px 24.2px 18px 25px;
    border-radius: 10px;
    box-shadow: 0 0 15px 2px rgb(226, 226, 226);
 
@@ -24,8 +24,8 @@
       margin-left: -5px;
 
       a{
-         color: rgb(32, 63, 121);
-         font-weight: 600;
+         color: #301F71;
+         font-weight: 700;
       }
    }
 
@@ -33,16 +33,16 @@
       display: inline;
       margin-left: 15px;
       margin-top: 10px;
-      color: rgb(50, 77, 128);
+      color: #2E1E70;
    }
 
    h1{
       font-weight: 700;
       font-size: 22px;
-      margin-top: 5px;
+      margin-top: 10px;
       margin-bottom: -2px;
       margin-left: -5px;
-      color: rgb(8, 41, 104);
+      color: #2E1E70;
    }
 
    .stockStatus {
@@ -52,7 +52,7 @@
 
    h5{
       display: inline-block;
-      color: #40B88E;
+      color: #4DC69B;
       margin-left: 10px;
       font-weight: 700;
       cursor: pointer;
@@ -60,7 +60,7 @@
 
    h6{
       display: inline-block;
-      color: #40B88E;
+      color: #4DC69B;
       font-size: 9.5px;
       margin-left: 3px;
    }
@@ -73,7 +73,7 @@
 }
 
 h1 {
-   color: rgb(38, 56, 94);
+   color: #200E66;
    font-size: 25px;
    font-weight: 900;
    margin-bottom: 25px;

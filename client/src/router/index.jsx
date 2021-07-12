@@ -37,8 +37,8 @@ function Routers(props) {
                <MainLayout>
                   <Switch>
                      <Route exact path='/'>
-                        <CarouselBar />
                         <div style={{ margin: '25px 125px' }}>
+                           <CarouselBar />
                            <ContentLayout>
                               <Category />
                               <Product />
@@ -54,7 +54,9 @@ function Routers(props) {
                      </Route>
 
                      <Route path='/product'>
-                        <Product />
+                        <div style={{ margin: '25px 125px' }}>
+                           <Product />
+                        </div>
                      </Route>
 
                      <Route path='/profile'>

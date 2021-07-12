@@ -60,7 +60,7 @@ function ProfileUserPage(props) {
 
    return (
       <>
-         <div style={{ paddingTop: 24, minHeight: 360 }}>
+         <div style={{ minHeight: 360 }}>
             <Row gutter={[12, 0]}>
                <Col span={8}>
                   <ProfileInfoCard

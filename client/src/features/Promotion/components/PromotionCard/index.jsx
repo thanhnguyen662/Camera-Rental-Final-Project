@@ -14,9 +14,9 @@ PromotionCard.propTypes = {};
 function PromotionCard(props) {
    return (
       <>
-         <h1 style={{ marginTop: '55px' }}>Active Promotions</h1>
+         <h1 style={{ marginTop: '70px' }}>Active Promotions</h1>
          <div className='promotion'>
-            <Row gutter={[25, 25]}>
+            <Row gutter={[30, 30]}>
                <Col span={6}>
                   <div className='promotionCard'>
                      <Row span={24}>
@@ -25,8 +25,8 @@ function PromotionCard(props) {
                            alt='photos'
                         />
                      </Row>
-                     <Row justify='center' className='promotionText'>
-                        <RiNotification2Line className='notificationIcon' />
+                     <Row justify='center' className='promotionTextBottom'>
+                        <RiNotification2Line className='icon' />
                         <h1>
                            Lorem nostrud quis excepteur aute officia ullamco.
                         </h1>
@@ -36,8 +36,12 @@ function PromotionCard(props) {
                </Col>
                <Col span={6}>
                   <div className='promotionCard1'>
-                     <Row justify='center' className='promotionText' span={24}>
-                        <RiMapPin5Line className='locationIcon' />
+                     <Row
+                        justify='center'
+                        className='promotionTextTop'
+                        span={24}
+                     >
+                        <RiMapPin5Line className='icon' />
                         <h1>
                            Esse do adipisicing elit ad nulla nisi voluptate ad
                            nulla.
@@ -60,8 +64,8 @@ function PromotionCard(props) {
                            alt='photos'
                         />
                      </Row>
-                     <Row justify='center' className='promotionText'>
-                        <RiCamera2Line className='cameraIcon' />
+                     <Row justify='center' className='promotionTextBottom'>
+                        <RiCamera2Line className='icon' />
                         <h1>
                            Lorem nostrud quis excepteur aute officia ullamco.
                         </h1>
@@ -71,8 +75,12 @@ function PromotionCard(props) {
                </Col>
                <Col span={6}>
                   <div className='promotionCard3'>
-                     <Row justify='center' className='promotionText' span={24}>
-                        <RiRepeat2Fill className='repeatIcon' />
+                     <Row
+                        justify='center'
+                        className='promotionTextTop'
+                        span={24}
+                     >
+                        <RiRepeat2Fill className='icon' />
                         <h1>
                            Esse do adipisicing elit ad nulla nisi voluptate ad
                            nulla.
