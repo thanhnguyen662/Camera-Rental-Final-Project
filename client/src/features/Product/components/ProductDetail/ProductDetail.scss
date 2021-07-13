@@ -1,9 +1,9 @@
 .productDetailCard{
-  padding: 7px 24px 18px 0px;
+  padding: 7px 24px 18px 18px;
   margin-top: -10px;
   height: 500px;
 
-  img{
+  .image{
     object-fit: cover;
     width: 300px;
     height: 300px;
@@ -11,9 +11,9 @@
   }
 
   .mainImage{
-    padding: 10px 38px 30px 100px;
+    text-align: center;
+    padding: 30px 0px 30px 0px;
     background: white;
-    // box-shadow: 0 0 15px 2px rgb(226, 226, 226);
     border-radius: 10px;
   }
 
@@ -25,104 +25,142 @@
     height: 130px;
     width: 100%;
     background: white;
-    // box-shadow: 0 0 15px 2px rgb(226, 226, 226);
     border-radius: 10px;
     margin-top: 18px;
   }
 
-  p{
-    display: inline-block;
-    margin-right: 5px;
-    font-size: 12px;
-    color:#292930;
-    margin-left: 0px;
+  h3{
+    font-weight: 500;
+    color:#3b3e42;
+    margin-top: 20px;
+    margin-bottom: -8px;
+    padding: 0px 20px 8px 10px;
+    font-size: 16px;
   }
 
-  h3{
+  h5{
+    margin-top: -28px;
+    font-size: 18px;
+    margin-left: 9px;
+    font-weight: 800;
+  }
+
+  h4{
+    margin-left: 10px;
     font-weight: 400;
+    font-size: 14px;
     color:#7e8996;
-    margin-left: 5px;
-    margin-top: -5px;
+  }
+
+  .productDescriptionInfo{
+    margin-top: 22px;
+    margin-left: 10px;
+    h4{
+      color:#4a4e53;
+      font-weight: 500;
+    }
+    .descriptionInfoRow{
+      text-align: center;
+      color: '#7e8996';
+    }
   }
 
   h2{
-    margin-top: -25px;
+    margin-top: 20px;
     color: #251568;
     font-size: 15px;
-    margin-left: 5px;
+    margin-left: 8px;
+
+    p{
+      display: inline-block;
+      margin-right: 5px;
+      font-size: 12px;
+      color:#292930;
+      margin-left: 0px;
+    }
   }
 
   h1{
-    margin-top: 15px;
+    margin-top: -10px;
     font-size: 38px;
     color: #292930;
     margin-left: 5px;
     font-weight: 700;
   }
 
-  .test{
+  h6{
+    margin-top: -28px;
+    margin-left: 8px;
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  .product{
     background: white;
     border-radius: 10px;
 
-    .addButton{
-      position: absolute;
-      left: 345px;
-      top: 275px;
-      margin-left: 6px;
-      background:#251568;
-      color: white;
-      border-radius: 9px;
-      width: 150px;
-      height: 62px;
+    .descriptionRow{
+      padding: 0px 10px 0px ;
     }
 
-    .datePicker{
+    .buttonRow{
       position: absolute;
-      left: 20px;
-      top: 276px;
-      margin-left: 5px;
-      font-size: 18px;
-      width: 310px;
-      height: 62px;
-      background: white;
-      border-radius: 10px;
-      border-width: 2px;
-
-      input::placeholder{
-        text-align: center;
+      top:  425px;
+  
+      .addButton{
+        margin-left: 8px;
+        background:#251568;
+        color: white;
+        border-radius: 9px;
+        width: 187px;
+        height: 62px;
+      }
+  
+      .datePicker{
+        margin-top: 2px;
+        margin-left: 12px;
+        font-size: 18px;
+        width: 342px;
+        height: 62px;
+        background: white;
+        border-radius: 10px;
+        border-width: 2px;
+  
+        input::placeholder{
+          text-align: center;
+        }
       }
     }
-  }
 
-  .productDetail{
-    h2{
-      margin-top: 5px;
-      font-size: 30px;
-      font-weight: 900;
-      padding: 10px 15px 10px 15px;
-      background: #F5F5FF;
-      display: inline-block;
-      border-radius: 10px;
-      font-style: normal;
-      color: #251568;
-    }
+    .productDetail{
+      position: absolute;
+      top:  310px;
 
-    h3{
-      padding-top: 15px;
-      padding-bottom: -10px;
-      padding-left: 55px;
-      color: #2dc97b;
-      font-weight: 700;
-      font-size: 19px;
-
-      p{
-        display: block;
-        margin-top: -3px;
+      h2{
+        font-size: 35px;
+        font-weight: 900;
+        font-style: normal;
+        color: #251568;
+      }
+      
+      h6{
+        margin-top: -20px;
+        margin-left: 10px;
         color:#7e8996;
-        font-weight: 400;
-        font-size: 15px;
-        font-style: italic;
+        font-weight: 500;
+        font-size: 13px;
       }
+    }
+  
+    .test{
+      margin-top: -5px;
+      margin-left: 1px;
+      padding: 20px 15px 0px 8px;
+      height: 210px;
+      border-radius: 12px;
+      border-width: 20px;
+      background: rgb(255, 255, 255);
+
     }
   }
 }
