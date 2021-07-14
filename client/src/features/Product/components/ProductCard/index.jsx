@@ -6,16 +6,14 @@ import './ProductCard.scss';
 
 ProductCard.propTypes = {
    products: PropTypes.array,
-   onClickToAddProduct: PropTypes.func,
 };
 
 ProductCard.defaultProps = {
    products: [],
-   onClickToAddProduct: null,
 };
 
 function ProductCard(props) {
-   const { products, onClickToAddProduct } = props;
+   const { products } = props;
 
    return (
       <>
@@ -61,9 +59,7 @@ function ProductCard(props) {
                            showInfo={false}
                            size='small'
                         />
-                        <h5 onClick={() => onClickToAddProduct(product)}>
-                           {product.stock}%
-                        </h5>
+                        <h5>{product.stock}%</h5>
                         <h6>in stock</h6>
                      </div>
                   </div>

@@ -3,125 +3,54 @@
   margin-top: -10px;
   height: 500px;
 
-  .image{
-    object-fit: cover;
-    width: 300px;
-    height: 300px;
-    border-radius: 10px;
-  }
-
-  .mainImage{
-    text-align: center;
-    padding: 30px 0px 30px 0px;
-    background: white;
-    border-radius: 10px;
-  }
-
   .rowImage{
     border-radius: 10px;
-  }
 
-  .rowImageDetail{
-    height: 130px;
-    width: 100%;
-    background: white;
-    border-radius: 10px;
-    margin-top: 18px;
-  }
-
-  h3{
-    font-weight: 500;
-    color:#3b3e42;
-    margin-top: 20px;
-    margin-bottom: -8px;
-    padding: 0px 20px 8px 10px;
-    font-size: 16px;
-  }
-
-  h5{
-    margin-top: -28px;
-    font-size: 18px;
-    margin-left: 9px;
-    font-weight: 800;
-  }
-
-  h4{
-    margin-left: 10px;
-    font-weight: 400;
-    font-size: 14px;
-    color:#7e8996;
-  }
-
-  .productDescriptionInfo{
-    margin-top: 22px;
-    margin-left: 10px;
-    h4{
-      color:#4a4e53;
-      font-weight: 500;
-    }
-    .descriptionInfoRow{
+    .mainImage{
       text-align: center;
-      color: '#7e8996';
+      padding: 30px 0px 30px 0px;
+      background: white;
+      border-radius: 10px;
+    }
+  
+    .image{
+      object-fit: cover;
+      width: 300px;
+      height: 300px;
+      border-radius: 10px;
+    }
+    
+    .rowImageDetail{
+      height: 140px;
+      width: 100%;
+      background: white;
+      border-radius: 10px;
+      margin-top: 18px;
     }
   }
-
-  h2{
-    margin-top: 20px;
-    color: #251568;
-    font-size: 15px;
-    margin-left: 8px;
-
-    p{
-      display: inline-block;
-      margin-right: 5px;
-      font-size: 12px;
-      color:#292930;
-      margin-left: 0px;
-    }
-  }
-
-  h1{
-    margin-top: -10px;
-    font-size: 38px;
-    color: #292930;
-    margin-left: 5px;
-    font-weight: 700;
-  }
-
-  h6{
-    margin-top: -28px;
-    margin-left: 8px;
-    font-size: 15px;
-    font-style: italic;
-  }
-
+  
+  
   .product{
     background: white;
     border-radius: 10px;
 
-    .descriptionRow{
-      padding: 0px 10px 0px ;
-    }
-
     .buttonRow{
-      position: absolute;
-      top:  425px;
   
       .addButton{
-        margin-left: 8px;
-        background:#251568;
+        margin-left: 10px;
+        background:#321c8a;
         color: white;
         border-radius: 9px;
-        width: 187px;
-        height: 62px;
+        width: 150px;
+        height: 52px;
       }
   
       .datePicker{
         margin-top: 2px;
-        margin-left: 12px;
+        margin-left: 16px;
         font-size: 18px;
-        width: 342px;
-        height: 62px;
+        width: 325px;
+        height: 52px;
         background: white;
         border-radius: 10px;
         border-width: 2px;
@@ -131,36 +60,79 @@
         }
       }
     }
-
-    .productDetail{
-      position: absolute;
-      top:  310px;
-
-      h2{
-        font-size: 35px;
-        font-weight: 900;
-        font-style: normal;
-        color: #251568;
-      }
+  
+    .productHeaderRow{
+      margin: 25px 0px 0px 18px;
       
-      h6{
-        margin-top: -20px;
-        margin-left: 10px;
-        color:#7e8996;
-        font-weight: 500;
-        font-size: 13px;
+      h1{
+        font-size: 32px;
+        font-weight: 800;
+        color: #321c8a;
       }
     }
-  
-    .test{
-      margin-top: -5px;
-      margin-left: 1px;
-      padding: 20px 15px 0px 8px;
-      height: 210px;
-      border-radius: 12px;
-      border-width: 20px;
-      background: rgb(255, 255, 255);
 
+    .productPriceRow{
+      margin: -20px 0px 0px 0px;
+
+      p{
+        color: #56535f;
+        font-weight: 500;
+        font-size: 25px;
+        padding-right: 3px;
+      }
+
+      h2{
+        color: #321c8a;
+        font-size: 32px;
+        font-weight: 800;
+      }
+
+      h3{
+        font-size: 15px;
+        color: #777980;
+        margin: 16.5px 0px 0px 10px;
+      }
+    }
+
+    .productDescriptionRow{
+      margin: -5px 0px 0px 18px;
+      
+      .productDescription{
+        min-height: 125px;
+      }
+      .description{
+        padding-right: 100px;
+        margin-bottom: 0px;
+        font-weight: 400;
+        color: #777980;
+      }
+      .readMore{
+        cursor: pointer;
+        color:#321c8a;
+      }
+    }
+    
+    .avatarGroup{
+      margin: 20px 0px 0px 16px;
+
+      h4{
+        margin-top: 5px;
+        margin-left: 10px;
+        color: #43454d;
+      }
+    }
+
+    .productDescriptionInfo{
+      margin: 32px 0px 0px 18px;
+
+      .descriptionInfoRow{
+        margin-bottom: 7px;
+
+        h4{
+          color:#43454d;
+          font-weight: 400;
+        }
+      }
     }
   }
 }

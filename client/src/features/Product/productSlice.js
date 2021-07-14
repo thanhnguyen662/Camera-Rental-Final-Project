@@ -15,6 +15,7 @@ const cartProduct = createSlice({
          if (item) {
             return;
          }
+         console.log('payload: ', action.payload);
          const newItem = action.payload;
          state.push(newItem);
       },
@@ -26,7 +27,7 @@ const cartProduct = createSlice({
    extraReducers: {
       [getCart.fulfilled]: (state, action) => {
          const item = action.payload;
-
+         console.log('item', item);
          const destructuringItem = item.map((i) => {
             const split = { ...i };
             split.id = i.Product.id;
@@ -40,7 +41,7 @@ const cartProduct = createSlice({
 
             return split;
          });
-
+         console.log('destructuringItem', destructuringItem);
          destructuringItem.map((i) => state.push(i));
       },
    },

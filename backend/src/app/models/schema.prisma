@@ -1,46 +1,43 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Product {
   id              Int      @id @default(autoincrement())
   name            String?
   description     String?
-  slug            String   @unique
-  brand           String?
-  price           String?
-  stock           Int?
-  qualityRate     Int?
-  productPhotoURL String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  User            User?    @relation(fields: [firebaseId], references: [firebaseId])
+  slug            String   @unique
   firebaseId      String?
+  brand           String?
+  price           String?
+  qualityRate     Int?
+  stock           Int?
+  productPhotoURL String?
+  User            User?    @relation(fields: [firebaseId], references: [firebaseId])
   carts           Cart[]
 
   @@map("Products")
 }
 
 model User {
-  firebaseId    String    @id
   age           Int?
+  firebaseId    String    @id
   gender        String?
-  rate          Int?      @default(0)
   address       String?
   favouriteGear String?
-  hasTag        String?
+  rate          Int?      @default(0)
   description   String?
+  hasTag        String?
   photoURL      String?
-  products      Product[]
   carts         Cart[]
+  products      Product[]
 
   @@map("Users")
 }
@@ -58,9 +55,9 @@ model Conversation {
 model Message {
   id             Int          @id @default(autoincrement())
   text           String?
+  conversationId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  conversationId Int
   sender         String
   conversations  Conversation @relation(fields: [conversationId], references: [id])
 
@@ -68,11 +65,13 @@ model Message {
 }
 
 model Cart {
-  id         Int      @id @default(autoincrement())
-  User       User?    @relation(fields: [firebaseId], references: [firebaseId])
+  id         Int       @id @default(autoincrement())
+  startDate  DateTime?
+  endDate    DateTime?
   firebaseId String?
-  Product    Product? @relation(fields: [productId], references: [id])
   productId  Int?
+  User       User?     @relation(fields: [firebaseId], references: [firebaseId])
+  Product    Product?  @relation(fields: [productId], references: [id])
 
   @@map("Carts")
 }

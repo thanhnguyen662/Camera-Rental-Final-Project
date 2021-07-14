@@ -35,6 +35,8 @@ class CartController {
             data: {
                firebaseId: req.body.firebaseId,
                productId: Number(req.body.productId),
+               startDate: new Date(req.body.startDate),
+               endDate: new Date(req.body.endDate),
             },
          });
 
