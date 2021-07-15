@@ -16,9 +16,14 @@ function ProductCartTable(props) {
          key: 'name',
       },
       {
-         title: 'Description',
-         dataIndex: 'description',
-         key: 'description',
+         title: 'Start',
+         dataIndex: 'startDate',
+         key: 'startDate',
+      },
+      {
+         title: 'End',
+         dataIndex: 'endDate',
+         key: 'endDate',
       },
       {
          title: 'Action',

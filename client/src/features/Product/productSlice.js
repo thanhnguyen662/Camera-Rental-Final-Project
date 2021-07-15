@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import cartApi from '../../api/cartApi';
+import moment from 'moment';
 
 export const getCart = createAsyncThunk('product/getCart', async (userId) => {
    const response = await cartApi.getCartByUid(userId);
@@ -27,7 +28,7 @@ const cartProduct = createSlice({
    extraReducers: {
       [getCart.fulfilled]: (state, action) => {
          const item = action.payload;
-         console.log('item', item);
+
          const destructuringItem = item.map((i) => {
             const split = { ...i };
             split.id = i.Product.id;
@@ -37,11 +38,17 @@ const cartProduct = createSlice({
             split.updatedAt = i.Product.updatedAt;
             split.firebaseId = i.Product.firebaseId;
             split.key = i.Product.id;
+            split.startDate = moment(i.startDate)
+               .utcOffset(7)
+               .format('YYYY-MM-DD HH:mm:ss');
+            split.endDate = moment(i.endDate)
+               .utcOffset(7)
+               .format('YYYY-MM-DD HH:mm:ss');
+
             delete split.Product;
 
             return split;
          });
-         console.log('destructuringItem', destructuringItem);
          destructuringItem.map((i) => state.push(i));
       },
    },
