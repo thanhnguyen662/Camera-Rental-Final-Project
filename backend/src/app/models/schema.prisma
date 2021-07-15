@@ -19,7 +19,7 @@ model Product {
   price           String?
   qualityRate     Int?
   stock           Int?
-  productPhotoURL String?
+  productPhotoURL String[]
   User            User?    @relation(fields: [firebaseId], references: [firebaseId])
   carts           Cart[]
 

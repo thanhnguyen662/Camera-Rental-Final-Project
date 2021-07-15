@@ -1,0 +1,58 @@
+.productDetailCard{
+  padding: 7px 24px 18px 18px;
+  margin-top: -10px;
+  height: 500px;
+  
+  .rowImage{
+    border-radius: 10px;
+
+    .mainImage{
+      text-align: center;
+      padding: 30px 0px 30px 0px;
+      background: white;
+      border-radius: 10px;
+    }
+  
+    .image{
+      object-fit: cover;
+      width: 300px;
+      height: 300px;
+      border-radius: 10px;
+    }
+    
+    .rowImageDetail{
+      height: 140px;
+      width: 155px;
+      background: white;
+      border-radius: 10px;
+      margin-top: 18px;
+      padding: 15px 0px 0px 25px;
+      cursor: pointer;
+      
+      img{
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+      }
+    }
+    
+    .rowImageDetailHighlight{
+      height: 140px;
+      width: 155px;
+      background: white;
+      border-radius: 10px;
+      margin-top: 18px;
+      padding: 15px 0px 0px 25px;
+      cursor: pointer;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #30245f;
+      
+      img{
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+      }
+    }
+  }
+}

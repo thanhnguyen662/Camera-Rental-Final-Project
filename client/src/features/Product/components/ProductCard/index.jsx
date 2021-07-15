@@ -28,7 +28,7 @@ function ProductCard(props) {
                               style={{ objectFit: 'cover' }}
                               height={150}
                               width={165}
-                              src={product.productPhotoURL}
+                              src={product.productPhotoURL[0]}
                            />
                         </div>
                      </Row>

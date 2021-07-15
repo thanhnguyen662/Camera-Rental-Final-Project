@@ -1,9 +1,11 @@
+import { Row, Col } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import productApi from '../../../../api/productApi';
-import ProductDetail from '../../components/ProductDetail';
+import ProductDetailImage from '../../components/ProductDetailImage';
+import ProductDetailDescription from '../../components/ProductDetailDescription';
 import { addProductToCart } from '../../productSlice';
 
 function ProductDetailPage(props) {
@@ -25,8 +27,7 @@ function ProductDetailPage(props) {
          }
       };
       getProductDetail();
-      // eslint-disable-next-line
-   }, []);
+   }, [slug]);
 
    const addKeyToProduct = (product) => {
       const split = { ...product };
@@ -58,10 +59,19 @@ function ProductDetailPage(props) {
 
    return (
       <>
-         <ProductDetail
-            productDetail={productDetail}
-            onClickToAddProduct={handleOnClickToAddProduct}
-         />
+         <div className='productDetailCard'>
+            <Row span={24} gutter={[45, 0]}>
+               <Col span={11} className='rowImage'>
+                  <ProductDetailImage productDetail={productDetail} />
+               </Col>
+               <Col span={13} className='product'>
+                  <ProductDetailDescription
+                     productDetail={productDetail}
+                     onClickToAddProduct={handleOnClickToAddProduct}
+                  />
+               </Col>
+            </Row>
+         </div>
       </>
    );
 }
