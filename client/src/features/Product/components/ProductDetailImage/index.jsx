@@ -2,6 +2,8 @@ import { Col, Image, Row, Spin } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import './ProductDetailImage.scss';
 
 ProductDetailImage.propTypes = {
@@ -38,7 +40,7 @@ function ProductDetailImage(props) {
             <Col span={24}>
                <div className='mainImage'>
                   {!productDetail.productPhotoURL ? (
-                     <Spin />
+                     <Spin className='spinLoading' />
                   ) : (
                      <Image className='image' src={imageArray} />
                   )}
@@ -47,12 +49,15 @@ function ProductDetailImage(props) {
             <Col span={24}>
                <Slider
                   {...settings}
-                  style={{ width: '530px', height: '158px' }}
+                  style={{ width: '522px', height: '158px' }}
                >
                   {productDetail.productPhotoURL?.map((product) => (
                      <div key={productDetail.productPhotoURL.indexOf(product)}>
                         {product === imageArray ? (
-                           <div className='rowImageDetailHighlight'>
+                           <div
+                              className='rowImageDetailHighlight'
+                              onClick={() => setImageArray(product)}
+                           >
                               <img
                                  onClick={() => setImageArray(product)}
                                  alt='photos'
@@ -60,7 +65,10 @@ function ProductDetailImage(props) {
                               />
                            </div>
                         ) : (
-                           <div className='rowImageDetail'>
+                           <div
+                              className='rowImageDetail'
+                              onClick={() => setImageArray(product)}
+                           >
                               <img
                                  onClick={() => setImageArray(product)}
                                  alt='photos'

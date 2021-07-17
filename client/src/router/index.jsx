@@ -15,8 +15,9 @@ import Profile from '../features/Profile';
 import Promotion from '../features/Promotion';
 import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
+import { Layout } from 'antd';
 // import ProfileLayout from '../layouts/Profile';
-
+const { Content } = Layout;
 function Routers(props) {
    const { profileIsExist } = props;
 
@@ -55,13 +56,17 @@ function Routers(props) {
 
                      <Route path='/product'>
                         <div style={{ margin: '25px 125px' }}>
-                           <Product />
+                           <Content style={{ minHeight: 550 }}>
+                              <Product />
+                           </Content>
                         </div>
                      </Route>
 
                      <Route path='/profile'>
                         <div style={{ margin: '25px 125px' }}>
-                           <Profile />
+                           <Content style={{ minHeight: 550 }}>
+                              <Profile />
+                           </Content>
                         </div>
                      </Route>
 

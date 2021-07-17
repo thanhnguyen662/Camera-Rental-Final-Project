@@ -1,0 +1,55 @@
+.createProductInfo{
+   background: white;
+   border-radius: 10px;
+   padding-bottom: 30px;
+   margin-bottom: 30px;
+   .header{
+      padding: 30px 0px 0px 30px;
+   }
+}
+
+
+.description{
+   .ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-toolbar, .ck.ck-editor__top .ck-sticky-panel .ck-toolbar.ck-rounded-corners{
+      border-color: white;
+      background: #ffffff;
+      border-width: 0px;
+      padding-left: 25px;
+      margin-top: -10px;
+   }
+
+   .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+      border-radius: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      min-height: 200px;
+      border-width: 0px;
+      margin-bottom: 10px;
+   }
+
+   .ck-focused{
+      min-height: 200px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      
+   }
+}
+
+.descriptionHeader{
+   padding: 30px 0px 0px 30px;
+   background: white;
+   height: 150px;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+   
+   .descriptionDivider{
+      width: 800px;
+      margin: 24px 0px 0px -20px;
+   }
+
+   .descriptionFooter{
+      height: 150px;
+      background: white;
+      padding: 30px 0px 0px 30px;
+   }
+}

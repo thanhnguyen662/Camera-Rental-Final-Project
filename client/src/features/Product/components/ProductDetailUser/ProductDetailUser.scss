@@ -1,0 +1,61 @@
+.productDetailCard{
+   .user{
+      margin: 17px 0px 10px 0px;
+      border-radius: 10px;
+      background: white;
+      width: 1172px;
+      .userAvatar{
+         margin: 18px 0px 18px 22px;
+      }
+
+      .avatarLoading{
+         width: 50%;
+         margin: 10px 20px 10px 20px;
+      }
+
+      .userInfo{
+         margin: 16px 0px 0px 28px;
+
+         h4{
+            font-size: 15px;
+            margin-bottom: 0px;
+         }
+
+         .buttonGroup{
+            button{
+               width: 125px;
+               span{
+                  font-size: 13.5px;
+                  font-weight: 400;
+               }
+            }
+         }
+      }
+
+      .dividerBar{
+         height: 80px;
+         margin-top: 20px;
+      }
+
+      .infoGird{
+         margin: 23px 0px 15px 10px;
+         padding: 10px 20px 25px;
+         border-radius: 10px;
+         .infoRow{
+            text-align: center;
+            .infoCol{
+               height: 40px;
+               
+               .titleRate{
+                  font-weight: 700;
+                  font-size: 16px;
+               }
+               .titleScore{
+                  font-size: 14px;
+                  font-weight: 500;
+               }
+            }
+         }
+      }
+   }
+}

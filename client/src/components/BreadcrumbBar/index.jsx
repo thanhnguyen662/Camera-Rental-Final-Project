@@ -7,20 +7,20 @@ import { HiChevronRight } from 'react-icons/hi';
 import './BreadcrumbBar.scss';
 
 BreadcrumbBar.propTypes = {
-   productName: PropTypes.object,
+   productName: PropTypes.string,
 };
 
 BreadcrumbBar.defaultProps = {
-   productName: {},
+   productName: '',
 };
 
 function BreadcrumbBar(props) {
    const { productName } = props;
 
-   const DynamicProductBreadcrumb = () => <span>{productName?.name}</span>;
+   const DynamicProductBreadcrumb = () => <span>{productName}</span>;
 
    const routes = [
-      { path: '/product/:userId', breadcrumb: DynamicProductBreadcrumb },
+      { path: '/product/:productSlug', breadcrumb: DynamicProductBreadcrumb },
    ];
 
    const breadcrumbs = useBreadcrumbs(routes);

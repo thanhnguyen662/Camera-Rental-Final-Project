@@ -1,4 +1,9 @@
-import { LogoutOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
+import {
+   LogoutOutlined,
+   UserOutlined,
+   EditOutlined,
+   TagsOutlined,
+} from '@ant-design/icons';
 import { RiShoppingBag2Line } from 'react-icons/ri';
 import { Avatar, Button, Col, Layout, Menu, Row, Badge } from 'antd';
 import { auth } from '../../firebase';
@@ -65,6 +70,9 @@ function HeaderBar(props) {
                            </Menu.Item>
                            <Menu.Item key='setting:2' icon={<EditOutlined />}>
                               <Link to='/profile/edit'>Edit</Link>
+                           </Menu.Item>
+                           <Menu.Item key='setting:4' icon={<TagsOutlined />}>
+                              <Link to='/product/create'>Create Product</Link>
                            </Menu.Item>
                            <Menu.Item
                               key='setting:3'

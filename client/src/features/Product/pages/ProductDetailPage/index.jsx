@@ -1,11 +1,14 @@
-import { Row, Col } from 'antd';
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import productApi from '../../../../api/productApi';
-import ProductDetailImage from '../../components/ProductDetailImage';
+import userApi from '../../../../api/userApi';
+import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import ProductDetailDescription from '../../components/ProductDetailDescription';
+import ProductDetailImage from '../../components/ProductDetailImage';
+import ProductDetailUser from '../../components/ProductDetailUser';
 import { addProductToCart } from '../../productSlice';
 
 function ProductDetailPage(props) {
@@ -13,6 +16,7 @@ function ProductDetailPage(props) {
    const dispatch = useDispatch();
 
    const [productDetail, setProductDetail] = useState();
+   const [userDetail, setUserDetail] = useState();
    const userId = useSelector((state) => state.users.id);
 
    useEffect(() => {
@@ -28,6 +32,26 @@ function ProductDetailPage(props) {
       };
       getProductDetail();
    }, [slug]);
+
+   useEffect(() => {
+      const getUserDetail = async () => {
+         try {
+            if (!productDetail?.firebaseId) return;
+            const response = await userApi.getMe({
+               uid: productDetail?.firebaseId,
+            });
+            setUserDetail(response);
+            console.log('userDetail: ', response);
+         } catch (error) {
+            return console.log('Fail: ', error);
+         }
+      };
+      getUserDetail();
+   }, [productDetail?.firebaseId]);
+
+   useEffect(() => {
+      window.scrollTo(0, 0);
+   }, []);
 
    const addKeyToProduct = (product) => {
       const split = { ...product };
@@ -59,7 +83,11 @@ function ProductDetailPage(props) {
 
    return (
       <>
-         <div className='productDetailCard'>
+         <div className='productDetailCard' style={{ minHeight: 700 }}>
+            <BreadcrumbBar
+               productName={productDetail?.name}
+               className='breadcrumbBar'
+            />
             <Row span={24} gutter={[45, 0]}>
                <Col span={11} className='rowImage'>
                   <ProductDetailImage productDetail={productDetail} />
@@ -71,6 +99,11 @@ function ProductDetailPage(props) {
                   />
                </Col>
             </Row>
+
+            <ProductDetailUser
+               userDetail={userDetail}
+               productDetail={productDetail}
+            />
          </div>
       </>
    );
