@@ -1,14 +1,20 @@
 import { DollarCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Input, Typography } from 'antd';
 import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import './ProductCreateForm.scss';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { config } from './editorConfig';
-import parse from 'html-react-parser';
+// import parse from 'html-react-parser';
 
-ProductCreateForm.propTypes = {};
+ProductCreateForm.propTypes = {
+   collectData: PropTypes.func,
+};
+
+ProductCreateForm.defaultProps = {
+   collectData: null,
+};
 
 ClassicEditor.defaultConfig = config;
 const { Title, Text } = Typography;
@@ -37,20 +43,19 @@ const tailFormItemLayout = {
    },
 };
 
-function ProductCreateForm() {
+function ProductCreateForm(props) {
+   const { collectData } = props;
+
    const [form] = Form.useForm();
    const [body, setBody] = useState('');
+   const [info, setInfo] = useState({});
 
-   const onFinish = (values) => {
-      console.log('Received values of form: ', values);
-   };
-   console.log(body);
    const handleSubmit = (e) => {
       e.preventDefault();
-      const descriptionForm = {
-         description: body,
-      };
-      console.log(descriptionForm);
+      const split = { ...info };
+      split.description = body;
+
+      collectData(split);
    };
 
    return (
@@ -65,7 +70,7 @@ function ProductCreateForm() {
                {...formItemLayout}
                form={form}
                name='createProduct'
-               onFinish={onFinish}
+               onFinish={(values) => setInfo(values)}
                scrollToFirstError
             >
                <Form.Item
@@ -118,7 +123,7 @@ function ProductCreateForm() {
                </Button>
             </form>
          </div>
-         <div>{parse(body)}</div>
+         {/* <div>{parse(body)}</div> */}
       </>
    );
 }

@@ -31,20 +31,24 @@ class ProductController {
       }
    };
 
-   createNewProduct = async (req, res) => {
+   createNewProduct = async (req, res, next) => {
       try {
          const createNewProduct = await prisma.product.create({
             data: {
                name: req.body.name,
                description: req.body.description,
-               firebaseId: req.user.id,
+               firebaseId: req.body.id,
+               productPhotoURL: req.body.productPhotoURL,
                slug: `${slugify(req.body.name)}-${shortid.generate()}`,
+               brand: req.body.brand,
+               price: req.body.price,
+               stock: req.body.stock,
             },
          });
 
          res.status(200).json(createNewProduct);
       } catch (error) {
-         return res.status(404).send({ message: 'Cant create product' });
+         return next(error);
       }
    };
 }

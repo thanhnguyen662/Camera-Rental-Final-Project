@@ -55,11 +55,11 @@ function ProductCard(props) {
                               '0%': '#108ee9',
                               '100%': '#87d068',
                            }}
-                           percent={product.stock}
+                           percent={product.stock || 0}
                            showInfo={false}
                            size='small'
                         />
-                        <h5>{product.stock}%</h5>
+                        <h5>{product.stock || 0}%</h5>
                         <h6>in stock</h6>
                      </div>
                   </div>

@@ -1,15 +1,13 @@
 export const config = {
    toolbar: {
       items: [
+         'heading',
+         '|',
          'bold',
          'italic',
-         '|',
+         'link',
          'bulletedList',
          'numberedList',
-         'indent',
-         'outdent',
-         '|',
-         'heading',
          '|',
          'undo',
          'redo',

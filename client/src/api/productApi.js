@@ -12,6 +12,11 @@ const productApi = {
          withCredentials: true,
       });
    },
+
+   createProduct: (data) => {
+      const url = '/product/createProduct';
+      return axiosClient.post(url, data);
+   },
 };
 
 export default productApi;
