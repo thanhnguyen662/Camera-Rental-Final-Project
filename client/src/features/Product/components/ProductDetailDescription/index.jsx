@@ -5,9 +5,10 @@ import {
    DatePicker,
    Modal,
    Row,
-   Typography,
    Skeleton,
+   Typography,
 } from 'antd';
+import parse from 'html-react-parser';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -79,11 +80,10 @@ function ProductDetailDescription(props) {
                            rows: 3,
                            onEllipsis: (ellipsis) => {
                               setMore(ellipsis);
-                              console.log(ellipsis);
                            },
                         }}
                      >
-                        {productDetail.description}
+                        {parse(productDetail.description)}
                      </Paragraph>
 
                      {more === true && (
@@ -172,7 +172,7 @@ function ProductDetailDescription(props) {
                onOk={() => setIsModalVisible(false)}
                onCancel={() => setIsModalVisible(false)}
             >
-               <Paragraph>{productDetail.description}</Paragraph>
+               <Paragraph>{parse(productDetail.description)}</Paragraph>
             </Modal>
          )}
       </>

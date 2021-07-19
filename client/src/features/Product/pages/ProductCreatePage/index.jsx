@@ -4,24 +4,28 @@ import ProductUploadImage from '../../components/ProductUploadImage';
 import { storage } from '../../../../firebase';
 import { useSelector } from 'react-redux';
 import productApi from '../../../../api/productApi';
+import { Steps } from 'antd';
+import './ProductCreatePage.scss';
+
+const { Step } = Steps;
 
 function ProductCreatePage(props) {
    const [imageList, setImageList] = useState([]);
    const [db, setDb] = useState();
+   const [currentStep, setCurrentStep] = useState(0);
+   const [percent, setPercent] = useState(0);
    const userEmail = useSelector((state) => state.users.email);
    const firebaseId = useSelector((state) => state.users.id);
 
    const uploadImage = async (options) => {
-      const { onSuccess, onError, file, onProgress } = options;
+      const { onSuccess, onError, file } = options;
       const uploadTask = storage
          .ref(`products/${userEmail}/product/${file.name}`)
          .put(file);
       uploadTask.on(
          'state_changed',
          (snapshot) => {
-            onProgress({
-               percent: (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-            });
+            setPercent((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
          },
          (error) => {
             console.error(error);
@@ -82,9 +86,10 @@ function ProductCreatePage(props) {
             !db?.description ||
             !db.productPrice ||
             !db.productName ||
-            !db.productPhotoURL
+            !db.productPhotoURL ||
+            db.productPhotoURL?.length === 0
          )
-            return console.log('ERROR');
+            return;
          try {
             const data = {
                id: firebaseId,
@@ -92,8 +97,9 @@ function ProductCreatePage(props) {
                productPhotoURL: db.productPhotoURL,
                price: db.productPrice,
                name: db.productName,
+               brand: db.productBrand,
+               stock: db.productStock,
             };
-            console.log(data);
             const response = await productApi.createProduct(data);
             console.log('created product: ', response);
          } catch (error) {
@@ -103,14 +109,37 @@ function ProductCreatePage(props) {
       createProductToDb();
    }, [db, firebaseId]);
 
+   const nextStep = () => {
+      setCurrentStep(currentStep + 1);
+   };
+
+   const prevStep = () => {
+      setCurrentStep(currentStep - 1);
+   };
+
    return (
       <>
-         <ProductCreateForm collectData={collectData} />
+         <div className='createStep'>
+            <Steps current={currentStep}>
+               <Step title='Create product' description='Basic information.' />
+               <Step title='Description' description='Product description.' />
+               <Step title='Image' description='Photos of product.' />
+            </Steps>
+         </div>
+         <ProductCreateForm
+            collectData={collectData}
+            currentStep={currentStep}
+            nextStep={nextStep}
+            prevStep={prevStep}
+         />
          <ProductUploadImage
             uploadImage={uploadImage}
             imageList={imageList}
             handleOnRemove={handleOnRemove}
             handleSubmit={handleSubmit}
+            currentStep={currentStep}
+            percent={percent}
+            prevStep={prevStep}
          />
       </>
    );

@@ -42,7 +42,7 @@ class ProductController {
                slug: `${slugify(req.body.name)}-${shortid.generate()}`,
                brand: req.body.brand,
                price: req.body.price,
-               stock: req.body.stock,
+               stock: Number(req.body.stock),
             },
          });
 

@@ -1,0 +1,21 @@
+.productUploadImage{
+   background: white;
+   padding: 30px 30px 30px 30px;
+   border-radius: 10px;
+
+   .progressBar{
+      width: 112px;
+      text-align: center;
+      margin-bottom: 10px;
+   }
+
+   .backButton2{
+      .ant-btn-circle{
+         padding-right: 0px;
+         padding-top: 4px;
+      }
+   }
+   .submitButton{
+      margin-top: 8px;
+   }
+}
