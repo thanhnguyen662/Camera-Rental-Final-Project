@@ -5,33 +5,33 @@ ProfileEditProfileCard.propTypes = {};
 
 const { Title, Text } = Typography;
 
+const formItemLayout = {
+   labelCol: {
+      xs: { span: 24 },
+      sm: { span: 3 },
+   },
+   wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 20 },
+   },
+};
+
+const tailFormItemLayout = {
+   wrapperCol: {
+      xs: {
+         span: 24,
+         offset: 0,
+      },
+      sm: {
+         span: 16,
+         offset: 3,
+      },
+   },
+};
+
 function ProfileEditProfileCard(props) {
    const { onProfileFinish, userProfile, photoURL } = props;
    console.log(userProfile);
-
-   const formItemLayout = {
-      labelCol: {
-         xs: { span: 24 },
-         sm: { span: 3 },
-      },
-      wrapperCol: {
-         xs: { span: 24 },
-         sm: { span: 20 },
-      },
-   };
-
-   const tailFormItemLayout = {
-      wrapperCol: {
-         xs: {
-            span: 24,
-            offset: 0,
-         },
-         sm: {
-            span: 16,
-            offset: 3,
-         },
-      },
-   };
 
    const handleProfileFormChange = (values) => {
       onProfileFinish(values);
@@ -57,10 +57,14 @@ function ProfileEditProfileCard(props) {
                      hasTag: userProfile.hasTag,
                      description: userProfile.description,
                      photoURL: photoURL,
+                     userName: userProfile.username,
                   }}
                >
                   <Form.Item name='photoURL' label='Photo'>
                      <Input disabled />
+                  </Form.Item>
+                  <Form.Item name='userName' label='UserName'>
+                     <Input />
                   </Form.Item>
                   <Form.Item name='age' label='Age'>
                      <Input />

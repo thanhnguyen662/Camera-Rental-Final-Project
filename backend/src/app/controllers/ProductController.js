@@ -17,17 +17,26 @@ class ProductController {
       }
    };
 
-   getProductDetail = async (req, res) => {
+   getProductDetail = async (req, res, next) => {
       try {
          const getProductDetail = await prisma.product.findUnique({
             where: {
                slug: String(req.params.productSlug),
             },
+            include: {
+               User: true,
+               productComments: {
+                  include: {
+                     user: true,
+                  },
+               },
+            },
          });
 
          return res.status(200).json(getProductDetail);
       } catch (error) {
-         return res.status(404).send({ message: 'Cant find product details' });
+         // return res.status(404).send({ message: 'Cant find product details' });
+         return next(error);
       }
    };
 

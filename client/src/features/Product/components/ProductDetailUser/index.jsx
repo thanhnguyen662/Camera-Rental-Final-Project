@@ -8,26 +8,24 @@ import conversationApi from '../../../../api/conversationApi';
 import './ProductDetailUser.scss';
 
 ProductDetailUser.propTypes = {
-   userDetail: PropTypes.object,
    productDetail: PropTypes.object,
 };
 
 ProductDetailUser.defaultProps = {
-   userDetail: {},
    productDetail: {},
 };
 
 function ProductDetailUser(props) {
-   const { userDetail, productDetail } = props;
+   const { productDetail } = props;
    const userId = useSelector((state) => state.users.id);
 
    const onClickSendMessage = async () => {
       try {
-         if (!userId || !productDetail?.firebaseId)
+         if (!userId || !productDetail.User?.firebaseId)
             return console.log('WAIT FOR REDUX');
          const formValues = {
             senderId: userId,
-            receiverId: productDetail?.firebaseId,
+            receiverId: productDetail.User.firebaseId,
          };
          const response = await conversationApi.createConversation(formValues);
          console.log('Conversation created: ', response);
@@ -42,7 +40,7 @@ function ProductDetailUser(props) {
    return (
       <>
          <Row span={24} className='user'>
-            {!userDetail.photoURL || !userDetail.displayName ? (
+            {!productDetail.User?.photoURL || !productDetail.User?.username ? (
                <>
                   <Skeleton.Input
                      active
@@ -56,12 +54,11 @@ function ProductDetailUser(props) {
                      <Avatar
                         className='userAvatar'
                         size={82}
-                        src={userDetail?.photoURL}
+                        src={productDetail.User.photoURL}
                      />
                   </Col>
                   <Col span={7} className='userInfo'>
-                     <h4>{userDetail.displayName}</h4>
-                     <h5>{userDetail.email}</h5>
+                     <h4>{productDetail.User.username}</h4>
                      <div className='buttonGroup'>
                         <Space size={10}>
                            <Button
@@ -71,7 +68,9 @@ function ProductDetailUser(props) {
                               Message
                            </Button>
                            <Button>
-                              <Link to={`/profile/${userDetail.uid}`}>
+                              <Link
+                                 to={`/profile/${productDetail.User?.firebaseId}`}
+                              >
                                  Profile
                               </Link>
                            </Button>

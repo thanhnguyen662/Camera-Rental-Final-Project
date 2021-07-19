@@ -102,6 +102,7 @@ function RegisterPage(props) {
             hasTag: values.hasTag,
             photoURL: values.photoURL,
             description: values.description,
+            username: values.userName,
          };
 
          const response = await userApi.addUserInfo(formValues);

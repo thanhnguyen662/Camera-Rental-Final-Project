@@ -163,6 +163,7 @@ function ProfileEditPage(props) {
             hasTag: values.hasTag,
             description: values.description,
             photoURL: values.photoURL,
+            username: values.userName,
          };
 
          const response = await userApi.addUserInfo(formValues);

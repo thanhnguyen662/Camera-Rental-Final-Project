@@ -8,36 +8,39 @@ datasource db {
 }
 
 model Product {
-  id              Int      @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   name            String?
   description     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  slug            String   @unique
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  slug            String           @unique
   firebaseId      String?
   brand           String?
   price           String?
   qualityRate     Int?
   stock           Int?
   productPhotoURL String[]
-  User            User?    @relation(fields: [firebaseId], references: [firebaseId])
+  User            User?            @relation(fields: [firebaseId], references: [firebaseId])
   carts           Cart[]
+  productComments ProductComment[]
 
   @@map("Products")
 }
 
 model User {
-  age           Int?
-  firebaseId    String    @id
-  gender        String?
-  address       String?
-  favouriteGear String?
-  rate          Int?      @default(0)
-  description   String?
-  hasTag        String?
-  photoURL      String?
-  carts         Cart[]
-  products      Product[]
+  firebaseId      String           @id
+  username        String?
+  age             Int?
+  gender          String?
+  address         String?
+  favouriteGear   String?
+  rate            Int?             @default(0)
+  description     String?
+  hasTag          String?
+  photoURL        String?
+  carts           Cart[]
+  products        Product[]
+  productComments ProductComment[]
 
   @@map("Users")
 }
@@ -74,4 +77,17 @@ model Cart {
   Product    Product?  @relation(fields: [productId], references: [id])
 
   @@map("Carts")
+}
+
+model ProductComment {
+  id        Int      @id @default(autoincrement())
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  productId Int?
+  authorId  String?
+  product   Product? @relation(fields: [productId], references: [id])
+  user      User?    @relation(fields: [authorId], references: [firebaseId])
+
+  @@map("ProductComments")
 }

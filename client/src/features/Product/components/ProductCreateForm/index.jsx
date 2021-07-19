@@ -1,21 +1,21 @@
-import { DollarCircleOutlined, LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 import {
    Button,
+   Col,
    Divider,
    Form,
    Input,
-   Typography,
-   Row,
-   Col,
-   Modal,
    InputNumber,
+   Modal,
+   Row,
+   Typography,
 } from 'antd';
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './ProductCreateForm.scss';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import React, { useState } from 'react';
 import { config } from './editorConfig';
+import './ProductCreateForm.scss';
 
 ProductCreateForm.propTypes = {
    collectData: PropTypes.func,

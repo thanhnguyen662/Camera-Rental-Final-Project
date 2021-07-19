@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import productApi from '../../../../api/productApi';
-import userApi from '../../../../api/userApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
+import ProductDetailComment from '../../components/ProductDetailComment';
 import ProductDetailDescription from '../../components/ProductDetailDescription';
 import ProductDetailImage from '../../components/ProductDetailImage';
 import ProductDetailUser from '../../components/ProductDetailUser';
@@ -16,7 +16,6 @@ function ProductDetailPage(props) {
    const dispatch = useDispatch();
 
    const [productDetail, setProductDetail] = useState();
-   const [userDetail, setUserDetail] = useState();
    const userId = useSelector((state) => state.users.id);
 
    useEffect(() => {
@@ -32,22 +31,6 @@ function ProductDetailPage(props) {
       };
       getProductDetail();
    }, [slug]);
-
-   useEffect(() => {
-      const getUserDetail = async () => {
-         try {
-            if (!productDetail?.firebaseId) return;
-            const response = await userApi.getMe({
-               uid: productDetail?.firebaseId,
-            });
-            setUserDetail(response);
-            console.log('userDetail: ', response);
-         } catch (error) {
-            return console.log('Fail: ', error);
-         }
-      };
-      getUserDetail();
-   }, [productDetail?.firebaseId]);
 
    useEffect(() => {
       window.scrollTo(0, 0);
@@ -83,7 +66,7 @@ function ProductDetailPage(props) {
 
    return (
       <>
-         <div className='productDetailCard' style={{ minHeight: 700 }}>
+         <div className='productDetailCard' style={{ minHeight: 900 }}>
             <BreadcrumbBar
                productName={productDetail?.name}
                className='breadcrumbBar'
@@ -100,10 +83,9 @@ function ProductDetailPage(props) {
                </Col>
             </Row>
 
-            <ProductDetailUser
-               userDetail={userDetail}
-               productDetail={productDetail}
-            />
+            <ProductDetailUser productDetail={productDetail} />
+
+            <ProductDetailComment productDetail={productDetail} />
          </div>
       </>
    );
