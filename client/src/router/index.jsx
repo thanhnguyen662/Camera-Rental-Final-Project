@@ -64,7 +64,9 @@ function Routers(props) {
 
                      <Route path='/profile'>
                         <div style={{ margin: '25px 125px' }}>
-                           <Content style={{ minHeight: 550 }}>
+                           <Content
+                              style={{ minHeight: 550, overflow: 'hidden' }}
+                           >
                               <Profile />
                            </Content>
                         </div>

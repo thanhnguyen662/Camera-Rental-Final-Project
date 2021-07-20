@@ -17,7 +17,7 @@ function PromotionCard(props) {
          <h1 style={{ marginTop: '70px' }}>Active Promotions</h1>
          <div className='promotion'>
             <Row gutter={[30, 30]}>
-               <Col span={6}>
+               <Col flex='none'>
                   <div className='promotionCard'>
                      <Row span={24}>
                         <img
@@ -34,7 +34,7 @@ function PromotionCard(props) {
                      </Row>
                   </div>
                </Col>
-               <Col span={6}>
+               <Col flex='none'>
                   <div className='promotionCard1'>
                      <Row
                         justify='center'
@@ -56,7 +56,7 @@ function PromotionCard(props) {
                      </Row>
                   </div>
                </Col>
-               <Col span={6}>
+               <Col flex='none'>
                   <div className='promotionCard2'>
                      <Row span={24}>
                         <img
@@ -73,7 +73,7 @@ function PromotionCard(props) {
                      </Row>
                   </div>
                </Col>
-               <Col span={6}>
+               <Col flex='none'>
                   <div className='promotionCard3'>
                      <Row
                         justify='center'

@@ -25,10 +25,6 @@ const uniqid = require('uniqid');
 function MessagePage(props) {
    const userId = useSelector((state) => state.users.id);
 
-   // const location = useLocation();
-   // const newMessageComing = location.state?.newMessageComing;
-   // console.log('currentSelectedChat: ', newMessageComing);
-
    const socket = useRef();
    const [conversation, setConversation] = useState([]);
    const [currentChat, setCurrentChat] = useState(
@@ -50,12 +46,7 @@ function MessagePage(props) {
       });
    }, []);
 
-   // console.log('Arrival message: ', arrivalMessage);
-   // console.log('SocketId: ', socket.current?.id);
-
    useEffect(() => {
-      // console.log('currentChat?.members: ', currentChat?.members);
-      // console.log('arrivalMessage: ', arrivalMessage);
       arrivalMessage &&
          currentChat?.members.includes(arrivalMessage.sender) &&
          setMessages((prev) => [...prev, arrivalMessage]);
@@ -102,11 +93,7 @@ function MessagePage(props) {
          }
       };
       getMessage();
-      // console.log('currentChat', currentChat);
-   }, [
-      currentChat,
-      // arrivalMessage
-   ]);
+   }, [currentChat]);
 
    const handleMessageInputSubmit = async () => {
       if (!userId) return;
@@ -119,10 +106,6 @@ function MessagePage(props) {
       const receiverId = currentChat.members.find(
          (member) => member !== userId
       );
-
-      console.log('receiverId sendMessage: ', receiverId);
-      console.log('userId sendMessage: ', userId);
-      console.log('text sendMessage: ', newMessage);
 
       socket.current.emit('sendMessage', {
          senderId: userId,
@@ -169,7 +152,7 @@ function MessagePage(props) {
 
    return (
       <>
-         <div style={{ height: '800px', position: 'relative' }}>
+         <div style={{ height: '694px', position: 'relative' }}>
             <MainContainer>
                <SideBarLeft
                   conversations={conversation}
@@ -238,19 +221,14 @@ function MessagePage(props) {
                </ChatContainer>
                {currentChat && (
                   <Sidebar position='right'>
-                     <ExpansionPanel
-                        open
-                        title='INFO'
-                        // style={{ textAlign: 'center', alignItems: 'center' }}
-                     >
+                     <ExpansionPanel open title='INFO'>
                         {!getUsernameById ? null : (
-                           <Row justify='center' style={{ marginTop: '5px' }}>
-                              <Col span={7}>
+                           <Row style={{ marginTop: '5px' }} justify='center'>
+                              <Col span={5}>
                                  <p>
                                     <Avatar
                                        src={getUsernameById?.photoURL}
                                        name={getUsernameById?.displayName}
-                                       style={{ marginLeft: '30px' }}
                                     />
                                  </p>
                               </Col>

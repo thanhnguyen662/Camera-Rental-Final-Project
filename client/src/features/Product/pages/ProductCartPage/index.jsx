@@ -28,11 +28,9 @@ function ProductCardPage(props) {
 
    return (
       <>
-         <div style={{ margin: '25px 144px' }}>
-            <ContentLayout>
-               <ProductCartTable onClickRemoveItem={handleOnClickRemoveItem} />
-            </ContentLayout>
-         </div>
+         <ContentLayout>
+            <ProductCartTable onClickRemoveItem={handleOnClickRemoveItem} />
+         </ContentLayout>
       </>
    );
 }

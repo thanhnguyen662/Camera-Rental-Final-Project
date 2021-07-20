@@ -66,7 +66,10 @@ function ProductDetailPage(props) {
 
    return (
       <>
-         <div className='productDetailCard' style={{ minHeight: 900 }}>
+         <div
+            className='productDetailCard'
+            style={{ overflow: 'hidden', height: '100%' }}
+         >
             <BreadcrumbBar
                productName={productDetail?.name}
                className='breadcrumbBar'
