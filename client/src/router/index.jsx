@@ -16,6 +16,7 @@ import Promotion from '../features/Promotion';
 import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
 import { Layout } from 'antd';
+import MessageBeta from '../features/MessageBeta';
 // import ProfileLayout from '../layouts/Profile';
 const { Content } = Layout;
 function Routers(props) {
@@ -33,6 +34,8 @@ function Routers(props) {
                   }}
                />
             )}
+
+            <Route path='/messageBeta' component={MessageBeta} />
 
             <Route>
                <MainLayout>

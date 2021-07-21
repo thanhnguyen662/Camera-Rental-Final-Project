@@ -48,6 +48,22 @@ class ConversationController {
          return next(error);
       }
    };
+
+   findConversationBeta = async (req, res, next) => {
+      try {
+         const response = await prisma.conversation.findMany({
+            where: {
+               members: {
+                  has: req.params.userId,
+               },
+            },
+         });
+
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new ConversationController();

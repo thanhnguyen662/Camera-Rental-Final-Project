@@ -30,6 +30,19 @@ class MessageController {
          return next(error);
       }
    };
+
+   findMessageBeta = async (req, res, next) => {
+      try {
+         const response = await prisma.message.findMany({
+            where: {
+               conversationId: Number(req.params.conversationId),
+            },
+         });
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new MessageController();

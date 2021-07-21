@@ -50,7 +50,7 @@ class ProductController {
                productPhotoURL: req.body.productPhotoURL,
                slug: `${slugify(req.body.name)}-${shortid.generate()}`,
                brand: req.body.brand,
-               price: req.body.price,
+               price: String(req.body.price),
                stock: Number(req.body.stock),
             },
          });

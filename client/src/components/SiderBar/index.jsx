@@ -27,11 +27,11 @@ function SiderBar(props) {
             <Menu.Item key='1' icon={<HomeOutlined />} title='Home'>
                <Link to='/'>Home</Link>
             </Menu.Item>
-            <Menu.Item key='2' icon={<MessageOutlined />} title='Messenger'>
-               <a href='http://localhost:3000/message'>Messenger</a>
-            </Menu.Item>
             <Menu.Item key='3' icon={<HeartOutlined />} title='Social'>
                <Link to='/lading'>Social</Link>
+            </Menu.Item>
+            <Menu.Item key='4' icon={<MessageOutlined />} title='Message Beta'>
+               <Link to='/messageBeta'>Message Beta</Link>
             </Menu.Item>
             {/* <SubMenu key='sub1' icon={<UserOutlined />} title='User'>
                <Menu.Item key='3'>Tom</Menu.Item>
