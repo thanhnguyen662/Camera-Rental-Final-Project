@@ -13,7 +13,7 @@ Messages.defaultProps = {
 };
 
 function Messages(props) {
-   const { message, currentUserId, friendInfo } = props;
+   const { message, currentUserId, friendInfo, redirectData } = props;
 
    return (
       <>
@@ -25,7 +25,10 @@ function Messages(props) {
                   sender: friendInfo.username,
                }}
             >
-               <Avatar src={friendInfo?.photoURL} name={friendInfo.username} />
+               <Avatar
+                  src={friendInfo?.photoURL || redirectData?.photoURL}
+                  name={friendInfo.username || redirectData?.username}
+               />
             </Message>
          ) : (
             <Message

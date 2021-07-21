@@ -1,10 +1,11 @@
 import { MessageOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Row, Space, Divider, Skeleton } from 'antd';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import conversationApi from '../../../../api/conversationApi';
+
 import './ProductDetailUser.scss';
 
 ProductDetailUser.propTypes = {
@@ -18,27 +19,35 @@ ProductDetailUser.defaultProps = {
 function ProductDetailUser(props) {
    const { productDetail } = props;
    const userId = useSelector((state) => state.users.id);
+   const [sendMessage, setSendMessage] = useState();
 
    const onClickSendMessage = async () => {
       try {
-         if (!userId || !productDetail.User?.firebaseId)
-            return console.log('WAIT FOR REDUX');
-         const formValues = {
+         const data = {
             senderId: userId,
             receiverId: productDetail.User.firebaseId,
          };
-         const response = await conversationApi.createConversation(formValues);
-         console.log('Conversation created: ', response);
-
-         localStorage.setItem('selectedConversation', JSON.stringify(response));
-         window.location = '/message';
+         const response = await conversationApi.createConversation(data);
+         console.log('conversation Test: ', response);
+         setSendMessage(response);
       } catch (error) {
-         return console.log('Error: ', error);
+         console.log(error);
       }
    };
 
    return (
       <>
+         {sendMessage === undefined ? null : (
+            <Redirect
+               to={{
+                  pathname: '/messageBeta',
+                  state: {
+                     conversationInfo: sendMessage,
+                     conversationUserInfo: productDetail.User,
+                  },
+               }}
+            />
+         )}
          <Row span={24} className='user'>
             {!productDetail.User?.photoURL || !productDetail.User?.username ? (
                <>

@@ -25,8 +25,7 @@ function Conversations(props) {
    } = props;
    const [friendInfo, setFriendInfo] = useState({});
 
-   const activeConversation = conversation.id ===
-      selectedConversationId?.id && {
+   const activeConversation = conversation.id === selectedConversationId && {
       active: 'active',
    };
 

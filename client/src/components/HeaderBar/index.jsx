@@ -1,15 +1,25 @@
 import {
-   LogoutOutlined,
-   UserOutlined,
    EditOutlined,
+   LogoutOutlined,
    TagsOutlined,
+   UserOutlined,
 } from '@ant-design/icons';
+import {
+   Avatar,
+   Badge,
+   Button,
+   Col,
+   Layout,
+   Menu,
+   notification,
+   Row,
+} from 'antd';
+import React, { useEffect } from 'react';
 import { RiShoppingBag2Line } from 'react-icons/ri';
-import { Avatar, Button, Col, Layout, Menu, Row, Badge } from 'antd';
-import { auth } from '../../firebase';
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import userApi from '../../api/userApi';
+import { auth } from '../../firebase';
 import './HeaderBar.scss';
 
 const { Header } = Layout;
@@ -19,6 +29,35 @@ function HeaderBar(props) {
    const loginStatus = useSelector((state) => state.users.loginStatus);
    const photoURL = useSelector((state) => state.users.photoURL);
    const productInCartCount = useSelector((state) => state.cart.length);
+   const reduxIncomingMessage = useSelector((state) => state.messages[0]);
+
+   const openNotification = (reduxIncomingMessage, photoURL, username) => {
+      notification.open({
+         message: username,
+         description: reduxIncomingMessage.text,
+         icon: <Avatar src={photoURL} />,
+      });
+   };
+
+   useEffect(() => {
+      if (!reduxIncomingMessage) return;
+
+      const getSenderOfMessageDetail = async () => {
+         try {
+            const response = await userApi.getUserProfile({
+               firebaseId: reduxIncomingMessage.sender,
+            });
+            openNotification(
+               reduxIncomingMessage,
+               response.photoURL,
+               response.username
+            );
+         } catch (error) {
+            return console.log(error);
+         }
+      };
+      getSenderOfMessageDetail();
+   }, [reduxIncomingMessage]);
 
    async function onLogoutButtonClick() {
       try {

@@ -10,49 +10,63 @@ import {
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import shortid from 'shortid';
 import { io } from 'socket.io-client';
 import conversationApi from '../../../../api/conversationApi';
 import userApi from '../../../../api/userApi';
 import Conversations from '../../components/Conversations';
 import Messages from '../../components/Messages';
+import { newMessage } from '../../messageSlice';
 import './MessageBetaPage.scss';
 
 function MessageBetaPage(props) {
-   const currentUserId = useSelector((state) => state.users.id);
    const socket = useRef();
+   const dispatch = useDispatch();
+   const location = useLocation();
 
-   const [friendInfo, setFriendInfo] = useState([]);
-   const [selectedConversation, setSelectedConversation] = useState('');
-   const [conversations, setConversations] = useState([]);
-   const [messages, setMessages] = useState([]);
-   const [incomingMessages, setIncomingMessages] = useState({});
+   const currentUserId = useSelector((state) => state.users.id);
+   const reduxIncomingMessage = useSelector((state) => state.messages[0]);
 
    const [messageInputValue, setMessageInputValue] = useState('');
+   const [friendInfo, setFriendInfo] = useState([]);
+   const [conversations, setConversations] = useState([]);
+   const [messages, setMessages] = useState([]);
+   const [selectedConversation, setSelectedConversation] = useState(
+      location.state?.conversationInfo || ''
+   );
 
    useEffect(() => {
       if (!currentUserId) return;
 
       //connect to Socket Server
       socket.current = io('ws://localhost:9900');
-      console.log('socket: ', socket);
 
       //get message from Socket Server
       socket.current.on('messageToReceiver', (message) => {
-         setIncomingMessages({
+         const action = newMessage({
             id: shortid.generate(),
             sender: message.sender,
             text: message.text,
          });
-         console.log('incoming message: ', message);
+
+         console.log('test message:', message);
+         dispatch(action);
       });
+      // eslint-disable-next-line
    }, [currentUserId]);
 
    useEffect(() => {
-      if (!incomingMessages) return;
-      setMessages((prevMessages) => [...prevMessages, incomingMessages]);
-   }, [incomingMessages]);
+      if (
+         !reduxIncomingMessage ||
+         !selectedConversation.members?.includes(reduxIncomingMessage.sender)
+      )
+         return;
+      setMessages((prevMessages) => [...prevMessages, reduxIncomingMessage]);
+
+      console.log('reduxIncomingMessage: ', reduxIncomingMessage);
+   }, [reduxIncomingMessage, selectedConversation.members]);
 
    useEffect(() => {
       if (!currentUserId) return;
@@ -123,7 +137,9 @@ function MessageBetaPage(props) {
          const messageDataSocket = {
             text: messageInputValue,
             sender: currentUserId,
-            receiver: friendInfo.firebaseId,
+            receiver:
+               friendInfo.firebaseId ||
+               location.state?.conversationUserInfo.firebaseId,
          };
 
          socket.current.emit('message', messageDataSocket);
@@ -165,11 +181,20 @@ function MessageBetaPage(props) {
                   <ChatContainer>
                      <ConversationHeader>
                         <Avatar
-                           src={friendInfo?.photoURL}
-                           name={friendInfo?.username}
+                           src={
+                              friendInfo?.photoURL ||
+                              location.state?.conversationUserInfo.photoURL
+                           }
+                           name={
+                              friendInfo?.username ||
+                              location.state?.conversationUserInfo.username
+                           }
                         />
                         <ConversationHeader.Content
-                           userName={friendInfo?.username}
+                           userName={
+                              friendInfo?.username ||
+                              location.state?.conversationUserInfo.username
+                           }
                         />
                      </ConversationHeader>
                      <MessageList>
@@ -179,6 +204,9 @@ function MessageBetaPage(props) {
                               message={message}
                               friendInfo={friendInfo}
                               currentUserId={currentUserId}
+                              redirectData={
+                                 location.state?.conversationUserInfo
+                              }
                            />
                         ))}
                      </MessageList>
