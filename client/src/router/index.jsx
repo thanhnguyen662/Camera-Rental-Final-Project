@@ -35,8 +35,6 @@ function Routers(props) {
                />
             )}
 
-            <Route path='/messageBeta' component={MessageBeta} />
-
             <Route>
                <MainLayout>
                   <Switch>
@@ -78,6 +76,8 @@ function Routers(props) {
                      <Route path='/message'>
                         <Message />
                      </Route>
+
+                     <Route path='/messageBeta' component={MessageBeta} />
                   </Switch>
                </MainLayout>
             </Route>

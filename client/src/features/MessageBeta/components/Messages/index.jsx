@@ -27,7 +27,7 @@ function Messages(props) {
             >
                <Avatar
                   src={friendInfo?.photoURL || redirectData?.photoURL}
-                  name={friendInfo.username || redirectData?.username}
+                  name={friendInfo?.username || redirectData?.username}
                />
             </Message>
          ) : (
@@ -35,6 +35,7 @@ function Messages(props) {
                model={{
                   message: message.text,
                   direction: 'outgoing',
+                  position: 'normal',
                }}
             />
          )}

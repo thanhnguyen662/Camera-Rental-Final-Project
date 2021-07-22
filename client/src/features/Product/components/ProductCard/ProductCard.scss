@@ -2,8 +2,7 @@
    background: white;
    padding: 25px 24px 18px 24px;
    border-radius: 10px;
-   box-shadow: 0 0 15px 2px rgb(226, 226, 226);
-
+   box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
 
    .productImage{
       margin-bottom: 10px;
@@ -26,7 +25,7 @@
 
       a{
          color: #301F71;
-         font-weight: 700;
+         font-weight: 500;
       }
    }
 
@@ -53,7 +52,7 @@
 
    h5{
       display: inline-block;
-      color: #4DC69B;
+      color: #38b388;
       margin-left: 10px;
       font-weight: 700;
       cursor: pointer;
@@ -61,7 +60,7 @@
 
    h6{
       display: inline-block;
-      color: #4DC69B;
+      color: #3eb88d;
       font-size: 9.5px;
       margin-left: 3px;
    }

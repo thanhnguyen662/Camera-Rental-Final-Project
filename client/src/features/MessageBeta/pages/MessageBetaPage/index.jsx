@@ -7,11 +7,14 @@ import {
    MessageInput,
    MessageList,
    Sidebar,
+   ExpansionPanel,
+   InfoButton,
+   Search,
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import shortid from 'shortid';
 import { io } from 'socket.io-client';
 import conversationApi from '../../../../api/conversationApi';
@@ -50,8 +53,6 @@ function MessageBetaPage(props) {
             sender: message.sender,
             text: message.text,
          });
-
-         console.log('Incoming message:', message);
          dispatch(action);
       });
       // eslint-disable-next-line
@@ -153,11 +154,20 @@ function MessageBetaPage(props) {
       setMessageInputValue('');
    };
 
+   const loading = conversations?.length === 0 && {
+      loading: true,
+   };
+
    return (
       <div className='message'>
          <MainContainer>
             <Sidebar position='left' scrollable={false}>
-               <ConversationList position='left' scrollable={false}>
+               <Search placeholder='Search...' />
+               <ConversationList
+                  position='left'
+                  scrollable={false}
+                  {...loading}
+               >
                   {conversations.map((conversation) => (
                      <Conversations
                         key={conversation.id}
@@ -180,6 +190,9 @@ function MessageBetaPage(props) {
                <>
                   <ChatContainer>
                      <ConversationHeader>
+                        <ConversationHeader.Back
+                           onClick={() => setSelectedConversation('')}
+                        />
                         <Avatar
                            src={
                               friendInfo?.photoURL ||
@@ -196,6 +209,11 @@ function MessageBetaPage(props) {
                               location.state?.conversationUserInfo.username
                            }
                         />
+                        <ConversationHeader.Actions>
+                           <Link to={`/profile/${friendInfo?.firebaseId}`}>
+                              <InfoButton />
+                           </Link>
+                        </ConversationHeader.Actions>
                      </ConversationHeader>
                      <MessageList>
                         {messages?.map((message) => (
@@ -217,6 +235,14 @@ function MessageBetaPage(props) {
                         onSend={handleOnSendMessage}
                      />
                   </ChatContainer>
+                  <Sidebar position='right'>
+                     <ExpansionPanel open title='Information'>
+                        <p>Lorem ipsum</p>
+                     </ExpansionPanel>
+                     <ExpansionPanel title='Media'>
+                        <p>Lorem ipsum</p>
+                     </ExpansionPanel>
+                  </Sidebar>
                </>
             )}
          </MainContainer>

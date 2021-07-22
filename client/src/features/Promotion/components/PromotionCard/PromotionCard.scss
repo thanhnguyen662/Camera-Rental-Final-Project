@@ -1,6 +1,6 @@
 .promotion{
    .promotionCard{
-      background: #dfe4ee;
+      background: #e7e9ee;
       border-radius: 10px;
       height: 500px;
       width: 275px;
@@ -13,7 +13,7 @@
       }
    }
    .promotionCard1{
-      background: #dfeee0;
+      background: #e5ece6;
       border-radius: 10px;
       height: 500px;
       width: 275px;
@@ -26,7 +26,7 @@
       }
    }
    .promotionCard2{
-      background: #ebe4e0;
+      background: #eeeae8;
       border-radius: 10px;
       height: 500px;
       width: 275px;
@@ -40,7 +40,7 @@
    }
 
    .promotionCard3{
-      background: #dfe4ee;
+      background: #e8ebf0;
       border-radius: 10px;
       height: 500px;
       width: 275px;
@@ -58,9 +58,16 @@
       color: rgb(38, 56, 94);
       font-size: 11px;
       font-weight: 700;
-      box-shadow: 0 0 15px 2px rgb(226, 228, 231);
+      border: 0px solid transparent;
+      box-shadow: rgba(62, 62, 99, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
       margin-left: -2px;
-      margin-top: -15px
+      margin-top: -15px;
+      width: 60%;
+
+      &:hover{
+         border: 1px solid rgb(181, 181, 209);
+         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+      }
    }
 
    h1{

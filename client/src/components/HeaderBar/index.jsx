@@ -17,7 +17,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { RiShoppingBag2Line } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import conversationApi from '../../api/conversationApi';
 import userApi from '../../api/userApi';
 import { auth } from '../../firebase';
@@ -27,6 +27,8 @@ const { Header } = Layout;
 const { SubMenu } = Menu;
 
 function HeaderBar(props) {
+   const location = useLocation();
+
    const loginStatus = useSelector((state) => state.users.loginStatus);
    const photoURL = useSelector((state) => state.users.photoURL);
    const userId = useSelector((state) => state.users.id);
@@ -69,7 +71,8 @@ function HeaderBar(props) {
             const response = await userApi.getUserProfile({
                firebaseId: reduxIncomingMessage.sender,
             });
-            openNotification(reduxIncomingMessage, response);
+            location.pathname !== '/messageBeta' &&
+               openNotification(reduxIncomingMessage, response);
             setSenderData(response);
          } catch (error) {
             return console.log(error);
