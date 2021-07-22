@@ -14,10 +14,11 @@ import {
    notification,
    Row,
 } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RiShoppingBag2Line } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import conversationApi from '../../api/conversationApi';
 import userApi from '../../api/userApi';
 import { auth } from '../../firebase';
 import './HeaderBar.scss';
@@ -28,15 +29,36 @@ const { SubMenu } = Menu;
 function HeaderBar(props) {
    const loginStatus = useSelector((state) => state.users.loginStatus);
    const photoURL = useSelector((state) => state.users.photoURL);
+   const userId = useSelector((state) => state.users.id);
    const productInCartCount = useSelector((state) => state.cart.length);
    const reduxIncomingMessage = useSelector((state) => state.messages[0]);
+   const [sendMessage, setSendMessage] = useState();
+   const [senderData, setSenderData] = useState();
 
-   const openNotification = (reduxIncomingMessage, photoURL, username) => {
-      notification.open({
-         message: username,
-         description: reduxIncomingMessage.text,
-         icon: <Avatar src={photoURL} />,
-      });
+   const openNotification = async (
+      reduxIncomingMessage,
+      responseSenderData
+   ) => {
+      try {
+         const data = {
+            senderId: responseSenderData.firebaseId,
+            receiverId: userId,
+         };
+         const response = await conversationApi.createConversation(data);
+         notification.open({
+            message: responseSenderData.username,
+            description: reduxIncomingMessage.text,
+            icon: <Avatar src={responseSenderData.photoURL} />,
+            onClick: () => {
+               setSendMessage(response);
+            },
+            style: {
+               cursor: 'pointer',
+            },
+         });
+      } catch (error) {
+         console.log(error);
+      }
    };
 
    useEffect(() => {
@@ -47,16 +69,14 @@ function HeaderBar(props) {
             const response = await userApi.getUserProfile({
                firebaseId: reduxIncomingMessage.sender,
             });
-            openNotification(
-               reduxIncomingMessage,
-               response.photoURL,
-               response.username
-            );
+            openNotification(reduxIncomingMessage, response);
+            setSenderData(response);
          } catch (error) {
             return console.log(error);
          }
       };
       getSenderOfMessageDetail();
+      // eslint-disable-next-line
    }, [reduxIncomingMessage]);
 
    async function onLogoutButtonClick() {
@@ -74,6 +94,17 @@ function HeaderBar(props) {
 
    return (
       <Header className='headerBar' style={{ padding: '0 16px' }}>
+         {sendMessage === undefined ? null : (
+            <Redirect
+               to={{
+                  pathname: '/messageBeta',
+                  state: {
+                     conversationInfo: sendMessage,
+                     conversationUserInfo: senderData,
+                  },
+               }}
+            />
+         )}
          <Row>
             <Col span={2} style={{ marginLeft: '130px' }}>
                LOGO

@@ -21,7 +21,7 @@ class MessageController {
       try {
          const findUserMessage = await prisma.message.findMany({
             where: {
-               conversationId: Number(req.params.conversationId),
+               conversationId: parseInt(req.params.conversationId),
             },
          });
 
@@ -35,7 +35,7 @@ class MessageController {
       try {
          const response = await prisma.message.findMany({
             where: {
-               conversationId: Number(req.params.conversationId),
+               conversationId: parseInt(req.params.conversationId),
             },
          });
          res.status(200).json(response);

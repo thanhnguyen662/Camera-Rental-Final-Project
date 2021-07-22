@@ -51,7 +51,7 @@ function MessageBetaPage(props) {
             text: message.text,
          });
 
-         console.log('test message:', message);
+         console.log('Incoming message:', message);
          dispatch(action);
       });
       // eslint-disable-next-line
