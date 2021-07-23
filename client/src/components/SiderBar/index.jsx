@@ -14,7 +14,7 @@ function SiderBar(props) {
    const { Sider } = Layout;
    const [collapsed, onCollapsed] = useState(true);
    const reduxIncomingMessage = useSelector((state) => state.messages[0]);
-   const [badge, setBadge] = useState(true);
+   const [badge, setBadge] = useState(false);
 
    useEffect(() => {
       reduxIncomingMessage && setBadge(true);

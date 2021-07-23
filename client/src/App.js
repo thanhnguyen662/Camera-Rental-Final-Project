@@ -54,6 +54,7 @@ function App() {
       checkUserProfileInDb();
    }, [userId]);
 
+   //[REDUX] get cart information in Db then dispatch to redux
    useEffect(() => {
       const getCartAsyncThunk = () => {
          try {

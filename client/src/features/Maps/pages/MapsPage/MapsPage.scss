@@ -1,0 +1,27 @@
+.mapbox{
+   .popupContent{
+      h5{
+         color: rgb(88, 88, 88);
+         font-size: 12px;
+      }
+   }
+   .locationIcon{
+      color: #160e38;
+      filter: drop-shadow(5px 5px 5px rgb(180, 180, 180));
+   }
+
+
+   .mapboxgl-popup-content {
+      background-color: white;
+      box-shadow: rgb(146, 146, 146) 0px 20px 30px -10px;
+      border-radius: 10px;
+   }
+
+   .mapboxgl-popup-tip{
+      border: 0px;
+   }
+
+   .mapboxgl-popup-close-button{
+      display: none;
+   }
+}

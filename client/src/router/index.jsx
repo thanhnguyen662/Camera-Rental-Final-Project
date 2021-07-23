@@ -17,8 +17,10 @@ import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
 import { Layout } from 'antd';
 import MessageBeta from '../features/MessageBeta';
-// import ProfileLayout from '../layouts/Profile';
+import Maps from '../features/Maps';
+
 const { Content } = Layout;
+
 function Routers(props) {
    const { profileIsExist } = props;
 
@@ -77,7 +79,19 @@ function Routers(props) {
                         <Message />
                      </Route>
 
-                     <Route path='/messageBeta' component={MessageBeta} />
+                     <Route path='/messageBeta'>
+                        <MessageBeta />
+                     </Route>
+
+                     <Route path='/maps'>
+                        <div style={{ margin: '25px 125px' }}>
+                           <Content
+                              style={{ minHeight: 550, overflow: 'hidden' }}
+                           >
+                              <Maps />
+                           </Content>
+                        </div>
+                     </Route>
                   </Switch>
                </MainLayout>
             </Route>
