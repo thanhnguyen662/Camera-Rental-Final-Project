@@ -1,0 +1,101 @@
+.popupContent{
+   padding: 5px 5px 0px 5px;
+   width: 200px;
+   cursor: default;
+
+   .popupInfoRow{
+      h5{
+         color: rgb(88, 88, 88);
+         font-size: 12px;
+         font-weight: 600;
+         margin-bottom: -3px;
+      }
+
+      h6{
+         font-size: 10px;
+         font-weight: 500;
+         display: inline-block;
+         color: rgb(143, 143, 143);
+      }
+
+      u{
+         font-size: 11px;
+         font-weight: 500;
+         color: #0579FF;
+      }
+
+      .popupAvatar{
+         width: 37px; 
+         height: 37px;
+         object-fit: cover;
+         border-radius: 20%;
+      }
+   }
+
+   .popupRateRow{
+      background: #F3F8FE;
+      border-radius: 5px;
+      padding: 8px 8px 8px 8px;
+      margin-top: 3px;
+      text-align: center;
+
+      .popupRateIcon{
+         font-size: 17px;
+         margin-bottom: -2px;
+         margin-right: 1px;
+      }
+
+      h5{
+         font-size: 12px;
+         display: inline-block;
+         margin-bottom: 0px;
+      }
+   }
+
+   .popupProduct{
+      padding: 0px 0px 0px 15px;
+      margin-top: 8px;
+      border: 1px solid rgb(217,217,217);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+
+      .popupProductImage{
+         img{
+            object-fit: cover;
+            width: 75px;
+            height: 75px;
+         }
+      }
+
+      .popupProductDescription{
+         padding-left: 10px;
+         padding-right: 10px;
+         h2{
+            margin-top: 10px;
+            margin-bottom: 0px;
+            font-size: 13px;
+            color: rgb(117, 117, 117);
+         }
+         
+         h3{
+            font-size: 15px;
+            font-weight: 900;
+         }
+      }
+   }
+
+   .popupButtonRow{
+      margin-top: 8px; 
+      margin-bottom: 0px;
+      .ant-btn{
+         text-align: center;
+         border-radius: 5px;
+         width: 100%;
+
+         a{
+            font-size: 12px;
+         }
+      }
+   }
+}

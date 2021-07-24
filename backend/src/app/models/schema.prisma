@@ -23,6 +23,7 @@ model Product {
   User            User?            @relation(fields: [firebaseId], references: [firebaseId])
   carts           Cart[]
   productComments ProductComment[]
+  pins            Pin[]
 
   @@map("Products")
 }
@@ -90,4 +91,14 @@ model ProductComment {
   user      User?    @relation(fields: [authorId], references: [firebaseId])
 
   @@map("ProductComments")
+}
+
+model Pin {
+  id        Int      @id @default(autoincrement())
+  lat       String?
+  long      String?
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id])
+
+  @@map("Pins")
 }

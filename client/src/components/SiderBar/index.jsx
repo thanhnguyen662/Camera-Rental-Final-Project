@@ -7,6 +7,7 @@ import { Layout, Menu, Badge } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
+import { BiMapPin } from 'react-icons/bi';
 
 function SiderBar(props) {
    const location = useLocation();
@@ -43,6 +44,9 @@ function SiderBar(props) {
             </Menu.Item>
             <Menu.Item key='3' icon={<HeartOutlined />} title='Social'>
                <Link to='/lading'>Social</Link>
+            </Menu.Item>
+            <Menu.Item key='2' icon={<BiMapPin />} title='Maps'>
+               <Link to='/maps'>Maps</Link>
             </Menu.Item>
             <Menu.Item
                key='4'
