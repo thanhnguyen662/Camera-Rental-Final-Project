@@ -1,0 +1,28 @@
+.createAddress{
+   background: white;
+   border-radius: 10px;
+   padding-bottom: 31px;
+   .header{
+      padding: 30px 0px 0px 30px;
+   }  
+
+   .inputGroup{
+      width: 30%;
+      margin-left: 30px;
+      margin-bottom: 10px;
+      .input{
+         display: inline-block;
+      }
+   }
+
+   .mapbox{
+      margin-left: 32px;
+      
+      .icon{
+         cursor: pointer;
+         color: red;
+      }
+   }
+
+
+}

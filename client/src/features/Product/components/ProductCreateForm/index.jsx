@@ -71,7 +71,6 @@ function ProductCreateForm(props) {
       if (body === '') return error();
       const split = { ...info };
       split.description = body;
-
       collectData(split);
       nextStep();
    };
@@ -126,7 +125,6 @@ function ProductCreateForm(props) {
                            },
                         ]}
                      >
-                        {/* <Input prefix={<DollarCircleOutlined />} suffix='USD' /> */}
                         <InputNumber
                            formatter={(value) =>
                               `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -153,6 +151,18 @@ function ProductCreateForm(props) {
                            {
                               required: true,
                               message: 'Please input your product stock',
+                           },
+                        ]}
+                     >
+                        <Input />
+                     </Form.Item>
+                     <Form.Item
+                        name='productAddress'
+                        label='Product Address'
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Please input your product address',
                            },
                         ]}
                      >

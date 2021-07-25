@@ -1,8 +1,15 @@
 .mapbox{
    .locationIcon{
-      color: #8b8b8b;
+      color: #1978C8;
       filter: drop-shadow(5px 5px 5px rgb(180, 180, 180));
       cursor: pointer;
+   }
+
+   .buttonGroup{
+      position: absolute;
+      top: 100px;
+      left: 1205px;
+      z-index: 1;
    }
 
    .mapboxgl-popup-tip{
@@ -27,6 +34,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
     }
     
     .crime-marker {

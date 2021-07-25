@@ -1,10 +1,11 @@
+import { Steps } from 'antd';
 import React, { useEffect, useState } from 'react';
-import ProductCreateForm from '../../components/ProductCreateForm';
-import ProductUploadImage from '../../components/ProductUploadImage';
-import { storage } from '../../../../firebase';
 import { useSelector } from 'react-redux';
 import productApi from '../../../../api/productApi';
-import { Steps } from 'antd';
+import { storage } from '../../../../firebase';
+import ProductAddressForm from '../../components/ProductAddressForm';
+import ProductCreateForm from '../../components/ProductCreateForm';
+import ProductUploadImage from '../../components/ProductUploadImage';
 import './ProductCreatePage.scss';
 
 const { Step } = Steps;
@@ -80,6 +81,10 @@ function ProductCreatePage(props) {
       setDb(values);
    };
 
+   const handleSubmitCoordinates = (values) => {
+      setDb({ ...db, ...values });
+   };
+
    useEffect(() => {
       const createProductToDb = async () => {
          if (
@@ -87,10 +92,21 @@ function ProductCreatePage(props) {
             !db.productPrice ||
             !db.productName ||
             !db.productPhotoURL ||
+            !db.lat ||
             db.productPhotoURL?.length === 0
          )
             return;
+
          try {
+            //get coordinates from product address
+            // const address = encodeURIComponent(db.productAddress);
+            // const apiKey = process.env.REACT_APP_MAP_BOX_API_KEY;
+            // const getCoordinates = await axios.get(
+            //    `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${apiKey}&limit=1`
+            // );
+            // console.log('address', getCoordinates.data.features[0].center);
+
+            //prepare data for Db
             const data = {
                id: firebaseId,
                description: db.description,
@@ -99,7 +115,13 @@ function ProductCreatePage(props) {
                name: db.productName,
                brand: db.productBrand,
                stock: db.productStock,
+               productAddress: db.productAddress,
+               lat: db.lat,
+               long: db.long,
+               // lat: getCoordinates.data.features[0].center[1],
+               // long: getCoordinates.data.features[0].center[0],
             };
+            console.log('full: ', data);
             const response = await productApi.createProduct(data);
             console.log('created product: ', response);
          } catch (error) {
@@ -124,6 +146,7 @@ function ProductCreatePage(props) {
                <Step title='Create product' description='Basic information.' />
                <Step title='Description' description='Product description.' />
                <Step title='Image' description='Photos of product.' />
+               <Step title='Address' description='Address for rent.' />
             </Steps>
          </div>
          <ProductCreateForm
@@ -140,6 +163,13 @@ function ProductCreatePage(props) {
             currentStep={currentStep}
             percent={percent}
             prevStep={prevStep}
+            nextStep={nextStep}
+         />
+         <ProductAddressForm
+            currentStep={currentStep}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleSubmitCoordinates={handleSubmitCoordinates}
          />
       </>
    );

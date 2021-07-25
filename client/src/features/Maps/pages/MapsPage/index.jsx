@@ -1,9 +1,11 @@
+import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Space } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { RiMapPin3Fill } from 'react-icons/ri';
-import ReactMapGL, { Marker, Popup } from 'react-map-gl';
+import ReactMapGL, { FlyToInterpolator, Marker, Popup } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
 import pinApi from '../../../../api/pinApi';
 import PopupContent from '../../components/PopupContent';
+import MapMarker from '../../components/PopupContent/MapMarker';
 import './MapsPage.scss';
 
 MapsPage.propTypes = {};
@@ -18,7 +20,7 @@ function MapsPage(props) {
       height: '80vh',
       latitude: 16.080361568951535,
       longitude: 108.21269906483103,
-      zoom: 15.5,
+      zoom: 6,
    });
 
    useEffect(() => {
@@ -38,17 +40,38 @@ function MapsPage(props) {
       if (!selectedMarker.some((m) => m === id)) {
          setSelectedMarker([...selectedMarker, id]);
       }
+      handleOnRemoveMarker(id);
    };
 
    const handleOnRemoveMarker = (id) => {
       const index = selectedMarker.indexOf(id);
       selectedMarker.splice(index, 1);
+      setViewport({ ...viewport });
+   };
+
+   const handleOnClickCluster = (id, longitude, latitude) => {
+      const expansionZoom = Math.min(
+         supercluster.getClusterExpansionZoom(id),
+         20
+      );
       setViewport({
-         width: '100vw',
-         height: '80vh',
-         latitude: viewport.latitude,
-         longitude: viewport.longitude,
-         zoom: viewport.zoom,
+         ...viewport,
+         latitude: latitude,
+         longitude: longitude,
+         zoom: expansionZoom,
+         transitionInterpolator: new FlyToInterpolator({
+            speed: 2,
+         }),
+         transitionDuration: 'auto',
+      });
+   };
+   const handleOnClickShowAllPopup = () => {
+      // eslint-disable-next-line
+      pins.map((pin) => {
+         if (!selectedMarker.some((m) => m === pin.id)) {
+            selectedMarker.push(pin.id);
+            setViewport({ ...viewport });
+         }
       });
    };
 
@@ -65,92 +88,103 @@ function MapsPage(props) {
       ? mapRef.current.getMap().getBounds().toArray().flat()
       : null;
 
-   const { clusters } = useSupercluster({
+   const { clusters, supercluster } = useSupercluster({
       points,
       bounds,
       zoom: viewport.zoom,
-      options: { radius: 75, maxZoom: 20 },
+      options: { radius: 50, maxZoom: 20 },
    });
 
    return (
       <>
          <div className='mapbox'>
+            <div className='buttonGroup'>
+               <Space>
+                  <Button
+                     type='primary'
+                     icon={<EyeOutlined />}
+                     onClick={handleOnClickShowAllPopup}
+                  />
+                  <Button
+                     type='primary'
+                     danger
+                     className='showAllPopupButton'
+                     icon={<DeleteOutlined />}
+                     onClick={() => setSelectedMarker([])}
+                  />
+               </Space>
+            </div>
             <ReactMapGL
                {...viewport}
                maxZoom={20}
                mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_API_KEY}
-               onViewportChange={(newViewport) => {
-                  setViewport({ ...newViewport });
-               }}
+               mapStyle='mapbox://styles/thanhnguyen662/ckrga4f8z4jah17o97c5z7rrx'
+               onViewportChange={setViewport}
                ref={mapRef}
             >
-               {clusters.map((cluster) => {
-                  const [longitude, latitude] = cluster.geometry.coordinates;
-                  const isCluster = cluster.properties.cluster;
-                  const pointCount = cluster.properties.point_count;
-
-                  if (isCluster) {
-                     return (
-                        <Marker
-                           key={`cluster-${cluster.id}`}
-                           latitude={latitude}
-                           longitude={longitude}
+               {clusters.map((cluster) =>
+                  cluster.properties.cluster ? (
+                     <Marker
+                        key={`cluster-${cluster.id}`}
+                        className='clusterMarker'
+                        longitude={cluster?.geometry.coordinates[0]}
+                        latitude={cluster?.geometry.coordinates[1]}
+                        onClick={() =>
+                           handleOnClickCluster(
+                              cluster.id,
+                              cluster?.geometry.coordinates[0],
+                              cluster?.geometry.coordinates[1]
+                           )
+                        }
+                     >
+                        <div
+                           className='cluster-marker'
+                           style={{
+                              width: `${
+                                 10 +
+                                 (cluster.properties.point_count /
+                                    points.length) *
+                                    20
+                              }px`,
+                              height: `${
+                                 10 +
+                                 (cluster.properties.point_count /
+                                    points.length) *
+                                    20
+                              }px`,
+                           }}
                         >
-                           <div
-                              className='cluster-marker'
-                              style={{
-                                 width: `${
-                                    10 + (pointCount / points.length) * 20
-                                 }px`,
-                                 height: `${
-                                    10 + (pointCount / points.length) * 20
-                                 }px`,
-                              }}
-                           >
-                              {pointCount}
-                           </div>
-                        </Marker>
-                     );
-                  }
-
-                  return (
-                     <>
-                        <div key={`crime-${cluster.properties?.pinId}`}>
-                           <Marker latitude={latitude} longitude={longitude}>
-                              <RiMapPin3Fill
-                                 style={{ fontSize: viewport.zoom * 2 }}
-                                 className='locationIcon'
-                                 onClick={() =>
-                                    handleOnClickMarker(
-                                       cluster.properties.pinId
-                                    )
-                                 }
-                              />
-                           </Marker>
-                           {selectedMarker?.find(
-                              (m) => m === cluster.properties.pinId
-                           ) && (
-                              <Popup
-                                 latitude={latitude}
-                                 longitude={longitude}
-                                 closeButton={true}
-                                 closeOnClick={false}
-                                 offsetLeft={35}
-                                 offsetTop={15}
-                                 anchor='left'
-                                 onClose={() =>
-                                    handleOnRemoveMarker(
-                                       cluster.properties.pinId
-                                    )
-                                 }
-                              >
-                                 <PopupContent pin={cluster.properties.pin} />
-                              </Popup>
-                           )}
+                           {cluster.properties.point_count}
                         </div>
-                     </>
-                  );
-               })}
+                     </Marker>
+                  ) : (
+                     <div key={cluster.properties?.pinId}>
+                        <MapMarker
+                           cluster={cluster}
+                           handleOnClickMarker={handleOnClickMarker}
+                           viewport={viewport}
+                        />
+                        {selectedMarker?.find(
+                           (m) => m === cluster.properties.pinId
+                        ) && (
+                           <Popup
+                              longitude={cluster?.geometry.coordinates[0]}
+                              latitude={cluster?.geometry.coordinates[1]}
+                              closeButton={true}
+                              closeOnClick={false}
+                              offsetLeft={35}
+                              offsetTop={15}
+                              anchor='left'
+                              onClose={() =>
+                                 handleOnRemoveMarker(cluster.properties.pinId)
+                              }
+                           >
+                              <PopupContent pin={cluster.properties.pin} />
+                           </Popup>
+                        )}
+                     </div>
+                  )
+               )}
             </ReactMapGL>
          </div>
       </>
@@ -158,40 +192,3 @@ function MapsPage(props) {
 }
 
 export default MapsPage;
-
-// <ReactMapGL
-//          {...viewport}
-//          mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_API_KEY}
-//          mapStyle='mapbox://styles/thanhnguyen662/ckrga4f8z4jah17o97c5z7rrx'
-//          onViewportChange={setViewport}
-//          ref={mapRef}
-//       >
-//          {pins.map((pin) => (
-//             <div key={pin.id}>
-//                <Marker
-//                   latitude={parseFloat(pin.lat)}
-//                   longitude={parseFloat(pin.long)}
-//                >
-//                   <RiMapPin3Fill
-//                      style={{ fontSize: viewport.zoom * 2 }}
-//                      className='locationIcon'
-//                      onClick={() => handleOnClickMarker(pin.id)}
-//                   />
-//                </Marker>
-//                {selectedMarker?.find((m) => m === pin.id) && (
-//                   <Popup
-//                      latitude={parseFloat(pin.lat)}
-//                      longitude={parseFloat(pin.long)}
-//                      closeButton={true}
-//                      closeOnClick={false}
-//                      offsetLeft={35}
-//                      offsetTop={15}
-//                      anchor='left'
-//                      onClose={() => handleOnRemoveMarker(pin.id)}
-//                   >
-//                      <PopupContent pin={pin} />
-//                   </Popup>
-//                )}
-//             </div>
-//          ))}
-//       </ReactMapGL>

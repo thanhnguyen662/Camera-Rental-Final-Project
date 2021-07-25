@@ -46,6 +46,7 @@ function ProductUploadImage(props) {
       currentStep,
       percent,
       prevStep,
+      nextStep,
    } = props;
    const [previewImage, setPreviewImage] = useState('');
    const [previewVisible, setPreviewVisible] = useState(false);
@@ -111,6 +112,7 @@ function ProductUploadImage(props) {
                      onClick={() => {
                         if (imageList?.length <= 3) return error();
                         handleSubmit();
+                        nextStep();
                      }}
                      className='submitButton'
                   >

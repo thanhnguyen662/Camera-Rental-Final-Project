@@ -31,7 +31,8 @@ function PopupContent(props) {
                </Col>
                <Col span={17}>
                   <h5>{pin.product.User.username}</h5>
-                  <h6>0.3 km &bull;</h6> <u>{pin.product.User.address}</u>
+                  <h6>0.3 km &bull;</h6>{' '}
+                  <u>{pin.product.User.address.split(',')[0]}</u>
                </Col>
             </Row>
             <Row className='popupRateRow'>

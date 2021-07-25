@@ -52,6 +52,14 @@ class ProductController {
                brand: req.body.brand,
                price: String(req.body.price),
                stock: Number(req.body.stock),
+               productAddress: req.body.productAddress,
+
+               pins: {
+                  create: {
+                     lat: String(req.body.lat),
+                     long: String(req.body.long),
+                  },
+               },
             },
          });
 
