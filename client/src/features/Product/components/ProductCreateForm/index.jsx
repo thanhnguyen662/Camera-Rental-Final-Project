@@ -156,7 +156,7 @@ function ProductCreateForm(props) {
                      >
                         <Input />
                      </Form.Item>
-                     <Form.Item
+                     {/* <Form.Item
                         name='productAddress'
                         label='Product Address'
                         rules={[
@@ -167,7 +167,7 @@ function ProductCreateForm(props) {
                         ]}
                      >
                         <Input />
-                     </Form.Item>
+                     </Form.Item> */}
                      <Form.Item {...tailFormItemLayout}>
                         <Button type='primary' htmlType='submit'>
                            Next Step

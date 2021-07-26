@@ -15,6 +15,7 @@ function MapsPage(props) {
 
    const [pins, setPins] = useState([]);
    const [selectedMarker, setSelectedMarker] = useState([]);
+   const [initLocation, setInitLocation] = useState(null);
    const [viewport, setViewport] = useState({
       width: '100vw',
       height: '80vh',
@@ -35,6 +36,27 @@ function MapsPage(props) {
       };
       getPins();
    }, []);
+
+   useEffect(() => {
+      navigator.geolocation.getCurrentPosition((position) => {
+         setInitLocation([position.coords.latitude, position.coords.longitude]);
+      });
+   }, []);
+
+   useEffect(() => {
+      if (!initLocation) return;
+      setViewport({
+         ...viewport,
+         latitude: initLocation[0],
+         longitude: initLocation[1],
+         zoom: 12,
+         transitionInterpolator: new FlyToInterpolator({
+            speed: 2,
+         }),
+         transitionDuration: 'auto',
+      });
+      // eslint-disable-next-line
+   }, [initLocation]);
 
    const handleOnClickMarker = (id) => {
       if (!selectedMarker.some((m) => m === id)) {
@@ -92,7 +114,7 @@ function MapsPage(props) {
       points,
       bounds,
       zoom: viewport.zoom,
-      options: { radius: 50, maxZoom: 20 },
+      options: { radius: 70, maxZoom: 20 },
    });
 
    return (

@@ -6,6 +6,7 @@ import { storage } from '../../../../firebase';
 import ProductAddressForm from '../../components/ProductAddressForm';
 import ProductCreateForm from '../../components/ProductCreateForm';
 import ProductUploadImage from '../../components/ProductUploadImage';
+import { v4 as uuidv4 } from 'uuid';
 import './ProductCreatePage.scss';
 
 const { Step } = Steps;
@@ -13,15 +14,22 @@ const { Step } = Steps;
 function ProductCreatePage(props) {
    const [imageList, setImageList] = useState([]);
    const [db, setDb] = useState();
-   const [currentStep, setCurrentStep] = useState(0);
+   const [currentStep, setCurrentStep] = useState(3);
    const [percent, setPercent] = useState(0);
    const userEmail = useSelector((state) => state.users.email);
    const firebaseId = useSelector((state) => state.users.id);
 
    const uploadImage = async (options) => {
       const { onSuccess, onError, file } = options;
+      const uniqueName = uuidv4();
+      console.log(`${uniqueName}.${file.type.split('/')[1]}`);
+
       const uploadTask = storage
-         .ref(`products/${userEmail}/product/${file.name}`)
+         .ref(
+            `products/${userEmail}/product/${uniqueName}.${
+               file.type.split('/')[1]
+            }`
+         )
          .put(file);
       uploadTask.on(
          'state_changed',
@@ -34,14 +42,17 @@ function ProductCreatePage(props) {
          () => {
             storage
                .ref(`products/${userEmail}/product`)
-               .child(file.name)
+               .child(`${uniqueName}.${file.type.split('/')[1]}`)
                .getDownloadURL()
                .then((url) => {
                   console.log(url);
                   onSuccess(null, file);
                   setImageList((prevList) => [
                      ...prevList,
-                     { uid: url.split('=')[2], url: url, status: 'done' },
+                     {
+                        status: 'done',
+                        url: url,
+                     },
                   ]);
                })
                .catch((error) => {
@@ -82,6 +93,7 @@ function ProductCreatePage(props) {
    };
 
    const handleSubmitCoordinates = (values) => {
+      console.log(values);
       setDb({ ...db, ...values });
    };
 

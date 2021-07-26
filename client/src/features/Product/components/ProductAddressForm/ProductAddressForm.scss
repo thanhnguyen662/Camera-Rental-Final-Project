@@ -6,23 +6,40 @@
       padding: 30px 0px 0px 30px;
    }  
 
-   .inputGroup{
-      width: 30%;
-      margin-left: 30px;
-      margin-bottom: 10px;
-      .input{
-         display: inline-block;
-      }
+   .buttonModal{
+      margin-top: 8px;
+      height: 38px;
+      border-color: #1890FF;
+      color: #1890FF;
+      border-width: 1.5px;
+      
    }
 
+   
    .mapbox{
       margin-left: 32px;
-      
+      padding-top: 7px;
       .icon{
          cursor: pointer;
          color: red;
       }
    }
+   
+}
 
+.inputModal{
+   .inputAddress{
+      width: 86%;
+      margin-left: 8px;
+   }
+   .inputLabel{
+      margin-top: 3.5px;
+      font-size: 13px;
+   }
 
+   em{
+      font-size: 12px;
+      margin-top: 10px;
+      color: rgb(99, 99, 99)
+   }
 }
