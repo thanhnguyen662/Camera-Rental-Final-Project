@@ -1,11 +1,12 @@
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, Marker, Popup } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
 import pinApi from '../../../../api/pinApi';
 import PopupContent from '../../components/PopupContent';
-import MapMarker from '../../components/PopupContent/MapMarker';
+import MapMarker from '../../components/MapMarker';
 import './MapsPage.scss';
 
 MapsPage.propTypes = {};
@@ -23,6 +24,18 @@ function MapsPage(props) {
       longitude: 108.21269906483103,
       zoom: 6,
    });
+
+   useEffect(() => {
+      const longitude = 16.071673787471287;
+      const latitude = 108.20924260022616;
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?types=poi&access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`;
+
+      const getAddress = async () => {
+         const response = await axios.get(url);
+         console.log('address', response.data);
+      };
+      getAddress();
+   }, []);
 
    useEffect(() => {
       const getPins = async () => {

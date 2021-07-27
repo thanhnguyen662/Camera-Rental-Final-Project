@@ -14,7 +14,6 @@ model Product {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   slug            String           @unique
-  productAddress  String?
   firebaseId      String?
   brand           String?
   price           String?
@@ -98,6 +97,10 @@ model Pin {
   id        Int      @id @default(autoincrement())
   lat       String?
   long      String?
+  address   String?
+  ward      String?
+  district  String?
+  city      String?
   productId Int?
   product   Product? @relation(fields: [productId], references: [id])
 

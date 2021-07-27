@@ -18,7 +18,7 @@ PopupContent.defaultProps = {
 
 function PopupContent(props) {
    const { pin } = props;
-   console.log(pin);
+   console.log('cc', pin);
    return (
       <>
          <div className='popupContent'>
@@ -31,8 +31,7 @@ function PopupContent(props) {
                </Col>
                <Col span={17}>
                   <h5>{pin.product.User.username}</h5>
-                  <h6>0.3 km &bull;</h6>{' '}
-                  <u>{pin.product.productAddress.split(',')[0]}</u>
+                  <h6>0.3 km &bull;</h6> <u>{pin.address}</u>
                </Col>
             </Row>
             <Row className='popupRateRow'>

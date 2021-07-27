@@ -14,7 +14,7 @@ const { Step } = Steps;
 function ProductCreatePage(props) {
    const [imageList, setImageList] = useState([]);
    const [db, setDb] = useState();
-   const [currentStep, setCurrentStep] = useState(3);
+   const [currentStep, setCurrentStep] = useState(0);
    const [percent, setPercent] = useState(0);
    const userEmail = useSelector((state) => state.users.email);
    const firebaseId = useSelector((state) => state.users.id);
@@ -22,7 +22,6 @@ function ProductCreatePage(props) {
    const uploadImage = async (options) => {
       const { onSuccess, onError, file } = options;
       const uniqueName = uuidv4();
-      console.log(`${uniqueName}.${file.type.split('/')[1]}`);
 
       const uploadTask = storage
          .ref(
@@ -45,7 +44,6 @@ function ProductCreatePage(props) {
                .child(`${uniqueName}.${file.type.split('/')[1]}`)
                .getDownloadURL()
                .then((url) => {
-                  console.log(url);
                   onSuccess(null, file);
                   setImageList((prevList) => [
                      ...prevList,
@@ -110,14 +108,6 @@ function ProductCreatePage(props) {
             return;
 
          try {
-            //get coordinates from product address
-            // const address = encodeURIComponent(db.productAddress);
-            // const apiKey = process.env.REACT_APP_MAP_BOX_API_KEY;
-            // const getCoordinates = await axios.get(
-            //    `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${apiKey}&limit=1`
-            // );
-            // console.log('address', getCoordinates.data.features[0].center);
-
             //prepare data for Db
             const data = {
                id: firebaseId,
@@ -130,10 +120,12 @@ function ProductCreatePage(props) {
                productAddress: db.productAddress,
                lat: db.lat,
                long: db.long,
-               // lat: getCoordinates.data.features[0].center[1],
-               // long: getCoordinates.data.features[0].center[0],
+               address: db.address,
+               ward: db.ward,
+               district: db.district,
+               city: db.city,
             };
-            console.log('full: ', data);
+
             const response = await productApi.createProduct(data);
             console.log('created product: ', response);
          } catch (error) {

@@ -58,7 +58,6 @@ function ProductUploadImage(props) {
       });
    };
 
-   console.log('test:', imageList);
    return (
       <>
          {currentStep === 2 && (

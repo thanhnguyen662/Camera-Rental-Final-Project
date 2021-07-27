@@ -1,10 +1,12 @@
-import { Button, Divider, Typography, Row, Col, Modal, Input } from 'antd';
+import { Button, Divider, Typography, Row, Col, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { RiMapPin3Fill } from 'react-icons/ri';
 import ReactMapGL, { FlyToInterpolator, Marker } from 'react-map-gl';
 import './ProductAddressForm.scss';
 import { CheckOutlined } from '@ant-design/icons';
+import AddressOption from '../../../../components/AddressOption';
+
 ProductAddressForm.propTypes = {
    currentStep: PropTypes.number,
 };
@@ -28,7 +30,6 @@ function ProductAddressForm(props) {
    const [coordinates, setCoordinates] = useState(null);
    const [initLocation, setInitLocation] = useState(null);
    const [isModalVisible, setIsModalVisible] = useState(false);
-   const [address, setAddress] = useState('');
 
    const handleDblClickOnMap = (e) => {
       const [longitude, latitude] = e.lngLat;
@@ -61,6 +62,16 @@ function ProductAddressForm(props) {
 
    const disableButton = !coordinates && {
       disabled: true,
+   };
+
+   const handleOnSubmitForm = (formData) => {
+      handleSubmitCoordinates({
+         ...coordinates,
+         district: formData.district.split('/')[1],
+         city: formData.city.split('/')[1],
+         ward: formData.ward.split('/')[1],
+         address: formData.address,
+      });
    };
 
    return (
@@ -119,19 +130,13 @@ function ProductAddressForm(props) {
                   <Modal
                      title='Please confirm your address 🏘'
                      visible={isModalVisible}
-                     onOk={() => {
-                        handleSubmitCoordinates({
-                           ...coordinates,
-                           productAddress: address,
-                        });
-                     }}
                      onCancel={() => setIsModalVisible(false)}
+                     footer={null}
                   >
                      <Row className='inputModal'>
-                        <label className='inputLabel'>Address:</label>
-                        <Input
-                           className='inputAddress'
-                           onChange={(e) => setAddress(e.target.value)}
+                        <AddressOption
+                           className='optionStyle'
+                           onFinish={handleOnSubmitForm}
                         />
                         <em>
                            We need the address where you rent the product. This
