@@ -84,13 +84,9 @@ function Routers(props) {
                      </Route>
 
                      <Route path='/maps'>
-                        <div style={{ margin: '25px 125px' }}>
-                           <Content
-                              style={{ minHeight: 550, overflow: 'hidden' }}
-                           >
-                              <Maps />
-                           </Content>
-                        </div>
+                        <Content style={{ minHeight: 550, overflow: 'hidden' }}>
+                           <Maps />
+                        </Content>
                      </Route>
                   </Switch>
                </MainLayout>

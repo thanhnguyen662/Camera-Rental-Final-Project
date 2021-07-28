@@ -1,7 +1,7 @@
-import { Col, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import productApi from '../../../../api/productApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
@@ -85,10 +85,20 @@ function ProductDetailPage(props) {
                   />
                </Col>
             </Row>
-
             <ProductDetailUser productDetail={productDetail} />
-
             <ProductDetailComment productDetail={productDetail} />
+            <Button>
+               <Link
+                  to={{
+                     pathname: '/maps',
+                     state: {
+                        productDetail: productDetail,
+                     },
+                  }}
+               >
+                  Click me
+               </Link>
+            </Button>
          </div>
       </>
    );

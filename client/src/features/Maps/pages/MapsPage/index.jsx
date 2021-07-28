@@ -8,40 +8,31 @@ import pinApi from '../../../../api/pinApi';
 import PopupContent from '../../components/PopupContent';
 import MapMarker from '../../components/MapMarker';
 import './MapsPage.scss';
+import { useLocation } from 'react-router-dom';
 
 MapsPage.propTypes = {};
 
 function MapsPage(props) {
    const mapRef = useRef();
+   const location = useLocation();
 
+   const [dataCollect, setDataCollect] = useState([]);
    const [pins, setPins] = useState([]);
    const [selectedMarker, setSelectedMarker] = useState([]);
    const [initLocation, setInitLocation] = useState(null);
    const [viewport, setViewport] = useState({
       width: '100vw',
-      height: '80vh',
+      height: '100vh',
       latitude: 16.080361568951535,
       longitude: 108.21269906483103,
       zoom: 6,
    });
 
    useEffect(() => {
-      const longitude = 16.071673787471287;
-      const latitude = 108.20924260022616;
-      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?types=poi&access_token=${process.env.REACT_APP_MAP_BOX_API_KEY}`;
-
-      const getAddress = async () => {
-         const response = await axios.get(url);
-         console.log('address', response.data);
-      };
-      getAddress();
-   }, []);
-
-   useEffect(() => {
       const getPins = async () => {
          try {
             const response = await pinApi.getAllPins();
-            console.log('Pins: ', response);
+            // console.log('Pins: ', response);
             setPins(response);
          } catch (error) {
             return console.log(error);
@@ -58,6 +49,72 @@ function MapsPage(props) {
 
    useEffect(() => {
       if (!initLocation) return;
+      const apiTokenMapbox = process.env.REACT_APP_MAP_BOX_API_KEY;
+      const mapboxUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
+
+      const latitude = initLocation[0];
+      const longitude = initLocation[1];
+      // 16.06069262291499, 108.21715329535822
+      // const latitude = 16.06069262291499;
+      // const longitude = 108.21715329535822;
+
+      const latitudeUp = latitude + 0.015;
+      const longitudeUp = longitude;
+
+      const latitudeDown = latitude - 0.015;
+      const longitudeDown = longitude;
+
+      const latitudeLeft = latitude;
+      const longitudeLeft = longitude + 0.015;
+
+      const latitudeRight = latitude;
+      const longitudeRight = longitude - 0.015;
+
+      const urlBatch = [
+         `${mapboxUrl}/${longitude},${latitude}.json?types=place&access_token=${apiTokenMapbox}&limit=1`, //center
+         `${mapboxUrl}/${longitudeUp},${latitudeUp}.json?types=place&access_token=${apiTokenMapbox}&limit=1`, //up
+         `${mapboxUrl}/${longitudeDown},${latitudeDown}.json?types=place&access_token=${apiTokenMapbox}&limit=1`, //down
+         `${mapboxUrl}/${longitudeLeft},${latitudeLeft}.json?types=place&access_token=${apiTokenMapbox}&limit=1`, //left
+         `${mapboxUrl}/${longitudeRight},${latitudeRight}.json?types=place&access_token=${apiTokenMapbox}&limit=1`, //right
+      ];
+
+      const getAddress = async () => {
+         let data = [];
+
+         urlBatch.map(async (url) => {
+            const mapboxResponse = await axios.get(url);
+            const rawData = mapboxResponse.data.features[0]?.text;
+
+            data.push(rawData);
+            if (data?.length === 5) {
+               // setDataCollect(arrToInstanceCountObj(data));
+               // console.log(arrToInstanceCountObj(data));
+
+               //only get Unique Data
+               const uniqueSet = new Set(data);
+               const backToArray = [...uniqueSet];
+
+               //then remove undefined value
+               backToArray.splice(backToArray.indexOf(undefined), 1);
+
+               setDataCollect(backToArray);
+               console.log(backToArray);
+            }
+         });
+      };
+      getAddress();
+   }, [initLocation]);
+
+   // const arrToInstanceCountObj = (arr) =>
+   //    arr.reduce((obj, e) => {
+   //       if (e !== undefined) {
+   //          obj[e] = (obj[e] || 0) + 1;
+   //       }
+   //       return obj;
+   //    }, {});
+
+   useEffect(() => {
+      if (!initLocation) return;
       setViewport({
          ...viewport,
          latitude: initLocation[0],
@@ -70,6 +127,25 @@ function MapsPage(props) {
       });
       // eslint-disable-next-line
    }, [initLocation]);
+
+   useEffect(() => {
+      if (!location) return;
+
+      const [district, district1] = dataCollect;
+      const getPinByOrder = async () => {
+         try {
+            const response = await pinApi.getPin({
+               district,
+               district1,
+               productName: location.state.productDetail.name,
+            });
+            console.log(response);
+         } catch (error) {
+            return console.log(error);
+         }
+      };
+      getPinByOrder();
+   }, [location, dataCollect]);
 
    const handleOnClickMarker = (id) => {
       if (!selectedMarker.some((m) => m === id)) {
@@ -100,6 +176,7 @@ function MapsPage(props) {
          transitionDuration: 'auto',
       });
    };
+
    const handleOnClickShowAllPopup = () => {
       // eslint-disable-next-line
       pins.map((pin) => {
@@ -127,7 +204,7 @@ function MapsPage(props) {
       points,
       bounds,
       zoom: viewport.zoom,
-      options: { radius: 70, maxZoom: 20 },
+      options: { radius: 100, maxZoom: 22 },
    });
 
    return (
@@ -136,11 +213,13 @@ function MapsPage(props) {
             <div className='buttonGroup'>
                <Space>
                   <Button
+                     size='large'
                      type='primary'
                      icon={<EyeOutlined />}
                      onClick={handleOnClickShowAllPopup}
                   />
                   <Button
+                     size='large'
                      type='primary'
                      danger
                      className='showAllPopupButton'
@@ -176,13 +255,13 @@ function MapsPage(props) {
                            className='cluster-marker'
                            style={{
                               width: `${
-                                 10 +
+                                 15 +
                                  (cluster.properties.point_count /
                                     points.length) *
                                     20
                               }px`,
                               height: `${
-                                 10 +
+                                 15 +
                                  (cluster.properties.point_count /
                                     points.length) *
                                     20
@@ -207,7 +286,7 @@ function MapsPage(props) {
                               latitude={cluster?.geometry.coordinates[1]}
                               closeButton={true}
                               closeOnClick={false}
-                              offsetLeft={35}
+                              offsetLeft={45}
                               offsetTop={15}
                               anchor='left'
                               onClose={() =>

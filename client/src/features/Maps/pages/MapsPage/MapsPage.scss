@@ -1,4 +1,5 @@
 .mapbox{
+   z-index: 0;
    .locationIcon{
       color: #1978C8;
       filter: drop-shadow(5px 5px 5px rgb(180, 180, 180));
@@ -8,7 +9,7 @@
    .buttonGroup{
       position: absolute;
       top: 100px;
-      left: 1205px;
+      left: 1380px;
       z-index: 1;
    }
 

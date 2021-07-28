@@ -1,7 +1,7 @@
 import './PopupContent.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Avatar, Button } from 'antd';
+import { Row, Col, Avatar, Button, Tooltip } from 'antd';
 import { FcLike, FcApproval, FcVoicePresentation } from 'react-icons/fc';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ PopupContent.defaultProps = {
 
 function PopupContent(props) {
    const { pin } = props;
-   console.log('cc', pin);
+
    return (
       <>
          <div className='popupContent'>
@@ -31,7 +31,14 @@ function PopupContent(props) {
                </Col>
                <Col span={17}>
                   <h5>{pin.product.User.username}</h5>
-                  <h6>0.3 km &bull;</h6> <u>{pin.address}</u>
+                  <h6>0.3 km &bull;</h6>
+                  &nbsp;
+                  <Tooltip
+                     placement='right'
+                     title={`${pin.ward}, ${pin.district}, ${pin.city}`}
+                  >
+                     <u>{pin.address}</u>
+                  </Tooltip>
                </Col>
             </Row>
             <Row className='popupRateRow'>

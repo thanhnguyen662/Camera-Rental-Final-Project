@@ -77,6 +77,7 @@ function AddressOption(props) {
 
                <Form.Item name='city' rules={[{ required: true }]}>
                   <Select
+                     showSearch
                      style={{ width: '230%' }}
                      placeholder='Please select city/province'
                      onChange={(value) => {
@@ -94,10 +95,10 @@ function AddressOption(props) {
                         ))}
                   </Select>
                </Form.Item>
-
                <Form.Item name='district' rules={[{ required: true }]}>
                   <Select
                      {...disableDistrictsOption}
+                     showSearch
                      style={{ width: '230%' }}
                      placeholder='Please select district'
                      onChange={(value) => {
@@ -120,6 +121,7 @@ function AddressOption(props) {
                      {...disableWardsOption}
                      style={{ width: '230%' }}
                      placeholder='Please select ward'
+                     showSearch
                   >
                      {wards &&
                         wards.map((ward) => (

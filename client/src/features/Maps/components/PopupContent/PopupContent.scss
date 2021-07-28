@@ -19,7 +19,7 @@
       }
 
       u{
-         font-size: 11px;
+         font-size: 10px;
          font-weight: 500;
          color: #0579FF;
       }
@@ -98,4 +98,9 @@
          }
       }
    }
+
+}
+.ant-tooltip-inner{
+   font-size: 11px;
+   padding-top: 7px;
 }

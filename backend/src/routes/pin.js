@@ -3,6 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../firebase/middleware/auth-middleware');
 const pinController = require('../app/controllers/PinController');
 
-router.get('/getAllPins', authMiddleware, pinController.getAllPins);
+router.get('/getAllPins', pinController.getAllPins);
+router.get('/getPin', pinController.getPinInDistrict);
 
 module.exports = router;
