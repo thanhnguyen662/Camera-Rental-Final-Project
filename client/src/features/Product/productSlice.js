@@ -31,13 +31,13 @@ const cartProduct = createSlice({
 
          const destructuringItem = item.map((i) => {
             const split = { ...i };
-            split.id = i.Product.id;
-            split.name = i.Product.name;
-            split.description = i.Product.description;
-            split.createdAt = i.Product.createdAt;
-            split.updatedAt = i.Product.updatedAt;
-            split.firebaseId = i.Product.firebaseId;
-            split.key = i.Product.id;
+            split.id = i.Product?.id;
+            split.name = i.Product?.name;
+            split.description = i.Product?.description;
+            split.createdAt = i.Product?.createdAt;
+            split.updatedAt = i.Product?.updatedAt;
+            split.firebaseId = i.Product?.firebaseId;
+            split.key = i.Product?.id;
             split.startDate = moment(i.startDate)
                .utcOffset(7)
                .format('YYYY-MM-DD HH:mm:ss');

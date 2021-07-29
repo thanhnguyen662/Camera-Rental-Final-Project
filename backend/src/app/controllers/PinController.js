@@ -84,6 +84,57 @@ class PinController {
          return next(error);
       }
    };
+
+   getSearch = async (req, res, next) => {
+      const { address, city, district, ward, productName } = req.query;
+
+      try {
+         const response = await prisma.pin.findMany({
+            where: {
+               AND: [
+                  {
+                     address: {
+                        contains: address,
+                     },
+                  },
+                  {
+                     city: {
+                        contains: city,
+                     },
+                  },
+                  {
+                     district: {
+                        contains: district,
+                     },
+                  },
+                  {
+                     ward: {
+                        contains: ward,
+                     },
+                  },
+                  {
+                     product: {
+                        name: {
+                           contains: productName,
+                        },
+                     },
+                  },
+               ],
+            },
+            include: {
+               product: {
+                  include: {
+                     User: true,
+                  },
+               },
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new PinController();

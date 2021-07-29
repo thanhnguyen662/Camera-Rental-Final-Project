@@ -3,14 +3,23 @@ import { Input, Select, Form, Button } from 'antd';
 import axios from 'axios';
 import { HomeOutlined } from '@ant-design/icons';
 import './AddressOption.scss';
+import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-AddressOption.propTypes = {};
+AddressOption.propTypes = {
+   onFinish: PropTypes.func,
+};
+
+AddressOption.defaultProps = {
+   onFinish: null,
+};
 
 const { Option } = Select;
 
 function AddressOption(props) {
    const { onFinish } = props;
 
+   const location = useLocation();
    const [provinces, setProvinces] = useState(null);
    const [districts, setDistricts] = useState(null);
    const [wards, setWards] = useState(null);
@@ -63,11 +72,27 @@ function AddressOption(props) {
       loading: true,
    };
 
+   const validationForm = location.pathname !== '/maps' && {
+      rules: [
+         {
+            required: true,
+         },
+      ],
+   };
+
    return (
       <>
          <div className='addressForm'>
             <Form className='form' form={form} onFinish={onFinish}>
-               <Form.Item name='address' rules={[{ required: true }]}>
+               {location.pathname === '/maps' && (
+                  <Form.Item name='productName' {...validationForm}>
+                     <Input
+                        placeholder='Please input product name'
+                        style={{ width: '230%' }}
+                     />
+                  </Form.Item>
+               )}
+               <Form.Item name='address' {...validationForm}>
                   <Input
                      placeholder='Please input address'
                      prefix={<HomeOutlined />}
@@ -75,7 +100,7 @@ function AddressOption(props) {
                   />
                </Form.Item>
 
-               <Form.Item name='city' rules={[{ required: true }]}>
+               <Form.Item name='city' {...validationForm}>
                   <Select
                      showSearch
                      style={{ width: '230%' }}
@@ -95,7 +120,7 @@ function AddressOption(props) {
                         ))}
                   </Select>
                </Form.Item>
-               <Form.Item name='district' rules={[{ required: true }]}>
+               <Form.Item name='district' {...validationForm}>
                   <Select
                      {...disableDistrictsOption}
                      showSearch
@@ -116,7 +141,7 @@ function AddressOption(props) {
                         ))}
                   </Select>
                </Form.Item>
-               <Form.Item name='ward' rules={[{ required: true }]}>
+               <Form.Item name='ward' {...validationForm}>
                   <Select
                      {...disableWardsOption}
                      style={{ width: '230%' }}
