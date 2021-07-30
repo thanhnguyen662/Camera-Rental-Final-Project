@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Input, Select, Form, Button } from 'antd';
+import { Button, Form, Input, Select, Space } from 'antd';
 import axios from 'axios';
-import { HomeOutlined } from '@ant-design/icons';
-import './AddressOption.scss';
-import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import './AddressOption.scss';
 
 AddressOption.propTypes = {
    onFinish: PropTypes.func,
@@ -83,30 +82,42 @@ function AddressOption(props) {
    return (
       <>
          <div className='addressForm'>
-            <Form className='form' form={form} onFinish={onFinish}>
+            <Form
+               className='form'
+               form={form}
+               onFinish={onFinish}
+               labelCol={{ span: 8 }}
+               wrapperCol={{ span: 16 }}
+            >
                {location.pathname === '/maps' && (
-                  <Form.Item name='productName' {...validationForm}>
+                  <Form.Item
+                     name='productName'
+                     label='Name'
+                     {...validationForm}
+                  >
                      <Input
+                        allowClear
                         placeholder='Please input product name'
-                        style={{ width: '230%' }}
+                        style={{ width: '205%' }}
                      />
                   </Form.Item>
                )}
-               <Form.Item name='address' {...validationForm}>
+               <Form.Item name='address' {...validationForm} label='Address'>
                   <Input
+                     allowClear
                      placeholder='Please input address'
-                     prefix={<HomeOutlined />}
-                     style={{ width: '230%' }}
+                     style={{ width: '205%' }}
                   />
                </Form.Item>
 
-               <Form.Item name='city' {...validationForm}>
+               <Form.Item name='city' {...validationForm} label='City'>
                   <Select
+                     allowClear
                      showSearch
-                     style={{ width: '230%' }}
+                     style={{ width: '205%' }}
                      placeholder='Please select city/province'
                      onChange={(value) => {
-                        getDistrict(value.split('/')[0]);
+                        getDistrict(value?.split('/')[0]);
                      }}
                   >
                      {provinces &&
@@ -120,14 +131,15 @@ function AddressOption(props) {
                         ))}
                   </Select>
                </Form.Item>
-               <Form.Item name='district' {...validationForm}>
+               <Form.Item name='district' {...validationForm} label='District'>
                   <Select
                      {...disableDistrictsOption}
+                     allowClear
                      showSearch
-                     style={{ width: '230%' }}
+                     style={{ width: '205%' }}
                      placeholder='Please select district'
                      onChange={(value) => {
-                        getWards(value.split('/')[0]);
+                        getWards(value?.split('/')[0]);
                      }}
                   >
                      {districts &&
@@ -141,10 +153,11 @@ function AddressOption(props) {
                         ))}
                   </Select>
                </Form.Item>
-               <Form.Item name='ward' {...validationForm}>
+               <Form.Item name='ward' {...validationForm} label='Ward'>
                   <Select
                      {...disableWardsOption}
-                     style={{ width: '230%' }}
+                     allowClear
+                     style={{ width: '205%' }}
                      placeholder='Please select ward'
                      showSearch
                   >
@@ -159,10 +172,22 @@ function AddressOption(props) {
                         ))}
                   </Select>
                </Form.Item>
-               <Form.Item>
-                  <Button type='primary' htmlType='submit'>
-                     Submit
-                  </Button>
+               <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                  <Space>
+                     <Button
+                        type='primary'
+                        htmlType='submit'
+                        style={{ width: '120px' }}
+                     >
+                        Search
+                     </Button>
+                     <Button
+                        htmlType='button'
+                        onClick={() => form.resetFields()}
+                     >
+                        Reset
+                     </Button>
+                  </Space>
                </Form.Item>
             </Form>
          </div>

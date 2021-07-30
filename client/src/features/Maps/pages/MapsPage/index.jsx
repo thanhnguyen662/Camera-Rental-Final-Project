@@ -1,5 +1,4 @@
-import { DeleteOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Col, Modal, Row, Space, Tooltip } from 'antd';
+import { Modal, Row } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, Marker, Popup } from 'react-map-gl';
@@ -8,6 +7,7 @@ import useSupercluster from 'use-supercluster';
 import pinApi from '../../../../api/pinApi';
 import AddressOption from '../../../../components/AddressOption';
 import openNotificationWithIcon from '../../../../components/Notification';
+import MapButton from '../../components/MapButton';
 import MapMarker from '../../components/MapMarker';
 import PopupContent from '../../components/PopupContent';
 import './MapsPage.scss';
@@ -18,6 +18,7 @@ function MapsPage(props) {
    const mapRef = useRef();
    const location = useLocation();
 
+   const [searchStatusNotification, setSearchStatusNotification] = useState('');
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [dataCollect, setDataCollect] = useState([]);
    const [pins, setPins] = useState([]);
@@ -192,12 +193,12 @@ function MapsPage(props) {
    const handleOnSearch = async (formValues) => {
       const formData = {
          address: formValues.address,
-         city: formValues.city?.split('/')[1] || undefined,
-         ward: formValues.ward?.split('/')[1] || undefined,
-         district: formValues.district?.split('/')[1] || undefined,
+         city: formValues.city?.split('/')[1] || '',
+         ward: formValues.ward?.split('/')[1] || '',
+         district: formValues.district?.split('/')[1] || '',
          productName: formValues.productName,
       };
-
+      setSearchStatusNotification(formData);
       try {
          const response = await pinApi.getSearch(formData);
          console.log('search result: ', response);
@@ -242,44 +243,13 @@ function MapsPage(props) {
       <>
          <div className='mapbox'>
             <div className='buttonSearchGroup'>
-               <Row span={24} align='middle'>
-                  <Col span={1} offset={1}>
-                     <Tooltip title='search'>
-                        <Button
-                           className='searchButton'
-                           type='primary'
-                           shape='circle'
-                           icon={<SearchOutlined />}
-                           onClick={() => setIsModalVisible(true)}
-                        />
-                     </Tooltip>
-                  </Col>
-                  <Col flex='auto' className='searchStatusRow'>
-                     <div className='searchStatusNotification'>
-                        We will show{' '}
-                        {location.state?.productDetail.name || `all product`} on
-                        map
-                     </div>
-                  </Col>
-                  <Col span={4} offset={11}>
-                     <Space>
-                        <Button
-                           size='large'
-                           type='primary'
-                           icon={<EyeOutlined />}
-                           onClick={handleOnClickShowAllPopup}
-                        />
-                        <Button
-                           size='large'
-                           type='primary'
-                           danger
-                           className='showAllPopupButton'
-                           icon={<DeleteOutlined />}
-                           onClick={() => setSelectedMarker([])}
-                        />
-                     </Space>
-                  </Col>
-               </Row>
+               <MapButton
+                  searchStatusNotification={searchStatusNotification}
+                  location={location}
+                  setIsModalVisible={setIsModalVisible}
+                  handleOnClickShowAllPopup={handleOnClickShowAllPopup}
+                  setSelectedMarker={setSelectedMarker}
+               />
             </div>
             <ReactMapGL
                {...viewport}
