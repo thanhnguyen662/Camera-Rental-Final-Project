@@ -36,18 +36,17 @@ function ProductDetailPage(props) {
       window.scrollTo(0, 0);
    }, []);
 
-   const addKeyToProduct = (product) => {
-      const split = { ...product };
-      split.key = product.id;
+   // const addKeyToProduct = (product) => {
+   //    const split = { ...product };
+   //    split.key = product.id;
 
-      return split;
-   };
+   //    return split;
+   // };
 
    const handleOnClickToAddProduct = async (product) => {
-      console.log('product', product);
-      const productToCart = addKeyToProduct(product);
-      const action = addProductToCart(productToCart);
-      dispatch(action);
+      // const productToCart = addKeyToProduct(product);
+      // const action = addProductToCart(productToCart);
+      // dispatch(action);
 
       try {
          const data = {
@@ -59,6 +58,10 @@ function ProductDetailPage(props) {
 
          const response = await cartApi.addMoreProductToCart(data);
          console.log('Add product to cart: ', response);
+
+         if (response.message === 'Product already in cart') return;
+         const action = addProductToCart(response);
+         dispatch(action);
       } catch (error) {
          return console.log('Error: ', error);
       }

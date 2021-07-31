@@ -42,6 +42,7 @@ model User {
   carts           Cart[]
   products        Product[]
   productComments ProductComment[]
+  role            Role             @default(USER)
 
   @@map("Users")
 }
@@ -105,4 +106,10 @@ model Pin {
   product   Product? @relation(fields: [productId], references: [id])
 
   @@map("Pins")
+}
+
+enum Role {
+  USER
+  ADMIN
+  EMPLOYEE
 }

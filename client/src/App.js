@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from './api/userApi';
 import './App.css';
-import { userInfo } from './features/Auth/loginSlice';
+import { userInfo, getUserProfile } from './features/Auth/loginSlice';
 import { auth } from './firebase';
 import { getCart } from './features/Product/productSlice';
 import Routers from './router';
@@ -36,6 +36,18 @@ function App() {
       return () => unregisterAuthObserver();
    }, [dispatch]);
 
+   useEffect(() => {
+      const getUserProfileAsyncThunk = () => {
+         try {
+            if (!userId) return;
+            dispatch(getUserProfile(userId));
+         } catch (error) {
+            return console.log(error);
+         }
+      };
+      getUserProfileAsyncThunk();
+   }, [userId, dispatch]);
+
    //[DATABASE] check user info if user info not available -> redirect user to register page
    useEffect(() => {
       const checkUserProfileInDb = async () => {
@@ -60,7 +72,6 @@ function App() {
          try {
             if (!userId) return;
             const actionResult = dispatch(getCart({ firebaseId: userId }));
-
             unwrapResult(actionResult);
          } catch (error) {
             return console.log('Error: ', error);

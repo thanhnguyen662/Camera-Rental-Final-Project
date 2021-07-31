@@ -9,7 +9,11 @@ class CartController {
             },
             include: {
                User: true,
-               Product: true,
+               Product: {
+                  include: {
+                     User: true,
+                  },
+               },
             },
          });
 
@@ -26,6 +30,14 @@ class CartController {
                firebaseId: req.body.firebaseId,
                productId: Number(req.body.productId),
             },
+            include: {
+               User: true,
+               Product: {
+                  include: {
+                     User: true,
+                  },
+               },
+            },
          });
 
          if (checkProductIsExists)
@@ -37,6 +49,14 @@ class CartController {
                productId: Number(req.body.productId),
                startDate: new Date(req.body.startDate),
                endDate: new Date(req.body.endDate),
+            },
+            include: {
+               User: true,
+               Product: {
+                  include: {
+                     User: true,
+                  },
+               },
             },
          });
 

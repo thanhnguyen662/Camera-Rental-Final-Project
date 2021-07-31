@@ -77,13 +77,13 @@ function ProductDetailDescription(props) {
                      <Paragraph
                         className='description'
                         ellipsis={{
-                           rows: 3,
+                           rows: 4,
                            onEllipsis: (ellipsis) => {
                               setMore(ellipsis);
                            },
                         }}
                      >
-                        {parse(productDetail.description)}
+                        <>{parse(productDetail.description)}</>
                      </Paragraph>
 
                      {more === true && (

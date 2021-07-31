@@ -12,13 +12,19 @@ const cartProduct = createSlice({
    initialState: [],
    reducers: {
       addProductToCart: (state, action) => {
-         const item = state.find((i) => i.id === action.payload.id);
-         if (item) {
-            return;
-         }
-         console.log('payload: ', action.payload);
          const newItem = action.payload;
-         state.push(newItem);
+
+         const convertUTC7 = {
+            ...newItem,
+            startDate: moment(newItem.startDate)
+               .utcOffset(7)
+               .format('YYYY-MM-DD HH:mm:ss'),
+            endDate: moment(newItem.endDate)
+               .utcOffset(7)
+               .format('YYYY-MM-DD HH:mm:ss'),
+         };
+
+         state.push(convertUTC7);
       },
       removeProductFromCart: (state, action) => {
          const removeItem = action.payload;
@@ -28,28 +34,20 @@ const cartProduct = createSlice({
    extraReducers: {
       [getCart.fulfilled]: (state, action) => {
          const item = action.payload;
+         const convertDateTimeType = item.map((i) => {
+            const convertUTC7 = {
+               ...i,
+               startDate: moment(i.startDate)
+                  .utcOffset(7)
+                  .format('YYYY-MM-DD HH:mm:ss'),
+               endDate: moment(i.endDate)
+                  .utcOffset(7)
+                  .format('YYYY-MM-DD HH:mm:ss'),
+            };
 
-         const destructuringItem = item.map((i) => {
-            const split = { ...i };
-            split.id = i.Product?.id;
-            split.name = i.Product?.name;
-            split.description = i.Product?.description;
-            split.createdAt = i.Product?.createdAt;
-            split.updatedAt = i.Product?.updatedAt;
-            split.firebaseId = i.Product?.firebaseId;
-            split.key = i.Product?.id;
-            split.startDate = moment(i.startDate)
-               .utcOffset(7)
-               .format('YYYY-MM-DD HH:mm:ss');
-            split.endDate = moment(i.endDate)
-               .utcOffset(7)
-               .format('YYYY-MM-DD HH:mm:ss');
-
-            delete split.Product;
-
-            return split;
+            return convertUTC7;
          });
-         destructuringItem.map((i) => state.push(i));
+         convertDateTimeType.map((i) => state.push(i));
       },
    },
 });

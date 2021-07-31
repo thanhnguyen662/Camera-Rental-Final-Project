@@ -16,7 +16,7 @@ function ProductCardPage(props) {
       try {
          const data = {
             firebaseId: userId,
-            productId: parseInt(product.id),
+            productId: parseInt(product.Product.id),
          };
          const response = await cartApi.removeProductFromCart(data);
 
