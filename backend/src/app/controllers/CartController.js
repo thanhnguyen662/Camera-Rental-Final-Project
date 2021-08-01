@@ -80,6 +80,25 @@ class CartController {
          return next(error);
       }
    };
+
+   editTimeOfProduct = async (req, res, next) => {
+      try {
+         const response = await prisma.cart.updateMany({
+            where: {
+               firebaseId: req.body.firebaseId,
+               productId: Number(req.body.productId),
+            },
+            data: {
+               startDate: new Date(req.body.startDate),
+               endDate: new Date(req.body.endDate),
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new CartController();

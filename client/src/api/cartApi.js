@@ -15,6 +15,11 @@ const cartApi = {
       const url = '/cart/removeItemFromCart';
       return axiosClient.delete(url, { data });
    },
+
+   editProductTimeInCart: (data) => {
+      const url = '/cart/editProductTime';
+      return axiosClient.patch(url, data);
+   },
 };
 
 export default cartApi;

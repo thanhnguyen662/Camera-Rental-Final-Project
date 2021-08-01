@@ -30,6 +30,21 @@ const cartProduct = createSlice({
          const removeItem = action.payload;
          return state.filter((i) => i.id !== removeItem.id);
       },
+      editProductTimeInCart: (state, action) => {
+         console.log('action', action);
+         const updateItem = action.payload;
+         state.map((i) => {
+            if (
+               i.productId === updateItem.productId &&
+               i.firebaseId === updateItem.firebaseId
+            ) {
+               i.startDate = updateItem.startDate;
+               i.endDate = updateItem.endDate;
+            }
+
+            return state;
+         });
+      },
    },
    extraReducers: {
       [getCart.fulfilled]: (state, action) => {
@@ -53,5 +68,9 @@ const cartProduct = createSlice({
 });
 
 const { reducer, actions } = cartProduct;
-export const { addProductToCart, removeProductFromCart } = actions;
+export const {
+   addProductToCart,
+   removeProductFromCart,
+   editProductTimeInCart,
+} = actions;
 export default reducer;

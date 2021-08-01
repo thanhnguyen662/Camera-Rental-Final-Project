@@ -1,0 +1,69 @@
+.cart{
+   margin-top: 20px;
+   
+   .cartTable{
+      .ant-table-thead > tr > th {
+         font-size: 13px;
+         font-weight: 400;
+      }
+
+      .ant-table-thead > tr > th {
+         display: none;
+      }
+
+      .table tr th.ant-table-selection-column, table tr td.ant-table-selection-column{
+         padding-left: 18px;
+      }
+
+      .ant-table-title {
+         padding: 15px 0px 12px 20px;
+      }
+
+      .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td{
+         padding: 12px 20px 12px 10px;
+      }
+
+
+      .cartPrice{
+         font-weight: 600;
+         font-size: 15px;
+      }
+
+      .cartDate{
+         border-radius: 5px;
+         height: 35px;
+         input{
+            font-size: 13px;
+         }
+      }
+      .cartDeleteButton{
+         border-radius: 5px;
+         height: 35px;
+      }
+
+      .cartName{
+         font-weight: normal;
+         color: rgb(48, 48, 48);
+
+         &:hover{
+            color: #1890FF;
+         }
+      }
+
+      .cartDuring{
+         text-decoration: underline;
+      }
+
+      .shopName{
+         color: rgb(48, 48, 48);
+         font-weight: 500;
+
+         &:hover{
+            color: #1890FF;
+         }
+      }
+
+   }
+}
+
+
