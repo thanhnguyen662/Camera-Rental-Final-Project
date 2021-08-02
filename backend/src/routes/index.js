@@ -4,6 +4,7 @@ const conversationRouter = require('./conversation');
 const messageRouter = require('./message');
 const cartRouter = require('./cart');
 const pinRouter = require('./pin');
+const orderRouter = require('./order');
 
 function route(app) {
    app.use('/account', accountRouter);
@@ -12,6 +13,7 @@ function route(app) {
    app.use('/message', messageRouter);
    app.use('/cart', cartRouter);
    app.use('/pin', pinRouter);
+   app.use('/order', orderRouter);
 }
 
 module.exports = route;

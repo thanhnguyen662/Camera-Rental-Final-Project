@@ -24,6 +24,7 @@ model Product {
   carts           Cart[]
   productComments ProductComment[]
   pins            Pin[]
+  orderItems      OrderItem[]
 
   @@map("Products")
 }
@@ -42,6 +43,7 @@ model User {
   carts           Cart[]
   products        Product[]
   productComments ProductComment[]
+  orders          Order[]
   role            Role             @default(USER)
 
   @@map("Users")
@@ -108,8 +110,41 @@ model Pin {
   @@map("Pins")
 }
 
+model Order {
+  id         String      @id @default(uuid())
+  address    String?
+  totalPrice Int?
+  userId     String?
+  User       User?       @relation(fields: [userId], references: [firebaseId])
+  status     Status      @default(PEDING)
+  orderItems OrderItem[]
+
+  @@map("Orders")
+}
+
+model OrderItem {
+  id                Int       @id @default(autoincrement())
+  totalPricePerHour String?
+  during            String?
+  price             Int?
+  startDate         DateTime?
+  endDate           DateTime?
+  orderId           String
+  productId         Int
+  Order             Order?    @relation(fields: [orderId], references: [id])
+  Product           Product?  @relation(fields: [productId], references: [id])
+
+  @@map("OrderItems")
+}
+
 enum Role {
   USER
   ADMIN
   EMPLOYEE
+}
+
+enum Status {
+  SUCCESS
+  PEDING
+  FAILURE
 }
