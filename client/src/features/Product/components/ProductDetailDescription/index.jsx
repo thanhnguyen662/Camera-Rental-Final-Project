@@ -68,7 +68,11 @@ function ProductDetailDescription(props) {
                </Row>
                <Row span={24} className='productPriceRow'>
                   <p>$</p>
-                  <h2>{productDetail.price}</h2>
+                  <h2>
+                     {new Intl.NumberFormat('en-US').format(
+                        productDetail.price
+                     )}
+                  </h2>
                   <h3>in shipping + handling</h3>
                </Row>
 

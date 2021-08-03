@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './ProductCartAddress.scss';
-import { Typography, Divider, Avatar, Row, Col, Skeleton } from 'antd';
-import { Link } from 'react-router-dom';
 import { EditOutlined } from '@ant-design/icons';
+import { Avatar, Col, Divider, Row, Skeleton, Typography } from 'antd';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './ProductCartAddress.scss';
 
 ProductCartAddress.propTypes = {
    email: PropTypes.string,

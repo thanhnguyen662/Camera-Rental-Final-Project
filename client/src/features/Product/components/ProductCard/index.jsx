@@ -2,6 +2,7 @@ import { Col, Image, Progress, Rate, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import priceFormat from '../../../../utils/PriceFormat';
 import './ProductCard.scss';
 
 ProductCard.propTypes = {
@@ -47,7 +48,7 @@ function ProductCard(props) {
                         }}
                      />
                      <h4>{product.qualityRate}</h4>
-                     <h1>${product.price}</h1>
+                     <h1>{priceFormat(product.price)}</h1>
                      <div className='stockStatus'>
                         <Progress
                            className='progressBar'

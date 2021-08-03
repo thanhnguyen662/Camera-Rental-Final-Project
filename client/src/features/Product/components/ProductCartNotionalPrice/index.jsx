@@ -2,6 +2,7 @@ import { Col, Divider, Row, Typography, Empty, Button } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
+import priceFormat from '../../../../utils/PriceFormat';
 import './ProductCartPrePrice.scss';
 
 ProductCartNotionalPrice.propTypes = {
@@ -24,7 +25,9 @@ function ProductCartNotionalPrice(props) {
    const sumArray = () => {
       if (data.length === 0) return;
       const reducer = (accumulator, curr) => accumulator + curr;
-      return data.reduce(reducer);
+      const totalPrice = data.reduce(reducer);
+
+      return totalPrice;
    };
 
    const onClickOrderButton = () => {
@@ -86,17 +89,17 @@ function ProductCartNotionalPrice(props) {
                               <Col span={12}>
                                  <Paragraph>{productName}</Paragraph>
                               </Col>
-                              <Col span={6} style={{ textAlign: 'center' }}>
+                              <Col span={4} style={{ textAlign: 'center' }}>
                                  <Paragraph level={5}>
                                     {duringHoursPerRow}
                                  </Paragraph>
                               </Col>
-                              <Col span={6}>
+                              <Col span={8}>
                                  <Paragraph
                                     level={5}
                                     style={{ textAlign: 'right' }}
                                  >
-                                    {pricePerRow}
+                                    {priceFormat(pricePerRow)}
                                  </Paragraph>
                               </Col>
                            </Row>
@@ -116,7 +119,9 @@ function ProductCartNotionalPrice(props) {
                      <div className='totalPriceTitle'>Total Price</div>
                   </Col>
                   <Col>
-                     <div className='totalPriceCal'>{sumArray()}</div>
+                     <div className='totalPriceCal'>
+                        {priceFormat(sumArray())}
+                     </div>
                   </Col>
                </Row>
             </div>

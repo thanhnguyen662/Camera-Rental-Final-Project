@@ -1,11 +1,12 @@
 // import PropTypes from 'prop-types';
 import { DeleteOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Image, Table, DatePicker, Skeleton } from 'antd';
+import { Button, Image, Table, DatePicker } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import './ProductCartTable.scss';
 import { Link } from 'react-router-dom';
+import priceFormat from '../../../../utils/PriceFormat';
 
 ProductCartTable.propTypes = {
    onClick: PropTypes.func,
@@ -70,7 +71,9 @@ function ProductCartTable(props) {
          dataIndex: ['Product', 'price'],
          key: productInCart.Product?.price,
          width: 80,
-         render: (record) => <div className='cartPrice'>${record}</div>,
+         render: (record) => (
+            <div className='cartPrice'>{priceFormat(record)}</div>
+         ),
       },
       {
          title: 'Time',
@@ -124,7 +127,15 @@ function ProductCartTable(props) {
          }
          setSelect(select.filter((i) => i.id !== selected.id));
       },
+      getCheckboxProps: (record) => ({
+         disabled: select.some(
+            (s) => s.Product.User.firebaseId !== record.Product.User.firebaseId
+         ),
+         name: record.name,
+      }),
    };
+
+   console.log(select);
 
    useEffect(() => {
       handleChangeRowSelection(select);

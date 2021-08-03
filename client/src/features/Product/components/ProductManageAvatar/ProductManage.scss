@@ -1,0 +1,20 @@
+.productManageUserInfo{
+   padding: 10px 10px 10px 10px;
+   background: white;
+   border-radius: 10px;
+   .productManageUserAvatar{
+      padding: 5px 14px 5px 5px;
+   }
+
+   .productManageUserProfile{
+      .productUserEmail{
+         font-size: 13px;
+         font-style: italic;
+      }
+
+      .productUsername{
+         font-size: 13px;
+         font-weight: 900;
+      }
+   }
+}

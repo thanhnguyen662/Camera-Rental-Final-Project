@@ -4,6 +4,7 @@ import ProductPage from './pages/ProductPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import ProductCartPage from './pages/ProductCartPage';
 import ProductCreatePage from './pages/ProductCreatePage';
+import ProductManagePage from './pages/ProductManagePage';
 
 function Product(props) {
    const match = useRouteMatch();
@@ -14,6 +15,7 @@ function Product(props) {
          <Route exact path={match.url} component={ProductPage} />
          <Route path={`${match.url}/cart`} component={ProductCartPage} />
          <Route path={`${match.url}/create`} component={ProductCreatePage} />
+         <Route path={`${match.url}/manage`} component={ProductManagePage} />
          <Route path={`${match.url}/:slug`} component={ProductDetailPage} />
       </Switch>
    );
