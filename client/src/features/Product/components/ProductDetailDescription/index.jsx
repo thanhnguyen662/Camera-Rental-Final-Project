@@ -100,7 +100,7 @@ function ProductDetailDescription(props) {
                   <RangePicker
                      className='datePicker'
                      ranges={{
-                        Today: [moment(), moment()],
+                        'This Day': [moment(), moment().add(1, 'days')],
                         'This Month': [
                            moment().startOf('month'),
                            moment().endOf('month'),

@@ -1,0 +1,35 @@
+.productCartAddress{
+   padding: 10px 14px 10px 10px;
+   margin-top: 20px;
+   background: white;
+
+   .productCartAddressHeader{
+      .subHeader{
+         font-size: 12px;
+      }
+   }
+
+   .cartUserInfo{
+      .cartUserAvatar{
+         padding: 5px 5px 5px 5px;
+      }
+
+      .cartUserInfo{
+         .cartUserEmail{
+            font-size: 13px;
+            font-style: italic;
+         }
+   
+         .cartUsername{
+            font-size: 13px;
+            font-weight: 900;
+         }
+      }
+      .cartUserAddress{
+         padding: 5px;
+         font-size: 13px;
+         font-weight: 500;
+         color: #303030;
+      }
+   }
+}

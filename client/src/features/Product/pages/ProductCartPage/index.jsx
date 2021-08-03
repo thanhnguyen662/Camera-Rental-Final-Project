@@ -1,9 +1,12 @@
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import orderApi from '../../../../api/orderApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
+import ResponseResult from '../../../../components/ResponseResult';
+import ProductCartAddress from '../../components/ProductCartAddress';
 import ProductCartNotionalPrice from '../../components/ProductCartNotionalPrice';
 import ProductCartTable from '../../components/ProductCartTable';
 import {
@@ -13,11 +16,17 @@ import {
 
 function ProductCardPage(props) {
    const dispatch = useDispatch();
+
    const userId = useSelector((state) => state.users.id);
-   const productInCart = useSelector((state) => state.cart);
    const userAddress = useSelector((state) => state.users.address);
+   const userPhotoURL = useSelector((state) => state.users.photoURL);
+   const name = useSelector((state) => state.users.name);
+   const productInCart = useSelector((state) => state.cart);
+   const email = useSelector((state) => state.users.email);
+   const phoneNumber = useSelector((state) => state.users.phoneNumber);
 
    const [selectRows, setSelectRows] = useState([]);
+   const [responseResult, setResponseResult] = useState();
 
    const handleOnClickRemoveItem = async (product) => {
       const action = removeProductFromCart(product);
@@ -68,7 +77,11 @@ function ProductCardPage(props) {
       try {
          const response = await orderApi.createOrder(data);
 
-         console.log('create order successfully: ', response);
+         if (response.message === 'success') {
+            console.log('create order successfully: ', response);
+
+            return setResponseResult(response);
+         }
       } catch (error) {
          return console.error('Error: ', error);
       }
@@ -76,8 +89,18 @@ function ProductCardPage(props) {
 
    return (
       <>
+         {responseResult && (
+            <Redirect
+               to={{
+                  pathname: '/responseResult',
+                  state: { responseResult: responseResult },
+               }}
+            >
+               <ResponseResult response={responseResult} />
+            </Redirect>
+         )}
          <BreadcrumbBar />
-         <Row gutter={[20, 0]}>
+         <Row gutter={[20, 20]}>
             <Col span={17}>
                <ProductCartTable
                   onClickRemoveItem={handleOnClickRemoveItem}
@@ -87,6 +110,14 @@ function ProductCardPage(props) {
                />
             </Col>
             <Col span={7}>
+               <ProductCartAddress
+                  userId={userId}
+                  userAddress={userAddress}
+                  userPhotoURL={userPhotoURL}
+                  name={name}
+                  email={email}
+                  phoneNumber={phoneNumber}
+               />
                <ProductCartNotionalPrice
                   selectRows={selectRows}
                   handleClickOrderButton={handleClickOrderButton}

@@ -18,6 +18,7 @@ import MainLayout from '../layouts/Main';
 import { Layout } from 'antd';
 import MessageBeta from '../features/MessageBeta';
 import Maps from '../features/Maps';
+import ResponseResult from '../components/ResponseResult';
 
 const { Content } = Layout;
 
@@ -36,6 +37,8 @@ function Routers(props) {
                   }}
                />
             )}
+
+            <Route path='/responseResult' component={ResponseResult} />
 
             <Route>
                <MainLayout>

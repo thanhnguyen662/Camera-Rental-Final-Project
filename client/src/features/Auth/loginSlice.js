@@ -5,6 +5,7 @@ export const getUserProfile = createAsyncThunk(
    'user/userProfile',
    async (firebaseId) => {
       const response = await userApi.getUserProfile({ firebaseId: firebaseId });
+      console.log(response);
       return response;
    }
 );
@@ -20,6 +21,7 @@ const login = createSlice({
       username: '',
       address: '',
       role: '',
+      phoneNumber: '',
    },
    reducers: {
       userInfo: (state, action) => {
@@ -34,11 +36,12 @@ const login = createSlice({
    },
    extraReducers: {
       [getUserProfile.fulfilled]: (state, action) => {
-         const { username, address, role } = action.payload;
+         const { username, address, role, phoneNumber } = action.payload;
 
          state.username = username;
          state.address = address;
          state.role = role;
+         state.phoneNumber = phoneNumber;
       },
    },
 });

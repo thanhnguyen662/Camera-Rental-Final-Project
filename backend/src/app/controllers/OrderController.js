@@ -18,7 +18,7 @@ class OrderController {
             },
          });
 
-         res.status(200).json(response);
+         res.status(200).json({ ...response, message: 'success' });
       } catch (error) {
          return next(error);
       }

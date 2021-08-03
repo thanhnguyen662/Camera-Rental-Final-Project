@@ -164,10 +164,16 @@ function ProfileEditPage(props) {
             description: values.description,
             photoURL: values.photoURL,
             username: values.userName,
+            phoneNumber: values.phoneNumber,
          };
 
          const response = await userApi.addUserInfo(formValues);
          console.log('Finish: ', response);
+         openNotificationWithIcon(
+            'success',
+            'Change Profile',
+            'Successful, reload page to take effect'
+         );
       } catch (error) {
          return console.log('Fail: ', error);
       }

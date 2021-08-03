@@ -58,6 +58,7 @@ function ProfileEditProfileCard(props) {
                      description: userProfile.description,
                      photoURL: photoURL,
                      userName: userProfile.username,
+                     phoneNumber: userProfile.phoneNumber,
                   }}
                >
                   <Form.Item name='photoURL' label='Photo'>
@@ -73,6 +74,9 @@ function ProfileEditProfileCard(props) {
                      <Input />
                   </Form.Item>
                   <Form.Item name='address' label='Address'>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item name='phoneNumber' label='Phone'>
                      <Input />
                   </Form.Item>
                   <Form.Item name='favouriteGear' label='Gear'>

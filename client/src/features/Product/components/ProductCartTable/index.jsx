@@ -1,6 +1,6 @@
 // import PropTypes from 'prop-types';
 import { DeleteOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Image, Table, DatePicker } from 'antd';
+import { Button, Image, Table, DatePicker, Skeleton } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
@@ -50,7 +50,9 @@ function ProductCartTable(props) {
          dataIndex: ['Product', 'productPhotoURL'],
          key: productInCart.Product?.id,
          width: 100,
-         render: (record) => <Image src={record[0]} width={80} />,
+         render: (record) => (
+            <Image src={record[0]} width={80} style={{ minHeight: 80 }} />
+         ),
       },
       {
          title: 'Name',
@@ -76,6 +78,9 @@ function ProductCartTable(props) {
          render: (record) => {
             const startDate = moment(record.startDate);
             const endDate = moment(record.endDate);
+            const isDisable = select?.find((s) => s.id === record.id) && {
+               disabled: true,
+            };
 
             return (
                <RangePicker
@@ -88,6 +93,7 @@ function ProductCartTable(props) {
                      if (!dates || !dateStrings) return;
                      handleDatePickerChange(record, dateStrings);
                   }}
+                  {...isDisable}
                />
             );
          },
@@ -95,13 +101,19 @@ function ProductCartTable(props) {
       {
          title: 'Action',
          key: 'action',
-         render: (record) => (
-            <Button
-               className='cartDeleteButton'
-               onClick={() => onClickRemoveItem(record)}
-               icon={<DeleteOutlined />}
-            />
-         ),
+         render: (record) => {
+            const isDisable = select?.find((s) => s.id === record.id) && {
+               disabled: true,
+            };
+            return (
+               <Button
+                  className='cartDeleteButton'
+                  onClick={() => onClickRemoveItem(record)}
+                  icon={<DeleteOutlined />}
+                  {...isDisable}
+               />
+            );
+         },
       },
    ];
 
@@ -163,7 +175,7 @@ function ProductCartTable(props) {
             ))
          ) : (
             <div className='cart'>
-               <Table className='cartTable' />
+               <Table className='cartTable' loading />
             </div>
          )}
       </>

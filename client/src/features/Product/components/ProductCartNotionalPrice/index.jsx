@@ -107,6 +107,7 @@ function ProductCartNotionalPrice(props) {
                   <Empty
                      description='Please select product'
                      style={{ color: '#AEB8C2', fontWeight: 400 }}
+                     imageStyle={{ height: 70 }}
                   />
                )}
                <Divider />

@@ -14,6 +14,7 @@ class AccountController {
                description: req.body.description,
                photoURL: String(req.body.photoURL),
                username: req.body.username,
+               phoneNumber: req.body.phoneNumber,
             },
             update: {
                age: req.body.age,
@@ -25,6 +26,7 @@ class AccountController {
                description: req.body.description,
                photoURL: String(req.body.photoURL),
                username: req.body.username,
+               phoneNumber: req.body.phoneNumber,
             },
             where: {
                firebaseId: req.body.firebaseId,
