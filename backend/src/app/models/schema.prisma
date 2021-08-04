@@ -45,7 +45,6 @@ model User {
   products        Product[]
   productComments ProductComment[]
   orders          Order[]
-  role            Role             @default(USER)
 
   @@map("Users")
 }
@@ -117,7 +116,6 @@ model Order {
   totalPrice Int?
   userId     String?
   User       User?       @relation(fields: [userId], references: [firebaseId])
-  status     Status      @default(PEDING)
   orderItems OrderItem[]
 
   @@map("Orders")
@@ -146,6 +144,6 @@ enum Role {
 
 enum Status {
   SUCCESS
-  PEDING
+  PENDING
   FAILURE
 }

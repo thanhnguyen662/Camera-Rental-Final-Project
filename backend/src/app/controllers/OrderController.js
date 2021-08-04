@@ -3,7 +3,6 @@ const prisma = require('../models/prisma');
 class OrderController {
    createOrder = async (req, res, next) => {
       try {
-         const orderItemArray = JSON.parse(req.body.orderItem);
          const response = await prisma.order.create({
             data: {
                address: req.body.address,
@@ -12,7 +11,7 @@ class OrderController {
 
                orderItems: {
                   createMany: {
-                     data: orderItemArray,
+                     data: req.body.orderItem,
                   },
                },
             },
@@ -45,6 +44,39 @@ class OrderController {
          });
 
          res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   myOrder = async (req, res, next) => {
+      try {
+         const response = await prisma.order.findMany({
+            where: {
+               orderItems: {
+                  every: {
+                     Product: {
+                        User: {
+                           firebaseId: req.query.firebaseId,
+                        },
+                     },
+                  },
+               },
+            },
+            include: {
+               orderItems: {
+                  include: {
+                     Product: {
+                        include: {
+                           User: true,
+                        },
+                     },
+                  },
+               },
+            },
+         });
+
+         res.json(response);
       } catch (error) {
          return next(error);
       }
