@@ -1,7 +1,34 @@
 .productManage{
    .productManageTable{
-      background: white;
-      margin-bottom: 10px;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      border-radius: 10px;
+   }
+   .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+      padding: 12px 25px;
+   }
 
+   .productManageName{
+      font-weight: normal;
+      color: rgb(48, 48, 48);
+
+      &:hover{
+         color: #1890FF;
+      }
+   }
+
+   .productManageDate{
+      border-radius: 5px;
+   }
+
+   .footerOfTable{
+      color: #FF4D4F;
+      font-weight: bold;
+      font-size: 18px;
+   }
+   .footerTitle{
+      font-size: 16px;
    }
 }

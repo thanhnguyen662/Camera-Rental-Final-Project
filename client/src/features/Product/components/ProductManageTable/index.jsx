@@ -1,9 +1,10 @@
-import React from 'react';
+import { Col, DatePicker, Image, Row, Table, Tag } from 'antd';
+import moment from 'moment';
 import PropTypes from 'prop-types';
-import './ProductManageTable.scss';
-import { Image, Table, Tag } from 'antd';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
+import './ProductManageTable.scss';
 
 ProductManageTable.propTypes = {
    orders: PropTypes.array,
@@ -13,6 +14,8 @@ ProductManageTable.defaultProps = {
    orders: [],
 };
 
+const { RangePicker } = DatePicker;
+
 function ProductManageTable(props) {
    const { orders } = props;
 
@@ -20,7 +23,7 @@ function ProductManageTable(props) {
       {
          title: 'Image',
          dataIndex: ['Product', 'productPhotoURL'],
-         width: 100,
+         width: 80,
          render: (record) => (
             <Image src={record[0]} width={80} style={{ minHeight: 80 }} />
          ),
@@ -28,53 +31,71 @@ function ProductManageTable(props) {
       {
          title: 'Name',
          dataIndex: ['Product'],
-         width: 180,
+         width: 100,
          render: (record) => (
-            <Link to={`/product/${record.slug}`} className='cartName'>
+            <Link to={`/product/${record.slug}`} className='productManageName'>
                {record.name}
             </Link>
          ),
       },
       {
-         title: 'Price/hours',
-         dataIndex: ['Product', 'price'],
-         width: 80,
-         render: (record) => (
-            <div className='cartPrice'>{priceFormat(record)}</div>
-         ),
+         title: 'Start - End',
+         width: 200,
+         render: (record) => {
+            const startDate = moment(record.startDate);
+            const endDate = moment(record.endDate);
+            return (
+               <RangePicker
+                  disabled
+                  className='productManageDate'
+                  disable
+                  defaultValue={[startDate, endDate]}
+                  format='YYYY/MM/DD HH:mm'
+               />
+            );
+         },
       },
       {
-         title: 'During',
-         dataIndex: ['during'],
-         width: 80,
-         render: (record) => <div className='cartPrice'>{record} hours</div>,
-      },
-      {
-         title: 'Total Price',
+         title: 'Price',
          dataIndex: ['totalPricePerHour'],
-         width: 80,
-         render: (record) => (
-            <div className='cartPrice'>{priceFormat(record)}</div>
-         ),
+         width: 100,
+         render: (record) => <div>{priceFormat(record)}</div>,
       },
    ];
+
+   const tileOfTable = (order) => {
+      return (
+         <div>
+            <Tag color='processing'>PENDING</Tag>| &nbsp;
+            <b>{order.orderItems[0].Product.User.username}</b> | &nbsp;
+            {order.id}
+         </div>
+      );
+   };
+
+   const footerOfTable = (totalPrice) => {
+      return (
+         <Row>
+            <Col flex='auto' className='footerTitle'>
+               Total Price:
+            </Col>
+            <Col span={4} className='footerOfTable'>
+               {priceFormat(totalPrice)}
+            </Col>
+         </Row>
+      );
+   };
 
    return (
       <div>
          {orders.map((order) => (
             <div key={order.id} className='productManage'>
                <Table
-                  title={() => (
-                     <>
-                        <div>
-                           <Tag color='processing'>{order.status}</Tag>| Order
-                           Id: {order.id}
-                        </div>
-                     </>
-                  )}
-                  footer={() => priceFormat(order.totalPrice)}
-                  className='productManageTable'
                   ellipsis={true}
+                  tableLayout='fixed'
+                  title={() => tileOfTable(order)}
+                  footer={() => footerOfTable(order.totalPrice)}
+                  className='productManageTable'
                   pagination={false}
                   rowKey={(record) => record.id}
                   dataSource={order.orderItems}

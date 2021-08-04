@@ -1,10 +1,11 @@
 import { Col, Row } from 'antd';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import orderApi from '../../../../api/orderApi';
-import BreadcrumbBar from '../../../../components/BreadcrumbBar';
+// import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import ResponseResult from '../../../../components/ResponseResult';
 import ProductCartAddress from '../../components/ProductCartAddress';
 import ProductCartNotionalPrice from '../../components/ProductCartNotionalPrice';
@@ -27,6 +28,14 @@ function ProductCardPage(props) {
 
    const [selectRows, setSelectRows] = useState([]);
    const [responseResult, setResponseResult] = useState();
+
+   const sumArray = (array) => {
+      if (array.length === 0) return;
+      const reducer = (accumulator, curr) => accumulator + curr;
+      const totalPrice = array.reduce(reducer);
+
+      return totalPrice;
+   };
 
    const handleOnClickRemoveItem = async (product) => {
       const action = removeProductFromCart(product);
@@ -66,25 +75,52 @@ function ProductCardPage(props) {
       setSelectRows(selectedRows);
    };
 
-   const handleClickOrderButton = async (formValues, totalPrice) => {
-      const data = {
-         address: userAddress,
-         totalPrice: totalPrice,
-         userId: userId,
-         orderItem: JSON.stringify(formValues),
-      };
+   const handleClickOrderButton = async () => {
+      let uniqueUsername = [];
+      let groupProductByUsername = [];
+      let sumPriceArray = [];
 
-      try {
-         const response = await orderApi.createOrder(data);
+      selectRows.map((row) => {
+         return uniqueUsername.push(row.Product.User.username);
+      });
+      uniqueUsername = [...new Set(uniqueUsername)];
 
-         if (response.message === 'success') {
-            console.log('create order successfully: ', response);
+      uniqueUsername.map(async (unique) => {
+         let filter = selectRows.filter(
+            (s) => s.Product.User.username !== unique
+         );
+         if (filter.length === 0) filter = [...selectRows];
+         filter.map((row) => {
+            const startDate = moment(row.startDate);
+            const endDate = moment(row.endDate);
+            const duringHoursPerRow = endDate.diff(startDate, 'hours');
+            const pricePerRow =
+               parseInt(row.Product.price) * parseInt(duringHoursPerRow);
+            sumPriceArray.push(pricePerRow);
 
-            return setResponseResult(response);
-         }
-      } catch (error) {
-         return console.error('Error: ', error);
-      }
+            return groupProductByUsername.push({
+               productId: row.Product.id,
+               startDate: new Date(row.startDate),
+               endDate: new Date(row.endDate),
+               price: parseInt(row.Product.price),
+               totalPricePerHour: String(pricePerRow),
+               during: String(duringHoursPerRow),
+            });
+         });
+         console.log('filter', groupProductByUsername);
+         console.log('sumPriceArray', sumPriceArray);
+         const response = await orderApi
+            .createOrder({
+               address: userAddress,
+               totalPrice: sumArray(sumPriceArray),
+               userId: userId,
+               orderItem: groupProductByUsername,
+            })
+            .then((groupProductByUsername = []))
+            .then((sumPriceArray = []));
+         console.log(response);
+         return setResponseResult(response);
+      });
    };
 
    return (
@@ -99,8 +135,8 @@ function ProductCardPage(props) {
                <ResponseResult response={responseResult} />
             </Redirect>
          )}
-         <BreadcrumbBar />
-         <Row gutter={[20, 20]}>
+         {/* <BreadcrumbBar /> */}
+         <Row gutter={[12, 12]}>
             <Col span={17}>
                <ProductCartTable
                   onClickRemoveItem={handleOnClickRemoveItem}

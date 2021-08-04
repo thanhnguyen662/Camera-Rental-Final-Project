@@ -1,7 +1,11 @@
 .cart{
-   margin-top: 20px;
+   margin-bottom: 12px;
    
    .cartTable{
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+
       .ant-table-thead > tr > th {
          font-size: 13px;
          font-weight: 400;

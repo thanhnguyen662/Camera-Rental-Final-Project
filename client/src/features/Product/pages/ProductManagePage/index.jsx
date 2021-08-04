@@ -13,13 +13,15 @@ function ProductManagePage(props) {
    const email = useSelector((state) => state.users.email);
    const phoneNumber = useSelector((state) => state.users.phoneNumber);
    const [orders, setOrders] = useState([]);
+   const [current, setCurrent] = useState(1);
 
    useEffect(() => {
       if (!userId) return;
 
       const getOrdersByUserId = async () => {
+         const status = 'PENDING';
          try {
-            const response = await orderApi.manageOrder(userId);
+            const response = await orderApi.manageOrder({ userId, status });
             console.log('Product by user Orders: ', response);
             setOrders(response);
          } catch (error) {
@@ -29,9 +31,11 @@ function ProductManagePage(props) {
       getOrdersByUserId();
    }, [userId]);
 
+   console.log(current);
+
    return (
       <div>
-         <Row gutter={[10, 10]}>
+         <Row gutter={[12, 10]}>
             <Col span={5}>
                <ProductManageAvatar
                   userAvatar={userAvatar}
@@ -39,10 +43,10 @@ function ProductManagePage(props) {
                   email={email}
                   phoneNumber={phoneNumber}
                />
-               <ProductManageTitle />
+               <ProductManageTitle setCurrent={setCurrent} />
             </Col>
             <Col span={19}>
-               <ProductManageTable orders={orders} />
+               {current === 1 && <ProductManageTable orders={orders} />}
             </Col>
          </Row>
       </div>

@@ -31,26 +31,7 @@ function ProductCartNotionalPrice(props) {
    };
 
    const onClickOrderButton = () => {
-      let formData = [];
-      const totalPrice = sumArray();
-      selectRows.map((row) => {
-         const startDate = moment(row.startDate);
-         const endDate = moment(row.endDate);
-         const duringHoursPerRow = endDate.diff(startDate, 'hours');
-         const pricePerRow =
-            parseInt(row.Product.price) * parseInt(duringHoursPerRow);
-
-         return formData.push({
-            productId: row.Product.id,
-            startDate: new Date(row.startDate),
-            endDate: new Date(row.endDate),
-            price: parseInt(row.Product.price),
-            totalPricePerHour: String(pricePerRow),
-            during: String(duringHoursPerRow),
-         });
-      });
-
-      handleClickOrderButton(formData, totalPrice);
+      handleClickOrderButton();
    };
 
    return (

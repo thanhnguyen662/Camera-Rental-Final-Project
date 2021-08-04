@@ -1,4 +1,3 @@
-// import PropTypes from 'prop-types';
 import { DeleteOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Image, Table, DatePicker } from 'antd';
 import PropTypes from 'prop-types';
@@ -127,31 +126,12 @@ function ProductCartTable(props) {
          }
          setSelect(select.filter((i) => i.id !== selected.id));
       },
-      getCheckboxProps: (record) => ({
-         disabled: select.some(
-            (s) => s.Product.User.firebaseId !== record.Product.User.firebaseId
-         ),
-         name: record.name,
-      }),
    };
-
-   console.log(select);
 
    useEffect(() => {
       handleChangeRowSelection(select);
       // eslint-disable-next-line
    }, [select]);
-
-   const tableGroupByShops = (shop) => {
-      let dataFilter = [];
-      // eslint-disable-next-line
-      productInCart.map((product) => {
-         if (product.Product.User.username === shop) {
-            dataFilter.push(product);
-         }
-      });
-      return dataFilter;
-   };
 
    const shopTitle = (record) => {
       return (
@@ -162,6 +142,17 @@ function ProductCartTable(props) {
             <UserOutlined /> &nbsp;{record[0]?.Product.User.username}
          </Link>
       );
+   };
+
+   const tableGroupByShops = (shop) => {
+      const dataFilter = [];
+      // eslint-disable-next-line
+      productInCart.map((product) => {
+         if (product.Product.User.username === shop) {
+            dataFilter.push(product);
+         }
+      });
+      return dataFilter;
    };
 
    return (

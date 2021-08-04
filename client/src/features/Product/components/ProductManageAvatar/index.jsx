@@ -28,7 +28,7 @@ function ProductManageAvatar(props) {
                <Col className='productManageUserProfile'>
                   <Text className='productUsername'>{username}</Text> |{' '}
                   <Text className='productUserEmail'> {phoneNumber}</Text>
-                  <Typography>{email}</Typography>
+                  <Typography style={{ fontSize: 12 }}>{email}</Typography>
                </Col>
             </Row>
          </Row>
