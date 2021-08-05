@@ -177,7 +177,7 @@ function ProductCartTable(props) {
             ))
          ) : (
             <div className='cart'>
-               <Table className='cartTable' loading />
+               <Table className='cartTable' hasData={false} />
             </div>
          )}
       </>

@@ -28,7 +28,7 @@ function ProductDetailUser(props) {
             receiverId: productDetail.User.firebaseId,
          };
          const response = await conversationApi.createConversation(data);
-         console.log('conversation Test: ', response);
+         console.log('conversation: ', response);
          setSendMessage(response);
       } catch (error) {
          console.log(error);

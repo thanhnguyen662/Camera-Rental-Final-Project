@@ -1,16 +1,19 @@
 import { Button, Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import conversationApi from '../../../../api/conversationApi';
 import userApi from '../../../../api/userApi';
 import ProfileInfoCard from '../../components/ProfileInfoCard';
 
 function ProfileUserPage(props) {
    const { firebaseId } = useParams();
+
+   const userId = useSelector((state) => state.users.id);
+
    const [userInfo, setUserInfo] = useState([]);
    const [userInfoFirebase, setUserInfoFirebase] = useState([]);
-   const userId = useSelector((state) => state.users.id);
+   const [sendMessage, setSendMessage] = useState();
 
    useEffect(() => {
       const getUserByParams = async () => {
@@ -50,9 +53,7 @@ function ProfileUserPage(props) {
          };
          const response = await conversationApi.createConversation(formValues);
          console.log('Conversation created: ', response);
-
-         localStorage.setItem('selectedConversation', JSON.stringify(response));
-         window.location = '/message';
+         setSendMessage(response);
       } catch (error) {
          return console.log('Error: ', error);
       }
@@ -60,6 +61,17 @@ function ProfileUserPage(props) {
 
    return (
       <>
+         {sendMessage === undefined ? null : (
+            <Redirect
+               to={{
+                  pathname: '/messageBeta',
+                  state: {
+                     conversationInfo: sendMessage,
+                     conversationUserInfo: userInfo,
+                  },
+               }}
+            />
+         )}
          <div style={{ minHeight: 360 }}>
             <Row gutter={[12, 0]}>
                <Col span={8}>

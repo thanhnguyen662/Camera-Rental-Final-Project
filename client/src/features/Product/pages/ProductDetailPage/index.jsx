@@ -36,18 +36,7 @@ function ProductDetailPage(props) {
       window.scrollTo(0, 0);
    }, []);
 
-   // const addKeyToProduct = (product) => {
-   //    const split = { ...product };
-   //    split.key = product.id;
-
-   //    return split;
-   // };
-
    const handleOnClickToAddProduct = async (product) => {
-      // const productToCart = addKeyToProduct(product);
-      // const action = addProductToCart(productToCart);
-      // dispatch(action);
-
       try {
          const data = {
             firebaseId: userId,

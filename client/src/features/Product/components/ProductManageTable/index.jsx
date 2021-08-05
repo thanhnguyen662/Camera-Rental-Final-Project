@@ -1,4 +1,5 @@
-import { Col, DatePicker, Image, Row, Table, Tag } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Divider, Image, Row, Table, Tag } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -8,16 +9,18 @@ import './ProductManageTable.scss';
 
 ProductManageTable.propTypes = {
    orders: PropTypes.array,
+   handleClickDeleteOrderButton: PropTypes.func,
 };
 
 ProductManageTable.defaultProps = {
    orders: [],
+   handleClickDeleteOrderButton: null,
 };
 
 const { RangePicker } = DatePicker;
 
 function ProductManageTable(props) {
-   const { orders } = props;
+   const { orders, current, handleClickDeleteOrderButton } = props;
 
    const columns = [
       {
@@ -64,11 +67,53 @@ function ProductManageTable(props) {
    ];
 
    const tileOfTable = (order) => {
+      const statusTagColor = () => {
+         switch (order.orderStatus?.name) {
+            case 'PENDING':
+               return {
+                  color: 'processing',
+               };
+            case 'SUCCESS':
+               return {
+                  color: 'success',
+               };
+            case 'FAILED':
+               return {
+                  color: 'error',
+               };
+            case 'DELIVERY': {
+               return {
+                  color: 'warning',
+               };
+            }
+            default:
+               break;
+         }
+      };
       return (
          <div>
-            <Tag color='processing'>PENDING</Tag>| &nbsp;
-            <b>{order.orderItems[0].Product.User.username}</b> | &nbsp;
-            {order.id}
+            <Row>
+               <Col flex='auto'>
+                  <Tag {...statusTagColor()}>{order.orderStatus?.name}</Tag>
+                  <Divider type='vertical' />
+                  &nbsp;
+                  <Link
+                     to={`/profile/${order.orderItems[0]?.Product.User.firebaseId}`}
+                     style={{ color: 'black' }}
+                  >
+                     <b>{order.orderItems[0].Product.User.username}</b>
+                  </Link>
+               </Col>
+               {current === 1 && (
+                  <Col>
+                     <Button
+                        className='messageButton'
+                        icon={<DeleteOutlined />}
+                        onClick={() => handleClickDeleteOrderButton(order.id)}
+                     />
+                  </Col>
+               )}
+            </Row>
          </div>
       );
    };
@@ -88,21 +133,25 @@ function ProductManageTable(props) {
 
    return (
       <div>
-         {orders.map((order) => (
-            <div key={order.id} className='productManage'>
-               <Table
-                  ellipsis={true}
-                  tableLayout='fixed'
-                  title={() => tileOfTable(order)}
-                  footer={() => footerOfTable(order.totalPrice)}
-                  className='productManageTable'
-                  pagination={false}
-                  rowKey={(record) => record.id}
-                  dataSource={order.orderItems}
-                  columns={columns}
-               />
-            </div>
-         ))}
+         {orders.length > 0 ? (
+            orders.map((order) => (
+               <div key={order.id} className='productManage'>
+                  <Table
+                     ellipsis={true}
+                     tableLayout='fixed'
+                     title={() => tileOfTable(order)}
+                     footer={() => footerOfTable(order.totalPrice)}
+                     className='productManageTable'
+                     pagination={false}
+                     rowKey={(record) => record.id}
+                     dataSource={order.orderItems}
+                     columns={columns}
+                  />
+               </div>
+            ))
+         ) : (
+            <Table hasData={true} />
+         )}
       </div>
    );
 }

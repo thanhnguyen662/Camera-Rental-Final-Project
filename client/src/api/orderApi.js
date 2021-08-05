@@ -10,6 +10,16 @@ const orderApi = {
       const url = '/order/manageOrder';
       return axiosClient.get(url, { params });
    },
+
+   myProductInOrder: (params) => {
+      const url = '/order/myProductInOrder';
+      return axiosClient.get(url, { params });
+   },
+
+   deleteOrder: (data) => {
+      const url = '/order/deleteOrder';
+      return axiosClient.delete(url, { data });
+   },
 };
 
 export default orderApi;

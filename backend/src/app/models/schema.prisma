@@ -111,12 +111,14 @@ model Pin {
 }
 
 model Order {
-  id         String      @id @default(uuid())
-  address    String?
-  totalPrice Int?
-  userId     String?
-  User       User?       @relation(fields: [userId], references: [firebaseId])
-  orderItems OrderItem[]
+  id            String       @id @default(uuid())
+  address       String?
+  totalPrice    Int?
+  userId        String?
+  User          User?        @relation(fields: [userId], references: [firebaseId])
+  orderItems    OrderItem[]
+  orderStatusId Int?
+  orderStatus   OrderStatus? @relation(fields: [orderStatusId], references: [id])
 
   @@map("Orders")
 }
@@ -136,14 +138,14 @@ model OrderItem {
   @@map("OrderItems")
 }
 
+model OrderStatus {
+  id     Int     @id @default(autoincrement())
+  name   String?
+  orders Order[]
+}
+
 enum Role {
   USER
   ADMIN
   EMPLOYEE
-}
-
-enum Status {
-  SUCCESS
-  PENDING
-  FAILURE
 }

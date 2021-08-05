@@ -8,7 +8,7 @@ class OrderController {
                address: req.body.address,
                userId: req.body.userId,
                totalPrice: Number(req.body.totalPrice),
-
+               orderStatusId: req.body.orderStatusId,
                orderItems: {
                   createMany: {
                      data: req.body.orderItem,
@@ -27,9 +27,15 @@ class OrderController {
       try {
          const response = await prisma.order.findMany({
             where: {
-               userId: req.query.firebaseId,
+               AND: {
+                  userId: req.query.userId,
+                  orderStatusId: {
+                     equals: parseInt(req.query.orderStatusId) || undefined,
+                  },
+               },
             },
             include: {
+               orderStatus: true,
                User: true,
                orderItems: {
                   include: {
@@ -49,7 +55,7 @@ class OrderController {
       }
    };
 
-   myOrder = async (req, res, next) => {
+   myProductInOrder = async (req, res, next) => {
       try {
          const response = await prisma.order.findMany({
             where: {
@@ -64,6 +70,7 @@ class OrderController {
                },
             },
             include: {
+               orderStatus: true,
                orderItems: {
                   include: {
                      Product: {
@@ -77,6 +84,20 @@ class OrderController {
          });
 
          res.json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   deleteOrder = async (req, res, next) => {
+      try {
+         const response = await prisma.order.delete({
+            where: {
+               id: req.body.orderId,
+            },
+         });
+
+         return res.status(200).json(response);
       } catch (error) {
          return next(error);
       }

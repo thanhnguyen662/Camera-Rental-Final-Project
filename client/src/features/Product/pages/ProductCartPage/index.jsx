@@ -111,6 +111,7 @@ function ProductCardPage(props) {
          console.log('sumPriceArray', sumPriceArray);
          const response = await orderApi
             .createOrder({
+               orderStatusId: 1,
                address: userAddress,
                totalPrice: sumArray(sumPriceArray),
                userId: userId,
