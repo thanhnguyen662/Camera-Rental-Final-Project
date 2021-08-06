@@ -150,9 +150,8 @@ function ProfileEditPage(props) {
 
    // [DATABASE] CHANGE USER PROFILE
    const onProfileFinish = async (values) => {
-      console.log(values);
-
       try {
+         console.log('values1', values);
          const formValues = {
             firebaseId: uid,
             age: parseInt(values.age),
@@ -166,7 +165,6 @@ function ProfileEditPage(props) {
             username: values.userName,
             phoneNumber: values.phoneNumber,
          };
-
          const response = await userApi.addUserInfo(formValues);
          console.log('Finish: ', response);
          openNotificationWithIcon(

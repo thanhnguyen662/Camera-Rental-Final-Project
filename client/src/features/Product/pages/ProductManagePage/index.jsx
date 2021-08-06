@@ -85,7 +85,6 @@ function ProductManagePage(props) {
                {current >= 0 && current <= 4 && (
                   <ProductManageTable
                      orders={orders}
-                     current={current}
                      handleClickDeleteOrderButton={handleClickDeleteOrderButton}
                   />
                )}

@@ -1,13 +1,13 @@
-import { Card, Image, Spin, Upload } from 'antd';
+import { Card, Upload } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { PlusOutlined } from '@ant-design/icons';
 
 ProfileEditAvatarCard.propTypes = {
    uploadImage: PropTypes.func,
    handleOnChange: PropTypes.func,
    defaultFileList: PropTypes.array,
    onPreview: PropTypes.func,
-   photoURL: PropTypes.string,
 };
 
 ProfileEditAvatarCard.defaultProps = {
@@ -15,12 +15,10 @@ ProfileEditAvatarCard.defaultProps = {
    handleOnChange: null,
    defaultFileList: [],
    onPreview: null,
-   photoURL: '',
 };
 
 function ProfileEditAvatarCard(props) {
-   const { uploadImage, handleOnChange, defaultFileList, onPreview, photoURL } =
-      props;
+   const { uploadImage, handleOnChange, defaultFileList, onPreview } = props;
    return (
       <>
          <Card hoverable={true}>
@@ -34,9 +32,10 @@ function ProfileEditAvatarCard(props) {
                   onPreview={onPreview}
                   className='image-upload-grid'
                >
-                  {defaultFileList.length >= 1 ? null : (
-                     <>{!photoURL ? <Spin /> : <Image src={photoURL} />}</>
-                  )}
+                  <div>
+                     <PlusOutlined />
+                     <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
                </Upload>
                <p>Click picture to change Avatar</p>
             </div>

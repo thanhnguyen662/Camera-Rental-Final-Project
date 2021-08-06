@@ -44,6 +44,10 @@ function ProductCartTable(props) {
       setShops([...new Set(data)]);
    }, [productInCart]);
 
+   function disabledDate(current) {
+      return current && current < moment().endOf('day');
+   }
+
    const columns = [
       {
          title: 'Image',
@@ -86,6 +90,7 @@ function ProductCartTable(props) {
 
             return (
                <RangePicker
+                  disabledDate={disabledDate}
                   allowClear={false}
                   className='cartDate'
                   showTime

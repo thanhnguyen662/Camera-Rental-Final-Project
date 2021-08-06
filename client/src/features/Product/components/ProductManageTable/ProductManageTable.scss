@@ -7,7 +7,7 @@
       border-radius: 10px;
    }
    .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
-      padding: 12px 25px;
+      padding: 10px 25px;
    }
 
    .productManageName{
@@ -28,10 +28,95 @@
       font-weight: bold;
       font-size: 18px;
    }
+
    .footerTitle{
       font-size: 16px;
    }
+
    .messageButton{
       border-radius: 5px;
    }
+
+   .orderDetailButton{
+      font-size: 18px;
+      transition: all 0.4s;
+      color: rgb(88, 88, 88);
+      cursor: pointer;
+
+      &:hover{
+         color: #1890FF;
+      }
+   }
+
 }
+
+.productOrderDetailModal{
+   .ant-divider-horizontal{
+      margin: 10px 0;
+   }
+
+   .ant-modal-content {
+      overflow: auto;
+      border-radius: 10px;
+   }
+
+   .ant-modal-title{
+      font-size: 13px;
+   }
+
+   .ant-modal-footer{
+      padding: 16px 26px;
+   }
+
+   .ant-modal-body{
+      padding: 16px 26px 25px 26px;
+   }
+
+   .orderDetailUsername{
+      font-size: 18px;
+      font-weight: 700;
+   }
+
+   .orderDetailCreateAt{
+      font-size: 13px;
+      font-style: italic;
+   }
+
+
+   .productManageOrderDetailTable{
+      .headerText{
+         h4{
+            margin-bottom: 0em;
+            font-weight: 500;
+            font-size: 14px;
+            font-style: italic;
+         }
+      }
+      
+      .totalPrice{
+         .totalPriceTitle{
+            font-weight: 300;
+            font-size: 14px;
+            font-weight: 500;
+         }
+      
+         .totalPriceCal{
+            font-size: 21px;
+            font-weight: bold;
+            color: #FF4D4F;
+         }
+      }
+      
+      .productNotionalPrice{
+         font-weight: 300;
+      }
+   }
+   
+   
+   .productManageOrderDetailTable{
+      border: 1.5px solid rgb(228, 228, 228);
+      border-radius: 10px;
+      padding: 10px 15px;
+   }
+}
+

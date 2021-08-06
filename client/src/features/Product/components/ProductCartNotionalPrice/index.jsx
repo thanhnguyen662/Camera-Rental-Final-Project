@@ -70,12 +70,12 @@ function ProductCartNotionalPrice(props) {
                               <Col span={12}>
                                  <Paragraph>{productName}</Paragraph>
                               </Col>
-                              <Col span={4} style={{ textAlign: 'center' }}>
+                              <Col span={6} style={{ textAlign: 'center' }}>
                                  <Paragraph level={5}>
                                     {duringHoursPerRow}
                                  </Paragraph>
                               </Col>
-                              <Col span={8}>
+                              <Col span={6}>
                                  <Paragraph
                                     level={5}
                                     style={{ textAlign: 'right' }}

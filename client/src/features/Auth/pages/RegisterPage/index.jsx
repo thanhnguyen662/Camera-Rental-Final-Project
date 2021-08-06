@@ -103,6 +103,7 @@ function RegisterPage(props) {
             photoURL: values.photoURL,
             description: values.description,
             username: values.userName,
+            phoneNumber: values.phoneNumber,
          };
 
          const response = await userApi.addUserInfo(formValues);

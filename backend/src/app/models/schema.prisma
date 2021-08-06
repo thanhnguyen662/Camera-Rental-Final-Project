@@ -119,6 +119,8 @@ model Order {
   orderItems    OrderItem[]
   orderStatusId Int?
   orderStatus   OrderStatus? @relation(fields: [orderStatusId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 
   @@map("Orders")
 }

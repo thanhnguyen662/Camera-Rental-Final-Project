@@ -1,8 +1,19 @@
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Divider, Image, Row, Table, Tag } from 'antd';
+import { InfoCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+   Modal,
+   Col,
+   DatePicker,
+   Divider,
+   Image,
+   Row,
+   Table,
+   Tag,
+   Typography,
+   Button,
+} from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
 import './ProductManageTable.scss';
@@ -18,9 +29,13 @@ ProductManageTable.defaultProps = {
 };
 
 const { RangePicker } = DatePicker;
+const { Paragraph, Text } = Typography;
 
 function ProductManageTable(props) {
-   const { orders, current, handleClickDeleteOrderButton } = props;
+   const { orders, handleClickDeleteOrderButton } = props;
+
+   const [isModalVisible, setIsModalVisible] = useState(false);
+   const [orderDetail, setOrderDetail] = useState();
 
    const columns = [
       {
@@ -58,12 +73,6 @@ function ProductManageTable(props) {
             );
          },
       },
-      {
-         title: 'Price',
-         dataIndex: ['totalPricePerHour'],
-         width: 100,
-         render: (record) => <div>{priceFormat(record)}</div>,
-      },
    ];
 
    const tileOfTable = (order) => {
@@ -99,20 +108,20 @@ function ProductManageTable(props) {
                   &nbsp;
                   <Link
                      to={`/profile/${order.orderItems[0]?.Product.User.firebaseId}`}
-                     style={{ color: 'black' }}
+                     className='productManageName'
                   >
                      <b>{order.orderItems[0].Product.User.username}</b>
                   </Link>
                </Col>
-               {current === 1 && (
-                  <Col>
-                     <Button
-                        className='messageButton'
-                        icon={<DeleteOutlined />}
-                        onClick={() => handleClickDeleteOrderButton(order.id)}
-                     />
-                  </Col>
-               )}
+               <Col>
+                  <InfoCircleOutlined
+                     className='orderDetailButton'
+                     onClick={() => {
+                        setOrderDetail(order);
+                        setIsModalVisible(true);
+                     }}
+                  />
+               </Col>
             </Row>
          </div>
       );
@@ -129,6 +138,13 @@ function ProductManageTable(props) {
             </Col>
          </Row>
       );
+   };
+
+   const disableButton = () => {
+      if (orderDetail?.orderStatus.name === 'PENDING') return;
+      return {
+         disabled: true,
+      };
    };
 
    return (
@@ -152,6 +168,102 @@ function ProductManageTable(props) {
          ) : (
             <Table hasData={true} />
          )}
+         <Modal
+            title={`ID: ${orderDetail?.id}`}
+            visible={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            className='productOrderDetailModal'
+            footer={[
+               <Button
+                  key='delete'
+                  icon={<DeleteOutlined />}
+                  onClick={() => {
+                     handleClickDeleteOrderButton(orderDetail?.id);
+                     setIsModalVisible(false);
+                  }}
+                  type='danger'
+                  {...disableButton()}
+               >
+                  Delete Order
+               </Button>,
+               <Button
+                  key='back'
+                  onClick={() => setIsModalVisible(false)}
+                  type='primary'
+               >
+                  OK
+               </Button>,
+            ]}
+         >
+            <Paragraph>
+               <Row>
+                  <Col flex='auto' className='orderDetailUsername'>
+                     <Text>{orderDetail?.User.username}</Text>
+                  </Col>
+                  <Col className='orderDetailCreateAt'>
+                     <Text>
+                        {moment(orderDetail?.createdAt).format(
+                           'YYYY-MM-DD HH:mm:ss'
+                        )}{' '}
+                        ({moment(orderDetail?.createdAt).fromNow()})
+                     </Text>
+                  </Col>
+               </Row>
+               <Text>{orderDetail?.User.address}</Text>
+               <br />
+               <Text>{orderDetail?.User.phoneNumber}</Text>
+               <br />
+            </Paragraph>
+            <div className='productManageOrderDetailTable'>
+               <Row className='headerText'>
+                  <Col span={10}>
+                     <h4>Name</h4>
+                  </Col>
+                  <Col span={4} style={{ textAlign: 'center' }}>
+                     <h4>Hours</h4>
+                  </Col>
+                  <Col span={4} style={{ textAlign: 'center' }}>
+                     <h4>Price</h4>
+                  </Col>
+                  <Col span={6} style={{ textAlign: 'right' }}>
+                     <h4>Total</h4>
+                  </Col>
+               </Row>
+               <Divider />
+               {orderDetail?.orderItems.map((item) => (
+                  <Row key={item.id}>
+                     <Col span={10}>
+                        <Paragraph>{item.Product.name}</Paragraph>
+                     </Col>
+                     <Col span={4} style={{ textAlign: 'center' }}>
+                        <Paragraph level={5}>{item.during}</Paragraph>
+                     </Col>
+                     <Col span={4} style={{ textAlign: 'center' }}>
+                        <Paragraph level={5}>
+                           {priceFormat(item.price)}
+                        </Paragraph>
+                     </Col>
+                     <Col span={6}>
+                        <Paragraph level={5} style={{ textAlign: 'right' }}>
+                           {priceFormat(item.totalPricePerHour)}
+                        </Paragraph>
+                     </Col>
+                  </Row>
+               ))}
+
+               <Divider />
+               <Row className='totalPrice'>
+                  <Col flex='auto'>
+                     <div className='totalPriceTitle'>Total Price</div>
+                  </Col>
+                  <Col>
+                     <div className='totalPriceCal'>
+                        {priceFormat(orderDetail?.totalPrice)}
+                     </div>
+                  </Col>
+               </Row>
+            </div>
+         </Modal>
       </div>
    );
 }

@@ -87,7 +87,7 @@ function ProductCardPage(props) {
 
       uniqueUsername.map(async (unique) => {
          let filter = selectRows.filter(
-            (s) => s.Product.User.username !== unique
+            (s) => s.Product.User.username === unique
          );
          if (filter.length === 0) filter = [...selectRows];
          filter.map((row) => {
@@ -108,7 +108,7 @@ function ProductCardPage(props) {
             });
          });
          console.log('filter', groupProductByUsername);
-         console.log('sumPriceArray', sumPriceArray);
+         console.log('sumPriceArray', sumArray(sumPriceArray));
          const response = await orderApi
             .createOrder({
                orderStatusId: 1,

@@ -54,6 +54,10 @@ function ProductDetailDescription(props) {
       onClickToAddProduct(destructuring(product));
    };
 
+   function disabledDate(current) {
+      return current && current < moment().endOf('day');
+   }
+
    const disable = (!startDate || !endDate) && { disabled: true };
    return (
       <>
@@ -103,11 +107,15 @@ function ProductDetailDescription(props) {
                <Row span={24} className='buttonRow'>
                   <RangePicker
                      className='datePicker'
+                     disabledDate={disabledDate}
                      ranges={{
-                        'This Day': [moment(), moment().add(1, 'days')],
-                        'This Month': [
-                           moment().startOf('month'),
-                           moment().endOf('month'),
+                        'Rent Tomorrow': [
+                           moment().add(1, 'days'),
+                           moment().add(2, 'days'),
+                        ],
+                        '30 days': [
+                           moment().add(1, 'days'),
+                           moment().add(31, 'days'),
                         ],
                      }}
                      showTime

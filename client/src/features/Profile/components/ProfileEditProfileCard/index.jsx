@@ -1,7 +1,14 @@
 import { Button, Card, Divider, Form, Input, Typography } from 'antd';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-ProfileEditProfileCard.propTypes = {};
+ProfileEditProfileCard.propTypes = {
+   onProfileFinish: PropTypes.func,
+};
+
+ProfileEditProfileCard.defaultProps = {
+   onProfileFinish: null,
+};
 
 const { Title, Text } = Typography;
 
@@ -34,6 +41,7 @@ function ProfileEditProfileCard(props) {
    console.log(userProfile);
 
    const handleProfileFormChange = (values) => {
+      console.log('values0: ', values);
       onProfileFinish(values);
    };
 
@@ -50,18 +58,22 @@ function ProfileEditProfileCard(props) {
                   onFinish={handleProfileFormChange}
                   scrollToFirstError
                   initialValues={{
-                     age: userProfile.age,
-                     favouriteGear: userProfile.favouriteGear,
-                     address: userProfile.address,
-                     gender: userProfile.gender,
-                     hasTag: userProfile.hasTag,
-                     description: userProfile.description,
+                     age: userProfile?.age,
+                     favouriteGear: userProfile?.favouriteGear,
+                     address: userProfile?.address,
+                     gender: userProfile?.gender,
+                     hasTag: userProfile?.hasTag,
+                     description: userProfile?.description,
                      photoURL: photoURL,
-                     userName: userProfile.username,
-                     phoneNumber: userProfile.phoneNumber,
+                     userName: userProfile?.username,
+                     phoneNumber: userProfile?.phoneNumber,
                   }}
                >
-                  <Form.Item name='photoURL' label='Photo'>
+                  <Form.Item
+                     name='photoURL'
+                     label='Photo'
+                     style={{ display: 'none' }}
+                  >
                      <Input disabled />
                   </Form.Item>
                   <Form.Item name='userName' label='UserName'>
