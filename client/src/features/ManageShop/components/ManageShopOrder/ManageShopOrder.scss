@@ -1,0 +1,97 @@
+.manageShopOrderTable{
+   border: 2px solid #F0F0F0;
+   margin-bottom: 20px;
+   border-radius: 10px;
+   overflow: hidden;
+   border-collapse: collapse;
+
+   .orderUsername{
+      font-weight: normal;
+      color: rgb(48, 48, 48);
+
+      &:hover{
+         color: #1890FF;
+      }
+   }
+
+   
+
+   .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+      padding: 10px 25px;
+   }
+
+   .footerOfTable{
+      color: #FF4D4F;
+      font-weight: bold;
+      font-size: 18px;
+   }
+
+   .footerTitle{
+      font-size: 16px;
+   }
+
+   .orderDetailButton{
+      font-size: 18px;
+      transition: all 0.4s;
+      color: rgb(88, 88, 88);
+      cursor: pointer;
+
+      &:hover{
+         color: #1890FF;
+      }
+   }
+
+   
+}
+.modalUserDetails{
+   .orderDetailUsername{
+      font-size: 14px;
+      font-style: italic;
+   }
+   
+   .orderDetailName{
+      font-size: 19px;
+      font-weight: 700;
+   }
+
+   .orderDetailUserPhoto{
+      margin-bottom: 10px;
+   }
+
+   .orderDetailUserInfo{
+      margin-top: 10px;
+
+      .orderDetailUserInfoRow{
+         padding: 0.5px;
+      }
+   }
+
+   .ant-divider-horizontal{
+      margin: 10px 0;
+   }
+
+   .ant-modal-content {
+      overflow: auto;
+      border-radius: 10px;
+   }
+
+   .ant-modal-title{
+      font-size: 13px;
+   }
+
+   .ant-modal-footer{
+      padding: 16px 26px;
+   }
+
+   .ant-modal-body{
+      padding: 16px 26px 25px 26px;
+   }
+}
+
+.orderTableEmpty{
+   border-radius: 10px;
+   overflow: hidden;
+   border: 2px solid #F0F0F0;
+   border-radius: 10px;
+}
+

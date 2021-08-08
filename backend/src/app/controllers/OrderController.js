@@ -59,17 +59,23 @@ class OrderController {
       try {
          const response = await prisma.order.findMany({
             where: {
-               orderItems: {
-                  every: {
-                     Product: {
-                        User: {
-                           firebaseId: req.query.firebaseId,
+               AND: {
+                  orderItems: {
+                     every: {
+                        Product: {
+                           User: {
+                              firebaseId: req.query.firebaseId,
+                           },
                         },
                      },
+                  },
+                  orderStatus: {
+                     name: req.query.orderStatus || undefined,
                   },
                },
             },
             include: {
+               User: true,
                orderStatus: true,
                orderItems: {
                   include: {
@@ -94,6 +100,36 @@ class OrderController {
          const response = await prisma.order.delete({
             where: {
                id: req.body.orderId,
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   updateOrder = async (req, res, next) => {
+      try {
+         const response = await prisma.order.update({
+            where: {
+               id: req.body.orderId,
+            },
+            data: {
+               orderStatusId: req.body.orderStatusId,
+            },
+            include: {
+               User: true,
+               orderStatus: true,
+               orderItems: {
+                  include: {
+                     Product: {
+                        include: {
+                           User: true,
+                        },
+                     },
+                  },
+               },
             },
          });
 

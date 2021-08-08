@@ -108,12 +108,10 @@ function HeaderBar(props) {
                }}
             />
          )}
-         <Row>
-            <Col span={2} style={{ marginLeft: '130px' }}>
-               LOGO
-            </Col>
+         <Row style={{ padding: '0 115px 0 150px' }}>
+            <Col flex='auto'>LOGO</Col>
 
-            <Col span={5} offset={13}>
+            <Col>
                {loginStatus === false ? (
                   <>
                      <Button type='link' size='large'>

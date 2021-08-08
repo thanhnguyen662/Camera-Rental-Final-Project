@@ -63,6 +63,7 @@ function ProductManagePage(props) {
             orderId: orderId,
          };
          const response = await orderApi.deleteOrder(data);
+         console.log('Removed order Successful: ', response);
          setOrders(orders.filter((o) => o.id !== response.id));
       } catch (error) {
          console.log(error);

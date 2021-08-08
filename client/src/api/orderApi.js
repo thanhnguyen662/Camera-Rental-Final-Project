@@ -20,6 +20,11 @@ const orderApi = {
       const url = '/order/deleteOrder';
       return axiosClient.delete(url, { data });
    },
+
+   updateOrder: (data) => {
+      const url = '/order/updateOrder';
+      return axiosClient.patch(url, data);
+   },
 };
 
 export default orderApi;

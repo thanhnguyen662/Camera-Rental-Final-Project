@@ -19,6 +19,7 @@ import { Layout } from 'antd';
 import MessageBeta from '../features/MessageBeta';
 import Maps from '../features/Maps';
 import ResponseResult from '../components/ResponseResult';
+import ManageShop from '../features/ManageShop';
 
 const { Content } = Layout;
 
@@ -64,6 +65,14 @@ function Routers(props) {
                         <div style={{ margin: '25px 125px' }}>
                            <Content style={{ minHeight: 550 }}>
                               <Product />
+                           </Content>
+                        </div>
+                     </Route>
+
+                     <Route path='/manage'>
+                        <div style={{ margin: '25px 125px' }}>
+                           <Content style={{ minHeight: 550 }}>
+                              <ManageShop />
                            </Content>
                         </div>
                      </Route>

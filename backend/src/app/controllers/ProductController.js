@@ -71,6 +71,24 @@ class ProductController {
          return next(error);
       }
    };
+
+   getMyProduct = async (req, res, next) => {
+      try {
+         const response = await prisma.product.findMany({
+            where: {
+               User: {
+                  firebaseId: req.query.firebaseId,
+               },
+            },
+            include: {
+               User: true,
+            },
+         });
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new ProductController();

@@ -55,9 +55,11 @@ function ProductCartAddress(props) {
                         <Avatar src={userPhotoURL} size={45} />
                      </Col>
                      <Col span={19} className='cartUserInfo'>
-                        <Text className='cartUsername'>{name}</Text> |{' '}
+                        <Typography>
+                           <Text className='cartUsername'>{name}</Text> |{' '}
+                           <Text className='cartUserPhone'>{phoneNumber}</Text>
+                        </Typography>
                         <Text className='cartUserEmail'>{email}</Text>
-                        <Typography>{phoneNumber}</Typography>
                      </Col>
                   </Row>
                   <Typography className='cartUserAddress'>

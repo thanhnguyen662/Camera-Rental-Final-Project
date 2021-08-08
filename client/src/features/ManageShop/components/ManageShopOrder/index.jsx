@@ -1,64 +1,104 @@
-import { InfoCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
-   Modal,
-   Col,
-   DatePicker,
-   Divider,
+   Table,
    Image,
    Row,
-   Table,
+   Col,
+   Divider,
+   DatePicker,
+   Modal,
    Tag,
-   Typography,
    Button,
+   Typography,
+   Space,
+   Avatar,
+   Spin,
 } from 'antd';
-import moment from 'moment';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import {
+   InfoCircleOutlined,
+   CheckOutlined,
+   UserOutlined,
+   IdcardOutlined,
+   ClusterOutlined,
+   HomeOutlined,
+   CloseOutlined,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
-import './ProductManageTable.scss';
+import moment from 'moment';
+import './ManageShopOrder.scss';
+import userApi from '../../../../api/userApi';
 
-ProductManageTable.propTypes = {
-   orders: PropTypes.array,
-   handleClickDeleteOrderButton: PropTypes.func,
+ManageShopOrder.propTypes = {
+   myProductInOrder: PropTypes.array,
+   handleUpdateOrder: PropTypes.func,
 };
 
-ProductManageTable.defaultProps = {
-   orders: [],
-   handleClickDeleteOrderButton: null,
+ManageShopOrder.defaultProps = {
+   myProductInOrder: [],
+   handleUpdateOrder: null,
 };
 
 const { RangePicker } = DatePicker;
 const { Paragraph, Text } = Typography;
 
-function ProductManageTable(props) {
-   const { orders, handleClickDeleteOrderButton } = props;
+function ManageShopOrder(props) {
+   const { myProductInOrder, handleUpdateOrder } = props;
 
    const [isModalVisible, setIsModalVisible] = useState(false);
+   const [isModalUserVisible, setIsModalUserVisible] = useState(false);
    const [orderDetail, setOrderDetail] = useState();
+   const [userDetailFirebase, setUserDetailFirebase] = useState({});
+
+   useEffect(() => {
+      if (!orderDetail) return;
+      const getUserDetailOnFirebase = async () => {
+         try {
+            setUserDetailFirebase({});
+            const response = await userApi.getMe({
+               uid: orderDetail?.User.firebaseId,
+            });
+
+            console.log(response);
+            setUserDetailFirebase(response);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getUserDetailOnFirebase();
+   }, [orderDetail]);
+
+   const onClickAccept = () => {
+      handleUpdateOrder({
+         orderId: orderDetail.id,
+         orderStatusId: 5, //ACCEPT
+      });
+   };
+
+   const onClickFailure = () => {
+      handleUpdateOrder({
+         orderId: orderDetail.id,
+         orderStatusId: 4, //FAILURE
+      });
+   };
 
    const columns = [
       {
          title: 'Image',
          dataIndex: ['Product', 'productPhotoURL'],
-         width: 80,
+         width: 120,
          render: (record) => (
             <Image src={record[0]} width={80} style={{ minHeight: 80 }} />
          ),
       },
       {
          title: 'Name',
-         dataIndex: ['Product'],
-         width: 100,
-         render: (record) => (
-            <Link to={`/product/${record.slug}`} className='productManageName'>
-               {record.name}
-            </Link>
-         ),
+         dataIndex: ['Product', 'name'],
+         width: 250,
       },
       {
          title: 'Start - End',
-         width: 200,
          render: (record) => {
             const startDate = moment(record.startDate);
             const endDate = moment(record.endDate);
@@ -95,6 +135,11 @@ function ProductManageTable(props) {
                   color: 'warning',
                };
             }
+            case 'ACCEPT': {
+               return {
+                  color: 'green',
+               };
+            }
             default:
                break;
          }
@@ -107,20 +152,29 @@ function ProductManageTable(props) {
                   <Divider type='vertical' />
                   &nbsp;
                   <Link
-                     to={`/profile/${order.orderItems[0]?.Product.User.firebaseId}`}
-                     className='productManageName'
+                     to={`/profile/${order.User?.firebaseId}`}
+                     className='orderUsername'
                   >
-                     <b>{order.orderItems[0].Product.User.username}</b>
+                     <b>{order.User?.username}</b>
                   </Link>
                </Col>
                <Col>
-                  <InfoCircleOutlined
-                     className='orderDetailButton'
-                     onClick={() => {
-                        setOrderDetail(order);
-                        setIsModalVisible(true);
-                     }}
-                  />
+                  <Space size='middle'>
+                     <UserOutlined
+                        className='orderDetailButton'
+                        onClick={() => {
+                           setOrderDetail(order);
+                           setIsModalUserVisible(true);
+                        }}
+                     />
+                     <InfoCircleOutlined
+                        className='orderDetailButton'
+                        onClick={() => {
+                           setOrderDetail(order);
+                           setIsModalVisible(true);
+                        }}
+                     />
+                  </Space>
                </Col>
             </Row>
          </div>
@@ -146,26 +200,26 @@ function ProductManageTable(props) {
    };
 
    return (
-      <div>
-         {orders.length > 0 ? (
-            orders.map((order) => (
-               <div key={order.id} className='productManage'>
+      <>
+         {myProductInOrder.length !== 0 ? (
+            myProductInOrder.map((order) => (
+               <div key={order.id}>
                   <Table
+                     className='manageShopOrderTable'
                      ellipsis={true}
-                     tableLayout='fixed'
-                     title={() => tileOfTable(order)}
-                     footer={() => footerOfTable(order.totalPrice)}
-                     className='productManageTable'
                      pagination={false}
                      rowKey={(record) => record.id}
                      dataSource={order.orderItems}
                      columns={columns}
+                     title={() => tileOfTable(order)}
+                     footer={() => footerOfTable(order.totalPrice)}
                   />
                </div>
             ))
          ) : (
-            <Table hasData={true} className='productManageTableEmpty' />
+            <Table hasData={true} className='orderTableEmpty' />
          )}
+
          <Modal
             title={`ID: ${orderDetail?.id}`}
             visible={isModalVisible}
@@ -173,23 +227,30 @@ function ProductManageTable(props) {
             className='productOrderDetailModal'
             footer={[
                <Button
-                  key='delete'
-                  icon={<DeleteOutlined />}
+                  key='accept'
+                  icon={<CheckOutlined />}
                   onClick={() => {
-                     handleClickDeleteOrderButton(orderDetail?.id);
+                     console.log('Accept Order');
+                     onClickAccept();
+                     setIsModalVisible(false);
+                  }}
+                  type='primary'
+                  {...disableButton()}
+               >
+                  Accept Order
+               </Button>,
+               <Button
+                  key='decline'
+                  icon={<CloseOutlined />}
+                  onClick={() => {
+                     console.log('Decline Order');
+                     onClickFailure();
                      setIsModalVisible(false);
                   }}
                   type='danger'
                   {...disableButton()}
                >
-                  Delete Order
-               </Button>,
-               <Button
-                  key='back'
-                  onClick={() => setIsModalVisible(false)}
-                  type='primary'
-               >
-                  OK
+                  Decline
                </Button>,
             ]}
          >
@@ -262,8 +323,61 @@ function ProductManageTable(props) {
                </Row>
             </div>
          </Modal>
-      </div>
+
+         <Modal
+            visible={isModalUserVisible}
+            onCancel={() => setIsModalUserVisible(false)}
+            style={{ textAlign: 'center' }}
+            className='modalUserDetails'
+            width={450}
+         >
+            {!userDetailFirebase?.displayName ? (
+               <Spin />
+            ) : (
+               <>
+                  <Avatar
+                     src={orderDetail?.User.photoURL}
+                     size={70}
+                     className='orderDetailUserPhoto'
+                  />
+                  <br />
+                  <div className='orderDetailName'>
+                     {userDetailFirebase?.displayName}
+                  </div>
+                  <div className='orderDetailUsername'>
+                     {userDetailFirebase?.email} | {orderDetail?.User.username}
+                  </div>
+                  <div className='orderDetailUserInfo'>
+                     <Row className='orderDetailUserInfoRow'>
+                        <Col flex='28px' offset={4}>
+                           <IdcardOutlined />
+                        </Col>
+                        <Col>
+                           <Text>{orderDetail?.User.firebaseId}</Text>
+                        </Col>
+                     </Row>
+                     <Row className='orderDetailUserInfoRow'>
+                        <Col flex='28px' offset={4}>
+                           <ClusterOutlined />
+                        </Col>
+                        <Col>
+                           <Text>{orderDetail?.User.phoneNumber}</Text>
+                        </Col>
+                     </Row>
+                     <Row className='orderDetailUserInfoRow'>
+                        <Col flex='28px' offset={4}>
+                           <HomeOutlined />
+                        </Col>
+                        <Col>
+                           <Text>{orderDetail?.address}</Text>
+                        </Col>
+                     </Row>
+                  </div>
+               </>
+            )}
+         </Modal>
+      </>
    );
 }
 
-export default ProductManageTable;
+export default ManageShopOrder;
