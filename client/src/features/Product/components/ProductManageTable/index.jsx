@@ -90,6 +90,11 @@ function ProductManageTable(props) {
                return {
                   color: 'error',
                };
+            case 'ACCEPT': {
+               return {
+                  color: 'success',
+               };
+            }
             case 'DELIVERY': {
                return {
                   color: 'warning',

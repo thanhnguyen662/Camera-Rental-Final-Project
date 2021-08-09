@@ -5,6 +5,7 @@ import {
    UserOutlined,
    LaptopOutlined,
    NotificationOutlined,
+   FundOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 
@@ -30,6 +31,9 @@ function ManageShopMenu(props) {
             defaultOpenKeys={['sub1', 'sub2']}
             onClick={(value) => handleCurrentMenuChange(value.key)}
          >
+            <Menu.Item key='overview' icon={<FundOutlined />}>
+               Overview
+            </Menu.Item>
             <SubMenu key='sub1' icon={<UserOutlined />} title='Manage Product'>
                <Menu.Item key='allProduct'>All Product</Menu.Item>
                <Menu.Item key='publication'>Publication</Menu.Item>

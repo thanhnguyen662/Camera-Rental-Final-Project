@@ -29,20 +29,11 @@ function ProductManageTitle(props) {
             <Menu.ItemGroup key='g1' title='Status'>
                <Menu.Item key={0}>All</Menu.Item>
                <Menu.Item key={1}>Pending</Menu.Item>
+               <Menu.Item key={5}>Accept</Menu.Item>
                <Menu.Item key={2}>Delivery</Menu.Item>
                <Menu.Item key={3}>Success</Menu.Item>
                <Menu.Item key={4}>Failure</Menu.Item>
             </Menu.ItemGroup>
-         </SubMenu>
-         <SubMenu
-            key='sub2'
-            icon={<SettingOutlined />}
-            title='My Product Order'
-         >
-            <Menu.Item key={5}>All</Menu.Item>
-            <Menu.Item key={6}>Pending</Menu.Item>
-            <Menu.Item key={7}>Success</Menu.Item>
-            <Menu.Item key={8}>Failure</Menu.Item>
          </SubMenu>
       </Menu>
    );

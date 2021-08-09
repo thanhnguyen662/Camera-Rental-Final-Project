@@ -1,0 +1,13 @@
+.manageShopProductTable{
+   border: 2px solid #F0F0F0;
+   margin-bottom: 20px;
+   border-radius: 10px;
+   overflow: hidden;
+   border-collapse: collapse;
+
+   .shopProductTable{
+      .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+         padding: 10px 25px;
+      }
+   }
+}

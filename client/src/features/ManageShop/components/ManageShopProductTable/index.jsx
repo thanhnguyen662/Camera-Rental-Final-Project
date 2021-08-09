@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Image } from 'antd';
+import priceFormat from '../../../../utils/PriceFormat';
+import './ManageShopProductTable.scss';
+
 ManageShopProductTable.propTypes = {
    myProduct: PropTypes.array,
 };
@@ -27,9 +30,15 @@ function ManageShopProductTable(props) {
          key: 'name',
       },
       {
+         title: 'Brand',
+         dataIndex: ['brand'],
+         key: 'brand',
+      },
+      {
          title: 'Price',
          dataIndex: ['price'],
          key: 'price',
+         render: (record) => <div>{priceFormat(record)}</div>,
       },
       {
          title: 'Stock',
@@ -39,8 +48,9 @@ function ManageShopProductTable(props) {
    ];
 
    return (
-      <div>
+      <div className='manageShopProductTable'>
          <Table
+            className='shopProductTable'
             dataSource={myProduct}
             columns={columns}
             ellipsis={true}

@@ -20,6 +20,7 @@ import MessageBeta from '../features/MessageBeta';
 import Maps from '../features/Maps';
 import ResponseResult from '../components/ResponseResult';
 import ManageShop from '../features/ManageShop';
+import Admin from '../features/Admin';
 
 const { Content } = Layout;
 
@@ -65,6 +66,14 @@ function Routers(props) {
                         <div style={{ margin: '25px 125px' }}>
                            <Content style={{ minHeight: 550 }}>
                               <Product />
+                           </Content>
+                        </div>
+                     </Route>
+
+                     <Route path='/admin'>
+                        <div style={{ margin: '25px 125px' }}>
+                           <Content style={{ minHeight: 550 }}>
+                              <Admin />
                            </Content>
                         </div>
                      </Route>

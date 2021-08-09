@@ -15,7 +15,6 @@ function ProductManagePage(props) {
 
    const [orders, setOrders] = useState([]);
    const [current, setCurrent] = useState(0);
-   const [myProductInOrder, setMyProductInOrder] = useState([]);
 
    useEffect(() => {
       if (!userId) return;
@@ -34,23 +33,6 @@ function ProductManagePage(props) {
          }
       };
       getOrdersByUserId();
-   }, [userId, current]);
-
-   useEffect(() => {
-      if (!userId) return;
-
-      const getMyProductInOrder = async () => {
-         try {
-            const response = await orderApi.myProductInOrder({
-               firebaseId: userId,
-            });
-            setMyProductInOrder(response);
-            console.log('My Product In Order: ', response);
-         } catch (error) {
-            console.log(error);
-         }
-      };
-      getMyProductInOrder();
    }, [userId, current]);
 
    const handleClickTitle = (id) => {
@@ -83,13 +65,12 @@ function ProductManagePage(props) {
                <ProductManageTitle handleClickTitle={handleClickTitle} />
             </Col>
             <Col span={19}>
-               {current >= 0 && current <= 4 && (
+               {current >= 0 && current <= 5 && (
                   <ProductManageTable
                      orders={orders}
                      handleClickDeleteOrderButton={handleClickDeleteOrderButton}
                   />
                )}
-               {current > 4 && <ProductManageTable orders={myProductInOrder} />}
             </Col>
          </Row>
       </div>

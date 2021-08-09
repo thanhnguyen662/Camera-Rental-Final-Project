@@ -5,6 +5,7 @@ import orderApi from '../../../../api/orderApi';
 import productApi from '../../../../api/productApi';
 import ManageShopMenu from '../../components/ManageShopMenu';
 import ManageShopOrder from '../../components/ManageShopOrder';
+import ManageShopOverview from '../../components/ManageShopOverview';
 import ManageShopProductTable from '../../components/ManageShopProductTable';
 import './ManageShopPage.scss';
 
@@ -13,8 +14,9 @@ ManageShopPage.propTypes = {};
 const { Content } = Layout;
 
 function ManageShopPage(props) {
-   const [current, setCurrent] = useState('0');
+   const [current, setCurrent] = useState('allProduct');
    const [myProductInOrder, setMyProductInOrder] = useState([]);
+   const [allMyProductInOrder, setAllMyProductInOrder] = useState([]);
    const [myProduct, setMyProduct] = useState([]);
 
    const userId = useSelector((state) => state.users.id);
@@ -59,7 +61,24 @@ function ManageShopPage(props) {
       getMyProductInOrder();
    }, [userId, current]);
 
-   console.log(current);
+   useEffect(() => {
+      if (!userId) return;
+
+      const getAllMyProductInOrder = async () => {
+         if (current !== 'overview') return;
+         try {
+            const response = await orderApi.myProductInOrder({
+               firebaseId: userId,
+               orderStatus: null,
+            });
+            setAllMyProductInOrder(response);
+            console.log('All My Product In Order: ', response);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getAllMyProductInOrder();
+   }, [userId, current]);
 
    const handleUpdateOrder = async (values) => {
       let array = [];
@@ -92,8 +111,13 @@ function ManageShopPage(props) {
                      handleCurrentMenuChange={handleCurrentMenuChange}
                   />
                </Col>
-               <Col flex='auto'>
+               <Col span={20}>
                   <Content className='manageShopPageContent'>
+                     {current === 'overview' && (
+                        <ManageShopOverview
+                           allMyProductInOrder={allMyProductInOrder}
+                        />
+                     )}
                      {current === 'allProduct' && (
                         <ManageShopProductTable myProduct={myProduct} />
                      )}
