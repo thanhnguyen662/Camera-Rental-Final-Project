@@ -14,9 +14,8 @@ ManageShopPage.propTypes = {};
 const { Content } = Layout;
 
 function ManageShopPage(props) {
-   const [current, setCurrent] = useState('allProduct');
+   const [current, setCurrent] = useState('overview');
    const [myProductInOrder, setMyProductInOrder] = useState([]);
-   const [allMyProductInOrder, setAllMyProductInOrder] = useState([]);
    const [myProduct, setMyProduct] = useState([]);
 
    const userId = useSelector((state) => state.users.id);
@@ -39,6 +38,7 @@ function ManageShopPage(props) {
 
       const getMyProductInOrder = async () => {
          if (
+            current !== 'overview' &&
             current !== 'ALL' &&
             current !== 'PENDING' &&
             current !== 'ACCEPT' &&
@@ -50,7 +50,8 @@ function ManageShopPage(props) {
          try {
             const response = await orderApi.myProductInOrder({
                firebaseId: userId,
-               orderStatus: current === 'ALL' ? null : current,
+               orderStatus:
+                  current === 'ALL' || current === 'overview' ? null : current,
             });
             setMyProductInOrder(response);
             console.log('My Product In Order: ', response);
@@ -59,25 +60,6 @@ function ManageShopPage(props) {
          }
       };
       getMyProductInOrder();
-   }, [userId, current]);
-
-   useEffect(() => {
-      if (!userId) return;
-
-      const getAllMyProductInOrder = async () => {
-         if (current !== 'overview') return;
-         try {
-            const response = await orderApi.myProductInOrder({
-               firebaseId: userId,
-               orderStatus: null,
-            });
-            setAllMyProductInOrder(response);
-            console.log('All My Product In Order: ', response);
-         } catch (error) {
-            console.log(error);
-         }
-      };
-      getAllMyProductInOrder();
    }, [userId, current]);
 
    const handleUpdateOrder = async (values) => {
@@ -115,7 +97,8 @@ function ManageShopPage(props) {
                   <Content className='manageShopPageContent'>
                      {current === 'overview' && (
                         <ManageShopOverview
-                           allMyProductInOrder={allMyProductInOrder}
+                           allMyProductInOrder={myProductInOrder}
+                           setCurrent={setCurrent}
                         />
                      )}
                      {current === 'allProduct' && (
