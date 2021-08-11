@@ -1,7 +1,6 @@
 .overviewTableGird{
    .tableGrid{
       cursor: pointer;
-      width: 25%;
       text-align: center;
    }
 
@@ -19,16 +18,88 @@
       border: 2px solid #E7E9EE;
       border-radius: 10px;
       width: 100%;
+      transition: 0.5s ease;
+
+      &:hover{
+         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      }
    
       .cardRevenueDescription{
          font-size: 16px;
       }
-   
+      h2.ant-typography, .ant-typography h2 {
+         margin-bottom: 0em;
+      }
+      .cardRevenuePercent{
+         color: #3EB388;
+         font-weight: bold;
+         font-style: italic;
+      }
    }
    .cardRevenueTable{
       border: 2px solid #F0F0F0;
       border-collapse: collapse;
       border-radius: 10px;
       overflow: hidden;
+      transition: 0.5s ease;
+
+      .ant-table-thead > tr > th {
+         padding: 7px 10px;
+      }
+
+      &:hover{
+         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      }
+   }
+}
+
+.barChartOverview{
+   width: 95%;
+}
+.cardOrderCol{
+   .cardOrder{
+      padding: 15px 0px 0px 15px;
+      margin-bottom: 15px;
+      border: 2px solid #E7E9EE;
+      border-radius: 10px;
+      width: 100%;
+      transition: 0.5s ease;
+
+      &:hover{
+         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      }
+   
+      .cardOrderDescription{
+         font-size: 16px;
+      }
+   
+   }
+   .cardOrderTable{
+      border: 2px solid #F0F0F0;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: 0.5s ease;
+
+      .ant-table-thead > tr > th {
+         padding: 7px 10px;
+      }
+
+      &:hover{
+         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      }
+   }
+}
+
+.searchByDateTime{
+   div.ant-typography, .ant-typography p {
+      margin-bottom: 0em;
+   }
+
+   .datePickerSearch{
+      width: 100%;
+      height: 100%;
+      border: 2px solid #E7E9EE;
+      border-radius: 10px;
    }
 }

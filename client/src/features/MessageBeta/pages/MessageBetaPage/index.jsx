@@ -154,20 +154,12 @@ function MessageBetaPage(props) {
       setMessageInputValue('');
    };
 
-   const loading = conversations?.length === 0 && {
-      loading: true,
-   };
-
    return (
       <div className='message'>
          <MainContainer>
             <Sidebar position='left' scrollable={false}>
                <Search placeholder='Search...' />
-               <ConversationList
-                  position='left'
-                  scrollable={false}
-                  {...loading}
-               >
+               <ConversationList position='left' scrollable={false}>
                   {conversations.map((conversation) => (
                      <Conversations
                         key={conversation.id}

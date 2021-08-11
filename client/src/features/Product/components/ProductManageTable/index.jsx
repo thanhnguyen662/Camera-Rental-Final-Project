@@ -1,15 +1,21 @@
-import { InfoCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
-   Modal,
+   DeleteOutlined,
+   InfoCircleOutlined,
+   CommentOutlined,
+} from '@ant-design/icons';
+import {
+   Button,
    Col,
    DatePicker,
    Divider,
    Image,
+   Modal,
    Row,
    Table,
    Tag,
    Typography,
-   Button,
+   Form,
+   Input,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -21,23 +27,34 @@ import './ProductManageTable.scss';
 ProductManageTable.propTypes = {
    orders: PropTypes.array,
    handleClickDeleteOrderButton: PropTypes.func,
+   handleClickCommentButton: PropTypes.func,
 };
 
 ProductManageTable.defaultProps = {
    orders: [],
    handleClickDeleteOrderButton: null,
+   handleClickCommentButton: null,
 };
 
 const { RangePicker } = DatePicker;
 const { Paragraph, Text } = Typography;
 
 function ProductManageTable(props) {
-   const { orders, handleClickDeleteOrderButton } = props;
+   const {
+      orders,
+      handleClickDeleteOrderButton,
+      current,
+      handleClickCommentButton,
+   } = props;
+
+   const [form] = Form.useForm();
 
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [orderDetail, setOrderDetail] = useState();
+   const [commentModal, setCommentModal] = useState(false);
+   const [orderItemDetail, setOrderItemDetail] = useState({});
 
-   const columns = [
+   let columns = [
       {
          title: 'Image',
          dataIndex: ['Product', 'productPhotoURL'],
@@ -74,6 +91,22 @@ function ProductManageTable(props) {
          },
       },
    ];
+
+   current === 3 &&
+      columns.push({
+         title: 'Comment',
+         width: 60,
+         render: (record) => (
+            <CommentOutlined
+               className='commentButton'
+               key={record.id}
+               onClick={() => {
+                  setCommentModal(true);
+                  setOrderItemDetail(record);
+               }}
+            />
+         ),
+      });
 
    const tileOfTable = (order) => {
       const statusTagColor = () => {
@@ -266,6 +299,33 @@ function ProductManageTable(props) {
                   </Col>
                </Row>
             </div>
+         </Modal>
+         <Modal
+            visible={commentModal}
+            title='Comment in Product'
+            onCancel={() => setCommentModal(false)}
+            footer={false}
+            className='productOrderDetailModal'
+         >
+            <Form
+               form={form}
+               onFinish={(values) => {
+                  handleClickCommentButton(values, orderItemDetail);
+               }}
+            >
+               <Form.Item name='comment' rules={[{ required: true }]}>
+                  <Input.TextArea placeholder='comment here...' />
+               </Form.Item>
+
+               <Form.Item
+                  wrapperCol={{ offset: 20, span: 3 }}
+                  style={{ marginBottom: '0px' }}
+               >
+                  <Button type='primary' htmlType='submit'>
+                     Submit
+                  </Button>
+               </Form.Item>
+            </Form>
          </Modal>
       </div>
    );

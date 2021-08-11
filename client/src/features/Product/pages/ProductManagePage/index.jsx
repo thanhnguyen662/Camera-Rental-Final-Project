@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import commentApi from '../../../../api/commentApi';
 import orderApi from '../../../../api/orderApi';
 import ProductManageAvatar from '../../components/ProductManageAvatar';
 import ProductManageTable from '../../components/ProductManageTable';
@@ -52,6 +53,24 @@ function ProductManagePage(props) {
       }
    };
 
+   const handleClickCommentButton = async (values, orderItemDetail) => {
+      const formValues = {
+         content: values.comment,
+         productId: orderItemDetail.Product?.id,
+         authorId: userId,
+      };
+
+      try {
+         const response = await commentApi.createComment(formValues);
+
+         console.log('comment created Successful: ', response);
+      } catch (error) {
+         console.log(error);
+      }
+
+      console.log('formValues', formValues);
+   };
+
    return (
       <div>
          <Row gutter={[12, 10]}>
@@ -69,6 +88,8 @@ function ProductManagePage(props) {
                   <ProductManageTable
                      orders={orders}
                      handleClickDeleteOrderButton={handleClickDeleteOrderButton}
+                     handleClickCommentButton={handleClickCommentButton}
+                     current={current}
                   />
                )}
             </Col>
