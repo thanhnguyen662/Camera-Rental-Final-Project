@@ -1,3 +1,4 @@
+import { UserOutlined } from '@ant-design/icons';
 import {
    Avatar,
    Button,
@@ -13,23 +14,26 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { BiCheckCircle } from 'react-icons/bi';
+import priceFormat from '../../../../utils/PriceFormat';
 import './ProductDetailDescription.scss';
 
 ProductDetailDescription.propTypes = {
    productDetail: PropTypes.object,
    onClickAddProduct: PropTypes.func,
+   orderInToday: PropTypes.array,
 };
 
 ProductDetailDescription.defaultProps = {
    productDetail: {},
    onClickAddProduct: null,
+   orderInToday: [],
 };
 
 const { RangePicker } = DatePicker;
 const { Paragraph } = Typography;
 
 function ProductDetailDescription(props) {
-   const { productDetail, onClickToAddProduct } = props;
+   const { productDetail, onClickToAddProduct, orderInToday } = props;
    const [startDate, setStartDate] = useState('');
    const [endDate, setEndDate] = useState('');
    const [more, setMore] = useState(null);
@@ -68,16 +72,20 @@ function ProductDetailDescription(props) {
          ) : (
             <>
                <Row className='productHeaderRow'>
-                  <h1>{productDetail.name}</h1>
+                  <Col flex='auto'>
+                     <h1>{productDetail.name}</h1>
+                  </Col>
+                  <Col>
+                     <div className='qualityRate'>
+                        Rating: {productDetail.qualityRate}
+                     </div>
+                  </Col>
                </Row>
                <Row span={24} className='productPriceRow'>
                   <p>$</p>
-                  <h2>
-                     {new Intl.NumberFormat('en-US').format(
-                        productDetail.price
-                     )}
-                  </h2>
+                  <h2>{priceFormat(productDetail.price).split('$')}</h2>
                   <h3>in shipping + handling</h3>
+                  <Col></Col>
                </Row>
 
                <div className='productDescriptionRow'>
@@ -132,14 +140,15 @@ function ProductDetailDescription(props) {
                </Row>
                <Row className='avatarGroup'>
                   <Avatar.Group maxCount={4}>
-                     <Avatar src='https://i.pinimg.com/originals/7c/c7/a6/7cc7a630624d20f7797cb4c8e93c09c1.png' />
-                     <Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRauk54z0nlNc-2kfVl_qL7IE1VwgqEPMRoUizTrz6OSydMc-1Dk74Mo1mUJPg5AEwVdxE&usqp=CAU' />
-                     <Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8iTx6ZbhdE5ogFj14hHN8-MdAEYAZA8x35yQyO_MwY0m4nHDVeCOBc2e7_B50sryILJY&usqp=CAU' />
-                     <Avatar src='https://i.pinimg.com/originals/72/cd/96/72cd969f8e21be3476277d12d44c791c.png' />
-                     <Avatar src='https://img2.pngio.com/bearded-man-hipster-male-avatar-male-person-young-man-icon-male-person-icon-png-512_512.png' />
-                     <Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH6Uyi30Ty2WkMb0ZjuFLoXmkRwrrMObm-X2zztWtGbOgyA-i7mFzuiSKltN14HLAJDVM&usqp=CAU' />
+                     {orderInToday.length > 0 ? (
+                        orderInToday.map((o) => (
+                           <Avatar src={o.User.photoURL} key={o.id} />
+                        ))
+                     ) : (
+                        <Avatar icon={<UserOutlined />} />
+                     )}
                   </Avatar.Group>
-                  <h4>11 other people tried it today</h4>
+                  <h4>{orderInToday?.length} other people tried it today</h4>
                </Row>
 
                <div className='productDescriptionInfo'>

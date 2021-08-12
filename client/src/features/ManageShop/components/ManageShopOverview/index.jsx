@@ -46,7 +46,7 @@ function ManageShopOverview(props) {
    const [orders, setOrders] = useState([]);
 
    useEffect(() => {
-      setDateNow(new Date().toISOString().slice(0, 10));
+      setDateNow(moment().format('YYYY-MM-DD'));
    }, []);
 
    const sumArray = (array) => {
@@ -118,7 +118,6 @@ function ManageShopOverview(props) {
       uniqueDate.sort((a, b) => {
          return new Date(a) - new Date(b);
       });
-      console.log('uniqueDate', uniqueDate);
       setLineChart([]);
       // eslint-disable-next-line
       uniqueDate.map((date) => {
@@ -178,8 +177,7 @@ function ManageShopOverview(props) {
          </Text>
       ) : (
          <Text style={{ color: 'red' }}>
-            <ArrowDownOutlined />
-            decrease {Math.round(result)}%
+            <ArrowDownOutlined /> decrease {Math.round(result) || 0}%
          </Text>
       );
    };
@@ -302,43 +300,73 @@ function ManageShopOverview(props) {
                         Revenue at today "{dateNow}"
                      </div>
                      <div>
-                        {/* eslint-disable-next-line */}
-                        {lineChart.map((item) => {
-                           if (item.updatedAt === dateNow) {
-                              const indexOfToday = lineChart.indexOf(item);
-                              const revenueOfBeforeDay =
-                                 lineChart[indexOfToday - 1]?.moneyInDay;
-                              const revenueOfToday = item.moneyInDay;
+                        {lineChart.find(
+                           (date) => date.updatedAt === dateNow
+                        ) ? (
+                           // eslint-disable-next-line
+                           lineChart.map((item) => {
+                              if (item.updatedAt === dateNow) {
+                                 const indexOfToday = lineChart.indexOf(item);
+                                 const revenueOfBeforeDay =
+                                    lineChart[indexOfToday - 1]?.moneyInDay;
+                                 const revenueOfToday = item.moneyInDay;
 
-                              return (
-                                 <div key={item.updatedAt}>
-                                    <Paragraph>
-                                       <Title level={2}>
-                                          {priceFormat(revenueOfToday)}
-                                       </Title>{' '}
-                                       {calculateIncreasePercent(
-                                          revenueOfToday,
-                                          revenueOfBeforeDay
-                                       )}
-                                    </Paragraph>
-                                 </div>
-                              );
-                           }
-                        })}
+                                 return (
+                                    <div key={item.updatedAt}>
+                                       <Paragraph>
+                                          <Title level={2}>
+                                             {priceFormat(revenueOfToday)}
+                                          </Title>{' '}
+                                          {calculateIncreasePercent(
+                                             revenueOfToday,
+                                             revenueOfBeforeDay
+                                          )}
+                                       </Paragraph>
+                                    </div>
+                                 );
+                              }
+                           })
+                        ) : (
+                           <Paragraph>
+                              <Title level={2}>{priceFormat(0)}</Title>{' '}
+                              {calculateIncreasePercent(
+                                 0,
+                                 lineChart[lineChart.length - 1]?.moneyInDay ||
+                                    0
+                              )}
+                           </Paragraph>
+                        )}
                      </div>
                   </Paragraph>
                </div>
                <Table
-                  fixed
                   className='cardRevenueTable'
                   dataSource={lineChart}
                   columns={columns}
                   ellipsis={true}
                   pagination={false}
-                  footer={false}
                   size='middle'
-                  scroll={{ y: 178 }}
+                  scroll={{ x: 0, y: 145 }}
                   rowKey={(record) => record.updatedAt}
+                  footer={(record) => {
+                     let totalRevenue = 0;
+                     record?.forEach(({ moneyInDay }) => {
+                        totalRevenue += moneyInDay;
+                     });
+
+                     return (
+                        <Row>
+                           <Col flex='150px' style={{ fontStyle: 'italic' }}>
+                              <b>Total Revenue:</b>
+                           </Col>
+                           <Col>
+                              <div className='totalFooterRow'>
+                                 {priceFormat(totalRevenue)}
+                              </div>
+                           </Col>
+                        </Row>
+                     );
+                  }}
                />
             </Col>
          </Row>
@@ -389,16 +417,22 @@ function ManageShopOverview(props) {
                         Order in today "{dateNow}"
                      </div>
                      <div>
-                        {/* eslint-disable-next-line */}
-                        {lineChart.map((item) => {
-                           if (item.updatedAt === dateNow) {
-                              return (
-                                 <Title level={2} key={item.updatedAt}>
-                                    {item.orderInDay}
-                                 </Title>
-                              );
-                           }
-                        })}
+                        {lineChart.find(
+                           (date) => date.updatedAt === dateNow
+                        ) ? (
+                           // eslint-disable-next-line
+                           lineChart.map((item) => {
+                              if (item.updatedAt === dateNow) {
+                                 return (
+                                    <Title level={2} key={item.updatedAt}>
+                                       {item.orderInDay}
+                                    </Title>
+                                 );
+                              }
+                           })
+                        ) : (
+                           <Title level={2}>0</Title>
+                        )}
                      </div>
                   </Paragraph>
                </div>
@@ -409,10 +443,26 @@ function ManageShopOverview(props) {
                   columns={columnsOrder}
                   ellipsis={true}
                   pagination={false}
-                  footer={false}
                   size='middle'
-                  scroll={{ y: 190 }}
+                  scroll={{ y: 152 }}
                   rowKey={(record) => record.updatedAt}
+                  footer={(record) => {
+                     let totalOrder = 0;
+                     record?.forEach(({ orderInDay }) => {
+                        totalOrder += orderInDay;
+                     });
+
+                     return (
+                        <Row>
+                           <Col flex='150px' style={{ fontStyle: 'italic' }}>
+                              <b>Total Order:</b>
+                           </Col>
+                           <Col>
+                              <div className='totalFooterRow'>{totalOrder}</div>
+                           </Col>
+                        </Row>
+                     );
+                  }}
                />
             </Col>
          </Row>

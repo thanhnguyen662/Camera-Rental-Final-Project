@@ -13,6 +13,7 @@ function ProductManagePage(props) {
    const username = useSelector((state) => state.users.username);
    const email = useSelector((state) => state.users.email);
    const phoneNumber = useSelector((state) => state.users.phoneNumber);
+   const userPhotoURL = useSelector((state) => state.users.photoURL);
 
    const [orders, setOrders] = useState([]);
    const [current, setCurrent] = useState(0);
@@ -58,6 +59,7 @@ function ProductManagePage(props) {
          content: values.comment,
          productId: orderItemDetail.Product?.id,
          authorId: userId,
+         rate: values.rate,
       };
 
       try {
@@ -90,6 +92,7 @@ function ProductManagePage(props) {
                      handleClickDeleteOrderButton={handleClickDeleteOrderButton}
                      handleClickCommentButton={handleClickCommentButton}
                      current={current}
+                     userPhotoURL={userPhotoURL}
                   />
                )}
             </Col>

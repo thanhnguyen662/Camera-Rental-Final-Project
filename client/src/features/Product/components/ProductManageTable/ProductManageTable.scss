@@ -59,6 +59,34 @@
    }
 }
 
+.productCommentModal{
+   .ant-modal-content {
+      overflow: auto;
+      border-radius: 10px;
+   }
+
+   .commentModalTitle{
+      font-weight: bold;
+      color: #3f3f3f;
+      padding-bottom: 10px;
+   }
+
+   .ant-form-item .ant-mentions, .ant-form-item textarea.ant-input {
+      height: 120px;
+      border-radius: 10px;
+      resize: none;
+
+      &::placeholder{
+         font-size: 13px;
+      }
+   }
+   .commentModalRate{
+      border: 1px solid #D9D9D9;
+      border-radius: 10px;
+      padding: 5px 10px 10px 10px;
+   }
+}
+
 .productOrderDetailModal{
    .ant-divider-horizontal{
       margin: 10px 0;

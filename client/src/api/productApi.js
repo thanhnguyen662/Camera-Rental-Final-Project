@@ -22,6 +22,11 @@ const productApi = {
       const url = '/product/myProduct';
       return axiosClient.get(url, { params });
    },
+
+   orderItemsIncludeProduct: (params) => {
+      const url = '/product/orderItemsIncludeProduct';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default productApi;

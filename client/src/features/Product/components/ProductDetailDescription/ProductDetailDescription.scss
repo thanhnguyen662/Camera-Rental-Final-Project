@@ -40,12 +40,20 @@
     }
   
     .productHeaderRow{
-      margin: 25px 0px 0px 18px;
+      margin: 25px 10px 0px 18px;
       
       h1{
         font-size: 32px;
         font-weight: 800;
         color: #332E55;
+      }
+
+      .qualityRate{
+        padding: 4px 8px;
+        background: #d9d7e4;
+        border-radius: 4px;
+        font-size: 15px;
+        color: #6C667C;
       }
     }
 

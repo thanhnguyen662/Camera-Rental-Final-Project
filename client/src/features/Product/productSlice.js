@@ -16,12 +16,8 @@ const cartProduct = createSlice({
 
          const convertUTC7 = {
             ...newItem,
-            startDate: moment(newItem.startDate)
-               .utcOffset(7)
-               .format('YYYY-MM-DD HH:mm:ss'),
-            endDate: moment(newItem.endDate)
-               .utcOffset(7)
-               .format('YYYY-MM-DD HH:mm:ss'),
+            startDate: moment(newItem.startDate).format('YYYY-MM-DD HH:mm'),
+            endDate: moment(newItem.endDate).format('YYYY-MM-DD HH:mm'),
          };
 
          state.push(convertUTC7);
@@ -31,15 +27,18 @@ const cartProduct = createSlice({
          return state.filter((i) => i.id !== removeItem.id);
       },
       editProductTimeInCart: (state, action) => {
-         console.log('action', action);
          const updateItem = action.payload;
          state.map((i) => {
             if (
                i.productId === updateItem.productId &&
                i.firebaseId === updateItem.firebaseId
             ) {
-               i.startDate = updateItem.startDate;
-               i.endDate = updateItem.endDate;
+               i.startDate = moment(new Date(updateItem.startDate)).format(
+                  'YYYY-MM-DD HH:mm'
+               );
+               i.endDate = moment(new Date(updateItem.endDate)).format(
+                  'YYYY-MM-DD HH:mm'
+               );
             }
 
             return state;
@@ -52,12 +51,8 @@ const cartProduct = createSlice({
          const convertDateTimeType = item.map((i) => {
             const convertUTC7 = {
                ...i,
-               startDate: moment(i.startDate)
-                  .utcOffset(7)
-                  .format('YYYY-MM-DD HH:mm:ss'),
-               endDate: moment(i.endDate)
-                  .utcOffset(7)
-                  .format('YYYY-MM-DD HH:mm:ss'),
+               startDate: moment(i.startDate).format('YYYY-MM-DD HH:mm'),
+               endDate: moment(i.endDate).format('YYYY-MM-DD HH:mm'),
             };
 
             return convertUTC7;

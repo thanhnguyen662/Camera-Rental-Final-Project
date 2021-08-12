@@ -16,6 +16,8 @@ import {
    Typography,
    Form,
    Input,
+   Rate,
+   Avatar,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -28,16 +30,18 @@ ProductManageTable.propTypes = {
    orders: PropTypes.array,
    handleClickDeleteOrderButton: PropTypes.func,
    handleClickCommentButton: PropTypes.func,
+   userPhotoURL: PropTypes.string,
 };
 
 ProductManageTable.defaultProps = {
    orders: [],
    handleClickDeleteOrderButton: null,
    handleClickCommentButton: null,
+   userPhotoURL: '',
 };
 
 const { RangePicker } = DatePicker;
-const { Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 function ProductManageTable(props) {
    const {
@@ -45,6 +49,7 @@ function ProductManageTable(props) {
       handleClickDeleteOrderButton,
       current,
       handleClickCommentButton,
+      userPhotoURL,
    } = props;
 
    const [form] = Form.useForm();
@@ -125,7 +130,7 @@ function ProductManageTable(props) {
                };
             case 'ACCEPT': {
                return {
-                  color: 'success',
+                  color: 'blue',
                };
             }
             case 'DELIVERY': {
@@ -302,10 +307,10 @@ function ProductManageTable(props) {
          </Modal>
          <Modal
             visible={commentModal}
-            title='Comment in Product'
             onCancel={() => setCommentModal(false)}
             footer={false}
-            className='productOrderDetailModal'
+            width={450}
+            className='productCommentModal'
          >
             <Form
                form={form}
@@ -313,9 +318,23 @@ function ProductManageTable(props) {
                   handleClickCommentButton(values, orderItemDetail);
                }}
             >
-               <Form.Item name='comment' rules={[{ required: true }]}>
-                  <Input.TextArea placeholder='comment here...' />
-               </Form.Item>
+               <Title level={5} className='commentModalTitle'>
+                  Comment on Product
+               </Title>
+               <Row>
+                  <Col span={3}>
+                     <Avatar src={userPhotoURL} size={40} />
+                  </Col>
+                  <Col span={21}>
+                     <Form.Item name='comment' rules={[{ required: true }]}>
+                        <Input.TextArea placeholder='Write a comment...' />
+                     </Form.Item>
+                     <label>Rating product</label>
+                     <Form.Item name='rate' rules={[{ required: true }]}>
+                        <Rate />
+                     </Form.Item>
+                  </Col>
+               </Row>
 
                <Form.Item
                   wrapperCol={{ offset: 20, span: 3 }}

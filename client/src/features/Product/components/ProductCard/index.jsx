@@ -40,6 +40,7 @@ function ProductCard(props) {
                         </Link>
                      </p>
                      <Rate
+                        allowHalf
                         value={product.qualityRate}
                         style={{
                            fontSize: '14px',

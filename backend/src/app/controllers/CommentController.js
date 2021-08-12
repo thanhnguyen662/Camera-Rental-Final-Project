@@ -8,6 +8,36 @@ class CommentController {
                content: req.body.content,
                productId: req.body.productId,
                authorId: req.body.authorId,
+               rate: req.body.rate,
+            },
+         });
+
+         const findProductCommentInProduct = await prisma.product.findUnique({
+            where: {
+               id: req.body.productId,
+            },
+            include: {
+               productComments: true,
+            },
+         });
+
+         const plusRate = () => {
+            let totalRate = 0;
+            findProductCommentInProduct.productComments?.forEach(({ rate }) => {
+               totalRate += parseInt(rate);
+            });
+            return totalRate;
+         };
+
+         const rateAverage =
+            plusRate() / findProductCommentInProduct.productComments.length;
+
+         await prisma.product.update({
+            where: {
+               id: req.body.productId,
+            },
+            data: {
+               qualityRate: parseFloat(rateAverage.toFixed(1)),
             },
          });
 

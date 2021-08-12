@@ -10,13 +10,16 @@ import ProductDetailDescription from '../../components/ProductDetailDescription'
 import ProductDetailImage from '../../components/ProductDetailImage';
 import ProductDetailUser from '../../components/ProductDetailUser';
 import { addProductToCart } from '../../productSlice';
+import moment from 'moment';
 
 function ProductDetailPage(props) {
    const { slug } = useParams();
    const dispatch = useDispatch();
 
-   const [productDetail, setProductDetail] = useState();
    const userId = useSelector((state) => state.users.id);
+
+   const [productDetail, setProductDetail] = useState();
+   const [orderInToday, setOrderInToday] = useState([]);
 
    useEffect(() => {
       const getProductDetail = async () => {
@@ -35,6 +38,18 @@ function ProductDetailPage(props) {
    useEffect(() => {
       window.scrollTo(0, 0);
    }, []);
+
+   useEffect(() => {
+      const getOrderProductInToday = async () => {
+         const response = await productApi.orderItemsIncludeProduct({
+            slug: slug,
+            date: moment().format('YYYY-MM-DD'),
+         });
+         console.log('getOrderProductInToday', response);
+         setOrderInToday(response);
+      };
+      getOrderProductInToday();
+   }, [slug]);
 
    const handleOnClickToAddProduct = async (product) => {
       try {
@@ -74,6 +89,7 @@ function ProductDetailPage(props) {
                   <ProductDetailDescription
                      productDetail={productDetail}
                      onClickToAddProduct={handleOnClickToAddProduct}
+                     orderInToday={orderInToday}
                   />
                </Col>
             </Row>

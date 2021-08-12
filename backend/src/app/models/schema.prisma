@@ -17,8 +17,9 @@ model Product {
   firebaseId      String?
   brand           String?
   price           String?
-  qualityRate     Int?
+  qualityRate     Float?
   stock           Int?
+  publicStatus    Boolean?
   productPhotoURL String[]
   User            User?            @relation(fields: [firebaseId], references: [firebaseId])
   carts           Cart[]
@@ -90,6 +91,7 @@ model ProductComment {
   updatedAt DateTime @updatedAt
   productId Int?
   authorId  String?
+  rate      Float?
   product   Product? @relation(fields: [productId], references: [id])
   user      User?    @relation(fields: [authorId], references: [firebaseId])
 

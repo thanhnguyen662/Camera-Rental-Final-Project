@@ -137,7 +137,7 @@ function ManageShopOrder(props) {
             }
             case 'ACCEPT': {
                return {
-                  color: 'green',
+                  color: 'blue',
                };
             }
             default:

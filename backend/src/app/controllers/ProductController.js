@@ -30,12 +30,59 @@ class ProductController {
                      user: true,
                   },
                },
+               orderItems: true,
             },
          });
 
          return res.status(200).json(getProductDetail);
       } catch (error) {
          // return res.status(404).send({ message: 'Cant find product details' });
+         return next(error);
+      }
+   };
+
+   getOrderIncludeProductInDay = async (req, res, next) => {
+      try {
+         console.log(req.query.date);
+         const response = await prisma.order.findMany({
+            where: {
+               AND: [
+                  {
+                     orderItems: {
+                        every: {
+                           Product: {
+                              slug: req.query.slug,
+                           },
+                        },
+                     },
+                  },
+                  {
+                     AND: [
+                        {
+                           orderStatusId: {
+                              not: 1,
+                           },
+                        },
+                        {
+                           orderStatusId: {
+                              not: 4,
+                           },
+                        },
+                     ],
+                  },
+                  {
+                     updatedAt: {
+                        gte: new Date(req.query.date),
+                     },
+                  },
+               ],
+            },
+            include: {
+               User: true,
+            },
+         });
+         return res.status(200).json(response);
+      } catch (error) {
          return next(error);
       }
    };
