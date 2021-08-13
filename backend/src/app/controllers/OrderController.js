@@ -111,12 +111,17 @@ class OrderController {
 
    updateOrder = async (req, res, next) => {
       try {
+         const orderItemsBatch = req.body.orderItems;
+         const orderStatusId = req.body.orderStatusId;
+
          const response = await prisma.order.update({
             where: {
                id: req.body.orderId,
             },
             data: {
                orderStatusId: req.body.orderStatusId,
+               note: req.body.note,
+               paidAt: new Date(req.body.paidAt),
             },
             include: {
                User: true,
@@ -132,6 +137,18 @@ class OrderController {
                },
             },
          });
+
+         parseInt(orderStatusId) === 5 &&
+            orderItemsBatch.map(async (order) => {
+               await prisma.product.update({
+                  where: {
+                     id: order.Product.id,
+                  },
+                  data: {
+                     stock: parseInt(order.Product.stock) - 1,
+                  },
+               });
+            });
 
          return res.status(200).json(response);
       } catch (error) {

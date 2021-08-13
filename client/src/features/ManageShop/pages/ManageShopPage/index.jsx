@@ -42,7 +42,6 @@ function ManageShopPage(props) {
             current !== 'ALL' &&
             current !== 'PENDING' &&
             current !== 'ACCEPT' &&
-            current !== 'DELIVERY' &&
             current !== 'SUCCESS' &&
             current !== 'FAILURE'
          )
@@ -64,8 +63,15 @@ function ManageShopPage(props) {
 
    const handleUpdateOrder = async (values) => {
       let array = [];
+      console.log('values: ', values);
       try {
-         const response = await orderApi.updateOrder(values);
+         const response = await orderApi.updateOrder({
+            orderId: values.orderId,
+            orderStatusId: values.orderStatusId,
+            orderItems: values.orderItems,
+            note: values.note ? values.note : null,
+            paidAt: values.paidAt,
+         });
          console.log('Updated: ', response);
 
          const filterOldData = myProductInOrder.filter(
@@ -104,37 +110,7 @@ function ManageShopPage(props) {
                      {current === 'allProduct' && (
                         <ManageShopProductTable myProduct={myProduct} />
                      )}
-                     {current === 'ALL' && (
-                        <ManageShopOrder
-                           myProductInOrder={myProductInOrder}
-                           handleUpdateOrder={handleUpdateOrder}
-                        />
-                     )}
-                     {current === 'PENDING' && (
-                        <ManageShopOrder
-                           myProductInOrder={myProductInOrder}
-                           handleUpdateOrder={handleUpdateOrder}
-                        />
-                     )}
-                     {current === 'ACCEPT' && (
-                        <ManageShopOrder
-                           myProductInOrder={myProductInOrder}
-                           handleUpdateOrder={handleUpdateOrder}
-                        />
-                     )}
-                     {current === 'DELIVERY' && (
-                        <ManageShopOrder
-                           myProductInOrder={myProductInOrder}
-                           handleUpdateOrder={handleUpdateOrder}
-                        />
-                     )}
-                     {current === 'SUCCESS' && (
-                        <ManageShopOrder
-                           myProductInOrder={myProductInOrder}
-                           handleUpdateOrder={handleUpdateOrder}
-                        />
-                     )}
-                     {current === 'FAILURE' && (
+                     {current !== 'allProduct' && current !== 'overview' && (
                         <ManageShopOrder
                            myProductInOrder={myProductInOrder}
                            handleUpdateOrder={handleUpdateOrder}

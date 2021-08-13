@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import {
+   ArrowDownOutlined,
+   ArrowUpOutlined,
+   QuestionCircleOutlined,
+} from '@ant-design/icons';
 import {
    Card,
-   Typography,
+   Col,
+   DatePicker,
    Divider,
    Row,
-   Col,
    Table,
    Tooltip,
-   DatePicker,
+   Typography,
 } from 'antd';
-import { Line, Bar } from 'react-chartjs-2';
 import moment from 'moment';
-import './ManageShopOverview.scss';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { Bar, Line } from 'react-chartjs-2';
 import priceFormat from '../../../../utils/PriceFormat';
-import {
-   QuestionCircleOutlined,
-   ArrowUpOutlined,
-   ArrowDownOutlined,
-} from '@ant-design/icons';
+import './ManageShopOverview.scss';
 
 ManageShopOverview.propTypes = {
    allMyProductInOrder: PropTypes.array,
@@ -38,7 +38,6 @@ function ManageShopOverview(props) {
    const [datePickerRange, setDatePickerRange] = useState(['', '']);
    const [pending, setPending] = useState(0);
    const [accept, setAccept] = useState(0);
-   const [delivery, setDelivery] = useState(0);
    const [success, setSuccess] = useState(0);
    const [failure, setFailure] = useState(0);
    const [lineChart, setLineChart] = useState([]);
@@ -62,8 +61,8 @@ function ManageShopOverview(props) {
       allMyProductInOrder.map((o) => {
          if (
             datePickerRange[0] !== '' &&
-            new Date(o.updatedAt) >= new Date(datePickerRange[0]) &&
-            new Date(o.updatedAt) <= new Date(datePickerRange[1])
+            new Date(o.paidAt) >= new Date(datePickerRange[0]) &&
+            new Date(o.paidAt) <= new Date(datePickerRange[1])
          ) {
             dateByOrder.push(o);
          }
@@ -83,7 +82,6 @@ function ManageShopOverview(props) {
 
       setAccept(0);
       setPending(0);
-      setDelivery(0);
       setSuccess(0);
       setFailure(0);
 
@@ -95,9 +93,6 @@ function ManageShopOverview(props) {
                break;
             case 'ACCEPT':
                setAccept((prev) => prev + 1);
-               break;
-            case 'DELIVERY':
-               setDelivery((prev) => prev + 1);
                break;
             case 'SUCCESS':
                setSuccess((prev) => prev + 1);
@@ -112,7 +107,7 @@ function ManageShopOverview(props) {
       });
 
       orders.map((o) => {
-         return uniqueDate.push(moment(o.updatedAt).format('YYYY-MM-DD'));
+         return uniqueDate.push(moment(o.paidAt).format('YYYY-MM-DD'));
       });
       uniqueDate = [...new Set(uniqueDate)];
       uniqueDate.sort((a, b) => {
@@ -124,16 +119,15 @@ function ManageShopOverview(props) {
          // eslint-disable-next-line
          orders.map((o) => {
             if (
-               moment(o.updatedAt).format('YYYY-MM-DD') === date &&
-               o.orderStatus.name !== 'PENDING' &&
-               o.orderStatus.name !== 'FAILURE'
+               moment(o.paidAt).format('YYYY-MM-DD') === date &&
+               o.orderStatus.name === 'SUCCESS'
             ) {
                orderInDay = orderInDay + 1;
                return totalMoneyInDay.push(o.totalPrice);
             }
          });
          const newData = {
-            updatedAt: date,
+            paidAt: date,
             moneyInDay: sumArray(totalMoneyInDay),
             orderInDay: orderInDay,
          };
@@ -148,7 +142,7 @@ function ManageShopOverview(props) {
    const columns = [
       {
          title: 'Date',
-         dataIndex: ['updatedAt'],
+         dataIndex: ['paidAt'],
       },
       {
          title: 'Revenue',
@@ -159,7 +153,7 @@ function ManageShopOverview(props) {
    const columnsOrder = [
       {
          title: 'Date',
-         dataIndex: ['updatedAt'],
+         dataIndex: ['paidAt'],
       },
       {
          title: 'Order',
@@ -211,13 +205,6 @@ function ManageShopOverview(props) {
                </Grid>
                <Grid
                   className='tableGrid'
-                  onClick={() => setCurrent('DELIVERY')}
-               >
-                  <div className='tableGridLabel'>Delivery Order</div>
-                  <div>{delivery}</div>
-               </Grid>
-               <Grid
-                  className='tableGrid'
                   onClick={() => setCurrent('SUCCESS')}
                >
                   <div className='tableGridLabel'>Success Order</div>
@@ -264,7 +251,7 @@ function ManageShopOverview(props) {
                      {
                         <Tooltip
                            placement='top'
-                           title='Pending and canceled orders are not included'
+                           title='Only include success order'
                         >
                            <QuestionCircleOutlined
                               style={{ cursor: 'pointer' }}
@@ -276,7 +263,7 @@ function ManageShopOverview(props) {
                   {
                      <Line
                         data={{
-                           labels: lineChart.map(({ updatedAt }) => updatedAt),
+                           labels: lineChart.map(({ paidAt }) => paidAt),
                            datasets: [
                               {
                                  data: lineChart.map(
@@ -300,19 +287,17 @@ function ManageShopOverview(props) {
                         Revenue at today "{dateNow}"
                      </div>
                      <div>
-                        {lineChart.find(
-                           (date) => date.updatedAt === dateNow
-                        ) ? (
+                        {lineChart.find((date) => date.paidAt === dateNow) ? (
                            // eslint-disable-next-line
                            lineChart.map((item) => {
-                              if (item.updatedAt === dateNow) {
+                              if (item.paidAt === dateNow) {
                                  const indexOfToday = lineChart.indexOf(item);
                                  const revenueOfBeforeDay =
                                     lineChart[indexOfToday - 1]?.moneyInDay;
                                  const revenueOfToday = item.moneyInDay;
 
                                  return (
-                                    <div key={item.updatedAt}>
+                                    <div key={item.paidAt}>
                                        <Paragraph>
                                           <Title level={2}>
                                              {priceFormat(revenueOfToday)}
@@ -347,7 +332,7 @@ function ManageShopOverview(props) {
                   pagination={false}
                   size='middle'
                   scroll={{ x: 0, y: 145 }}
-                  rowKey={(record) => record.updatedAt}
+                  rowKey={(record) => record.paidAt}
                   footer={(record) => {
                      let totalRevenue = 0;
                      record?.forEach(({ moneyInDay }) => {
@@ -380,7 +365,7 @@ function ManageShopOverview(props) {
                   {
                      <Tooltip
                         placement='top'
-                        title='Pending and canceled orders are not included'
+                        title='Only include success order'
                      >
                         <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
                      </Tooltip>
@@ -391,7 +376,7 @@ function ManageShopOverview(props) {
                   <div className='barChartOverview'>
                      <Bar
                         data={{
-                           labels: lineChart.map(({ updatedAt }) => updatedAt),
+                           labels: lineChart.map(({ paidAt }) => paidAt),
                            datasets: [
                               {
                                  data: lineChart.map(
@@ -417,14 +402,12 @@ function ManageShopOverview(props) {
                         Order in today "{dateNow}"
                      </div>
                      <div>
-                        {lineChart.find(
-                           (date) => date.updatedAt === dateNow
-                        ) ? (
+                        {lineChart.find((date) => date.paidAt === dateNow) ? (
                            // eslint-disable-next-line
                            lineChart.map((item) => {
-                              if (item.updatedAt === dateNow) {
+                              if (item.paidAt === dateNow) {
                                  return (
-                                    <Title level={2} key={item.updatedAt}>
+                                    <Title level={2} key={item.paidAt}>
                                        {item.orderInDay}
                                     </Title>
                                  );
@@ -445,7 +428,7 @@ function ManageShopOverview(props) {
                   pagination={false}
                   size='middle'
                   scroll={{ y: 152 }}
-                  rowKey={(record) => record.updatedAt}
+                  rowKey={(record) => record.paidAt}
                   footer={(record) => {
                      let totalOrder = 0;
                      record?.forEach(({ orderInDay }) => {

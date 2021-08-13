@@ -50,7 +50,6 @@ function ManageShopOrder(props) {
    const [isModalUserVisible, setIsModalUserVisible] = useState(false);
    const [orderDetail, setOrderDetail] = useState();
    const [userDetailFirebase, setUserDetailFirebase] = useState({});
-
    useEffect(() => {
       if (!orderDetail) return;
       const getUserDetailOnFirebase = async () => {
@@ -73,6 +72,8 @@ function ManageShopOrder(props) {
       handleUpdateOrder({
          orderId: orderDetail.id,
          orderStatusId: 5, //ACCEPT
+         orderItems: orderDetail.orderItems,
+         paidAt: null,
       });
    };
 
@@ -80,6 +81,16 @@ function ManageShopOrder(props) {
       handleUpdateOrder({
          orderId: orderDetail.id,
          orderStatusId: 4, //FAILURE
+         note: 'Shop cancel',
+         paidAt: null,
+      });
+   };
+
+   const onClickPaid = () => {
+      handleUpdateOrder({
+         orderId: orderDetail.id,
+         orderStatusId: 3, //SUCCESS PAID
+         paidAt: moment().format('YYYY-MM-DD HH:mm'),
       });
    };
 
@@ -130,11 +141,6 @@ function ManageShopOrder(props) {
                return {
                   color: 'error',
                };
-            case 'DELIVERY': {
-               return {
-                  color: 'warning',
-               };
-            }
             case 'ACCEPT': {
                return {
                   color: 'blue',
@@ -151,25 +157,29 @@ function ManageShopOrder(props) {
                   <Tag {...statusTagColor()}>{order.orderStatus?.name}</Tag>
                   <Divider type='vertical' />
                   &nbsp;
-                  <Link
-                     to={`/profile/${order.User?.firebaseId}`}
-                     className='orderUsername'
-                  >
-                     <b>{order.User?.username}</b>
-                  </Link>
-               </Col>
-               <Col>
                   <Space size='middle'>
-                     <UserOutlined
-                        className='orderDetailButton'
+                     <Avatar
+                        size={30}
+                        src={order?.User.photoURL}
                         onClick={() => {
                            setOrderDetail(order);
                            setIsModalUserVisible(true);
                         }}
                      />
+                     <Link
+                        to={`/profile/${order.User?.firebaseId}`}
+                        className='orderUsername'
+                     >
+                        <b>{order.User?.username}</b>
+                     </Link>
+                  </Space>
+               </Col>
+               <Col>
+                  <Space size='middle'>
                      <InfoCircleOutlined
                         className='orderDetailButton'
                         onClick={() => {
+                           console.log('orderDetail', order);
                            setOrderDetail(order);
                            setIsModalVisible(true);
                         }}
@@ -194,6 +204,13 @@ function ManageShopOrder(props) {
 
    const disableButton = () => {
       if (orderDetail?.orderStatus.name === 'PENDING') return;
+      return {
+         disabled: true,
+      };
+   };
+
+   const disablePaid = () => {
+      if (orderDetail?.orderStatus.name === 'ACCEPT') return;
       return {
          disabled: true,
       };
@@ -227,6 +244,17 @@ function ManageShopOrder(props) {
             className='productOrderDetailModal'
             footer={[
                <Button
+                  key='paid'
+                  icon={<CheckOutlined />}
+                  onClick={() => {
+                     onClickPaid();
+                     setIsModalVisible(false);
+                  }}
+                  {...disablePaid()}
+               >
+                  Paid
+               </Button>,
+               <Button
                   key='accept'
                   icon={<CheckOutlined />}
                   onClick={() => {
@@ -256,22 +284,40 @@ function ManageShopOrder(props) {
          >
             <Paragraph>
                <Row>
-                  <Col flex='auto' className='orderDetailUsername'>
-                     <Text>{orderDetail?.User.username}</Text>
+                  <Col flex='auto'>
+                     <Text className='orderDetailUsername'>
+                        {orderDetail?.User.username}
+                     </Text>
+                     <br />
+                     <Text>{orderDetail?.User.address}</Text>
+                     <br />
+                     <Text>{orderDetail?.User.phoneNumber}</Text>
                   </Col>
                   <Col className='orderDetailCreateAt'>
-                     <Text>
-                        {moment(orderDetail?.createdAt).format(
-                           'YYYY-MM-DD HH:mm:ss'
-                        )}{' '}
-                        ({moment(orderDetail?.createdAt).fromNow()})
-                     </Text>
+                     <Paragraph>
+                        <Row>
+                           <Col>
+                              Created: &nbsp;
+                              <br />
+                              Updated: &nbsp;
+                           </Col>
+                           <Col>
+                              <Text>
+                                 {moment(orderDetail?.createdAt).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                 )}
+                              </Text>
+                              <br />
+                              <Text>
+                                 {moment(orderDetail?.updatedAt).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                 )}
+                              </Text>
+                           </Col>
+                        </Row>
+                     </Paragraph>
                   </Col>
                </Row>
-               <Text>{orderDetail?.User.address}</Text>
-               <br />
-               <Text>{orderDetail?.User.phoneNumber}</Text>
-               <br />
             </Paragraph>
             <div className='productManageOrderDetailTable'>
                <Row className='headerText'>

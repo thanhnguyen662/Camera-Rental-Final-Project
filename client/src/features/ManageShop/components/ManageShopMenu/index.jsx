@@ -42,7 +42,6 @@ function ManageShopMenu(props) {
                <Menu.Item key='ALL'>All Order</Menu.Item>
                <Menu.Item key='PENDING'>Pending Order</Menu.Item>
                <Menu.Item key='ACCEPT'>Accept Order</Menu.Item>
-               <Menu.Item key='DELIVERY'>Delivery Order</Menu.Item>
                <Menu.Item key='SUCCESS'>Success Order</Menu.Item>
                <Menu.Item key='FAILURE'>Failure Order</Menu.Item>
             </SubMenu>

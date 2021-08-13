@@ -32,10 +32,10 @@ function ProductCartAddress(props) {
                <Row>
                   <Col flex='auto'>
                      <Title level={5} style={{ marginBottom: 2 }}>
-                        Delivery
+                        Address
                      </Title>
                      <Paragraph className='subHeader'>
-                        Give us the address, we'll bring product to you
+                        You must provide address
                      </Paragraph>
                   </Col>
                   <Col>

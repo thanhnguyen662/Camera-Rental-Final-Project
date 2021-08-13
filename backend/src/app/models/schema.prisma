@@ -46,8 +46,16 @@ model User {
   products        Product[]
   productComments ProductComment[]
   orders          Order[]
+  userStats       UserStat[]
 
   @@map("Users")
+}
+
+model UserStat {
+  id          Int     @id @default(autoincrement())
+  successRate Float?
+  userId      String?
+  user        User?   @relation(fields: [userId], references: [firebaseId])
 }
 
 model Conversation {
@@ -117,9 +125,11 @@ model Order {
   address       String?
   totalPrice    Int?
   userId        String?
-  User          User?        @relation(fields: [userId], references: [firebaseId])
-  orderItems    OrderItem[]
   orderStatusId Int?
+  note          String?
+  paidAt        DateTime?
+  orderItems    OrderItem[]
+  User          User?        @relation(fields: [userId], references: [firebaseId])
   orderStatus   OrderStatus? @relation(fields: [orderStatusId], references: [id])
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt

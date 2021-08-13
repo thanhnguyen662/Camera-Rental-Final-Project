@@ -133,11 +133,6 @@ function ProductManageTable(props) {
                   color: 'blue',
                };
             }
-            case 'DELIVERY': {
-               return {
-                  color: 'warning',
-               };
-            }
             default:
                break;
          }
@@ -238,22 +233,40 @@ function ProductManageTable(props) {
          >
             <Paragraph>
                <Row>
-                  <Col flex='auto' className='orderDetailUsername'>
-                     <Text>{orderDetail?.User.username}</Text>
+                  <Col flex='auto'>
+                     <Text className='orderDetailUsername'>
+                        {orderDetail?.User.username}
+                     </Text>
+                     <br />
+                     <Text>{orderDetail?.User.address}</Text>
+                     <br />
+                     <Text>{orderDetail?.User.phoneNumber}</Text>
                   </Col>
                   <Col className='orderDetailCreateAt'>
-                     <Text>
-                        {moment(orderDetail?.createdAt).format(
-                           'YYYY-MM-DD HH:mm:ss'
-                        )}{' '}
-                        ({moment(orderDetail?.createdAt).fromNow()})
-                     </Text>
+                     <Paragraph>
+                        <Row>
+                           <Col>
+                              Created:
+                              <br />
+                              Updated:
+                           </Col>
+                           <Col>
+                              <Text>
+                                 {moment(orderDetail?.createdAt).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                 )}
+                              </Text>
+                              <br />
+                              <Text>
+                                 {moment(orderDetail?.updatedAt).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                 )}
+                              </Text>
+                           </Col>
+                        </Row>
+                     </Paragraph>
                   </Col>
                </Row>
-               <Text>{orderDetail?.User.address}</Text>
-               <br />
-               <Text>{orderDetail?.User.phoneNumber}</Text>
-               <br />
             </Paragraph>
             <div className='productManageOrderDetailTable'>
                <Row className='headerText'>

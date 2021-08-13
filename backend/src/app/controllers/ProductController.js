@@ -43,13 +43,12 @@ class ProductController {
 
    getOrderIncludeProductInDay = async (req, res, next) => {
       try {
-         console.log(req.query.date);
          const response = await prisma.order.findMany({
             where: {
                AND: [
                   {
                      orderItems: {
-                        every: {
+                        some: {
                            Product: {
                               slug: req.query.slug,
                            },
@@ -57,21 +56,12 @@ class ProductController {
                      },
                   },
                   {
-                     AND: [
-                        {
-                           orderStatusId: {
-                              not: 1,
-                           },
-                        },
-                        {
-                           orderStatusId: {
-                              not: 4,
-                           },
-                        },
-                     ],
+                     orderStatusId: {
+                        equals: 3,
+                     },
                   },
                   {
-                     updatedAt: {
+                     paidAt: {
                         gte: new Date(req.query.date),
                      },
                   },

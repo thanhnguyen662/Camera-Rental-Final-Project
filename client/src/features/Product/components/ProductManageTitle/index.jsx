@@ -30,7 +30,6 @@ function ProductManageTitle(props) {
                <Menu.Item key={0}>All</Menu.Item>
                <Menu.Item key={1}>Pending</Menu.Item>
                <Menu.Item key={5}>Accept</Menu.Item>
-               <Menu.Item key={2}>Delivery</Menu.Item>
                <Menu.Item key={3}>Success</Menu.Item>
                <Menu.Item key={4}>Failure</Menu.Item>
             </Menu.ItemGroup>
