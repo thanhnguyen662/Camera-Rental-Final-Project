@@ -52,10 +52,12 @@ model User {
 }
 
 model UserStat {
-  id          Int     @id @default(autoincrement())
-  successRate Float?
-  userId      String?
-  user        User?   @relation(fields: [userId], references: [firebaseId])
+  id         Int     @id @default(autoincrement())
+  success    Float?  @default(0)
+  come       Float?  @default(0)
+  totalOrder Float?  @default(0)
+  userId     String? @unique
+  user       User?   @relation(fields: [userId], references: [firebaseId])
 }
 
 model Conversation {
@@ -128,6 +130,7 @@ model Order {
   orderStatusId Int?
   note          String?
   paidAt        DateTime?
+  backAt        DateTime?
   orderItems    OrderItem[]
   User          User?        @relation(fields: [userId], references: [firebaseId])
   orderStatus   OrderStatus? @relation(fields: [orderStatusId], references: [id])
