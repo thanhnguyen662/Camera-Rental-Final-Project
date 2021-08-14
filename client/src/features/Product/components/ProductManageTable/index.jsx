@@ -120,7 +120,7 @@ function ProductManageTable(props) {
                return {
                   color: 'processing',
                };
-            case 'SUCCESS':
+            case 'RENTED':
                return {
                   color: 'success',
                };

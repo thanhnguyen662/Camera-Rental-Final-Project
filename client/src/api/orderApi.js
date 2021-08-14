@@ -25,6 +25,21 @@ const orderApi = {
       const url = '/order/updateOrder';
       return axiosClient.patch(url, data);
    },
+
+   updateOrderToPaid: (data) => {
+      const url = '/order/updateOrderToPaid';
+      return axiosClient.patch(url, data);
+   },
+
+   updateOrderToBack: (data) => {
+      const url = '/order/updateOrderToBack';
+      return axiosClient.patch(url, data);
+   },
+
+   updateUserStat: (params) => {
+      const url = '/order/updateStats';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default orderApi;

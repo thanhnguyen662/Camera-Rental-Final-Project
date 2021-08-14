@@ -39,6 +39,7 @@ function ManageShopOverview(props) {
    const [pending, setPending] = useState(0);
    const [accept, setAccept] = useState(0);
    const [success, setSuccess] = useState(0);
+   const [back, setBack] = useState(0);
    const [failure, setFailure] = useState(0);
    const [lineChart, setLineChart] = useState([]);
    const [dateNow, setDateNow] = useState('');
@@ -47,6 +48,8 @@ function ManageShopOverview(props) {
    useEffect(() => {
       setDateNow(moment().format('YYYY-MM-DD'));
    }, []);
+
+   console.log(moment().format('YYYY-MM-DD HH:mm'));
 
    const sumArray = (array) => {
       if (array.length === 0) return;
@@ -84,6 +87,7 @@ function ManageShopOverview(props) {
       setPending(0);
       setSuccess(0);
       setFailure(0);
+      setBack(0);
 
       // eslint-disable-next-line
       allMyProductInOrder.map((o) => {
@@ -94,8 +98,11 @@ function ManageShopOverview(props) {
             case 'ACCEPT':
                setAccept((prev) => prev + 1);
                break;
-            case 'SUCCESS':
+            case 'RENTED':
                setSuccess((prev) => prev + 1);
+               break;
+            case 'BACK':
+               setBack((prev) => prev + 1);
                break;
             case 'FAILURE':
                setFailure((prev) => prev + 1);
@@ -118,11 +125,8 @@ function ManageShopOverview(props) {
       uniqueDate.map((date) => {
          // eslint-disable-next-line
          orders.map((o) => {
-            if (
-               moment(o.paidAt).format('YYYY-MM-DD') === date &&
-               o.orderStatus.name === 'SUCCESS'
-            ) {
-               orderInDay = orderInDay + 1;
+            if (moment(o.paidAt).format('YYYY-MM-DD') === date && o.paidAt) {
+               orderInDay += 1;
                return totalMoneyInDay.push(o.totalPrice);
             }
          });
@@ -203,12 +207,13 @@ function ManageShopOverview(props) {
                   <div className='tableGridLabel'>Accept Order</div>
                   <div>{accept}</div>
                </Grid>
-               <Grid
-                  className='tableGrid'
-                  onClick={() => setCurrent('SUCCESS')}
-               >
-                  <div className='tableGridLabel'>Success Order</div>
+               <Grid className='tableGrid' onClick={() => setCurrent('RENTED')}>
+                  <div className='tableGridLabel'>Rented Order</div>
                   <div>{success}</div>
+               </Grid>
+               <Grid className='tableGrid' onClick={() => setCurrent('BACK')}>
+                  <div className='tableGridLabel'>Back Order</div>
+                  <div>{back}</div>
                </Grid>
                <Grid
                   className='tableGrid'
@@ -251,7 +256,7 @@ function ManageShopOverview(props) {
                      {
                         <Tooltip
                            placement='top'
-                           title='Only include success order'
+                           title='Only include rented success order'
                         >
                            <QuestionCircleOutlined
                               style={{ cursor: 'pointer' }}
@@ -365,7 +370,7 @@ function ManageShopOverview(props) {
                   {
                      <Tooltip
                         placement='top'
-                        title='Only include success order'
+                        title='Only include rented success order'
                      >
                         <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
                      </Tooltip>

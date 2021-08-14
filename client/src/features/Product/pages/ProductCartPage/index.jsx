@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Modal, Row } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,6 +37,23 @@ function ProductCardPage(props) {
       return totalPrice;
    };
 
+   const error = () => {
+      Modal.error({
+         title: 'Can not create Order',
+         content: (
+            <div>
+               <p>
+                  Make sure the products in order are rented at the same time
+               </p>
+               <b>
+                  If you want to rent in 2 stores with different time, please
+                  order 2 times
+               </b>
+            </div>
+         ),
+      });
+   };
+
    const handleOnClickRemoveItem = async (product) => {
       const action = removeProductFromCart(product);
       dispatch(action);
@@ -72,6 +89,7 @@ function ProductCardPage(props) {
    };
 
    const handleChangeRowSelection = (selectedRows) => {
+      console.log('selectedRows', selectedRows);
       setSelectRows(selectedRows);
    };
 
@@ -84,7 +102,36 @@ function ProductCardPage(props) {
          return uniqueUsername.push(row.Product.User.username);
       });
       uniqueUsername = [...new Set(uniqueUsername)];
-
+      /////////////
+      let stop = false;
+      // eslint-disable-next-line
+      uniqueUsername.map((u) => {
+         const filterByUsername = selectRows.filter(
+            (f) => f.Product.User.username === u
+         );
+         if (filterByUsername.length >= 2) {
+            // eslint-disable-next-line
+            filterByUsername.map((t) => {
+               const startDate = new Date(filterByUsername[0].startDate);
+               const endDate = new Date(filterByUsername[0].endDate);
+               // eslint-disable-next-line
+               if (filterByUsername.indexOf(t) === 0) return;
+               if (
+                  new Date(t.startDate).getTime() !== startDate.getTime() ||
+                  new Date(t.endDate).getTime() !== endDate.getTime()
+               ) {
+                  console.log('not equal');
+                  return (stop = true);
+               } else {
+                  console.log('equal');
+               }
+            });
+         }
+      });
+      if (stop === true) {
+         return error();
+      }
+      /////////////
       uniqueUsername.map(async (unique) => {
          let filter = selectRows.filter(
             (s) => s.Product.User.username === unique
@@ -109,6 +156,14 @@ function ProductCardPage(props) {
          });
          console.log('filter', groupProductByUsername);
          console.log('sumPriceArray', sumArray(sumPriceArray));
+
+         console.log('test', {
+            orderStatusId: 1,
+            address: userAddress,
+            totalPrice: sumArray(sumPriceArray),
+            userId: userId,
+            orderItem: groupProductByUsername,
+         });
          const response = await orderApi
             .createOrder({
                orderStatusId: 1,

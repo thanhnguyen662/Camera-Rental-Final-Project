@@ -7,6 +7,7 @@ import ManageShopMenu from '../../components/ManageShopMenu';
 import ManageShopOrder from '../../components/ManageShopOrder';
 import ManageShopOverview from '../../components/ManageShopOverview';
 import ManageShopProductTable from '../../components/ManageShopProductTable';
+import moment from 'moment';
 import './ManageShopPage.scss';
 
 ManageShopPage.propTypes = {};
@@ -42,8 +43,9 @@ function ManageShopPage(props) {
             current !== 'ALL' &&
             current !== 'PENDING' &&
             current !== 'ACCEPT' &&
-            current !== 'SUCCESS' &&
-            current !== 'FAILURE'
+            current !== 'RENTED' &&
+            current !== 'FAILURE' &&
+            current !== 'BACK'
          )
             return;
          try {
@@ -63,16 +65,40 @@ function ManageShopPage(props) {
 
    const handleUpdateOrder = async (values) => {
       let array = [];
-      console.log('values: ', values);
+      let response = [];
+
       try {
-         const response = await orderApi.updateOrder({
-            orderId: values.orderId,
-            orderStatusId: values.orderStatusId,
-            orderItems: values.orderItems,
-            note: values.note ? values.note : null,
-            paidAt: values.paidAt,
-         });
+         if (!values.paidAt && !values.backAt) {
+            response = await orderApi.updateOrder({
+               orderId: values.orderId,
+               orderStatusId: values.orderStatusId,
+               orderItems: values.orderItems,
+               note: values.note ? values.note : null,
+            });
+         }
+         if (values.paidAt) {
+            response = await orderApi.updateOrderToPaid({
+               orderId: values.orderId,
+               orderStatusId: values.orderStatusId,
+               paidAt: values.paidAt,
+            });
+         }
+         if (values.backAt) {
+            response = await orderApi.updateOrderToBack({
+               orderId: values.orderId,
+               orderStatusId: values.orderStatusId,
+               orderItems: values.orderItems,
+               backAt: values.backAt,
+            });
+         }
          console.log('Updated: ', response);
+
+         const updateUserStat = await orderApi.updateUserStat({
+            userId: response.userId,
+            date: moment().format('YYYY-MM-DD'),
+         });
+
+         console.log('Updated: ', updateUserStat);
 
          const filterOldData = myProductInOrder.filter(
             (o) => o.id !== response.id

@@ -28,6 +28,10 @@ function ProductManagePage(props) {
                orderStatusId: current || null,
             };
             const response = await orderApi.manageOrder(query);
+
+            response.sort((a, b) => {
+               return new Date(b.createdAt) - new Date(a.createdAt);
+            });
             console.log('Product by user Orders: ', response);
             setOrders(response);
          } catch (error) {
@@ -86,7 +90,7 @@ function ProductManagePage(props) {
                <ProductManageTitle handleClickTitle={handleClickTitle} />
             </Col>
             <Col span={19}>
-               {current >= 0 && current <= 5 && (
+               {current >= 0 && current <= 6 && (
                   <ProductManageTable
                      orders={orders}
                      handleClickDeleteOrderButton={handleClickDeleteOrderButton}

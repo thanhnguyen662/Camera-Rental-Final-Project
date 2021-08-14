@@ -18,11 +18,12 @@ import {
 import {
    InfoCircleOutlined,
    CheckOutlined,
-   UserOutlined,
    IdcardOutlined,
    ClusterOutlined,
    HomeOutlined,
    CloseOutlined,
+   PayCircleOutlined,
+   RollbackOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
@@ -73,7 +74,6 @@ function ManageShopOrder(props) {
          orderId: orderDetail.id,
          orderStatusId: 5, //ACCEPT
          orderItems: orderDetail.orderItems,
-         paidAt: null,
       });
    };
 
@@ -81,16 +81,24 @@ function ManageShopOrder(props) {
       handleUpdateOrder({
          orderId: orderDetail.id,
          orderStatusId: 4, //FAILURE
-         note: 'Shop cancel',
-         paidAt: null,
+         orderItems: orderDetail.orderItems,
       });
    };
 
    const onClickPaid = () => {
       handleUpdateOrder({
          orderId: orderDetail.id,
-         orderStatusId: 3, //SUCCESS PAID
+         orderStatusId: 3, //RENTED
          paidAt: moment().format('YYYY-MM-DD HH:mm'),
+      });
+   };
+
+   const onClickBack = () => {
+      handleUpdateOrder({
+         orderId: orderDetail.id,
+         orderStatusId: 6, //BACK
+         backAt: moment().format('YYYY-MM-DD HH:mm'),
+         orderItems: orderDetail.orderItems,
       });
    };
 
@@ -133,13 +141,17 @@ function ManageShopOrder(props) {
                return {
                   color: 'processing',
                };
-            case 'SUCCESS':
+            case 'RENTED':
                return {
                   color: 'success',
                };
             case 'FAILURE':
                return {
                   color: 'error',
+               };
+            case 'BACK':
+               return {
+                  color: 'warning',
                };
             case 'ACCEPT': {
                return {
@@ -206,6 +218,9 @@ function ManageShopOrder(props) {
       if (orderDetail?.orderStatus.name === 'PENDING') return;
       return {
          disabled: true,
+         style: {
+            display: 'none',
+         },
       };
    };
 
@@ -213,9 +228,21 @@ function ManageShopOrder(props) {
       if (orderDetail?.orderStatus.name === 'ACCEPT') return;
       return {
          disabled: true,
+         style: {
+            display: 'none',
+         },
       };
    };
 
+   const disableBack = () => {
+      if (orderDetail?.orderStatus.name === 'RENTED') return;
+      return {
+         disabled: true,
+         style: {
+            display: 'none',
+         },
+      };
+   };
    return (
       <>
          {myProductInOrder.length !== 0 ? (
@@ -244,13 +271,34 @@ function ManageShopOrder(props) {
             className='productOrderDetailModal'
             footer={[
                <Button
+                  key='notCome'
+                  onClick={() => {
+                     onClickFailure();
+                     setIsModalVisible(false);
+                  }}
+               >
+                  User not come
+               </Button>,
+               <Button
+                  key='back'
+                  icon={<RollbackOutlined />}
+                  onClick={() => {
+                     onClickBack();
+                     setIsModalVisible(false);
+                  }}
+                  {...disableBack()}
+               >
+                  Product Back
+               </Button>,
+               <Button
                   key='paid'
-                  icon={<CheckOutlined />}
+                  icon={<PayCircleOutlined />}
                   onClick={() => {
                      onClickPaid();
                      setIsModalVisible(false);
                   }}
                   {...disablePaid()}
+                  type='primary'
                >
                   Paid
                </Button>,
@@ -265,7 +313,7 @@ function ManageShopOrder(props) {
                   type='primary'
                   {...disableButton()}
                >
-                  Accept Order
+                  Accept
                </Button>,
                <Button
                   key='decline'
