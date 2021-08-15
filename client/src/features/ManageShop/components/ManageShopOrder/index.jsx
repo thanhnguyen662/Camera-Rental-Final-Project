@@ -18,9 +18,6 @@ import {
 import {
    InfoCircleOutlined,
    CheckOutlined,
-   IdcardOutlined,
-   ClusterOutlined,
-   HomeOutlined,
    CloseOutlined,
    PayCircleOutlined,
    RollbackOutlined,
@@ -45,23 +42,37 @@ const { RangePicker } = DatePicker;
 const { Paragraph, Text } = Typography;
 
 function ManageShopOrder(props) {
-   const { myProductInOrder, handleUpdateOrder } = props;
+   const {
+      myProductInOrder,
+      handleAcceptOrder,
+      handleDeclineOrder,
+      handleOrderUserNotCome,
+      handlePaidOrder,
+      handleBackOrder,
+   } = props;
 
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [isModalUserVisible, setIsModalUserVisible] = useState(false);
    const [orderDetail, setOrderDetail] = useState();
    const [userDetailFirebase, setUserDetailFirebase] = useState({});
+   const [userStats, setUserStats] = useState({});
+
    useEffect(() => {
       if (!orderDetail) return;
       const getUserDetailOnFirebase = async () => {
          try {
-            setUserDetailFirebase({});
-            const response = await userApi.getMe({
+            const getUserInfo = await userApi.getMe({
                uid: orderDetail?.User.firebaseId,
             });
+            setUserDetailFirebase(getUserInfo);
 
-            console.log(response);
-            setUserDetailFirebase(response);
+            const getStat = await userApi.getUserStats({
+               userId: getUserInfo.uid,
+            });
+            setUserStats(getStat);
+
+            console.log('userInfo', getUserInfo);
+            console.log('getStat', getStat);
          } catch (error) {
             console.log(error);
          }
@@ -70,7 +81,7 @@ function ManageShopOrder(props) {
    }, [orderDetail]);
 
    const onClickAccept = () => {
-      handleUpdateOrder({
+      handleAcceptOrder({
          orderId: orderDetail.id,
          orderStatusId: 5, //ACCEPT
          orderItems: orderDetail.orderItems,
@@ -78,7 +89,15 @@ function ManageShopOrder(props) {
    };
 
    const onClickFailure = () => {
-      handleUpdateOrder({
+      handleDeclineOrder({
+         orderId: orderDetail.id,
+         orderStatusId: 4, //FAILURE
+         orderItems: orderDetail.orderItems,
+      });
+   };
+
+   const onClickNotCome = () => {
+      handleOrderUserNotCome({
          orderId: orderDetail.id,
          orderStatusId: 4, //FAILURE
          orderItems: orderDetail.orderItems,
@@ -86,7 +105,7 @@ function ManageShopOrder(props) {
    };
 
    const onClickPaid = () => {
-      handleUpdateOrder({
+      handlePaidOrder({
          orderId: orderDetail.id,
          orderStatusId: 3, //RENTED
          paidAt: moment().format('YYYY-MM-DD HH:mm'),
@@ -94,7 +113,7 @@ function ManageShopOrder(props) {
    };
 
    const onClickBack = () => {
-      handleUpdateOrder({
+      handleBackOrder({
          orderId: orderDetail.id,
          orderStatusId: 6, //BACK
          backAt: moment().format('YYYY-MM-DD HH:mm'),
@@ -113,8 +132,19 @@ function ManageShopOrder(props) {
       },
       {
          title: 'Name',
-         dataIndex: ['Product', 'name'],
+         dataIndex: ['Product'],
          width: 250,
+         render: (record) => (
+            <Link to={`/product/${record.slug}`}>
+               <Text
+                  width={80}
+                  style={{ minHeight: 80 }}
+                  className='orderUsername'
+               >
+                  {record.name}
+               </Text>
+            </Link>
+         ),
       },
       {
          title: 'Start - End',
@@ -177,6 +207,7 @@ function ManageShopOrder(props) {
                            setOrderDetail(order);
                            setIsModalUserVisible(true);
                         }}
+                        style={{ cursor: 'pointer' }}
                      />
                      <Link
                         to={`/profile/${order.User?.firebaseId}`}
@@ -243,6 +274,17 @@ function ManageShopOrder(props) {
          },
       };
    };
+
+   const disableUserNotCome = () => {
+      if (orderDetail?.orderStatus.name === 'ACCEPT') return;
+
+      return {
+         disabled: true,
+         style: {
+            display: 'none',
+         },
+      };
+   };
    return (
       <>
          {myProductInOrder.length !== 0 ? (
@@ -273,9 +315,10 @@ function ManageShopOrder(props) {
                <Button
                   key='notCome'
                   onClick={() => {
-                     onClickFailure();
+                     onClickNotCome();
                      setIsModalVisible(false);
                   }}
+                  {...disableUserNotCome()}
                >
                   User not come
                </Button>,
@@ -421,49 +464,22 @@ function ManageShopOrder(props) {
          <Modal
             visible={isModalUserVisible}
             onCancel={() => setIsModalUserVisible(false)}
-            style={{ textAlign: 'center' }}
             className='modalUserDetails'
-            width={450}
+            width={400}
          >
             {!userDetailFirebase?.displayName ? (
                <Spin />
             ) : (
                <>
-                  <Avatar
-                     src={orderDetail?.User.photoURL}
-                     size={70}
-                     className='orderDetailUserPhoto'
-                  />
-                  <br />
-                  <div className='orderDetailName'>
-                     {userDetailFirebase?.displayName}
-                  </div>
-                  <div className='orderDetailUsername'>
-                     {userDetailFirebase?.email} | {orderDetail?.User.username}
-                  </div>
-                  <div className='orderDetailUserInfo'>
-                     <Row className='orderDetailUserInfoRow'>
-                        <Col flex='28px' offset={4}>
-                           <IdcardOutlined />
-                        </Col>
+                  <div>
+                     <Row justify='space-around' align='middle'>
                         <Col>
-                           <Text>{orderDetail?.User.firebaseId}</Text>
+                           <Avatar src={orderDetail?.User.photoURL} size={70} />
                         </Col>
-                     </Row>
-                     <Row className='orderDetailUserInfoRow'>
-                        <Col flex='28px' offset={4}>
-                           <ClusterOutlined />
-                        </Col>
-                        <Col>
-                           <Text>{orderDetail?.User.phoneNumber}</Text>
-                        </Col>
-                     </Row>
-                     <Row className='orderDetailUserInfoRow'>
-                        <Col flex='28px' offset={4}>
-                           <HomeOutlined />
-                        </Col>
-                        <Col>
-                           <Text>{orderDetail?.address}</Text>
+                        <Col flex='auto' push='1'>
+                           <Paragraph>
+                              <Text>123</Text>
+                           </Paragraph>
                         </Col>
                      </Row>
                   </div>

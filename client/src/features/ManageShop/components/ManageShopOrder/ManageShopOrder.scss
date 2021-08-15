@@ -8,6 +8,7 @@
    .orderUsername{
       font-weight: normal;
       color: rgb(48, 48, 48);
+      transition: 0.2s ease;
 
       &:hover{
          color: #1890FF;
@@ -44,47 +45,18 @@
    
 }
 .modalUserDetails{
-   .orderDetailUsername{
-      font-size: 14px;
-      font-style: italic;
-   }
    
-   .orderDetailName{
-      font-size: 19px;
-      font-weight: 700;
-   }
-
-   .orderDetailUserPhoto{
-      margin-bottom: 10px;
-   }
-
-   .orderDetailUserInfo{
-      margin-top: 10px;
-
-      .orderDetailUserInfoRow{
-         padding: 0.5px;
-      }
-   }
-
-   .ant-divider-horizontal{
-      margin: 10px 0;
-   }
 
    .ant-modal-content {
       overflow: auto;
       border-radius: 10px;
    }
-
-   .ant-modal-title{
-      font-size: 13px;
-   }
-
    .ant-modal-footer{
       padding: 16px 26px;
    }
 
    .ant-modal-body{
-      padding: 16px 26px 25px 26px;
+      padding: 25px 25px;
    }
 }
 

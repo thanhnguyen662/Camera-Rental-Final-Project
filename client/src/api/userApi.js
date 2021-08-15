@@ -20,6 +20,11 @@ const userApi = {
       const url = '/account/getUserProfileByUid';
       return axiosClient.get(url, { params });
    },
+
+   getUserStats: (params) => {
+      const url = '/account/getUserStats';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default userApi;

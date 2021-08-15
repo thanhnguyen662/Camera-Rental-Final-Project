@@ -7,5 +7,6 @@ const accountController = require('../app/controllers/AccountController');
 router.get('/getUserByUid', authMiddleware, getUserInfoMiddleware);
 router.post('/addUserInfo', accountController.addUserInfo);
 router.get('/getUserProfileByUid', accountController.getUserInfo);
+router.get('/getUserStats', accountController.getUserStats);
 
 module.exports = router;

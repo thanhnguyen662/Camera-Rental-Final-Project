@@ -272,6 +272,10 @@ class OrderController {
          },
       });
 
+      const filterDeclineOrder = getOrderExcludePendingAccept.filter(
+         (o) => o.note !== 'Decline'
+      );
+
       //get accept order but user come = paidAt
       const getPaidOrder = await prisma.order.findMany({
          where: {
@@ -306,68 +310,46 @@ class OrderController {
                      not: null,
                   },
                },
-            ],
-         },
-      });
-
-      const getSuccessOrderNotDelay = await prisma.order.findMany({
-         where: {
-            AND: [
                {
                   userId: req.query.userId,
                },
-               {
-                  orderItems: {
-                     every: {
-                        endDate: {
-                           gte: new Date(req.query.date),
-                        },
-                     },
-                  },
-               },
-               {
-                  paidAt: {
-                     not: null,
-                  },
-               },
-               {
-                  backAt: {
-                     not: null,
-                  },
-               },
             ],
+         },
+         include: {
+            orderItems: true,
          },
       });
 
-      console.log('getPaidOrder', getPaidOrder.length);
-      console.log('getOrderExcludePending', getOrderExcludePendingAccept);
-      console.log('getSuccessOrderNotDelay', getSuccessOrderNotDelay.length);
-      console.log('getSuccessOrder', getSuccessOrder.length);
+      let inTimeArray = [];
+      getSuccessOrder?.map((order) => {
+         let backAt = order.backAt;
+         order.orderItems.map((item) => {
+            if (
+               new Date(item.endDate).getDate() >= new Date(backAt).getDate()
+            ) {
+               inTimeArray.push(order.id);
+            }
+         });
+      });
+      const inTimeUniqueOrder = [...new Set(inTimeArray)];
 
-      const comeResult =
-         (getPaidOrder.length / getOrderExcludePendingAccept.length) * 100;
-      let successResultInTime = 0;
-
-      if (getSuccessOrderNotDelay.length === 0) {
-         successResultInTime = 100;
-      } else {
-         successResultInTime =
-            (getSuccessOrderNotDelay.length / getSuccessOrder.length) * 100;
-      }
+      const inTimeRate =
+         (inTimeUniqueOrder.length / getSuccessOrder.length) * 100;
+      const comeRate = (getPaidOrder.length / filterDeclineOrder.length) * 100;
 
       const updateStats = await prisma.userStat.upsert({
          where: {
             userId: req.query.userId,
          },
          update: {
-            come: parseFloat(comeResult.toFixed(1)),
-            success: parseFloat(successResultInTime.toFixed(1)),
+            come: parseFloat(comeRate.toFixed(1)),
+            success: parseFloat(inTimeRate.toFixed(1)),
             totalOrder: parseFloat(getAllOrderOfUser.length),
          },
          create: {
             userId: req.query.userId,
-            come: parseFloat(comeResult.toFixed(1)),
-            success: parseFloat(successResultInTime.toFixed(1)),
+            come: parseFloat(inTimeRate.toFixed(1)),
+            success: parseFloat(inTimeRate.toFixed(1)),
             totalOrder: parseFloat(getAllOrderOfUser.length),
          },
       });

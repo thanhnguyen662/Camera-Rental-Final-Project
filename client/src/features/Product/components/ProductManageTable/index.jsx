@@ -97,7 +97,7 @@ function ProductManageTable(props) {
       },
    ];
 
-   current === 3 &&
+   current === 6 &&
       columns.push({
          title: 'Comment',
          width: 60,

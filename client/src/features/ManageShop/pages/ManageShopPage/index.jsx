@@ -7,7 +7,6 @@ import ManageShopMenu from '../../components/ManageShopMenu';
 import ManageShopOrder from '../../components/ManageShopOrder';
 import ManageShopOverview from '../../components/ManageShopOverview';
 import ManageShopProductTable from '../../components/ManageShopProductTable';
-import moment from 'moment';
 import './ManageShopPage.scss';
 
 ManageShopPage.propTypes = {};
@@ -63,53 +62,80 @@ function ManageShopPage(props) {
       getMyProductInOrder();
    }, [userId, current]);
 
-   const handleUpdateOrder = async (values) => {
+   const handleAcceptOrder = async (values) => {
+      const response = await orderApi.updateOrder({
+         orderId: values.orderId,
+         orderStatusId: values.orderStatusId,
+         orderItems: values.orderItems,
+      });
+
+      console.log('Order updated', response);
+      updateDataToTableOrder(response);
+   };
+
+   const handleDeclineOrder = async (values) => {
+      const response = await orderApi.updateOrder({
+         orderId: values.orderId,
+         orderStatusId: values.orderStatusId,
+         orderItems: values.orderItems,
+         note: 'Decline',
+      });
+      updateStats(response);
+      console.log('Order updated', response);
+      updateDataToTableOrder(response);
+   };
+
+   const handleOrderUserNotCome = async (values) => {
+      const response = await orderApi.updateOrder({
+         orderId: values.orderId,
+         orderStatusId: values.orderStatusId,
+         orderItems: values.orderItems,
+         note: 'NotCome',
+      });
+      updateStats(response);
+      console.log('Order updated', response);
+      updateDataToTableOrder(response);
+   };
+
+   const handlePaidOrder = async (values) => {
+      const response = await orderApi.updateOrderToPaid({
+         orderId: values.orderId,
+         orderStatusId: values.orderStatusId,
+         paidAt: values.paidAt,
+      });
+      updateStats(response);
+      console.log('Order updated', response);
+      updateDataToTableOrder(response);
+   };
+
+   const handleBackOrder = async (values) => {
+      const response = await orderApi.updateOrderToBack({
+         orderId: values.orderId,
+         orderStatusId: values.orderStatusId,
+         orderItems: values.orderItems,
+         backAt: values.backAt,
+      });
+      updateStats(response);
+      console.log('Order updated', response);
+      updateDataToTableOrder(response);
+   };
+
+   const updateStats = async (response) => {
+      const updateUserStat = await orderApi.updateUserStat({
+         userId: response.userId,
+      });
+      console.log('update Stats', updateUserStat);
+   };
+
+   const updateDataToTableOrder = (response) => {
       let array = [];
-      let response = [];
+      const filterOldData = myProductInOrder.filter(
+         (o) => o.id !== response.id
+      );
+      array = filterOldData;
+      array.unshift(response);
 
-      try {
-         if (!values.paidAt && !values.backAt) {
-            response = await orderApi.updateOrder({
-               orderId: values.orderId,
-               orderStatusId: values.orderStatusId,
-               orderItems: values.orderItems,
-               note: values.note ? values.note : null,
-            });
-         }
-         if (values.paidAt) {
-            response = await orderApi.updateOrderToPaid({
-               orderId: values.orderId,
-               orderStatusId: values.orderStatusId,
-               paidAt: values.paidAt,
-            });
-         }
-         if (values.backAt) {
-            response = await orderApi.updateOrderToBack({
-               orderId: values.orderId,
-               orderStatusId: values.orderStatusId,
-               orderItems: values.orderItems,
-               backAt: values.backAt,
-            });
-         }
-         console.log('Updated: ', response);
-
-         const updateUserStat = await orderApi.updateUserStat({
-            userId: response.userId,
-            date: moment().format('YYYY-MM-DD'),
-         });
-
-         console.log('Updated: ', updateUserStat);
-
-         const filterOldData = myProductInOrder.filter(
-            (o) => o.id !== response.id
-         );
-         array = filterOldData;
-         array.unshift(response);
-
-         setMyProductInOrder(array);
-      } catch (error) {
-         console.log(error);
-      }
+      setMyProductInOrder(array);
    };
 
    const handleCurrentMenuChange = (value) => {
@@ -139,7 +165,11 @@ function ManageShopPage(props) {
                      {current !== 'allProduct' && current !== 'overview' && (
                         <ManageShopOrder
                            myProductInOrder={myProductInOrder}
-                           handleUpdateOrder={handleUpdateOrder}
+                           handleAcceptOrder={handleAcceptOrder}
+                           handleDeclineOrder={handleDeclineOrder}
+                           handleOrderUserNotCome={handleOrderUserNotCome}
+                           handlePaidOrder={handlePaidOrder}
+                           handleBackOrder={handleBackOrder}
                         />
                      )}
                   </Content>

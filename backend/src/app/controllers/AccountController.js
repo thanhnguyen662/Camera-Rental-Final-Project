@@ -51,6 +51,20 @@ class AccountController {
          return next(error);
       }
    };
+
+   getUserStats = async (req, res, next) => {
+      try {
+         const response = await prisma.userStat.findMany({
+            where: {
+               userId: req.query.userId,
+            },
+         });
+
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new AccountController();

@@ -108,7 +108,7 @@ function HeaderBar(props) {
                }}
             />
          )}
-         <Row style={{ padding: '0 115px 0 150px' }}>
+         <Row style={{ padding: '0 115px' }}>
             <Col flex='auto'>LOGO</Col>
 
             <Col>
