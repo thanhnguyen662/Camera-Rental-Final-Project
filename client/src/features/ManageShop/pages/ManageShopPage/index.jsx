@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import orderApi from '../../../../api/orderApi';
 import productApi from '../../../../api/productApi';
+import userApi from '../../../../api/userApi';
 import ManageShopMenu from '../../components/ManageShopMenu';
 import ManageShopOrder from '../../components/ManageShopOrder';
 import ManageShopOverview from '../../components/ManageShopOverview';
@@ -17,8 +18,11 @@ function ManageShopPage(props) {
    const [current, setCurrent] = useState('overview');
    const [myProductInOrder, setMyProductInOrder] = useState([]);
    const [myProduct, setMyProduct] = useState([]);
+   const [newComment, setNewComment] = useState({});
 
    const userId = useSelector((state) => state.users.id);
+   const username = useSelector((state) => state.users.username);
+   const photoURL = useSelector((state) => state.users.photoURL);
 
    useEffect(() => {
       if (!userId) return;
@@ -28,6 +32,7 @@ function ManageShopPage(props) {
          });
 
          console.log('My product: ', response);
+
          setMyProduct(response);
       };
       getMyProduct();
@@ -61,6 +66,24 @@ function ManageShopPage(props) {
       };
       getMyProductInOrder();
    }, [userId, current]);
+
+   const handleOnSubmitComment = async (values, orderDetailUserId) => {
+      try {
+         const response = await userApi.createUserComment({
+            content: values.content,
+            rate: values.rate,
+            userId: orderDetailUserId,
+            authorId: userId,
+            authorUsername: username,
+            authorPhotoURL: photoURL,
+         });
+
+         console.log('Commented: ', response);
+         setNewComment(response);
+      } catch (error) {
+         console.log(error);
+      }
+   };
 
    const handleAcceptOrder = async (values) => {
       const response = await orderApi.updateOrder({
@@ -164,12 +187,14 @@ function ManageShopPage(props) {
                      )}
                      {current !== 'allProduct' && current !== 'overview' && (
                         <ManageShopOrder
+                           handleOnSubmitComment={handleOnSubmitComment}
                            myProductInOrder={myProductInOrder}
                            handleAcceptOrder={handleAcceptOrder}
                            handleDeclineOrder={handleDeclineOrder}
                            handleOrderUserNotCome={handleOrderUserNotCome}
                            handlePaidOrder={handlePaidOrder}
                            handleBackOrder={handleBackOrder}
+                           newComment={newComment}
                         />
                      )}
                   </Content>

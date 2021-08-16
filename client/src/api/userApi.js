@@ -25,6 +25,16 @@ const userApi = {
       const url = '/account/getUserStats';
       return axiosClient.get(url, { params });
    },
+
+   getUserComments: (params) => {
+      const url = '/account/comment';
+      return axiosClient.get(url, { params });
+   },
+
+   createUserComment: (data) => {
+      const url = 'account/comment/create';
+      return axiosClient.post(url, data);
+   },
 };
 
 export default userApi;

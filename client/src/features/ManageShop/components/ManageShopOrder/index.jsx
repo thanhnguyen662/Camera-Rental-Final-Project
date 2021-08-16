@@ -1,45 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import {
-   Table,
-   Image,
-   Row,
-   Col,
-   Divider,
-   DatePicker,
-   Modal,
-   Tag,
-   Button,
-   Typography,
-   Space,
-   Avatar,
-   Spin,
-} from 'antd';
-import {
-   InfoCircleOutlined,
    CheckOutlined,
    CloseOutlined,
+   HomeOutlined,
+   InfoCircleOutlined,
    PayCircleOutlined,
+   PhoneOutlined,
    RollbackOutlined,
+   UserOutlined,
+   DownOutlined,
+   UpOutlined,
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import priceFormat from '../../../../utils/PriceFormat';
+import {
+   Avatar,
+   Button,
+   Col,
+   DatePicker,
+   Divider,
+   Image,
+   Modal,
+   Row,
+   Space,
+   Spin,
+   Table,
+   Tag,
+   Typography,
+   Comment,
+   Form,
+   Input,
+   Rate,
+} from 'antd';
 import moment from 'moment';
-import './ManageShopOrder.scss';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import userApi from '../../../../api/userApi';
+import priceFormat from '../../../../utils/PriceFormat';
+import './ManageShopOrder.scss';
 
 ManageShopOrder.propTypes = {
    myProductInOrder: PropTypes.array,
    handleUpdateOrder: PropTypes.func,
+   newComment: PropTypes.object,
 };
 
 ManageShopOrder.defaultProps = {
    myProductInOrder: [],
    handleUpdateOrder: null,
+   newComment: {},
 };
 
 const { RangePicker } = DatePicker;
-const { Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 function ManageShopOrder(props) {
    const {
@@ -49,15 +61,24 @@ function ManageShopOrder(props) {
       handleOrderUserNotCome,
       handlePaidOrder,
       handleBackOrder,
+      handleOnSubmitComment,
+      newComment,
    } = props;
 
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [isModalUserVisible, setIsModalUserVisible] = useState(false);
    const [orderDetail, setOrderDetail] = useState();
    const [userDetailFirebase, setUserDetailFirebase] = useState({});
-   const [userStats, setUserStats] = useState({});
+   const [userStats, setUserStats] = useState();
+   const [userComment, setUserComment] = useState([]);
+   const [onClickExplain, setOnClickExplain] = useState(false);
+
+   const photoURL = useSelector((state) => state.users.photoURL);
+
+   const [form] = Form.useForm();
 
    useEffect(() => {
+      setOnClickExplain(false);
       if (!orderDetail) return;
       const getUserDetailOnFirebase = async () => {
          try {
@@ -79,6 +100,32 @@ function ManageShopOrder(props) {
       };
       getUserDetailOnFirebase();
    }, [orderDetail]);
+
+   useEffect(() => {
+      if (!onClickExplain) return setUserComment([]);
+      const onClickCommentExplain = async () => {
+         try {
+            const response = await userApi.getUserComments({
+               userId: orderDetail?.User.firebaseId,
+            });
+            console.log('Comment', response);
+            setUserComment(response);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      onClickCommentExplain();
+      // eslint-disable-next-line
+   }, [onClickExplain]);
+
+   useEffect(() => {
+      if (Object.keys(newComment).length === 0) return;
+      setUserComment((prev) => [...prev, newComment]);
+   }, [newComment]);
+
+   const handleArrowOnClick = () => {
+      onClickExplain ? setOnClickExplain(false) : setOnClickExplain(true);
+   };
 
    const onClickAccept = () => {
       handleAcceptOrder({
@@ -161,6 +208,28 @@ function ManageShopOrder(props) {
                />
             );
          },
+      },
+   ];
+
+   const columnsComment = [
+      {
+         width: 10,
+         render: (record) => (
+            <Image width={30} src={record?.authorPhotoURL} preview={false} />
+         ),
+      },
+      {
+         render: (record) => (
+            <>
+               <Text className='commentTableUsername'>
+                  {record?.authorUsername}
+               </Text>{' '}
+               <Text className='commentTableTimeAgo'>
+                  ({moment(record?.createdAt).fromNow()})
+               </Text>
+               <div>{record?.content}</div>
+            </>
+         ),
       },
    ];
 
@@ -465,24 +534,117 @@ function ManageShopOrder(props) {
             visible={isModalUserVisible}
             onCancel={() => setIsModalUserVisible(false)}
             className='modalUserDetails'
-            width={400}
+            width={420}
+            footer={false}
          >
             {!userDetailFirebase?.displayName ? (
                <Spin />
             ) : (
                <>
-                  <div>
+                  <div className='modalInfo'>
                      <Row justify='space-around' align='middle'>
                         <Col>
-                           <Avatar src={orderDetail?.User.photoURL} size={70} />
+                           <Avatar src={orderDetail?.User.photoURL} size={65} />
                         </Col>
                         <Col flex='auto' push='1'>
-                           <Paragraph>
-                              <Text>123</Text>
-                           </Paragraph>
+                           <Title level={3} className='modalUsername'>
+                              {orderDetail?.User.username}
+                           </Title>
+                           <Text className='modalEmail'>
+                              {userDetailFirebase?.email}
+                           </Text>
                         </Col>
                      </Row>
                   </div>
+                  <div className='modalMoreInfo'>
+                     <Paragraph>
+                        <UserOutlined className='modalIcon' /> &nbsp;
+                        <Text className='modalMoreInfoDescription'>
+                           {userDetailFirebase?.displayName}
+                        </Text>
+                        <br />
+                        <PhoneOutlined className='modalIcon' /> &nbsp;
+                        <Text className='modalMoreInfoDescription'>
+                           {orderDetail?.User.phoneNumber}
+                        </Text>
+                        <br />
+                        <HomeOutlined className='modalIcon' /> &nbsp;
+                        <Text className='modalMoreInfoDescription'>
+                           {orderDetail?.User.address}
+                        </Text>
+                     </Paragraph>
+                  </div>
+                  <div className='modalUserStats'>
+                     <Row style={{ textAlign: 'center' }}>
+                        <Col span={8}>
+                           <h4>Total Orders</h4>
+                           <b>{userStats?.totalOrder}</b>
+                        </Col>
+                        <Col span={8}>
+                           <h4>Success Rate</h4>
+                           <b>{userStats?.success}%</b>
+                        </Col>
+                        <Col span={8}>
+                           <h4>Pick-up Rate</h4>
+                           <b>{userStats?.come}%</b>
+                        </Col>
+                     </Row>
+                  </div>
+                  {onClickExplain ? (
+                     <div className='modalArrowButton'>
+                        <DownOutlined onClick={handleArrowOnClick} />
+                     </div>
+                  ) : (
+                     <div className='modalArrowButton'>
+                        <UpOutlined onClick={handleArrowOnClick} />
+                     </div>
+                  )}
+                  {onClickExplain && (
+                     <>
+                        <Comment
+                           className='modalAreaComment'
+                           avatar={<Avatar src={photoURL} alt='Han Solo' />}
+                           content={
+                              <Form
+                                 form={form}
+                                 onFinish={(values) =>
+                                    handleOnSubmitComment(
+                                       values,
+                                       orderDetail?.userId
+                                    )
+                                 }
+                              >
+                                 <Form.Item
+                                    name='content'
+                                    rules={[
+                                       {
+                                          required: true,
+                                          message: 'Please input your comment!',
+                                       },
+                                    ]}
+                                 >
+                                    <Input
+                                       className='textInputComment'
+                                       placeholder='Comment here...'
+                                    />
+                                 </Form.Item>
+                                 <Form.Item
+                                    name='rate'
+                                    rules={[{ required: true }]}
+                                 >
+                                    <Rate />
+                                 </Form.Item>
+                              </Form>
+                           }
+                        />
+                        <Table
+                           className='modalCommentTable'
+                           rowKey={(record) => record.id}
+                           dataSource={userComment}
+                           columns={columnsComment}
+                        />
+                     </>
+                  )}
                </>
             )}
          </Modal>

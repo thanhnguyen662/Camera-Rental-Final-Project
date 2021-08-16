@@ -54,13 +54,49 @@ class AccountController {
 
    getUserStats = async (req, res, next) => {
       try {
-         const response = await prisma.userStat.findMany({
+         const response = await prisma.userStat.findUnique({
             where: {
                userId: req.query.userId,
             },
          });
 
          res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getUserComment = async (req, res, next) => {
+      try {
+         const response = await prisma.userComment.findMany({
+            where: {
+               userId: req.query.userId,
+            },
+            include: {
+               user: true,
+            },
+         });
+
+         res.status(200).send(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   createUserComment = async (req, res, next) => {
+      try {
+         const response = await prisma.userComment.create({
+            data: {
+               content: req.body.content,
+               rate: req.body.rate,
+               authorId: req.body.authorId,
+               authorUsername: req.body.authorUsername,
+               authorPhotoURL: req.body.authorPhotoURL,
+               userId: req.body.userId,
+            },
+         });
+
+         res.status(200).send(response);
       } catch (error) {
          return next(error);
       }

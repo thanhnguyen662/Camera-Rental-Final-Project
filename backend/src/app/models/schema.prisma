@@ -62,13 +62,16 @@ model UserStat {
 }
 
 model UserComment {
-  id        Int      @id @default(autoincrement())
-  content   String?
-  userId    String?
-  rate      Float?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User?    @relation(fields: [userId], references: [firebaseId])
+  id             Int      @id @default(autoincrement())
+  content        String?
+  userId         String?
+  rate           Float?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  authorId       String?
+  authorUsername String?
+  authorPhotoURL String?
+  user           User?    @relation(fields: [userId], references: [firebaseId])
 }
 
 model Conversation {

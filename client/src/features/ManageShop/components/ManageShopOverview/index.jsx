@@ -49,8 +49,6 @@ function ManageShopOverview(props) {
       setDateNow(moment().format('YYYY-MM-DD'));
    }, []);
 
-   console.log(moment().format('YYYY-MM-DD HH:mm'));
-
    const sumArray = (array) => {
       if (array.length === 0) return;
       const reducer = (accumulator, curr) => accumulator + curr;

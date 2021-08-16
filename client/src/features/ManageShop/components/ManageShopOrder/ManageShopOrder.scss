@@ -45,18 +45,88 @@
    
 }
 .modalUserDetails{
-   
+   .modalInfo{
+      padding-bottom: 10px;
+      
+      .modalUsername{
+         margin-bottom: 0em;
+      }
+
+      .modalEmail{
+         font-size: 16px;
+      }
+   }
+
+   .modalMoreInfo{
+      .modalIcon{
+         display: inline-block;
+         font-size: 15px;
+         color:rgb(80, 80, 80);
+      }
+
+      .modalMoreInfoDescription{
+         font-size: 14px;
+      }
+   }
+
+   .modalArrowButton{
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.4s;
+      
+      &:hover{
+         color: #1890FF;
+      }
+   }
+
+   .modalUserStats{
+      background: #F3F8FE;
+      padding: 10px;
+      border-radius: 10px;
+   }
 
    .ant-modal-content {
       overflow: auto;
       border-radius: 10px;
    }
-   .ant-modal-footer{
-      padding: 16px 26px;
-   }
 
    .ant-modal-body{
-      padding: 25px 25px;
+      padding-bottom: 10px;
+   }
+
+   .modalCommentTable{
+      transition: all 5s ease;
+      .commentTableUsername{
+         font-size: 12px;
+         font-weight: 300;
+      }
+
+      .commentTableTimeAgo{
+         font-style: italic;
+         font-size: 10px;
+      }
+
+      .ant-table-thead{
+         display: none;
+      }
+
+      .ant-table-tbody > tr > td{
+         border-bottom: 0px;
+      }
+
+      .ant-table-cell{
+         padding: 5px;
+      }
+   }
+
+   .modalAreaComment{
+      .textInputComment{
+         border-radius: 10px;
+      }
+      .ant-comment-inner{
+         padding: 0px
+      }
    }
 }
 
@@ -65,5 +135,9 @@
    overflow: hidden;
    border: 2px solid #F0F0F0;
    border-radius: 10px;
+
+   .ant-table-tbody > tr > td {
+      border-bottom: 0px;
+   }
 }
 

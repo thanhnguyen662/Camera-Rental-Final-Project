@@ -32,12 +32,13 @@
     }
     
     .rowImageDetail{
-      height: 140px;
-      width: 155px;
       background: white;
       border-radius: 10px;
       margin-top: 18px;
-      padding: 15px 0px 0px 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 25px;
       cursor: pointer;
       
       img{
@@ -48,12 +49,13 @@
     }
     
     .rowImageDetailHighlight{
-      height: 140px;
-      width: 155px;
       background: white;
       border-radius: 10px;
       margin-top: 18px;
-      padding: 15px 0px 0px 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 25px;
       cursor: pointer;
       border-style: solid;
       border-width: 2px;
