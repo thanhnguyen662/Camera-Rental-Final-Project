@@ -96,6 +96,36 @@ class AccountController {
             },
          });
 
+         const findAllCommentOfUser = await prisma.user.findUnique({
+            where: {
+               firebaseId: req.body.userId,
+            },
+            include: {
+               userComments: true,
+            },
+         });
+
+         const plusRate = () => {
+            let totalRate = 0;
+
+            findAllCommentOfUser.userComments?.forEach(({ rate }) => {
+               totalRate += parseInt(rate);
+            });
+
+            return totalRate;
+         };
+         const rateAverage =
+            plusRate() / findAllCommentOfUser.userComments?.length;
+
+         await prisma.user.update({
+            where: {
+               firebaseId: req.body.userId,
+            },
+            data: {
+               rate: parseFloat(rateAverage.toFixed(1)),
+            },
+         });
+
          res.status(200).send(response);
       } catch (error) {
          return next(error);

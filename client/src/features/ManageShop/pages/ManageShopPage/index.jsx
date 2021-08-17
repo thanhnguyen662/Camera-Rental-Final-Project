@@ -1,5 +1,5 @@
 import { Col, Layout, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import orderApi from '../../../../api/orderApi';
 import productApi from '../../../../api/productApi';
@@ -15,14 +15,18 @@ ManageShopPage.propTypes = {};
 const { Content } = Layout;
 
 function ManageShopPage(props) {
-   const [current, setCurrent] = useState('overview');
+   const [current, setCurrent] = useState('ALL');
    const [myProductInOrder, setMyProductInOrder] = useState([]);
+   const [myProductInOrderOverview, setMyProductInOrderOverview] = useState([]);
    const [myProduct, setMyProduct] = useState([]);
    const [newComment, setNewComment] = useState({});
+   const [page, setPage] = useState(1);
 
    const userId = useSelector((state) => state.users.id);
    const username = useSelector((state) => state.users.username);
    const photoURL = useSelector((state) => state.users.photoURL);
+
+   const ref = useRef(page);
 
    useEffect(() => {
       if (!userId) return;
@@ -42,23 +46,13 @@ function ManageShopPage(props) {
       if (!userId) return;
 
       const getMyProductInOrder = async () => {
-         if (
-            current !== 'overview' &&
-            current !== 'ALL' &&
-            current !== 'PENDING' &&
-            current !== 'ACCEPT' &&
-            current !== 'RENTED' &&
-            current !== 'FAILURE' &&
-            current !== 'BACK'
-         )
-            return;
+         if (current !== 'overview') return;
          try {
             const response = await orderApi.myProductInOrder({
                firebaseId: userId,
-               orderStatus:
-                  current === 'ALL' || current === 'overview' ? null : current,
+               orderStatus: null,
             });
-            setMyProductInOrder(response);
+            setMyProductInOrderOverview(response);
             console.log('My Product In Order: ', response);
          } catch (error) {
             console.log(error);
@@ -67,12 +61,51 @@ function ManageShopPage(props) {
       getMyProductInOrder();
    }, [userId, current]);
 
-   const handleOnSubmitComment = async (values, orderDetailUserId) => {
+   useEffect(() => {
+      setMyProductInOrder([]);
+      setPage(1);
+   }, [current]);
+
+   useEffect(() => {
+      if (!userId || current === 'overview') return;
+      if (page > 1) {
+         if (ref.current === page) return;
+      }
+      const getMyProductInOrder = async () => {
+         try {
+            const response = await orderApi.myProductInOrder({
+               firebaseId: userId,
+               orderStatus: current === 'ALL' ? null : current,
+               page: page,
+            });
+            const sortResponse = response.sort((a, b) => {
+               let dateA = new Date(a.createdAt);
+               let dateB = new Date(b.createdAt);
+
+               return dateB - dateA;
+            });
+            setMyProductInOrder((prev) => [...prev, ...sortResponse]);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getMyProductInOrder();
+   }, [userId, current, page]);
+
+   const handlePageChange = () => {
+      setPage(page + 1);
+   };
+
+   useEffect(() => {
+      ref.current = page;
+   }, [page]);
+
+   const handleOnSubmitComment = async (values) => {
       try {
          const response = await userApi.createUserComment({
             content: values.content,
             rate: values.rate,
-            userId: orderDetailUserId,
+            userId: values.userId,
             authorId: userId,
             authorUsername: username,
             authorPhotoURL: photoURL,
@@ -178,7 +211,7 @@ function ManageShopPage(props) {
                   <Content className='manageShopPageContent'>
                      {current === 'overview' && (
                         <ManageShopOverview
-                           allMyProductInOrder={myProductInOrder}
+                           allMyProductInOrder={myProductInOrderOverview}
                            setCurrent={setCurrent}
                         />
                      )}
@@ -195,6 +228,7 @@ function ManageShopPage(props) {
                            handlePaidOrder={handlePaidOrder}
                            handleBackOrder={handleBackOrder}
                            newComment={newComment}
+                           handlePageChange={handlePageChange}
                         />
                      )}
                   </Content>

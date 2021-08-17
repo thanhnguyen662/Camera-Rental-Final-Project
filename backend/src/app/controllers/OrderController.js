@@ -25,7 +25,11 @@ class OrderController {
 
    manageOrder = async (req, res, next) => {
       try {
+         const page = req.query.page;
+         const take = page ? 4 : undefined;
          const response = await prisma.order.findMany({
+            take: take,
+            skip: (page - 1) * 4 || undefined,
             where: {
                AND: {
                   userId: req.query.userId,
@@ -57,7 +61,11 @@ class OrderController {
 
    myProductInOrder = async (req, res, next) => {
       try {
+         const page = req.query.page;
+         const take = page ? 10 : undefined;
          const response = await prisma.order.findMany({
+            take: take,
+            skip: (page - 1) * 10 || undefined,
             where: {
                AND: {
                   orderItems: {
@@ -89,7 +97,7 @@ class OrderController {
             },
          });
 
-         res.json(response);
+         res.status(200).json(response);
       } catch (error) {
          return next(error);
       }

@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import commentApi from '../../../../api/commentApi';
 import orderApi from '../../../../api/orderApi';
@@ -17,15 +17,21 @@ function ProductManagePage(props) {
 
    const [orders, setOrders] = useState([]);
    const [current, setCurrent] = useState(0);
+   const [page, setPage] = useState(1);
+
+   const ref = useRef(page);
 
    useEffect(() => {
       if (!userId) return;
-
+      if (page > 1) {
+         if (ref.current === page) return;
+      }
       const getOrdersByUserId = async () => {
          try {
             const query = {
                userId: userId,
                orderStatusId: current || null,
+               page: page,
             };
             const response = await orderApi.manageOrder(query);
 
@@ -33,13 +39,26 @@ function ProductManagePage(props) {
                return new Date(b.createdAt) - new Date(a.createdAt);
             });
             console.log('Product by user Orders: ', response);
-            setOrders(response);
+            setOrders((prev) => [...prev, ...response]);
          } catch (error) {
             console.log(error);
          }
       };
       getOrdersByUserId();
-   }, [userId, current]);
+   }, [userId, current, page]);
+
+   useEffect(() => {
+      setPage(1);
+      setOrders([]);
+   }, [current]);
+
+   const handlePageChange = () => {
+      setPage(page + 1);
+   };
+
+   useEffect(() => {
+      ref.current = page;
+   }, [page]);
 
    const handleClickTitle = (id) => {
       setCurrent(id);
@@ -97,6 +116,7 @@ function ProductManagePage(props) {
                      handleClickCommentButton={handleClickCommentButton}
                      current={current}
                      userPhotoURL={userPhotoURL}
+                     handlePageChange={handlePageChange}
                   />
                )}
             </Col>

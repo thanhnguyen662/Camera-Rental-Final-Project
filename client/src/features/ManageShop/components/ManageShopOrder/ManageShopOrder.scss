@@ -67,6 +67,14 @@
       .modalMoreInfoDescription{
          font-size: 14px;
       }
+      
+      .ant-typography ul, .ant-typography ol {
+         margin: 0 0 0em 0;
+      }
+
+      .ant-typography ul li, .ant-typography ol li{
+         margin: 0;
+      }
    }
 
    .modalArrowButton{
@@ -121,6 +129,7 @@
    }
 
    .modalAreaComment{
+      padding: 4px;
       .textInputComment{
          border-radius: 10px;
       }

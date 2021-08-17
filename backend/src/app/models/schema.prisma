@@ -37,7 +37,7 @@ model User {
   gender          String?
   address         String?
   favouriteGear   String?
-  rate            Int?             @default(0)
+  rate            Float?           @default(0)
   description     String?
   hasTag          String?
   photoURL        String?

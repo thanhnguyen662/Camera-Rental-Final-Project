@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import './ProductManageTable.scss';
 
 ProductManageTable.propTypes = {
@@ -31,6 +32,7 @@ ProductManageTable.propTypes = {
    handleClickDeleteOrderButton: PropTypes.func,
    handleClickCommentButton: PropTypes.func,
    userPhotoURL: PropTypes.string,
+   handlePageChange: PropTypes.func,
 };
 
 ProductManageTable.defaultProps = {
@@ -38,6 +40,7 @@ ProductManageTable.defaultProps = {
    handleClickDeleteOrderButton: null,
    handleClickCommentButton: null,
    userPhotoURL: '',
+   handlePageChange: null,
 };
 
 const { RangePicker } = DatePicker;
@@ -50,6 +53,7 @@ function ProductManageTable(props) {
       current,
       handleClickCommentButton,
       userPhotoURL,
+      handlePageChange,
    } = props;
 
    const [form] = Form.useForm();
@@ -186,21 +190,27 @@ function ProductManageTable(props) {
    return (
       <div>
          {orders.length > 0 ? (
-            orders.map((order) => (
-               <div key={order.id} className='productManage'>
-                  <Table
-                     ellipsis={true}
-                     tableLayout='fixed'
-                     title={() => tileOfTable(order)}
-                     footer={() => footerOfTable(order.totalPrice)}
-                     className='productManageTable'
-                     pagination={false}
-                     rowKey={(record) => record.id}
-                     dataSource={order.orderItems}
-                     columns={columns}
-                  />
-               </div>
-            ))
+            <InfiniteScroll
+               dataLength={orders.length}
+               next={() => handlePageChange()}
+               hasMore={true}
+            >
+               {orders.map((order) => (
+                  <div key={order.id} className='productManage'>
+                     <Table
+                        ellipsis={true}
+                        tableLayout='fixed'
+                        title={() => tileOfTable(order)}
+                        footer={() => footerOfTable(order.totalPrice)}
+                        className='productManageTable'
+                        pagination={false}
+                        rowKey={(record) => record.id}
+                        dataSource={order.orderItems}
+                        columns={columns}
+                     />
+                  </div>
+               ))}
+            </InfiniteScroll>
          ) : (
             <Table hasData={true} className='productManageTableEmpty' />
          )}
