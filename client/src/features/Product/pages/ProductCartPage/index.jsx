@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import orderApi from '../../../../api/orderApi';
+import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 // import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import ResponseResult from '../../../../components/ResponseResult';
 import ProductCartAddress from '../../components/ProductCartAddress';
@@ -191,7 +192,7 @@ function ProductCardPage(props) {
                <ResponseResult response={responseResult} />
             </Redirect>
          )}
-         {/* <BreadcrumbBar /> */}
+         <BreadcrumbBar />
          <Row gutter={[12, 12]}>
             <Col span={17}>
                <ProductCartTable

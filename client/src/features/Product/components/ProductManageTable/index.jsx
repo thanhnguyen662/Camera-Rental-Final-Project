@@ -1,30 +1,23 @@
+import { CommentOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import {
-   DeleteOutlined,
-   InfoCircleOutlined,
-   CommentOutlined,
-} from '@ant-design/icons';
-import {
-   Button,
    Col,
    DatePicker,
    Divider,
    Image,
-   Modal,
    Row,
    Table,
    Tag,
    Typography,
-   Form,
-   Input,
-   Rate,
-   Avatar,
+   Space,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import ProductManageModalComment from '../ProductManageModalComment';
+import ProductManageModalOrder from '../ProductManageModalOrder';
 import './ProductManageTable.scss';
 
 ProductManageTable.propTypes = {
@@ -44,7 +37,7 @@ ProductManageTable.defaultProps = {
 };
 
 const { RangePicker } = DatePicker;
-const { Paragraph, Text, Title } = Typography;
+const { Text } = Typography;
 
 function ProductManageTable(props) {
    const {
@@ -55,8 +48,6 @@ function ProductManageTable(props) {
       userPhotoURL,
       handlePageChange,
    } = props;
-
-   const [form] = Form.useForm();
 
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [orderDetail, setOrderDetail] = useState();
@@ -137,6 +128,11 @@ function ProductManageTable(props) {
                   color: 'blue',
                };
             }
+            case 'BACK': {
+               return {
+                  color: 'warning',
+               };
+            }
             default:
                break;
          }
@@ -156,13 +152,18 @@ function ProductManageTable(props) {
                   </Link>
                </Col>
                <Col>
-                  <InfoCircleOutlined
-                     className='orderDetailButton'
-                     onClick={() => {
-                        setOrderDetail(order);
-                        setIsModalVisible(true);
-                     }}
-                  />
+                  <Space>
+                     <Text>
+                        {moment(order.createdAt).format('YYYY-MM-DD HH:mm')}
+                     </Text>
+                     <InfoCircleOutlined
+                        className='orderDetailButton'
+                        onClick={() => {
+                           setOrderDetail(order);
+                           setIsModalVisible(true);
+                        }}
+                     />
+                  </Space>
                </Col>
             </Row>
          </div>
@@ -180,11 +181,12 @@ function ProductManageTable(props) {
       );
    };
 
-   const disableButton = () => {
-      if (orderDetail?.orderStatus.name === 'PENDING') return;
-      return {
-         disabled: true,
-      };
+   const handleOnClickCancelOrderModal = () => {
+      setIsModalVisible(false);
+   };
+
+   const handleOnClickCancelCommentModal = () => {
+      setCommentModal(false);
    };
 
    return (
@@ -195,180 +197,42 @@ function ProductManageTable(props) {
                next={() => handlePageChange()}
                hasMore={true}
             >
-               {orders.map((order) => (
-                  <div key={order.id} className='productManage'>
-                     <Table
-                        ellipsis={true}
-                        tableLayout='fixed'
-                        title={() => tileOfTable(order)}
-                        footer={() => footerOfTable(order.totalPrice)}
-                        className='productManageTable'
-                        pagination={false}
-                        rowKey={(record) => record.id}
-                        dataSource={order.orderItems}
-                        columns={columns}
-                     />
-                  </div>
-               ))}
+               <div style={{ minHeight: '550px' }}>
+                  {orders.map((order) => (
+                     <div key={order.id} className='productManage'>
+                        <Table
+                           ellipsis={true}
+                           tableLayout='fixed'
+                           title={() => tileOfTable(order)}
+                           footer={() => footerOfTable(order.totalPrice)}
+                           className='productManageTable'
+                           pagination={false}
+                           rowKey={(record) => record.id}
+                           dataSource={order.orderItems}
+                           columns={columns}
+                        />
+                     </div>
+                  ))}
+               </div>
             </InfiniteScroll>
          ) : (
-            <Table hasData={true} className='productManageTableEmpty' />
-         )}
-         <Modal
-            title={`ID: ${orderDetail?.id}`}
-            visible={isModalVisible}
-            onCancel={() => setIsModalVisible(false)}
-            className='productOrderDetailModal'
-            footer={[
-               <Button
-                  key='delete'
-                  icon={<DeleteOutlined />}
-                  onClick={() => {
-                     handleClickDeleteOrderButton(orderDetail?.id);
-                     setIsModalVisible(false);
-                  }}
-                  type='danger'
-                  {...disableButton()}
-               >
-                  Delete Order
-               </Button>,
-               <Button
-                  key='back'
-                  onClick={() => setIsModalVisible(false)}
-                  type='primary'
-               >
-                  OK
-               </Button>,
-            ]}
-         >
-            <Paragraph>
-               <Row>
-                  <Col flex='auto'>
-                     <Text className='orderDetailUsername'>
-                        {orderDetail?.User.username}
-                     </Text>
-                     <br />
-                     <Text>{orderDetail?.User.address}</Text>
-                     <br />
-                     <Text>{orderDetail?.User.phoneNumber}</Text>
-                  </Col>
-                  <Col className='orderDetailCreateAt'>
-                     <Paragraph>
-                        <Row>
-                           <Col>
-                              Created:
-                              <br />
-                              Updated:
-                           </Col>
-                           <Col>
-                              <Text>
-                                 {moment(orderDetail?.createdAt).format(
-                                    'YYYY-MM-DD HH:mm:ss'
-                                 )}
-                              </Text>
-                              <br />
-                              <Text>
-                                 {moment(orderDetail?.updatedAt).format(
-                                    'YYYY-MM-DD HH:mm:ss'
-                                 )}
-                              </Text>
-                           </Col>
-                        </Row>
-                     </Paragraph>
-                  </Col>
-               </Row>
-            </Paragraph>
-            <div className='productManageOrderDetailTable'>
-               <Row className='headerText'>
-                  <Col span={10}>
-                     <h4>Name</h4>
-                  </Col>
-                  <Col span={4} style={{ textAlign: 'center' }}>
-                     <h4>Hours</h4>
-                  </Col>
-                  <Col span={4} style={{ textAlign: 'center' }}>
-                     <h4>Price</h4>
-                  </Col>
-                  <Col span={6} style={{ textAlign: 'right' }}>
-                     <h4>Total</h4>
-                  </Col>
-               </Row>
-               <Divider />
-               {orderDetail?.orderItems.map((item) => (
-                  <Row key={item.id}>
-                     <Col span={10}>
-                        <Paragraph>{item.Product.name}</Paragraph>
-                     </Col>
-                     <Col span={4} style={{ textAlign: 'center' }}>
-                        <Paragraph level={5}>{item.during}</Paragraph>
-                     </Col>
-                     <Col span={4} style={{ textAlign: 'center' }}>
-                        <Paragraph level={5}>
-                           {priceFormat(item.price)}
-                        </Paragraph>
-                     </Col>
-                     <Col span={6}>
-                        <Paragraph level={5} style={{ textAlign: 'right' }}>
-                           {priceFormat(item.totalPricePerHour)}
-                        </Paragraph>
-                     </Col>
-                  </Row>
-               ))}
-
-               <Divider />
-               <Row className='totalPrice'>
-                  <Col flex='auto'>
-                     <div className='totalPriceTitle'>Total Price</div>
-                  </Col>
-                  <Col>
-                     <div className='totalPriceCal'>
-                        {priceFormat(orderDetail?.totalPrice)}
-                     </div>
-                  </Col>
-               </Row>
+            <div style={{ minHeight: '550px' }}>
+               <Table hasData={false} className='productManageTableEmpty' />
             </div>
-         </Modal>
-         <Modal
-            visible={commentModal}
-            onCancel={() => setCommentModal(false)}
-            footer={false}
-            width={450}
-            className='productCommentModal'
-         >
-            <Form
-               form={form}
-               onFinish={(values) => {
-                  handleClickCommentButton(values, orderItemDetail);
-               }}
-            >
-               <Title level={5} className='commentModalTitle'>
-                  Comment on Product
-               </Title>
-               <Row>
-                  <Col span={3}>
-                     <Avatar src={userPhotoURL} size={40} />
-                  </Col>
-                  <Col span={21}>
-                     <Form.Item name='comment' rules={[{ required: true }]}>
-                        <Input.TextArea placeholder='Write a comment...' />
-                     </Form.Item>
-                     <label>Rating product</label>
-                     <Form.Item name='rate' rules={[{ required: true }]}>
-                        <Rate />
-                     </Form.Item>
-                  </Col>
-               </Row>
-
-               <Form.Item
-                  wrapperCol={{ offset: 20, span: 3 }}
-                  style={{ marginBottom: '0px' }}
-               >
-                  <Button type='primary' htmlType='submit'>
-                     Submit
-                  </Button>
-               </Form.Item>
-            </Form>
-         </Modal>
+         )}
+         <ProductManageModalOrder
+            orderDetail={orderDetail}
+            isModalVisible={isModalVisible}
+            handleOnClickCancelOrderModal={handleOnClickCancelOrderModal}
+            handleClickDeleteOrderButton={handleClickDeleteOrderButton}
+         />
+         <ProductManageModalComment
+            commentModal={commentModal}
+            handleOnClickCancelCommentModal={handleOnClickCancelCommentModal}
+            handleClickCommentButton={handleClickCommentButton}
+            userPhotoURL={userPhotoURL}
+            orderItemDetail={orderItemDetail}
+         />
       </div>
    );
 }

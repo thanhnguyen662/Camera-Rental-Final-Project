@@ -1,3 +1,4 @@
+import { Layout } from 'antd';
 import React from 'react';
 import {
    BrowserRouter as Router,
@@ -5,22 +6,18 @@ import {
    Route,
    Switch,
 } from 'react-router-dom';
-import CarouselBar from '../components/CarouselBar';
+import ResponseResult from '../components/ResponseResult';
+import Admin from '../features/Admin';
 import SignIn from '../features/Auth';
-import Category from '../features/Category';
+import Home from '../features/Home';
 import Lading from '../features/Lading';
+import ManageShop from '../features/ManageShop';
+import Maps from '../features/Maps';
 import Message from '../features/Message';
+import MessageBeta from '../features/MessageBeta';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
-import Promotion from '../features/Promotion';
-import ContentLayout from '../layouts/Content';
 import MainLayout from '../layouts/Main';
-import { Layout } from 'antd';
-import MessageBeta from '../features/MessageBeta';
-import Maps from '../features/Maps';
-import ResponseResult from '../components/ResponseResult';
-import ManageShop from '../features/ManageShop';
-import Admin from '../features/Admin';
 
 const { Content } = Layout;
 
@@ -47,19 +44,12 @@ function Routers(props) {
                   <Switch>
                      <Route exact path='/'>
                         <div style={{ margin: '25px 125px' }}>
-                           <CarouselBar />
-                           <ContentLayout>
-                              <Category />
-                              <Product />
-                              <Promotion />
-                           </ContentLayout>
+                           <Home />
                         </div>
                      </Route>
 
                      <Route path='/lading'>
-                        <ContentLayout>
-                           <Lading />
-                        </ContentLayout>
+                        <Lading />
                      </Route>
 
                      <Route path='/product'>
@@ -88,9 +78,7 @@ function Routers(props) {
 
                      <Route path='/profile'>
                         <div style={{ margin: '25px 125px' }}>
-                           <Content
-                              style={{ minHeight: 550, overflow: 'hidden' }}
-                           >
+                           <Content style={{ minHeight: 550 }}>
                               <Profile />
                            </Content>
                         </div>

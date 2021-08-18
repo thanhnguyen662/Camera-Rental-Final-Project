@@ -18,6 +18,7 @@ import {
    Spin,
    Table,
    Typography,
+   Tooltip,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -142,11 +143,15 @@ function ManageShopModalUser(props) {
                   <div className='modalUserStats'>
                      <Row style={{ textAlign: 'center' }}>
                         <Col span={8}>
-                           <h4>Total Orders</h4>
+                           <Tooltip title='Includes all user orders'>
+                              <h4>Total Orders</h4>
+                           </Tooltip>
                            <b>{userStats?.totalOrder}</b>
                         </Col>
                         <Col span={8}>
-                           <h4>Success Rate</h4>
+                           <Tooltip title='On-time order completion rate'>
+                              <h4>Success Rate</h4>
+                           </Tooltip>
                            <b>{userStats?.success}%</b>
                         </Col>
                         <Col span={8}>

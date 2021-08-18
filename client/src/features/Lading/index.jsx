@@ -4,7 +4,7 @@ import LadingPage from '../Lading/pages/LandingPage';
 
 function Lading(props) {
    const match = useRouteMatch();
-   console.log('Lading: ', { match });
+
    return (
       <Switch>
          <Route exact path={match.url} component={LadingPage} />

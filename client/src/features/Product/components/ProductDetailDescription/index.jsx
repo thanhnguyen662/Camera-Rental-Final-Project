@@ -1,4 +1,9 @@
-import { UserOutlined } from '@ant-design/icons';
+import {
+   CheckCircleOutlined,
+   FileProtectOutlined,
+   SmileOutlined,
+   UserOutlined,
+} from '@ant-design/icons';
 import {
    Avatar,
    Button,
@@ -7,13 +12,14 @@ import {
    Modal,
    Row,
    Skeleton,
+   Space,
    Typography,
 } from 'antd';
 import parse from 'html-react-parser';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { BiCheckCircle } from 'react-icons/bi';
+import { Redirect } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
 import './ProductDetailDescription.scss';
 
@@ -30,7 +36,7 @@ ProductDetailDescription.defaultProps = {
 };
 
 const { RangePicker } = DatePicker;
-const { Paragraph } = Typography;
+const { Paragraph, Text } = Typography;
 
 function ProductDetailDescription(props) {
    const { productDetail, onClickToAddProduct, orderInToday } = props;
@@ -38,6 +44,7 @@ function ProductDetailDescription(props) {
    const [endDate, setEndDate] = useState('');
    const [more, setMore] = useState(null);
    const [isModalVisible, setIsModalVisible] = useState(false);
+   const [clickMap, setClickMap] = useState(false);
 
    const onChange = (dates, dateStrings) => {
       if (!dates || !dateStrings) return;
@@ -71,115 +78,135 @@ function ProductDetailDescription(props) {
             <Skeleton active className='skeletonLoading' />
          ) : (
             <>
-               <Row className='productHeaderRow'>
-                  <Col flex='auto'>
-                     <h1>{productDetail.name}</h1>
-                  </Col>
-                  <Col>
-                     <div className='qualityRate'>
-                        Rating: {productDetail.qualityRate}
-                     </div>
-                  </Col>
-               </Row>
-               <Row span={24} className='productPriceRow'>
-                  <p>$</p>
-                  <h2>{priceFormat(productDetail.price).split('$')}</h2>
-                  <h3>in shipping + handling</h3>
-                  <Col></Col>
-               </Row>
-
-               <div className='productDescriptionRow'>
-                  <div className='productDescription'>
-                     <Paragraph
-                        className='description'
-                        ellipsis={{
-                           rows: 4,
-                           onEllipsis: (ellipsis) => {
-                              setMore(ellipsis);
-                           },
-                        }}
-                     >
-                        <>{parse(productDetail.description)}</>
-                     </Paragraph>
-
-                     {more === true && (
-                        <h5
-                           className='readMore'
-                           onClick={() => setIsModalVisible(true)}
-                        >
-                           more details
-                        </h5>
-                     )}
-                  </div>
-               </div>
-               <Row span={24} className='buttonRow'>
-                  <RangePicker
-                     className='datePicker'
-                     disabledDate={disabledDate}
-                     ranges={{
-                        'Rent Tomorrow': [
-                           moment().add(1, 'days'),
-                           moment().add(2, 'days'),
-                        ],
-                        '30 days': [
-                           moment().add(1, 'days'),
-                           moment().add(31, 'days'),
-                        ],
+               {clickMap === true && (
+                  <Redirect
+                     to={{
+                        pathname: '/maps',
+                        state: {
+                           productDetail: productDetail,
+                        },
                      }}
-                     showTime
-                     format='YYYY/MM/DD HH:mm'
-                     onChange={onChange}
                   />
-                  <Button
-                     className='addButton'
-                     onClick={() => onClickAdd(productDetail)}
-                     {...disable}
-                  >
-                     Add to Cart
-                  </Button>
-               </Row>
-               <Row className='avatarGroup'>
-                  <Avatar.Group maxCount={4}>
-                     {orderInToday.length > 0 ? (
-                        orderInToday.map((o) => (
-                           <Avatar src={o.User.photoURL} key={o.id} />
-                        ))
-                     ) : (
-                        <Avatar icon={<UserOutlined />} />
-                     )}
-                  </Avatar.Group>
-                  <h4>{orderInToday?.length} other people tried it today</h4>
-               </Row>
+               )}
+               <div className='productDetail'>
+                  <Row className='productHeaderRow'>
+                     <Col flex='auto'>
+                        <h1>{productDetail.name}</h1>
+                     </Col>
+                     <Col>
+                        <div className='qualityRate'>
+                           Rating: {productDetail.qualityRate}
+                        </div>
+                     </Col>
+                  </Row>
+                  <Row span={24} className='productPriceRow'>
+                     <p>$</p>
+                     <h2>{priceFormat(productDetail.price).split('$')}</h2>
+                     <h3>in shipping + handling</h3>
+                     <Col></Col>
+                  </Row>
 
-               <div className='productDescriptionInfo'>
-                  <Row className='descriptionInfoRow'>
-                     <Col flex='30px'>
-                        <BiCheckCircle
-                           style={{ fontSize: '20px', color: '#64C7A8' }}
+                  <div className='productDescriptionRow'>
+                     <div className='productDescription'>
+                        <Paragraph
+                           className='description'
+                           ellipsis={{
+                              rows: 4,
+                              onEllipsis: (ellipsis) => {
+                                 setMore(ellipsis);
+                              },
+                           }}
+                        >
+                           <>{parse(productDetail.description)}</>
+                        </Paragraph>
+
+                        {more === true && (
+                           <h5
+                              className='readMore'
+                              onClick={() => setIsModalVisible(true)}
+                           >
+                              more details
+                           </h5>
+                        )}
+                     </div>
+                  </div>
+                  <Row span={24} className='buttonRow'>
+                     <Space>
+                        <RangePicker
+                           className='datePicker'
+                           disabledDate={disabledDate}
+                           ranges={{
+                              'Rent Tomorrow': [
+                                 moment().add(1, 'days'),
+                                 moment().add(2, 'days'),
+                              ],
+                              '30 days': [
+                                 moment().add(1, 'days'),
+                                 moment().add(31, 'days'),
+                              ],
+                           }}
+                           showTime
+                           format='YYYY/MM/DD HH:mm'
+                           onChange={onChange}
                         />
-                     </Col>
-                     <Col>
-                        <h4>Elit commodo duis.</h4>
-                     </Col>
+                        <Button
+                           className='addButton'
+                           onClick={() => onClickAdd(productDetail)}
+                           {...disable}
+                        >
+                           Add to Cart
+                        </Button>
+                     </Space>
                   </Row>
-                  <Row className='descriptionInfoRow'>
-                     <Col flex='30px'>
-                        <BiCheckCircle
-                           style={{ fontSize: '20px', color: '#64C7A8' }}
-                        />
-                     </Col>
-                     <Col>
-                        <h4>Cillum et officia tempor.</h4>
-                     </Col>
+                  <Row className='avatarGroup'>
+                     <Space>
+                        <Avatar.Group maxCount={4}>
+                           {orderInToday.length > 0 ? (
+                              orderInToday.map((o) => (
+                                 <Avatar src={o.User.photoURL} key={o.id} />
+                              ))
+                           ) : (
+                              <Avatar icon={<UserOutlined />} />
+                           )}
+                        </Avatar.Group>
+                        <h4>
+                           {orderInToday?.length} other people tried it today
+                        </h4>
+                     </Space>
                   </Row>
-                  <Row className='descriptionInfoRow'>
-                     <Col flex='30px'>
-                        <BiCheckCircle
-                           style={{ fontSize: '20px', color: '#64C7A8' }}
-                        />
-                     </Col>
+                  <Row
+                     justify='space-around'
+                     align='middle'
+                     style={{ marginTop: 30 }}
+                  >
                      <Col>
-                        <h4>Qui nisi commodo do.</h4>
+                        <div className='card' onClick={() => setClickMap(true)}>
+                           <img
+                              src='https://firebasestorage.googleapis.com/v0/b/camera-rental-firbase.appspot.com/o/public%2FArtboard%201.png?alt=media&token=31b68b46-a498-4179-8fce-56652d472d0f'
+                              alt='photos'
+                           />
+                           <div className='info'>
+                              <h1>Near me</h1>
+                           </div>
+                        </div>
+                     </Col>
+                     <Col flex='auto'>
+                        <div className='productDescriptionInfo'>
+                           <Space direction='vertical' size='middle'>
+                              <div>
+                                 <CheckCircleOutlined className='descriptionIcon' />
+                                 <Text>Free shipping.</Text>
+                              </div>
+                              <div>
+                                 <SmileOutlined className='descriptionIcon' />
+                                 <Text>Refund if the product is damage.</Text>
+                              </div>
+                              <div>
+                                 <FileProtectOutlined className='descriptionIcon' />
+                                 <Text>Genuine product.</Text>
+                              </div>
+                           </Space>
+                        </div>
                      </Col>
                   </Row>
                </div>

@@ -1,24 +1,31 @@
 import { MessageOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Row, Space, Divider, Skeleton } from 'antd';
+import { Avatar, Button, Col, Row, Skeleton, Space, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import conversationApi from '../../../../api/conversationApi';
-
 import './ProductDetailUser.scss';
 
 ProductDetailUser.propTypes = {
    productDetail: PropTypes.object,
+   myProduct: PropTypes.number,
+   myStats: PropTypes.object,
 };
 
 ProductDetailUser.defaultProps = {
    productDetail: {},
+   myProduct: 0,
+   myStats: {},
 };
 
+const { Text } = Typography;
+
 function ProductDetailUser(props) {
-   const { productDetail } = props;
+   const { productDetail, myProduct, myStats } = props;
+
    const userId = useSelector((state) => state.users.id);
+
    const [sendMessage, setSendMessage] = useState();
 
    const onClickSendMessage = async () => {
@@ -48,7 +55,7 @@ function ProductDetailUser(props) {
                }}
             />
          )}
-         <Row span={24} className='user'>
+         <Row span={24} className='user' justify='space-around' align='middle'>
             {!productDetail.User?.photoURL || !productDetail.User?.username ? (
                <>
                   <Skeleton.Input
@@ -86,23 +93,33 @@ function ProductDetailUser(props) {
                         </Space>
                      </div>
                   </Col>
-                  <Col span={1}>
+                  {/* <Col span={1}>
                      <Divider type='vertical' className='dividerBar' />
-                  </Col>
+                  </Col> */}
                   <Col span={13}>
                      <div className='infoGird'>
                         <Row className='infoRow'>
-                           <Col span={8} className='infoCol'>
-                              <h6 className='titleRate'>Product</h6>
-                              <h6 className='titleScore'>24</h6>
+                           <Col span={8}>
+                              <Space direction='vertical '>
+                                 <Text className='titleRate'>Product</Text>
+                                 <Text className='titleScore'>{myProduct}</Text>
+                              </Space>
                            </Col>
-                           <Col span={8} className='infoCol'>
-                              <h6 className='titleRate'>Rate</h6>
-                              <h6 className='titleScore'>4.5</h6>
+                           <Col span={8}>
+                              <Space direction='vertical '>
+                                 <Text className='titleRate'>Rate</Text>
+                                 <Text className='titleScore'>
+                                    {productDetail.User.rate}
+                                 </Text>
+                              </Space>
                            </Col>
-                           <Col span={8} className='infoCol'>
-                              <h6 className='titleRate'>Follows</h6>
-                              <h6 className='titleScore'>194</h6>
+                           <Col span={8}>
+                              <Space direction='vertical '>
+                                 <Text className='titleRate'>Orders</Text>
+                                 <Text className='titleScore'>
+                                    {myStats.totalOrder}
+                                 </Text>
+                              </Space>
                            </Col>
                         </Row>
                      </div>

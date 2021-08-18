@@ -4,8 +4,9 @@
       border-radius: 10px;
       background: white;
       width: 102%;
+
       .userAvatar{
-         margin: 18px 0px 18px 22px;
+         margin: 18px;
       }
 
       .avatarLoading{
@@ -14,16 +15,15 @@
       }
 
       .userInfo{
-         margin: 16px 0px 0px 28px;
 
          h4{
-            margin-top: 10px;
             font-size: 17px;
          }
 
          .buttonGroup{
             button{
                width: 125px;
+               border-radius: 5px;
                span{
                   font-size: 13.5px;
                   font-weight: 400;
@@ -32,28 +32,16 @@
          }
       }
 
-      .dividerBar{
-         height: 80px;
-         margin-top: 20px;
-      }
-
       .infoGird{
-         margin: 23px 0px 15px 10px;
-         padding: 10px 20px 25px;
-         border-radius: 10px;
          .infoRow{
             text-align: center;
-            .infoCol{
-               height: 40px;
-               
-               .titleRate{
-                  font-weight: 700;
-                  font-size: 16px;
-               }
-               .titleScore{
-                  font-size: 14px;
-                  font-weight: 500;
-               }
+            .titleRate{
+               font-weight: 700;
+               font-size: 17px;
+            }
+            .titleScore{
+               font-size: 14px;
+               font-weight: 500;
             }
          }
       }

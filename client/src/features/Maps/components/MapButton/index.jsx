@@ -12,7 +12,7 @@ function MapButton(props) {
       setSelectedMarker,
       handleOnClickShowAllPopup,
    } = props;
-   console.log(location.state?.productDetail.name);
+
    return (
       <>
          <Row span={24} align='middle'>

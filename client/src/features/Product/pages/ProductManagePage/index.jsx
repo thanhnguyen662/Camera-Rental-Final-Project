@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import commentApi from '../../../../api/commentApi';
 import orderApi from '../../../../api/orderApi';
+import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import ProductManageAvatar from '../../components/ProductManageAvatar';
 import ProductManageTable from '../../components/ProductManageTable';
 import ProductManageTitle from '../../components/ProductManageTitle';
@@ -98,6 +99,7 @@ function ProductManagePage(props) {
 
    return (
       <div>
+         <BreadcrumbBar />
          <Row gutter={[12, 10]}>
             <Col span={5}>
                <ProductManageAvatar

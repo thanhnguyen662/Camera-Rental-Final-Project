@@ -1,16 +1,17 @@
-import { Button, Col, Row } from 'antd';
+import { Col, Row } from 'antd';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import productApi from '../../../../api/productApi';
+import userApi from '../../../../api/userApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import ProductDetailComment from '../../components/ProductDetailComment';
 import ProductDetailDescription from '../../components/ProductDetailDescription';
 import ProductDetailImage from '../../components/ProductDetailImage';
 import ProductDetailUser from '../../components/ProductDetailUser';
 import { addProductToCart } from '../../productSlice';
-import moment from 'moment';
 
 function ProductDetailPage(props) {
    const { slug } = useParams();
@@ -20,6 +21,8 @@ function ProductDetailPage(props) {
 
    const [productDetail, setProductDetail] = useState();
    const [orderInToday, setOrderInToday] = useState([]);
+   const [myProduct, setMyProduct] = useState(0);
+   const [myStats, setMyStats] = useState({});
 
    useEffect(() => {
       const getProductDetail = async () => {
@@ -27,7 +30,15 @@ function ProductDetailPage(props) {
             const response = await productApi.getProductDetail(slug);
             setProductDetail(response);
 
-            console.log(response);
+            const productOfMe = await productApi.getMyProduct({
+               firebaseId: response.User.firebaseId,
+            });
+            setMyProduct(productOfMe.length);
+
+            const statsOfMe = await userApi.getUserStats({
+               userId: response.User.firebaseId,
+            });
+            setMyStats(statsOfMe);
          } catch (error) {
             console.log('Fail: ', error);
          }
@@ -45,7 +56,6 @@ function ProductDetailPage(props) {
             slug: slug,
             date: moment().format('YYYY-MM-DD'),
          });
-         console.log('getOrderProductInToday', response);
          setOrderInToday(response);
       };
       getOrderProductInToday();
@@ -93,9 +103,13 @@ function ProductDetailPage(props) {
                   />
                </Col>
             </Row>
-            <ProductDetailUser productDetail={productDetail} />
+            <ProductDetailUser
+               productDetail={productDetail}
+               myProduct={myProduct}
+               myStats={myStats}
+            />
             <ProductDetailComment productDetail={productDetail} />
-            <Button>
+            {/* <Button>
                <Link
                   to={{
                      pathname: '/maps',
@@ -106,7 +120,7 @@ function ProductDetailPage(props) {
                >
                   Click me
                </Link>
-            </Button>
+            </Button> */}
          </div>
       </>
    );

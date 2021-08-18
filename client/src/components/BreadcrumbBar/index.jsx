@@ -20,6 +20,7 @@ function BreadcrumbBar(props) {
    const DynamicProductBreadcrumb = () => <span>{productName}</span>;
 
    const routes = [
+      { path: '/product/manage' },
       { path: '/product/cart' },
       { path: '/product/:productSlug', breadcrumb: DynamicProductBreadcrumb },
    ];
