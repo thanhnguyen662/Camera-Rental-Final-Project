@@ -1,6 +1,6 @@
 .productDetailCard{
   .productDetail{
-    padding: 20px 10px;
+    padding: 25px 10px;
   }
   .product{
     background: white;
@@ -38,8 +38,6 @@
     }
   
     .productHeaderRow{
-      // margin: 25px 10px 0px 18px;
-      
       h1{
         font-size: 32px;
         font-weight: 800;
@@ -47,6 +45,7 @@
       }
 
       .qualityRate{
+        margin-top: 5px;
         padding: 4px 8px;
         background: #d9d7e4;
         border-radius: 4px;

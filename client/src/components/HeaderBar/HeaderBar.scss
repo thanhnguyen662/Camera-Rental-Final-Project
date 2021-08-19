@@ -6,3 +6,20 @@
   background: #fff;
   box-shadow: 0 0 15px 2px rgb(226, 226, 226);
 }
+
+.cartButton{
+  margin-top: 2px;
+  border-radius: 10px;
+  border: 2px solid #EBEAEE;
+  height: 37px;
+
+  .cartButtonIcon{
+    font-size: 17px;
+    border-width: 2px;
+    margin-bottom: -2.2px;
+  }
+  .cartText{
+    font-weight: 500;
+
+  }
+}

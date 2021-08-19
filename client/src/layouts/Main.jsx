@@ -6,9 +6,9 @@ import SiderBar from '../components/SiderBar';
 
 function MainLayout({ children }) {
    return (
-      <Layout>
+      <Layout style={{ minHeight: '100vh' }}>
          <SiderBar />
-         <Layout>
+         <Layout className='site-layout'>
             <HeaderBar />
             {children}
             <FooterBar />

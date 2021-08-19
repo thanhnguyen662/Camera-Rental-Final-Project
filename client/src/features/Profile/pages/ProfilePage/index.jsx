@@ -23,21 +23,19 @@ function ProfilePage(props) {
 
    return (
       <>
-         <div style={{ minHeight: 360 }}>
-            <Row gutter={[25, 0]}>
-               <Col span={8}>
-                  <ProfileInfoCard
-                     email={email}
-                     photoURL={photoURL}
-                     name={name}
-                     userProfile={userProfile}
-                  />
-               </Col>
-               <Col flex='auto'>
-                  <ProfileRelationCard />
-               </Col>
-            </Row>
-         </div>
+         <Row gutter={[25, 0]}>
+            <Col span={8}>
+               <ProfileInfoCard
+                  email={email}
+                  photoURL={photoURL}
+                  name={name}
+                  userProfile={userProfile}
+               />
+            </Col>
+            <Col flex='auto'>
+               <ProfileRelationCard />
+            </Col>
+         </Row>
       </>
    );
 }

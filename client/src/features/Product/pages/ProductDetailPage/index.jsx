@@ -82,47 +82,30 @@ function ProductDetailPage(props) {
    };
 
    return (
-      <>
-         <div
-            className='productDetailCard'
-            style={{ overflow: 'hidden', height: '100%' }}
-         >
-            <BreadcrumbBar
-               productName={productDetail?.name}
-               className='breadcrumbBar'
-            />
-            <Row span={24} gutter={[45, 0]}>
-               <Col span={11} className='rowImage'>
-                  <ProductDetailImage productDetail={productDetail} />
-               </Col>
-               <Col span={13} className='product'>
-                  <ProductDetailDescription
-                     productDetail={productDetail}
-                     onClickToAddProduct={handleOnClickToAddProduct}
-                     orderInToday={orderInToday}
-                  />
-               </Col>
-            </Row>
-            <ProductDetailUser
-               productDetail={productDetail}
-               myProduct={myProduct}
-               myStats={myStats}
-            />
-            <ProductDetailComment productDetail={productDetail} />
-            {/* <Button>
-               <Link
-                  to={{
-                     pathname: '/maps',
-                     state: {
-                        productDetail: productDetail,
-                     },
-                  }}
-               >
-                  Click me
-               </Link>
-            </Button> */}
-         </div>
-      </>
+      <div className='productDetailCard' style={{ height: '100%' }}>
+         <BreadcrumbBar
+            productName={productDetail?.name}
+            className='breadcrumbBar'
+         />
+         <Row span={24} gutter={[45, 0]}>
+            <Col span={11} className='rowImage'>
+               <ProductDetailImage productDetail={productDetail} />
+            </Col>
+            <Col span={13} className='product'>
+               <ProductDetailDescription
+                  productDetail={productDetail}
+                  onClickToAddProduct={handleOnClickToAddProduct}
+                  orderInToday={orderInToday}
+               />
+            </Col>
+         </Row>
+         <ProductDetailUser
+            productDetail={productDetail}
+            myProduct={myProduct}
+            myStats={myStats}
+         />
+         <ProductDetailComment productDetail={productDetail} />
+      </div>
    );
 }
 

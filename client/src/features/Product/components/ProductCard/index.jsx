@@ -19,16 +19,16 @@ function ProductCard(props) {
    return (
       <>
          <h1 style={{ marginTop: '45px' }}>Recent Discounts</h1>
-         <Row gutter={[30, 30]}>
+         <Row gutter={[35, 30]}>
             {products.map((product) => (
                <Col flex='none' key={product.id}>
                   <div className='productCard'>
-                     <Row span={24}>
+                     <Row span={24} style={{ align: 'center' }}>
                         <div className='productImage'>
                            <Image
                               style={{ objectFit: 'cover' }}
                               height={150}
-                              width={165}
+                              width={150}
                               src={product.productPhotoURL[0]}
                            />
                         </div>

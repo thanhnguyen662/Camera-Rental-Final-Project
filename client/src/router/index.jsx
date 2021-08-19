@@ -43,9 +43,9 @@ function Routers(props) {
                <MainLayout>
                   <Switch>
                      <Route exact path='/'>
-                        <div style={{ margin: '25px 125px' }}>
+                        <Content style={{ margin: '25px 125px' }}>
                            <Home />
-                        </div>
+                        </Content>
                      </Route>
 
                      <Route path='/lading'>
@@ -53,35 +53,27 @@ function Routers(props) {
                      </Route>
 
                      <Route path='/product'>
-                        <div style={{ margin: '25px 125px' }}>
-                           <Content style={{ minHeight: 550 }}>
-                              <Product />
-                           </Content>
-                        </div>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Product />
+                        </Content>
                      </Route>
 
                      <Route path='/admin'>
-                        <div style={{ margin: '25px 125px' }}>
-                           <Content style={{ minHeight: 550 }}>
-                              <Admin />
-                           </Content>
-                        </div>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Admin />
+                        </Content>
                      </Route>
 
                      <Route path='/manage'>
-                        <div style={{ margin: '25px 125px' }}>
-                           <Content style={{ minHeight: 550 }}>
-                              <ManageShop />
-                           </Content>
-                        </div>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <ManageShop />
+                        </Content>
                      </Route>
 
                      <Route path='/profile'>
-                        <div style={{ margin: '25px 125px' }}>
-                           <Content style={{ minHeight: 550 }}>
-                              <Profile />
-                           </Content>
-                        </div>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Profile />
+                        </Content>
                      </Route>
 
                      <Route path='/message'>

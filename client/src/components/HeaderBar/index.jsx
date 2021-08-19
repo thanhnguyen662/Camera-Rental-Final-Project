@@ -4,23 +4,14 @@ import {
    TagsOutlined,
    UserOutlined,
 } from '@ant-design/icons';
-import {
-   Avatar,
-   Badge,
-   Button,
-   Col,
-   Layout,
-   Menu,
-   notification,
-   Row,
-} from 'antd';
+import { Avatar, Button, Col, Layout, Menu, notification, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { RiShoppingBag2Line } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import conversationApi from '../../api/conversationApi';
 import userApi from '../../api/userApi';
 import { auth } from '../../firebase';
+import Cart from '../Cart';
 import './HeaderBar.scss';
 
 const { Header } = Layout;
@@ -108,9 +99,13 @@ function HeaderBar(props) {
                }}
             />
          )}
-         <Row style={{ padding: '0 115px' }}>
+         <Row
+            style={{ padding: '0 115px' }}
+            justify='space-around'
+            align='middle'
+         >
             <Col flex='auto'>LOGO</Col>
-
+            <Cart count={productInCartCount} />
             <Col>
                {loginStatus === false ? (
                   <>
@@ -123,11 +118,7 @@ function HeaderBar(props) {
                   </>
                ) : (
                   <>
-                     <Menu
-                        mode='horizontal'
-                        subMenuCloseDelay='0.5'
-                        style={{ marginLeft: '150px' }}
-                     >
+                     <Menu mode='horizontal' subMenuCloseDelay='0.5'>
                         <SubMenu
                            key='SubMenu'
                            title={
@@ -155,19 +146,6 @@ function HeaderBar(props) {
                               Logout
                            </Menu.Item>
                         </SubMenu>
-
-                        <Menu.Item key='setting'>
-                           <Link to='/product/cart'>
-                              <Badge count={productInCartCount} size='small'>
-                                 <RiShoppingBag2Line
-                                    style={{
-                                       fontSize: '160%',
-                                       marginBottom: '-7px',
-                                    }}
-                                 />
-                              </Badge>
-                           </Link>
-                        </Menu.Item>
                      </Menu>
                   </>
                )}
