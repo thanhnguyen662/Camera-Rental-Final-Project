@@ -4,7 +4,17 @@ import {
    TagsOutlined,
    UserOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Col, Layout, Menu, notification, Row } from 'antd';
+import {
+   Avatar,
+   Button,
+   Col,
+   Dropdown,
+   Layout,
+   Menu,
+   notification,
+   Row,
+   Space,
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Redirect, useLocation } from 'react-router-dom';
@@ -12,10 +22,10 @@ import conversationApi from '../../api/conversationApi';
 import userApi from '../../api/userApi';
 import { auth } from '../../firebase';
 import Cart from '../Cart';
+import SearchBar from '../SearchBar';
 import './HeaderBar.scss';
 
 const { Header } = Layout;
-const { SubMenu } = Menu;
 
 function HeaderBar(props) {
    const location = useLocation();
@@ -86,6 +96,29 @@ function HeaderBar(props) {
       }
    }
 
+   const menu = (
+      <Menu>
+         <Menu.Item key='setting:1' icon={<UserOutlined />}>
+            <Link to='/profile'>Profile</Link>
+         </Menu.Item>
+         <Menu.Item key='setting:2' icon={<EditOutlined />}>
+            <Link to='/profile/edit'>Edit</Link>
+         </Menu.Item>
+         <Menu.Item key='setting:4' icon={<TagsOutlined />}>
+            <Link to='/product/create'>Create Product</Link>
+         </Menu.Item>
+         <Menu.Item
+            key='setting:3'
+            icon={<LogoutOutlined />}
+            onClick={() => {
+               onLogoutButtonClick();
+            }}
+         >
+            Logout
+         </Menu.Item>
+      </Menu>
+   );
+
    return (
       <Header className='headerBar' style={{ padding: '0 16px' }}>
          {sendMessage === undefined ? null : (
@@ -100,14 +133,13 @@ function HeaderBar(props) {
             />
          )}
          <Row
-            style={{ padding: '0 115px' }}
+            style={{ padding: '0 115px ' }}
             justify='space-around'
             align='middle'
          >
             <Col flex='auto'>LOGO</Col>
-            <Cart count={productInCartCount} />
-            <Col>
-               {loginStatus === false ? (
+            {loginStatus === false ? (
+               <Col>
                   <>
                      <Button type='link' size='large'>
                         <Link to='/account/login'>Login</Link>
@@ -116,40 +148,28 @@ function HeaderBar(props) {
                         <Link to='/account/register'>Register</Link>
                      </Button>
                   </>
-               ) : (
-                  <>
-                     <Menu mode='horizontal' subMenuCloseDelay='0.5'>
-                        <SubMenu
-                           key='SubMenu'
-                           title={
-                              <>
-                                 <Avatar size={38} src={photoURL} />
-                              </>
-                           }
-                        >
-                           <Menu.Item key='setting:1' icon={<UserOutlined />}>
-                              <Link to='/profile'>Profile</Link>
-                           </Menu.Item>
-                           <Menu.Item key='setting:2' icon={<EditOutlined />}>
-                              <Link to='/profile/edit'>Edit</Link>
-                           </Menu.Item>
-                           <Menu.Item key='setting:4' icon={<TagsOutlined />}>
-                              <Link to='/product/create'>Create Product</Link>
-                           </Menu.Item>
-                           <Menu.Item
-                              key='setting:3'
-                              icon={<LogoutOutlined />}
-                              onClick={() => {
-                                 onLogoutButtonClick();
-                              }}
-                           >
-                              Logout
-                           </Menu.Item>
-                        </SubMenu>
-                     </Menu>
-                  </>
-               )}
-            </Col>
+               </Col>
+            ) : (
+               <>
+                  <Space size={15}>
+                     <Col>
+                        <SearchBar />
+                     </Col>
+                     <Col>
+                        <Cart count={productInCartCount} />
+                     </Col>
+                     <Col>
+                        <Dropdown overlay={menu}>
+                           <Avatar
+                              size={38}
+                              src={photoURL}
+                              style={{ marginBottom: 2 }}
+                           />
+                        </Dropdown>
+                     </Col>
+                  </Space>
+               </>
+            )}
          </Row>
       </Header>
    );

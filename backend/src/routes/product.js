@@ -3,6 +3,7 @@ const router = express.Router();
 const productController = require('../app/controllers/ProductController');
 const authMiddleware = require('../firebase/middleware/auth-middleware');
 
+router.get('/searchSuggestion', productController.searchProductSuggestion);
 router.get('/myProduct', productController.getMyProduct);
 router.get(
    '/orderItemsIncludeProduct',
