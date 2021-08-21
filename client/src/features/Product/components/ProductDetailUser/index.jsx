@@ -42,6 +42,10 @@ function ProductDetailUser(props) {
       }
    };
 
+   const disableMessageButton = userId === productDetail.User?.firebaseId && {
+      disabled: true,
+   };
+
    return (
       <>
          {sendMessage === undefined ? null : (
@@ -80,6 +84,7 @@ function ProductDetailUser(props) {
                            <Button
                               icon={<MessageOutlined />}
                               onClick={onClickSendMessage}
+                              {...disableMessageButton}
                            >
                               Message
                            </Button>

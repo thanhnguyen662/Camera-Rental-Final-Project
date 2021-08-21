@@ -1,8 +1,8 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Select, Row, Col, Tag } from 'antd';
+import { Col, Row, Select, Tag } from 'antd';
 import React, { useRef, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import productApi from '../../api/productApi';
+import searchApi from '../../api/searchApi';
 import '../HeaderBar/HeaderBar.scss';
 
 const { Option } = Select;
@@ -26,11 +26,11 @@ function SearchBar(props) {
    const onSearchForm = async (formValues) => {
       if (formValues.productName === '') return;
       try {
-         const response = await productApi.searchSuggestion(formValues);
+         const response = await searchApi.suggestion(formValues);
          setSearchResult([
             {
                id: 'user input',
-               name: `${formValues.productName}*all`,
+               name: formValues.productName,
                tag: 'all',
             },
             ...response,
@@ -47,7 +47,7 @@ function SearchBar(props) {
 
    return (
       <>
-         {redirect && <Redirect to={`search/${redirect}`} />}
+         {redirect && <Redirect to={`/search/${redirect}`} />}
          <div className='searchContainer'>
             <Select
                onSearch={(value) => handleOnSearchChange(value)}
@@ -65,7 +65,7 @@ function SearchBar(props) {
                   >
                      {result.tag ? (
                         <Row>
-                           <Col flex='auto'>{result.name.split('*')[0]}</Col>
+                           <Col flex='auto'>{result.name}</Col>
                            <Col>
                               <Tag color='blue'>All</Tag>
                            </Col>

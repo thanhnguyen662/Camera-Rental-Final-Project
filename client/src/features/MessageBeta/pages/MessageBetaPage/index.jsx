@@ -20,6 +20,7 @@ import { io } from 'socket.io-client';
 import conversationApi from '../../../../api/conversationApi';
 import userApi from '../../../../api/userApi';
 import Conversations from '../../components/Conversations';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Messages from '../../components/Messages';
 import { newMessage } from '../../messageSlice';
 import './MessageBetaPage.scss';
@@ -32,13 +33,17 @@ function MessageBetaPage(props) {
    const currentUserId = useSelector((state) => state.users.id);
    const reduxIncomingMessage = useSelector((state) => state.messages[0]);
 
+   const [page, setPage] = useState(1);
    const [messageInputValue, setMessageInputValue] = useState('');
    const [friendInfo, setFriendInfo] = useState([]);
+   const [ok, setOk] = useState(0);
    const [conversations, setConversations] = useState([]);
    const [messages, setMessages] = useState([]);
    const [selectedConversation, setSelectedConversation] = useState(
       location.state?.conversationInfo || ''
    );
+
+   const ref = useRef(page);
 
    useEffect(() => {
       if (!currentUserId) return;
@@ -84,29 +89,54 @@ function MessageBetaPage(props) {
                currentUserId
             );
             console.log('Conversations: ', response);
+            response.sort((a, b) => {
+               return (
+                  new Date(b.messages[0].createdAt) -
+                  new Date(a.messages[0].createdAt)
+               );
+            });
             setConversations(response);
          };
          getConversation();
       } catch (error) {
          return console.log(error);
       }
-   }, [currentUserId]);
+      // eslint-disable-next-line
+   }, [currentUserId, reduxIncomingMessage, ok]);
+
+   useEffect(() => {
+      setPage(1);
+      setMessages([]);
+   }, [selectedConversation]);
 
    useEffect(() => {
       if (!selectedConversation) return;
+      if (page > 1) {
+         if (ref.current === page) return;
+      }
       const getMessagesByConversationId = async () => {
          try {
             const response = await conversationApi.getMessageBeta(
-               selectedConversation.id
+               selectedConversation.id,
+               page
             );
             console.log('Messages: ', response);
-            setMessages(response);
+
+            response.sort((a, b) => {
+               return new Date(a.createdAt) - new Date(b.createdAt);
+            });
+
+            setMessages((prev) => [...response, ...prev]);
          } catch (error) {
             console.log(error);
          }
       };
       getMessagesByConversationId();
-   }, [selectedConversation]);
+   }, [selectedConversation, page]);
+
+   useEffect(() => {
+      ref.current = page;
+   }, [page]);
 
    const handleOnClickConversation = async (conversation) => {
       console.log('Selected Conversation: ', conversation);
@@ -146,6 +176,8 @@ function MessageBetaPage(props) {
          socket.current.emit('message', messageDataSocket);
 
          const response = await conversationApi.sendMessage(messageDataDb);
+         console.log('created: ', response);
+         setOk(ok + 1);
          setMessages([...messages, response]);
       } catch (error) {
          console.log(error);
@@ -167,6 +199,7 @@ function MessageBetaPage(props) {
                         currentUserId={currentUserId}
                         handleOnClickConversation={handleOnClickConversation}
                         selectedConversationId={selectedConversation?.id}
+                        lastMessage={conversation.messages[0].text}
                      />
                   ))}
                </ConversationList>
@@ -208,17 +241,30 @@ function MessageBetaPage(props) {
                         </ConversationHeader.Actions>
                      </ConversationHeader>
                      <MessageList>
-                        {messages?.map((message) => (
-                           <Messages
-                              key={message.id}
-                              message={message}
-                              friendInfo={friendInfo}
-                              currentUserId={currentUserId}
-                              redirectData={
-                                 location.state?.conversationUserInfo
-                              }
-                           />
-                        ))}
+                        <div
+                           id='scrollableDiv'
+                           className='messageInfinityScroll'
+                        >
+                           <InfiniteScroll
+                              dataLength={messages?.length}
+                              next={() => setPage(page + 1)}
+                              inverse={true}
+                              hasMore={true}
+                              scrollableTarget='scrollableDiv'
+                           >
+                              {messages?.map((message) => (
+                                 <Messages
+                                    key={message.id}
+                                    message={message}
+                                    friendInfo={friendInfo}
+                                    currentUserId={currentUserId}
+                                    redirectData={
+                                       location.state?.conversationUserInfo
+                                    }
+                                 />
+                              ))}
+                           </InfiniteScroll>
+                        </div>
                      </MessageList>
                      <MessageInput
                         placeholder='Type message here'

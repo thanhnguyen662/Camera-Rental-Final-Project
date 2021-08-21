@@ -17,25 +17,18 @@ class MessageController {
       }
    };
 
-   findMessage = async (req, res, next) => {
+   findMessageBeta = async (req, res, next) => {
+      const page = req.params.page;
+      const take = 14;
       try {
-         const findUserMessage = await prisma.message.findMany({
+         const response = await prisma.message.findMany({
+            take: take,
+            skip: (page - 1) * take,
             where: {
                conversationId: parseInt(req.params.conversationId),
             },
-         });
-
-         res.status(200).json(findUserMessage);
-      } catch (error) {
-         return next(error);
-      }
-   };
-
-   findMessageBeta = async (req, res, next) => {
-      try {
-         const response = await prisma.message.findMany({
-            where: {
-               conversationId: parseInt(req.params.conversationId),
+            orderBy: {
+               createdAt: 'desc',
             },
          });
          res.status(200).json(response);

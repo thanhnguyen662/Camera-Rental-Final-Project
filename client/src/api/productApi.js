@@ -27,11 +27,6 @@ const productApi = {
       const url = '/product/orderItemsIncludeProduct';
       return axiosClient.get(url, { params });
    },
-
-   searchSuggestion: (params) => {
-      const url = '/product/searchSuggestion';
-      return axiosClient.get(url, { params });
-   },
 };
 
 export default productApi;

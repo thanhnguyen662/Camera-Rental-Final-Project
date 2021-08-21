@@ -17,6 +17,7 @@ import Message from '../features/Message';
 import MessageBeta from '../features/MessageBeta';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
+import Search from '../features/Search';
 import MainLayout from '../layouts/Main';
 
 const { Content } = Layout;
@@ -55,6 +56,12 @@ function Routers(props) {
                      <Route path='/product'>
                         <Content style={{ margin: '25px 125px' }}>
                            <Product />
+                        </Content>
+                     </Route>
+
+                     <Route path='/search'>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Search />
                         </Content>
                      </Route>
 

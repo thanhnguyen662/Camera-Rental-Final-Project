@@ -22,6 +22,7 @@ function Conversations(props) {
       currentUserId,
       handleOnClickConversation,
       selectedConversationId,
+      lastMessage,
    } = props;
    const [friendInfo, setFriendInfo] = useState({});
 
@@ -50,8 +51,8 @@ function Conversations(props) {
    return (
       <>
          <Conversation
-            className='conversation'
             name={friendInfo.username}
+            info={lastMessage}
             onClick={() => handleOnClickConversation(conversation)}
             {...activeConversation}
          >

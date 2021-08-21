@@ -57,6 +57,14 @@ class ConversationController {
                   has: req.params.userId,
                },
             },
+            include: {
+               messages: {
+                  take: 1,
+                  orderBy: {
+                     createdAt: 'desc',
+                  },
+               },
+            },
          });
 
          res.status(200).json(response);

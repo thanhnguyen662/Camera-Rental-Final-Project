@@ -28,8 +28,8 @@ const conversationApi = {
       return axiosClient.get(url);
    },
 
-   getMessageBeta: (conversationId) => {
-      const url = `/message/${conversationId}`;
+   getMessageBeta: (conversationId, page) => {
+      const url = `/message/beta/${conversationId}/${page}`;
       return axiosClient.get(url);
    },
 };

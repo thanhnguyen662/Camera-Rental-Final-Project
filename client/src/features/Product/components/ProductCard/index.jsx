@@ -18,7 +18,6 @@ function ProductCard(props) {
 
    return (
       <>
-         <h1 style={{ marginTop: '45px' }}>Recent Discounts</h1>
          <Row gutter={[35, 30]}>
             {products.map((product) => (
                <Col flex='none' key={product.id}>

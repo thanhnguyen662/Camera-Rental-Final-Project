@@ -16,6 +16,7 @@ function ProductPage(props) {
 
    return (
       <>
+         <h1 style={{ marginTop: '45px' }}>Recent Discounts</h1>
          <ProductCard products={product} />
       </>
    );

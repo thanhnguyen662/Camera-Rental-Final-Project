@@ -65,6 +65,10 @@ function HeaderBar(props) {
    };
 
    useEffect(() => {
+      setSendMessage();
+   }, [location]);
+
+   useEffect(() => {
       if (!reduxIncomingMessage) return;
 
       const getSenderOfMessageDetail = async () => {
@@ -128,6 +132,7 @@ function HeaderBar(props) {
                   state: {
                      conversationInfo: sendMessage,
                      conversationUserInfo: senderData,
+                     reduxIncomingMessage: reduxIncomingMessage,
                   },
                }}
             />

@@ -126,34 +126,6 @@ class ProductController {
          return next(error);
       }
    };
-
-   searchProductSuggestion = async (req, res, next) => {
-      try {
-         const response = await prisma.product.findMany({
-            take: 8,
-            where: {
-               OR: {
-                  name: {
-                     contains: req.query.productName,
-                     mode: 'insensitive',
-                  },
-                  brand: {
-                     contains: req.query.productName,
-                     mode: 'insensitive',
-                  },
-               },
-            },
-            select: {
-               id: true,
-               name: true,
-            },
-         });
-
-         res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
 }
 
 module.exports = new ProductController();
