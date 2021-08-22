@@ -36,7 +36,6 @@ function MessageBetaPage(props) {
    const [page, setPage] = useState(1);
    const [messageInputValue, setMessageInputValue] = useState('');
    const [friendInfo, setFriendInfo] = useState([]);
-   const [ok, setOk] = useState(0);
    const [conversations, setConversations] = useState([]);
    const [messages, setMessages] = useState([]);
    const [selectedConversation, setSelectedConversation] = useState(
@@ -57,6 +56,8 @@ function MessageBetaPage(props) {
             id: shortid.generate(),
             sender: message.sender,
             text: message.text,
+            conversationId: message.conversationId,
+            createdAt: message.createdAt,
          });
          dispatch(action);
       });
@@ -75,6 +76,36 @@ function MessageBetaPage(props) {
    }, [reduxIncomingMessage, selectedConversation.members]);
 
    useEffect(() => {
+      if (!reduxIncomingMessage) return;
+      setConversations((prev) => {
+         const filterConversation = prev?.find(
+            (m) => m.id === reduxIncomingMessage.conversationId
+         );
+         if (filterConversation) {
+            if (filterConversation.messages.length > 0) {
+               filterConversation.messages[0].text = reduxIncomingMessage.text;
+               filterConversation.messages[0].createdAt =
+                  reduxIncomingMessage.createdAt;
+            } else {
+               filterConversation.messages.push({
+                  text: reduxIncomingMessage.text,
+                  createdAt: reduxIncomingMessage.createdAt,
+               });
+            }
+         }
+
+         prev.sort((a, b) => {
+            return (
+               new Date(b.messages[0]?.createdAt) -
+               new Date(a.messages[0]?.createdAt)
+            );
+         });
+
+         return [...prev];
+      });
+   }, [reduxIncomingMessage]);
+
+   useEffect(() => {
       if (!currentUserId) return;
 
       //send my userId to Socket Server
@@ -83,6 +114,18 @@ function MessageBetaPage(props) {
 
    useEffect(() => {
       if (!currentUserId) return;
+      const array2Sorted = [reduxIncomingMessage?.sender, currentUserId]
+         .slice()
+         .sort();
+      const check = conversations.map((c) => {
+         return c.members
+            .slice()
+            .sort()
+            .every(function (value, index) {
+               return value === array2Sorted[index];
+            });
+      });
+      if (check.find((i) => i === true)) return;
       try {
          const getConversation = async () => {
             const response = await conversationApi.getConversationBeta(
@@ -91,8 +134,8 @@ function MessageBetaPage(props) {
             console.log('Conversations: ', response);
             response.sort((a, b) => {
                return (
-                  new Date(b.messages[0].createdAt) -
-                  new Date(a.messages[0].createdAt)
+                  new Date(b.messages[0]?.createdAt) -
+                  new Date(a.messages[0]?.createdAt)
                );
             });
             setConversations(response);
@@ -102,7 +145,7 @@ function MessageBetaPage(props) {
          return console.log(error);
       }
       // eslint-disable-next-line
-   }, [currentUserId, reduxIncomingMessage, ok]);
+   }, [currentUserId, reduxIncomingMessage]);
 
    useEffect(() => {
       setPage(1);
@@ -166,6 +209,8 @@ function MessageBetaPage(props) {
          };
 
          const messageDataSocket = {
+            conversationId: selectedConversation.id,
+            createdAt: new Date(),
             text: messageInputValue,
             sender: currentUserId,
             receiver:
@@ -177,8 +222,31 @@ function MessageBetaPage(props) {
 
          const response = await conversationApi.sendMessage(messageDataDb);
          console.log('created: ', response);
-         setOk(ok + 1);
          setMessages([...messages, response]);
+
+         //update new messages to latest messages on conversation list
+         setConversations((prev) => {
+            const filterConversation = prev.find(
+               (m) => m.id === response.conversationId
+            );
+            if (filterConversation.messages.length > 0) {
+               filterConversation.messages[0].text = response.text;
+               filterConversation.messages[0].createdAt = response.createdAt;
+            } else {
+               filterConversation.messages.push({
+                  text: response.text,
+                  createdAt: response.createdAt,
+               });
+            }
+
+            prev.sort((a, b) => {
+               return (
+                  new Date(b.messages[0]?.createdAt) -
+                  new Date(a.messages[0]?.createdAt)
+               );
+            });
+            return [...prev];
+         });
       } catch (error) {
          console.log(error);
       }
@@ -199,7 +267,7 @@ function MessageBetaPage(props) {
                         currentUserId={currentUserId}
                         handleOnClickConversation={handleOnClickConversation}
                         selectedConversationId={selectedConversation?.id}
-                        lastMessage={conversation.messages[0].text}
+                        lastMessage={conversation.messages[0]?.text}
                      />
                   ))}
                </ConversationList>

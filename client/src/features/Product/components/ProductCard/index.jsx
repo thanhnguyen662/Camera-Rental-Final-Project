@@ -1,4 +1,4 @@
-import { Col, Image, Progress, Rate, Row } from 'antd';
+import { Col, Image, Rate, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,18 @@ ProductCard.propTypes = {
 
 ProductCard.defaultProps = {
    products: [],
+};
+
+const colorStatus = (stock) => {
+   console.log('stock', stock);
+   if (stock >= 50)
+      return {
+         color: '#3eb88d',
+      };
+   if (stock < 50)
+      return {
+         color: '#F080B5',
+      };
 };
 
 function ProductCard(props) {
@@ -49,19 +61,11 @@ function ProductCard(props) {
                      />
                      <h4>{product.qualityRate}</h4>
                      <h1>{priceFormat(product.price)}</h1>
-                     <div className='stockStatus'>
-                        <Progress
-                           className='progressBar'
-                           strokeColor={{
-                              '0%': '#108ee9',
-                              '100%': '#87d068',
-                           }}
-                           percent={product.stock || 0}
-                           showInfo={false}
-                           size='small'
-                        />
-                        <h5>{product.stock || 0}%</h5>
-                        <h6>in stock</h6>
+                     <div style={colorStatus(product.stock)}>
+                        <h5 style={colorStatus(product.stock)}>
+                           {product.stock || 0}
+                        </h5>
+                        <h6 style={colorStatus(product.stock)}>in stock</h6>
                      </div>
                   </div>
                </Col>

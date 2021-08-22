@@ -58,6 +58,8 @@ io.on('connection', (socket) => {
       io.to(receiverSocketId.socketId).emit('messageToReceiver', {
          sender: clientMessage.sender,
          text: clientMessage.text,
+         conversationId: clientMessage.conversationId,
+         createdAt: clientMessage.createdAt,
       });
    });
 

@@ -132,7 +132,7 @@ function HeaderBar(props) {
                   state: {
                      conversationInfo: sendMessage,
                      conversationUserInfo: senderData,
-                     reduxIncomingMessage: reduxIncomingMessage,
+                     // reduxIncomingMessage: reduxIncomingMessage,
                   },
                }}
             />
