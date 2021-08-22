@@ -9,16 +9,20 @@ import AddressOption from '../../../../components/AddressOption';
 
 ProductAddressForm.propTypes = {
    currentStep: PropTypes.number,
+   oldData: PropTypes.object,
+   handleSubmitCoordinates: PropTypes.func,
 };
 
 ProductAddressForm.defaultProps = {
    currentStep: 0,
+   oldData: {},
+   handleSubmitCoordinates: null,
 };
 
 const { Title, Text } = Typography;
 
 function ProductAddressForm(props) {
-   const { currentStep, handleSubmitCoordinates } = props;
+   const { currentStep, handleSubmitCoordinates, oldData } = props;
 
    const [viewport, setViewport] = useState({
       width: '1130px',
@@ -46,6 +50,14 @@ function ProductAddressForm(props) {
    }, []);
 
    useEffect(() => {
+      if (Object.keys(oldData).length === 0) return;
+      setCoordinates({
+         lat: parseFloat(oldData.pins[0].lat),
+         long: parseFloat(oldData.pins[0].long),
+      });
+   }, [oldData]);
+
+   useEffect(() => {
       if (!initLocation) return;
       setViewport({
          ...viewport,
@@ -67,9 +79,9 @@ function ProductAddressForm(props) {
    const handleOnSubmitForm = (formData) => {
       handleSubmitCoordinates({
          ...coordinates,
-         district: formData.district.split('/')[1],
-         city: formData.city.split('/')[1],
-         ward: formData.ward.split('/')[1],
+         district: formData.district.split('/')[1] || formData.district,
+         city: formData.city.split('/')[1] || formData.city,
+         ward: formData.ward.split('/')[1] || formData.ward,
          address: formData.address,
       });
    };
@@ -137,6 +149,7 @@ function ProductAddressForm(props) {
                         <AddressOption
                            className='optionStyle'
                            onFinish={handleOnSubmitForm}
+                           oldData={oldData}
                         />
                         <em>
                            We need the address where you rent the product. This

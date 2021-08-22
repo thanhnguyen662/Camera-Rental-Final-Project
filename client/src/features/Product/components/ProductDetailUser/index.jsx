@@ -98,23 +98,22 @@ function ProductDetailUser(props) {
                         </Space>
                      </div>
                   </Col>
-                  {/* <Col span={1}>
-                     <Divider type='vertical' className='dividerBar' />
-                  </Col> */}
                   <Col span={13}>
                      <div className='infoGird'>
                         <Row className='infoRow'>
                            <Col span={8}>
                               <Space direction='vertical '>
                                  <Text className='titleRate'>Product</Text>
-                                 <Text className='titleScore'>{myProduct}</Text>
+                                 <Text className='titleScore'>
+                                    {myProduct || 0}
+                                 </Text>
                               </Space>
                            </Col>
                            <Col span={8}>
                               <Space direction='vertical '>
                                  <Text className='titleRate'>Rate</Text>
                                  <Text className='titleScore'>
-                                    {productDetail.User.rate}
+                                    {productDetail.User.rate || 0}
                                  </Text>
                               </Space>
                            </Col>
@@ -122,7 +121,7 @@ function ProductDetailUser(props) {
                               <Space direction='vertical '>
                                  <Text className='titleRate'>Orders</Text>
                                  <Text className='titleScore'>
-                                    {myStats.totalOrder}
+                                    {myStats.totalOrder || 0}
                                  </Text>
                               </Space>
                            </Col>

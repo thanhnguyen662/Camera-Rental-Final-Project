@@ -26,8 +26,16 @@ model Product {
   productComments ProductComment[]
   pins            Pin[]
   orderItems      OrderItem[]
+  categoryId      Int?
+  categories      Category?        @relation(fields: [categoryId], references: [id])
 
   @@map("Products")
+}
+
+model Category {
+  id      Int       @id @default(autoincrement())
+  name    String?
+  Product Product[]
 }
 
 model User {
@@ -130,7 +138,7 @@ model Pin {
   ward      String?
   district  String?
   city      String?
-  productId Int?
+  productId Int?     @unique
   product   Product? @relation(fields: [productId], references: [id])
 
   @@map("Pins")

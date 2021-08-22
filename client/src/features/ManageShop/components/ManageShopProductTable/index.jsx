@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Image } from 'antd';
+import { Table, Image, Button } from 'antd';
 import priceFormat from '../../../../utils/PriceFormat';
 import './ManageShopProductTable.scss';
+import { useHistory } from 'react-router-dom';
 
 ManageShopProductTable.propTypes = {
    myProduct: PropTypes.array,
@@ -14,6 +15,7 @@ ManageShopProductTable.defaultProps = {
 
 function ManageShopProductTable(props) {
    const { myProduct } = props;
+   const history = useHistory();
 
    const columns = [
       {
@@ -44,6 +46,15 @@ function ManageShopProductTable(props) {
          title: 'Stock',
          dataIndex: ['stock'],
          key: 'stock',
+      },
+      {
+         title: 'Action',
+         dataIndex: ['slug'],
+         render: (record) => (
+            <Button onClick={() => history.push(`/product/edit/${record}`)}>
+               Edit
+            </Button>
+         ),
       },
    ];
 

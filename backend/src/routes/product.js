@@ -13,6 +13,7 @@ router.post(
    authMiddleware,
    productController.createNewProduct
 );
+router.patch('/update', productController.updateProduct);
 router.get('/:productSlug', authMiddleware, productController.getProductDetail);
 router.get('/', authMiddleware, productController.getProducts);
 

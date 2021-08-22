@@ -31,6 +31,8 @@ class ProductController {
                   },
                },
                orderItems: true,
+               pins: true,
+               categories: true,
             },
          });
 
@@ -89,6 +91,7 @@ class ProductController {
                brand: req.body.brand,
                price: String(req.body.price),
                stock: Number(req.body.stock),
+               categoryId: Number(req.body.categoryId),
 
                pins: {
                   create: {
@@ -104,6 +107,45 @@ class ProductController {
          });
 
          res.status(200).json(createNewProduct);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   updateProduct = async (req, res, next) => {
+      try {
+         const response = await prisma.product.update({
+            where: {
+               id: parseInt(req.body.productId),
+            },
+            data: {
+               name: req.body.name,
+               description: req.body.description,
+               productPhotoURL: req.body.productPhotoURL,
+               brand: req.body.brand,
+               price: String(req.body.price),
+               stock: Number(req.body.stock),
+               categoryId: Number(req.body.categoryId),
+
+               pins: {
+                  update: {
+                     data: {
+                        lat: String(req.body.lat),
+                        long: String(req.body.long),
+                        address: String(req.body.address),
+                        ward: String(req.body.ward),
+                        city: String(req.body.city),
+                        district: String(req.body.district),
+                     },
+                     where: {
+                        productId: parseInt(req.body.productId),
+                     },
+                  },
+               },
+            },
+         });
+
+         res.status(200).json(response);
       } catch (error) {
          return next(error);
       }

@@ -11,9 +11,10 @@ import {
    Modal,
    Row,
    Typography,
+   Select,
 } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { config } from './editorConfig';
 import './ProductCreateForm.scss';
 
@@ -22,6 +23,8 @@ ProductCreateForm.propTypes = {
    currentStep: PropTypes.number,
    nextStep: PropTypes.func,
    prevStep: PropTypes.func,
+   oldData: PropTypes.object,
+   category: PropTypes.array,
 };
 
 ProductCreateForm.defaultProps = {
@@ -29,11 +32,14 @@ ProductCreateForm.defaultProps = {
    currentStep: 0,
    nextStep: null,
    prevStep: null,
+   oldData: {},
+   category: [],
 };
 
 ClassicEditor.defaultConfig = config;
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 const formItemLayout = {
    labelCol: {
@@ -60,7 +66,8 @@ const tailFormItemLayout = {
 };
 
 function ProductCreateForm(props) {
-   const { collectData, currentStep, nextStep, prevStep } = props;
+   const { collectData, currentStep, nextStep, prevStep, oldData, category } =
+      props;
 
    const [form] = Form.useForm();
    const [body, setBody] = useState('');
@@ -82,6 +89,19 @@ function ProductCreateForm(props) {
       });
    };
 
+   const initialValues = Object.keys(oldData).length !== 0 && {
+      productName: oldData.name,
+      productPrice: oldData.price,
+      productBrand: oldData.brand,
+      productStock: oldData.stock,
+      productCategory: oldData.categories.id,
+   };
+
+   useEffect(() => {
+      if (Object.keys(oldData).length === 0) return;
+      setBody(oldData?.description);
+   }, [oldData]);
+
    return (
       <>
          {currentStep === 0 && (
@@ -102,6 +122,7 @@ function ProductCreateForm(props) {
                         nextStep();
                      }}
                      scrollToFirstError
+                     initialValues={initialValues}
                   >
                      <Form.Item
                         name='productName'
@@ -156,18 +177,24 @@ function ProductCreateForm(props) {
                      >
                         <Input />
                      </Form.Item>
-                     {/* <Form.Item
-                        name='productAddress'
-                        label='Product Address'
+                     <Form.Item
+                        name='productCategory'
+                        label='Category'
                         rules={[
                            {
                               required: true,
-                              message: 'Please input your product address',
+                              message: 'Please input your product stock',
                            },
                         ]}
                      >
-                        <Input />
-                     </Form.Item> */}
+                        <Select>
+                           {category?.map((c) => (
+                              <Option value={c.id} key={c.id}>
+                                 {c.name}
+                              </Option>
+                           ))}
+                        </Select>
+                     </Form.Item>
                      <Form.Item {...tailFormItemLayout}>
                         <Button type='primary' htmlType='submit'>
                            Next Step
@@ -203,6 +230,7 @@ function ProductCreateForm(props) {
                            const data = editor.getData();
                            setBody(data);
                         }}
+                        data={oldData?.description}
                      />
                      <Button type='primary' htmlType='submit'>
                         Next Step

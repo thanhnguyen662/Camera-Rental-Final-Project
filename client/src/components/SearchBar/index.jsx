@@ -1,7 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Col, Row, Select, Tag } from 'antd';
 import React, { useRef, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import searchApi from '../../api/searchApi';
 import '../HeaderBar/HeaderBar.scss';
 
@@ -11,7 +11,7 @@ function SearchBar(props) {
    const timeout = useRef(null);
 
    const [searchResult, setSearchResult] = useState([]);
-   const [redirect, setRedirect] = useState('');
+   const history = useHistory();
 
    const handleOnSearchChange = (value) => {
       if (timeout.current) clearTimeout(timeout.current);
@@ -41,13 +41,8 @@ function SearchBar(props) {
       }
    };
 
-   const redirectToSearchPage = (value) => {
-      setRedirect(value);
-   };
-
    return (
       <>
-         {redirect && <Redirect to={`/search/${redirect}`} />}
          <div className='searchContainer'>
             <Select
                onSearch={(value) => handleOnSearchChange(value)}
@@ -55,7 +50,7 @@ function SearchBar(props) {
                className='headerSearchBar'
                placeholder='Search'
                suffixIcon={<SearchOutlined className='headerSearchIcon' />}
-               onSelect={(value) => redirectToSearchPage(value)}
+               onSelect={(value) => history.push(`/search/${value}`)}
             >
                {searchResult?.map((result) => (
                   <Option

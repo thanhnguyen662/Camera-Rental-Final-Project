@@ -7,6 +7,7 @@ const pinRouter = require('./pin');
 const orderRouter = require('./order');
 const commentRouter = require('./comment');
 const searchRouter = require('./search');
+const categoryRouter = require('./category');
 
 function route(app) {
    app.use('/account', accountRouter);
@@ -18,6 +19,7 @@ function route(app) {
    app.use('/order', orderRouter);
    app.use('/comment', commentRouter);
    app.use('/search', searchRouter);
+   app.use('/category', categoryRouter);
 }
 
 module.exports = route;

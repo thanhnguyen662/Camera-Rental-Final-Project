@@ -1,25 +1,62 @@
 import { Steps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import categoryApi from '../../../../api/categoryApi';
 import productApi from '../../../../api/productApi';
 import { storage } from '../../../../firebase';
 import ProductAddressForm from '../../components/ProductAddressForm';
 import ProductCreateForm from '../../components/ProductCreateForm';
 import ProductUploadImage from '../../components/ProductUploadImage';
-import { v4 as uuidv4 } from 'uuid';
-import './ProductCreatePage.scss';
-import categoryApi from '../../../../api/categoryApi';
 
 const { Step } = Steps;
 
-function ProductCreatePage(props) {
-   const [imageList, setImageList] = useState([]);
-   const [db, setDb] = useState();
+function ProductEditPage(props) {
+   const { slug } = useParams();
    const [currentStep, setCurrentStep] = useState(0);
+   const [db, setDb] = useState();
+   const [productData, setProductData] = useState({});
+   const [imageList, setImageList] = useState([]);
    const [percent, setPercent] = useState(0);
    const [category, setCategory] = useState([]);
+
    const userEmail = useSelector((state) => state.users.email);
-   const firebaseId = useSelector((state) => state.users.id);
+
+   useEffect(() => {
+      const getProductDetail = async () => {
+         if (!slug) return;
+         const response = await productApi.getProductDetail(slug);
+         console.log('Detail: ', response);
+
+         setProductData(response);
+         setImageList(() => {
+            let data = [];
+            response.productPhotoURL.map((url) => {
+               return data.push({
+                  status: 'done',
+                  url: url,
+                  id: uuidv4(),
+               });
+            });
+
+            return data;
+         });
+      };
+      getProductDetail();
+   }, [slug]);
+
+   useEffect(() => {
+      const getCategoryInDb = async () => {
+         try {
+            const response = await categoryApi.getCategory();
+            setCategory(response);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getCategoryInDb();
+   }, []);
 
    const uploadImage = async (options) => {
       const { onSuccess, onError, file } = options;
@@ -62,7 +99,11 @@ function ProductCreatePage(props) {
          }
       );
    };
-   console.log('imageList', imageList);
+
+   const collectBasicData = (values) => {
+      console.log('collectBasicData', values);
+      setDb(values);
+   };
 
    const handleOnRemove = (file) => {
       const index = imageList.indexOf(file);
@@ -84,17 +125,21 @@ function ProductCreatePage(props) {
       //add photoURL array to array data for push into DB
       const split = { ...db };
       split.productPhotoURL = array;
+      console.log('photo', split);
       setDb(split);
    };
 
-   //collect data from ProductCreateForm includes information of product
-   const collectData = (values) => {
-      setDb(values);
+   const handleSubmitCoordinates = (values) => {
+      console.log('submitCoordinates', values);
+      setDb({ ...db, ...values });
    };
 
-   const handleSubmitCoordinates = (values) => {
-      console.log(values);
-      setDb({ ...db, ...values });
+   const nextStep = () => {
+      setCurrentStep(currentStep + 1);
+   };
+
+   const prevStep = () => {
+      setCurrentStep(currentStep - 1);
    };
 
    useEffect(() => {
@@ -112,51 +157,29 @@ function ProductCreatePage(props) {
          try {
             //prepare data for Db
             const data = {
-               id: firebaseId,
+               productId: productData.id,
                description: db.description,
                productPhotoURL: db.productPhotoURL,
-               categoryId: db.productCategory,
                price: db.productPrice,
                name: db.productName,
                brand: db.productBrand,
                stock: db.productStock,
-               productAddress: db.productAddress,
                lat: db.lat,
                long: db.long,
                address: db.address,
                ward: db.ward,
                district: db.district,
                city: db.city,
+               categoryId: db.productCategory
             };
-
-            const response = await productApi.createProduct(data);
-            console.log('created product: ', response);
+            const response = await productApi.updateProduct(data);
+            console.log('updated product: ', response);
          } catch (error) {
             return console.log(error);
          }
       };
       createProductToDb();
-   }, [db, firebaseId]);
-
-   const nextStep = () => {
-      setCurrentStep(currentStep + 1);
-   };
-
-   const prevStep = () => {
-      setCurrentStep(currentStep - 1);
-   };
-
-   useEffect(() => {
-      const getCategoryInDb = async () => {
-         try {
-            const response = await categoryApi.getCategory();
-            setCategory(response);
-         } catch (error) {
-            console.log(error);
-         }
-      };
-      getCategoryInDb();
-   }, []);
+   }, [db, productData.id]);
 
    return (
       <>
@@ -168,31 +191,37 @@ function ProductCreatePage(props) {
                <Step title='Address' description='Address for rent.' />
             </Steps>
          </div>
-         <ProductCreateForm
-            collectData={collectData}
-            currentStep={currentStep}
-            nextStep={nextStep}
-            prevStep={prevStep}
-            category={category}
-         />
-         <ProductUploadImage
-            uploadImage={uploadImage}
-            imageList={imageList}
-            handleOnRemove={handleOnRemove}
-            handleSubmit={handleSubmit}
-            currentStep={currentStep}
-            percent={percent}
-            prevStep={prevStep}
-            nextStep={nextStep}
-         />
-         <ProductAddressForm
-            currentStep={currentStep}
-            nextStep={nextStep}
-            prevStep={prevStep}
-            handleSubmitCoordinates={handleSubmitCoordinates}
-         />
+         {Object.keys(productData).length !== 0 && (
+            <>
+               <ProductCreateForm
+                  collectData={collectBasicData}
+                  currentStep={currentStep}
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  oldData={productData}
+                  category={category}
+               />
+               <ProductUploadImage
+                  uploadImage={uploadImage}
+                  imageList={imageList}
+                  handleOnRemove={handleOnRemove}
+                  handleSubmit={handleSubmit}
+                  currentStep={currentStep}
+                  percent={percent}
+                  prevStep={prevStep}
+                  nextStep={nextStep}
+               />
+               <ProductAddressForm
+                  currentStep={currentStep}
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  handleSubmitCoordinates={handleSubmitCoordinates}
+                  oldData={productData}
+               />
+            </>
+         )}
       </>
    );
 }
 
-export default ProductCreatePage;
+export default ProductEditPage;

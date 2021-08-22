@@ -14,12 +14,16 @@ ProductCard.defaultProps = {
 };
 
 const colorStatus = (stock) => {
-   console.log('stock', stock);
-   if (stock >= 50)
+   if (stock > 60)
       return {
          color: '#3eb88d',
       };
-   if (stock < 50)
+   if (stock >= 30 && stock <= 65) {
+      return {
+         color: '#FFB571',
+      };
+   }
+   if (stock < 30)
       return {
          color: '#F080B5',
       };
@@ -56,7 +60,6 @@ function ProductCard(props) {
                         style={{
                            fontSize: '14px',
                            color: 'rgb(255, 155, 61)',
-                           marginLeft: '-5px',
                         }}
                      />
                      <h4>{product.qualityRate}</h4>

@@ -5,6 +5,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import ProductCartPage from './pages/ProductCartPage';
 import ProductCreatePage from './pages/ProductCreatePage';
 import ProductManagePage from './pages/ProductManagePage';
+import ProductEditPage from './pages/ProductEditPage';
 
 function Product(props) {
    const match = useRouteMatch();
@@ -13,6 +14,7 @@ function Product(props) {
    return (
       <Switch>
          <Route exact path={match.url} component={ProductPage} />
+         <Route path={`${match.url}/edit/:slug`} component={ProductEditPage} />
          <Route path={`${match.url}/cart`} component={ProductCartPage} />
          <Route path={`${match.url}/create`} component={ProductCreatePage} />
          <Route path={`${match.url}/manage`} component={ProductManagePage} />

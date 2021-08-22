@@ -7,16 +7,18 @@ import './AddressOption.scss';
 
 AddressOption.propTypes = {
    onFinish: PropTypes.func,
+   oldData: PropTypes.object,
 };
 
 AddressOption.defaultProps = {
    onFinish: null,
+   oldData: {},
 };
 
 const { Option } = Select;
 
 function AddressOption(props) {
-   const { onFinish } = props;
+   const { onFinish, oldData } = props;
 
    const location = useLocation();
    const [provinces, setProvinces] = useState(null);
@@ -79,6 +81,13 @@ function AddressOption(props) {
       ],
    };
 
+   const initialValues = Object.keys(oldData).length !== 0 && {
+      address: oldData.pins[0].address,
+      city: oldData.pins[0].city,
+      district: oldData.pins[0].district,
+      ward: oldData.pins[0].ward,
+   };
+
    return (
       <>
          <div className='addressForm'>
@@ -88,6 +97,7 @@ function AddressOption(props) {
                onFinish={onFinish}
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
+               initialValues={initialValues}
             >
                {location.pathname === '/maps' && (
                   <Form.Item
@@ -179,7 +189,7 @@ function AddressOption(props) {
                         htmlType='submit'
                         style={{ width: '120px' }}
                      >
-                        Search
+                        Submit
                      </Button>
                      <Button
                         htmlType='button'
