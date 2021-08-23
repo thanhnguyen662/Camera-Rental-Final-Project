@@ -19,7 +19,7 @@ class MessageController {
 
    findMessageBeta = async (req, res, next) => {
       const page = req.params.page;
-      const take = 14;
+      const take = 20;
       try {
          const response = await prisma.message.findMany({
             take: take,

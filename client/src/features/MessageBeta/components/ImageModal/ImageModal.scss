@@ -1,0 +1,16 @@
+.modalSendImage{
+   .ant-modal-content {
+      overflow: auto;
+      border-radius: 10px;
+   }
+
+   .image-upload-grid{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+
+   p{
+      text-align: center;
+   }
+}

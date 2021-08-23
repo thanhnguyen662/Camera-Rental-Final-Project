@@ -3,24 +3,27 @@ import {
    ChatContainer,
    ConversationHeader,
    ConversationList,
+   ExpansionPanel,
+   InfoButton,
    MainContainer,
    MessageInput,
    MessageList,
-   Sidebar,
-   ExpansionPanel,
-   InfoButton,
    Search,
+   Sidebar,
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+import { Image, Row, Col } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import shortid from 'shortid';
 import { io } from 'socket.io-client';
 import conversationApi from '../../../../api/conversationApi';
 import userApi from '../../../../api/userApi';
+import { storage } from '../../../../firebase';
 import Conversations from '../../components/Conversations';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import ImageModal from '../../components/ImageModal';
 import Messages from '../../components/Messages';
 import { newMessage } from '../../messageSlice';
 import './MessageBetaPage.scss';
@@ -38,6 +41,8 @@ function MessageBetaPage(props) {
    const [friendInfo, setFriendInfo] = useState([]);
    const [conversations, setConversations] = useState([]);
    const [messages, setMessages] = useState([]);
+   const [isModalVisible, setIsModalVisible] = useState(false);
+   const [mediaPhotoList, setMediaPhotoList] = useState([]);
    const [selectedConversation, setSelectedConversation] = useState(
       location.state?.conversationInfo || ''
    );
@@ -71,8 +76,6 @@ function MessageBetaPage(props) {
       )
          return;
       setMessages((prevMessages) => [...prevMessages, reduxIncomingMessage]);
-
-      console.log('reduxIncomingMessage: ', reduxIncomingMessage);
    }, [reduxIncomingMessage, selectedConversation.members]);
 
    useEffect(() => {
@@ -131,7 +134,6 @@ function MessageBetaPage(props) {
             const response = await conversationApi.getConversationBeta(
                currentUserId
             );
-            console.log('Conversations: ', response);
             response.sort((a, b) => {
                return (
                   new Date(b.messages[0]?.createdAt) -
@@ -163,8 +165,6 @@ function MessageBetaPage(props) {
                selectedConversation.id,
                page
             );
-            console.log('Messages: ', response);
-
             response.sort((a, b) => {
                return new Date(a.createdAt) - new Date(b.createdAt);
             });
@@ -182,9 +182,8 @@ function MessageBetaPage(props) {
    }, [page]);
 
    const handleOnClickConversation = async (conversation) => {
-      console.log('Selected Conversation: ', conversation);
       setSelectedConversation(conversation);
-
+      setMediaPhotoList([]);
       const friend = conversation.members?.find(
          (member) => member !== currentUserId
       );
@@ -193,17 +192,16 @@ function MessageBetaPage(props) {
          const response = await userApi.getUserProfile({
             firebaseId: friend,
          });
-         console.log('Friend Info: ', response);
          setFriendInfo(response);
       } catch (error) {
          console.log(error);
       }
    };
 
-   const handleOnSendMessage = async () => {
+   const handleOnSendMessage = async (sendImage) => {
       try {
          const messageDataDb = {
-            text: messageInputValue,
+            text: messageInputValue || sendImage,
             conversationId: selectedConversation.id,
             sender: currentUserId,
          };
@@ -211,7 +209,7 @@ function MessageBetaPage(props) {
          const messageDataSocket = {
             conversationId: selectedConversation.id,
             createdAt: new Date(),
-            text: messageInputValue,
+            text: messageInputValue || sendImage,
             sender: currentUserId,
             receiver:
                friendInfo.firebaseId ||
@@ -221,7 +219,6 @@ function MessageBetaPage(props) {
          socket.current.emit('message', messageDataSocket);
 
          const response = await conversationApi.sendMessage(messageDataDb);
-         console.log('created: ', response);
          setMessages([...messages, response]);
 
          //update new messages to latest messages on conversation list
@@ -254,9 +251,30 @@ function MessageBetaPage(props) {
       setMessageInputValue('');
    };
 
+   const handleModalVisible = () => {
+      setIsModalVisible(false);
+   };
+
+   const getMediaInConversation = () => {
+      const ref = storage.ref(
+         `messages/${selectedConversation.id}/messageImage`
+      );
+      ref.listAll().then((res) => {
+         res.items.forEach((itemRef) => {
+            itemRef.getDownloadURL().then((url) =>
+               setMediaPhotoList((prev) => {
+                  prev.push(url);
+
+                  return [...new Set(prev)];
+               })
+            );
+         });
+      });
+   };
+
    return (
       <div className='message'>
-         <MainContainer>
+         <MainContainer responsive>
             <Sidebar position='left' scrollable={false}>
                <Search placeholder='Search...' />
                <ConversationList position='left' scrollable={false}>
@@ -339,19 +357,33 @@ function MessageBetaPage(props) {
                         value={messageInputValue}
                         onChange={(val) => setMessageInputValue(val)}
                         onSend={handleOnSendMessage}
+                        onAttachClick={() => setIsModalVisible(true)}
                      />
                   </ChatContainer>
                   <Sidebar position='right'>
-                     <ExpansionPanel open title='Information'>
-                        <p>Lorem ipsum</p>
-                     </ExpansionPanel>
-                     <ExpansionPanel title='Media'>
-                        <p>Lorem ipsum</p>
+                     <ExpansionPanel
+                        title='Media'
+                        onClick={() => getMediaInConversation()}
+                     >
+                        <Row flex='none' align='middle' gutter={[8, 8]}>
+                           {mediaPhotoList?.map((p) => (
+                              <Col key={p}>
+                                 <Image src={p} width={60} />
+                              </Col>
+                           ))}
+                        </Row>
                      </ExpansionPanel>
                   </Sidebar>
                </>
             )}
          </MainContainer>
+         <ImageModal
+            isModalVisible={isModalVisible}
+            handleModalVisible={handleModalVisible}
+            selectedConversation={selectedConversation}
+            handleOnSendMessage={handleOnSendMessage}
+            setMessageInputValue={setMessageInputValue}
+         />
       </div>
    );
 }

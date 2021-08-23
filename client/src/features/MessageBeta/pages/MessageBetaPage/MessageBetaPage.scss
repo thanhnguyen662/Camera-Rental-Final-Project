@@ -22,4 +22,10 @@
    .messageInfinityScroll::-webkit-scrollbar {
       display: none;
     }
+
+   .expansionPanelMedia{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
 }

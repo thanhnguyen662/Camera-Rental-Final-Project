@@ -52,7 +52,16 @@ function Conversations(props) {
       <>
          <Conversation
             name={friendInfo.username}
-            info={lastMessage}
+            info={
+               lastMessage?.split('.').length === 6 &&
+               lastMessage?.split('.')[0] === 'https://firebasestorage' &&
+               lastMessage?.split('.')[2] ===
+                  'com/v0/b/camera-rental-firbase' ? (
+                  <b>Image</b>
+               ) : (
+                  lastMessage
+               )
+            }
             onClick={() => handleOnClickConversation(conversation)}
             {...activeConversation}
          >

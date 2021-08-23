@@ -47,10 +47,18 @@ function HeaderBar(props) {
             senderId: responseSenderData.firebaseId,
             receiverId: userId,
          };
+         const { text } = reduxIncomingMessage;
          const response = await conversationApi.createConversation(data);
          notification.open({
             message: responseSenderData.username,
-            description: reduxIncomingMessage.text,
+            description:
+               text?.split('.').length === 6 &&
+               text?.split('.')[0] === 'https://firebasestorage' &&
+               text?.split('.')[2] === 'com/v0/b/camera-rental-firbase' ? (
+                  <b>Image</b>
+               ) : (
+                  text
+               ),
             icon: <Avatar src={responseSenderData.photoURL} />,
             onClick: () => {
                setSendMessage(response);
@@ -132,7 +140,6 @@ function HeaderBar(props) {
                   state: {
                      conversationInfo: sendMessage,
                      conversationUserInfo: senderData,
-                     // reduxIncomingMessage: reduxIncomingMessage,
                   },
                }}
             />

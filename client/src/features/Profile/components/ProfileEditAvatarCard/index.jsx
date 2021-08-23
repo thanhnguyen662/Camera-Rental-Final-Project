@@ -32,12 +32,14 @@ function ProfileEditAvatarCard(props) {
                   onPreview={onPreview}
                   className='image-upload-grid'
                >
-                  <div>
-                     <PlusOutlined />
-                     <div style={{ marginTop: 8 }}>Upload</div>
-                  </div>
+                  {defaultFileList.length >= 1 ? null : (
+                     <div>
+                        <PlusOutlined />
+                        <div style={{ marginTop: 8 }}>Upload</div>
+                     </div>
+                  )}
                </Upload>
-               <p>Click picture to change Avatar</p>
+               <p>Click here to change Avatar</p>
             </div>
          </Card>
       </>
