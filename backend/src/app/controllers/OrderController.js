@@ -243,6 +243,7 @@ class OrderController {
                   },
                   data: {
                      stock: parseInt(order.Product.stock) + 1,
+                     completed: parseInt(order.Product.completed) + 1,
                   },
                });
             });

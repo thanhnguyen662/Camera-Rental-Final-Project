@@ -15,6 +15,11 @@ const pinApi = {
       const url = '/pin/getSearch';
       return axiosClient.get(url, { params });
    },
+
+   getPinInProduct: (params) => {
+      const url = '/pin/getPinInProduct';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default pinApi;

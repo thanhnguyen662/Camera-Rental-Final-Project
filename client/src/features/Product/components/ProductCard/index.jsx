@@ -34,7 +34,7 @@ function ProductCard(props) {
 
    return (
       <>
-         <Row gutter={[35, 30]}>
+         <Row gutter={[35, 35]}>
             {products.map((product) => (
                <Col flex='none' key={product.id}>
                   <div className='productCard'>
@@ -68,7 +68,9 @@ function ProductCard(props) {
                         <h5 style={colorStatus(product.stock)}>
                            {product.stock || 0}
                         </h5>
-                        <h6 style={colorStatus(product.stock)}>in stock</h6>
+                        <h6 style={colorStatus(product.stock)}>
+                           in stock, {product.completed} rented
+                        </h6>
                      </div>
                   </div>
                </Col>

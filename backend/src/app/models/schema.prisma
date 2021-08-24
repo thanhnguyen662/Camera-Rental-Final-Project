@@ -21,21 +21,23 @@ model Product {
   stock           Int?
   publicStatus    Boolean?
   productPhotoURL String[]
+  categoryId      Int?
+  completed       Int?             @default(0)
   User            User?            @relation(fields: [firebaseId], references: [firebaseId])
+  categories      Category?        @relation(fields: [categoryId], references: [id])
   carts           Cart[]
   productComments ProductComment[]
   pins            Pin[]
   orderItems      OrderItem[]
-  categoryId      Int?
-  categories      Category?        @relation(fields: [categoryId], references: [id])
 
   @@map("Products")
 }
 
 model Category {
-  id      Int       @id @default(autoincrement())
-  name    String?
-  Product Product[]
+  id          Int       @id @default(autoincrement())
+  name        String?
+  description String?
+  Product     Product[]
 }
 
 model User {

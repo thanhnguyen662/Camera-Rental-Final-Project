@@ -21,7 +21,7 @@ function SearchPage(props) {
 
    return (
       <>
-         <h1>Search result</h1>
+         <h1>Search result: "{keyword}"</h1>
          <ProductCard products={products} />
       </>
    );

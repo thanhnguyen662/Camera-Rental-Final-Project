@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import orderApi from '../../../../api/orderApi';
 import productApi from '../../../../api/productApi';
 import userApi from '../../../../api/userApi';
+import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import ManageShopMenu from '../../components/ManageShopMenu';
 import ManageShopOrder from '../../components/ManageShopOrder';
 import ManageShopOverview from '../../components/ManageShopOverview';
@@ -200,6 +201,7 @@ function ManageShopPage(props) {
 
    return (
       <div>
+         <BreadcrumbBar />
          <Layout className='manageShopPageLayout'>
             <Row>
                <Col span={4}>

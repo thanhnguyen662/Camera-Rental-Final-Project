@@ -168,6 +168,21 @@ class ProductController {
          return next(error);
       }
    };
+
+   getTopRenting = async (req, res, next) => {
+      try {
+         const response = await prisma.product.findMany({
+            take: 5,
+            orderBy: {
+               completed: 'desc',
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new ProductController();

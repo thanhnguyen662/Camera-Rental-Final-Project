@@ -9,7 +9,6 @@ import ProductEditPage from './pages/ProductEditPage';
 
 function Product(props) {
    const match = useRouteMatch();
-   console.log('Product: ', { match });
 
    return (
       <Switch>

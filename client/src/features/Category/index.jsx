@@ -7,7 +7,7 @@ function Category(props) {
 
    return (
       <Switch>
-         <Route exact path={`${match.url}`} component={CategoryPage} />
+         <Route path={`${match.url}/:categoryName`} component={CategoryPage} />
       </Switch>
    );
 }

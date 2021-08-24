@@ -206,7 +206,7 @@ function ManageShopOverview(props) {
                   <div>{accept}</div>
                </Grid>
                <Grid className='tableGrid' onClick={() => setCurrent('RENTED')}>
-                  <div className='tableGridLabel'>Rented Order</div>
+                  <div className='tableGridLabel'>Renting Order</div>
                   <div>{success}</div>
                </Grid>
                <Grid className='tableGrid' onClick={() => setCurrent('BACK')}>

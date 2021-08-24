@@ -9,6 +9,7 @@ import {
 import ResponseResult from '../components/ResponseResult';
 import Admin from '../features/Admin';
 import SignIn from '../features/Auth';
+import Category from '../features/Category';
 import Home from '../features/Home';
 import Lading from '../features/Lading';
 import ManageShop from '../features/ManageShop';
@@ -80,6 +81,12 @@ function Routers(props) {
                      <Route path='/profile'>
                         <Content style={{ margin: '25px 125px' }}>
                            <Profile />
+                        </Content>
+                     </Route>
+
+                     <Route path='/category'>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Category />
                         </Content>
                      </Route>
 

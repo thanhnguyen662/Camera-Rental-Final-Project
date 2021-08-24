@@ -45,6 +45,7 @@ function ProductDetailDescription(props) {
    const [more, setMore] = useState(null);
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [clickMap, setClickMap] = useState(false);
+   const [clickLocate, setClickLocate] = useState(false);
 
    const onChange = (dates, dateStrings) => {
       if (!dates || !dateStrings) return;
@@ -83,6 +84,18 @@ function ProductDetailDescription(props) {
                      to={{
                         pathname: '/maps',
                         state: {
+                           type: 'searchNearMe',
+                           productDetail: productDetail,
+                        },
+                     }}
+                  />
+               )}
+               {clickLocate === true && (
+                  <Redirect
+                     to={{
+                        pathname: '/maps',
+                        state: {
+                           type: 'searchOne',
                            productDetail: productDetail,
                         },
                      }}
@@ -92,6 +105,11 @@ function ProductDetailDescription(props) {
                   <Row className='productHeaderRow'>
                      <Col flex='auto'>
                         <h1>{productDetail.name}</h1>
+                     </Col>
+                     <Col>
+                        <div className='qualityRate'>
+                           Rented: {productDetail.completed}
+                        </div>
                      </Col>
                      <Col>
                         <div className='qualityRate'>
@@ -155,6 +173,9 @@ function ProductDetailDescription(props) {
                            {...disable}
                         >
                            Add to Cart
+                        </Button>
+                        <Button onClick={() => setClickLocate(true)}>
+                           Locate
                         </Button>
                      </Space>
                   </Row>

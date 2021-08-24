@@ -14,7 +14,6 @@ PromotionCard.propTypes = {};
 function PromotionCard(props) {
    return (
       <>
-         <h1 style={{ marginTop: '70px' }}>Active Promotions</h1>
          <div className='promotion'>
             <Row gutter={[30, 30]}>
                <Col flex='none'>

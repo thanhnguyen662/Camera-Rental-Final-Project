@@ -26,11 +26,13 @@ class PinController {
          const response = await prisma.pin.findMany({
             where: {
                OR: [
-                  {
-                     district: {
-                        contains: district,
-                     },
+                  district && {
                      AND: [
+                        {
+                           district: {
+                              contains: district,
+                           },
+                        },
                         {
                            product: {
                               name: {
@@ -40,11 +42,13 @@ class PinController {
                         },
                      ],
                   },
-                  {
-                     district: {
-                        contains: district1,
-                     },
+                  district1 && {
                      AND: [
+                        {
+                           district: {
+                              contains: district1,
+                           },
+                        },
                         {
                            product: {
                               name: {
@@ -54,11 +58,13 @@ class PinController {
                         },
                      ],
                   },
-                  {
-                     district: {
-                        contains: district2,
-                     },
+                  district2 && {
                      AND: [
+                        {
+                           district: {
+                              contains: district2,
+                           },
+                        },
                         {
                            product: {
                               name: {
@@ -120,6 +126,27 @@ class PinController {
                      },
                   },
                ],
+            },
+            include: {
+               product: {
+                  include: {
+                     User: true,
+                  },
+               },
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getPinInProduct = async (req, res, next) => {
+      try {
+         const response = await prisma.pin.findMany({
+            where: {
+               productId: parseInt(req.query.productId),
             },
             include: {
                product: {

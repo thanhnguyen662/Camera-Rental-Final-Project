@@ -60,16 +60,24 @@ function MapsPage(props) {
       if (!location) return;
 
       const [district, district1, district2] = dataCollect;
+      if (dataCollect.length === 0) return;
       const getPinByOrder = async () => {
          if (!location.state) return;
-
+         let response = [];
          try {
-            const response = await pinApi.getPin({
-               district,
-               district1,
-               district2,
-               productName: location.state.productDetail.name,
-            });
+            if (location.state.type === 'searchNearMe') {
+               response = await pinApi.getPin({
+                  district,
+                  district1,
+                  district2,
+                  productName: location.state.productDetail.name,
+               });
+            }
+            if (location.state.type === 'searchOne') {
+               response = await pinApi.getPinInProduct({
+                  productId: location.state.productDetail.id,
+               });
+            }
             console.log('Get Pin from location', response);
             district &&
                openNotificationWithIcon(
