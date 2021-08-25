@@ -8,6 +8,7 @@ class PinController {
                product: {
                   include: {
                      User: true,
+                     productComments: true,
                   },
                },
             },

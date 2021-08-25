@@ -1,4 +1,4 @@
-import { Modal, Row } from 'antd';
+import { Layout, Modal, Row, Space } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, Marker, Popup } from 'react-map-gl';
@@ -9,16 +9,17 @@ import AddressOption from '../../../../components/AddressOption';
 import openNotificationWithIcon from '../../../../components/Notification';
 import MapButton from '../../components/MapButton';
 import MapMarker from '../../components/MapMarker';
+import MapMenu from '../../components/MapMenu';
 import PopupContent from '../../components/PopupContent';
 import './MapsPage.scss';
 
-MapsPage.propTypes = {};
+const { Content } = Layout;
 
 function MapsPage(props) {
    const mapRef = useRef();
    const location = useLocation();
 
-   const [searchStatusNotification, setSearchStatusNotification] = useState('');
+   const [searchStatusNotification, setSearchStatusNotification] = useState({});
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [dataCollect, setDataCollect] = useState([]);
    const [pins, setPins] = useState([]);
@@ -41,7 +42,7 @@ function MapsPage(props) {
       const getPins = async () => {
          try {
             const response = await pinApi.getAllPins();
-            console.log('Pins: ', response);
+            // console.log('Pins: ', response);
             setPins(response);
          } catch (error) {
             return console.log(error);
@@ -57,10 +58,9 @@ function MapsPage(props) {
    }, []);
 
    useEffect(() => {
-      if (!location) return;
-
       const [district, district1, district2] = dataCollect;
-      if (dataCollect.length === 0) return;
+
+      if (!location || dataCollect.length === 0) return;
       const getPinByOrder = async () => {
          if (!location.state) return;
          let response = [];
@@ -72,19 +72,20 @@ function MapsPage(props) {
                   district2,
                   productName: location.state.productDetail.name,
                });
+
+               district &&
+                  openNotificationWithIcon(
+                     'success',
+                     'Location detected',
+                     `We will show all product near you`
+                  );
             }
             if (location.state.type === 'searchOne') {
                response = await pinApi.getPinInProduct({
                   productId: location.state.productDetail.id,
                });
             }
-            console.log('Get Pin from location', response);
-            district &&
-               openNotificationWithIcon(
-                  'success',
-                  'Location detected',
-                  `We will show all product near you`
-               );
+            // console.log('Get Pin from location', response);
             setPins(response);
          } catch (error) {
             return console.log(error);
@@ -129,14 +130,14 @@ function MapsPage(props) {
             const rawData = mapboxResponse.data.features[0]?.text;
             data.push(rawData);
             if (data?.length === 5) {
-               console.log('raw data location from mapbox Api: ', data);
+               // console.log('raw data location from mapbox Api: ', data);
 
                //only get Unique Data
                const uniqueSet = new Set(data);
                const backToArray = [...uniqueSet];
 
                setDataCollect(backToArray);
-               console.log('get all district near me: ', backToArray);
+               // console.log('get all district near me: ', backToArray);
             }
          });
       };
@@ -149,7 +150,7 @@ function MapsPage(props) {
          ...viewport,
          latitude: initLocation[0],
          longitude: initLocation[1],
-         zoom: 12,
+         zoom: 8,
          transitionInterpolator: new FlyToInterpolator({
             speed: 2,
          }),
@@ -209,7 +210,7 @@ function MapsPage(props) {
       setSearchStatusNotification(formData);
       try {
          const response = await pinApi.getSearch(formData);
-         console.log('search result: ', response);
+         // console.log('search result: ', response);
          setPins(response);
          setIsModalVisible(false);
          setViewport({
@@ -225,6 +226,25 @@ function MapsPage(props) {
       } catch (error) {
          console.log(error);
       }
+   };
+
+   const handleOnClickMenuItem = (pin) => {
+      setViewport({
+         ...viewport,
+         latitude: parseFloat(pin.lat),
+         longitude: parseFloat(pin.long),
+         zoom: 16,
+         transitionInterpolator: new FlyToInterpolator({
+            speed: 2,
+         }),
+         transitionDuration: 'auto',
+      });
+      setSelectedMarker((prev) => {
+         prev.length = 0;
+         prev.push(pin.id);
+
+         return prev;
+      });
    };
 
    const points = pins.map((pin) => ({
@@ -250,88 +270,101 @@ function MapsPage(props) {
    return (
       <>
          <div className='mapbox'>
-            <div className='buttonSearchGroup'>
-               <MapButton
-                  searchStatusNotification={searchStatusNotification}
-                  location={location}
-                  setIsModalVisible={setIsModalVisible}
-                  handleOnClickShowAllPopup={handleOnClickShowAllPopup}
-                  setSelectedMarker={setSelectedMarker}
-               />
-            </div>
-            <ReactMapGL
-               {...viewport}
-               maxZoom={20}
-               mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_API_KEY}
-               mapStyle='mapbox://styles/thanhnguyen662/ckroakcxxcyqb17o5pje90mzu'
-               onViewportChange={setViewport}
-               ref={mapRef}
-            >
-               {clusters.map((cluster) =>
-                  cluster.properties.cluster ? (
-                     <Marker
-                        key={`cluster-${cluster.id}`}
-                        className='clusterMarker'
-                        longitude={cluster?.geometry.coordinates[0]}
-                        latitude={cluster?.geometry.coordinates[1]}
-                        onClick={() =>
-                           handleOnClickCluster(
-                              cluster.id,
-                              cluster?.geometry.coordinates[0],
-                              cluster?.geometry.coordinates[1]
-                           )
-                        }
-                     >
-                        <div
-                           className='cluster-marker'
-                           style={{
-                              width: `${
-                                 15 +
-                                 (cluster.properties.point_count /
-                                    points.length) *
-                                    20
-                              }px`,
-                              height: `${
-                                 15 +
-                                 (cluster.properties.point_count /
-                                    points.length) *
-                                    20
-                              }px`,
-                           }}
+            <Content style={{ margin: '0px 0px' }}>
+               <div style={{ width: 285 }} className='sidebarMap'>
+                  <div className='buttonSearchGroup'>
+                     <MapButton
+                        searchStatusNotification={searchStatusNotification}
+                        location={location}
+                        setIsModalVisible={setIsModalVisible}
+                        handleOnClickShowAllPopup={handleOnClickShowAllPopup}
+                        setSelectedMarker={setSelectedMarker}
+                     />
+                  </div>
+                  <div className='menuList'>
+                     <MapMenu
+                        pins={pins}
+                        handleOnClickMenuItem={handleOnClickMenuItem}
+                        selectedMarker={selectedMarker}
+                     />
+                  </div>
+               </div>
+               <ReactMapGL
+                  {...viewport}
+                  maxZoom={20}
+                  mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_API_KEY}
+                  mapStyle='mapbox://styles/thanhnguyen662/ckroakcxxcyqb17o5pje90mzu'
+                  onViewportChange={setViewport}
+                  ref={mapRef}
+                  className='reactMapGL'
+               >
+                  {clusters.map((cluster) =>
+                     cluster.properties.cluster ? (
+                        <Marker
+                           key={`cluster-${cluster.id}`}
+                           className='clusterMarker'
+                           longitude={cluster?.geometry.coordinates[0]}
+                           latitude={cluster?.geometry.coordinates[1]}
+                           onClick={() =>
+                              handleOnClickCluster(
+                                 cluster.id,
+                                 cluster?.geometry.coordinates[0],
+                                 cluster?.geometry.coordinates[1]
+                              )
+                           }
                         >
-                           {cluster.properties.point_count}
-                        </div>
-                     </Marker>
-                  ) : (
-                     <div key={cluster.properties?.pinId}>
-                        <MapMarker
-                           cluster={cluster}
-                           handleOnClickMarker={handleOnClickMarker}
-                           viewport={viewport}
-                        />
-                        {selectedMarker?.find(
-                           (m) => m === cluster.properties.pinId
-                        ) && (
-                           <Popup
-                              longitude={cluster?.geometry.coordinates[0]}
-                              latitude={cluster?.geometry.coordinates[1]}
-                              closeButton={true}
-                              closeOnClick={false}
-                              offsetLeft={45}
-                              offsetTop={15}
-                              anchor='left'
-                              onClose={() =>
-                                 handleOnRemoveMarker(cluster.properties.pinId)
-                              }
+                           <div
+                              className='cluster-marker'
+                              style={{
+                                 width: `${
+                                    15 +
+                                    (cluster.properties.point_count /
+                                       points.length) *
+                                       20
+                                 }px`,
+                                 height: `${
+                                    15 +
+                                    (cluster.properties.point_count /
+                                       points.length) *
+                                       20
+                                 }px`,
+                              }}
                            >
-                              <PopupContent pin={cluster.properties.pin} />
-                           </Popup>
-                        )}
-                     </div>
-                  )
-               )}
-            </ReactMapGL>
-
+                              {cluster.properties.point_count}
+                           </div>
+                        </Marker>
+                     ) : (
+                        <div key={cluster.properties?.pinId}>
+                           <MapMarker
+                              cluster={cluster}
+                              handleOnClickMarker={handleOnClickMarker}
+                              viewport={viewport}
+                           />
+                           {selectedMarker?.find(
+                              (m) => m === cluster.properties.pinId
+                           ) && (
+                              <Popup
+                                 longitude={cluster?.geometry.coordinates[0]}
+                                 latitude={cluster?.geometry.coordinates[1]}
+                                 closeButton={true}
+                                 closeOnClick={false}
+                                 offsetLeft={45}
+                                 offsetTop={15}
+                                 anchor='left'
+                                 onClose={() =>
+                                    handleOnRemoveMarker(
+                                       cluster.properties.pinId
+                                    )
+                                 }
+                              >
+                                 <PopupContent pin={cluster.properties.pin} />
+                              </Popup>
+                           )}
+                        </div>
+                     )
+                  )}
+               </ReactMapGL>
+            </Content>
             <div>
                <Modal
                   title='Please input your search 🏘'

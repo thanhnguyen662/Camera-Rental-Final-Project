@@ -1,0 +1,45 @@
+.menuProductList{
+   background: white;
+   box-shadow: rgba(157, 157, 163, 0.2) 0px 7px 29px 0px;
+   height: auto;
+   overflow: auto;
+   border-radius: 10px;
+   width: 283px;
+   padding: 10px 12px;
+   cursor: pointer;
+
+   .menuListUsername{
+      font-size: 13px;
+      font-weight: bold;
+      display: block;
+      a{
+
+         color: black;
+      }
+   }
+
+   .menuListAddress{
+      font-size: 11px;
+      cursor: pointer;
+   }
+
+   .popupRateRow{
+      background: #F3F8FE;
+      border-radius: 5px;
+      padding: 8px 8px 8px 8px;
+      margin-top: 3px;
+      text-align: center;
+
+      .popupRateIcon{
+         font-size: 17px;
+         margin-bottom: -2px;
+         margin-right: 1px;
+      }
+
+      h5{
+         font-size: 12px;
+         display: inline-block;
+         margin-bottom: 0px;
+      }
+   }
+}

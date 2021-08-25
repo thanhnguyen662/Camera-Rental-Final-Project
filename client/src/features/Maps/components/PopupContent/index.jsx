@@ -1,10 +1,10 @@
-import './PopupContent.scss';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Row, Col, Avatar, Button, Tooltip } from 'antd';
-import { FcLike, FcApproval, FcVoicePresentation } from 'react-icons/fc';
+import { Avatar, Button, Col, Row, Tooltip, Typography } from 'antd';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { FcApproval, FcLike, FcVoicePresentation } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
+import './PopupContent.scss';
 
 PopupContent.propTypes = {
    viewport: PropTypes.object,
@@ -15,6 +15,8 @@ PopupContent.defaultProps = {
    viewport: {},
    pin: {},
 };
+
+const { Text } = Typography;
 
 function PopupContent(props) {
    const { pin } = props;
@@ -31,25 +33,26 @@ function PopupContent(props) {
                </Col>
                <Col span={17}>
                   <h5>{pin.product.User.username}</h5>
-                  <h6>0.3 km &bull;</h6>
-                  &nbsp;
                   <Tooltip
                      placement='right'
                      title={`${pin.ward}, ${pin.district}, ${pin.city}`}
                   >
-                     <u>{pin.address}</u>
+                     <Text className='address'>{pin.address}</Text>
                   </Tooltip>
                </Col>
             </Row>
             <Row className='popupRateRow'>
                <Col span={8}>
-                  <FcLike className='popupRateIcon' /> <h5>100</h5>
+                  <FcLike className='popupRateIcon' />{' '}
+                  <h5>{pin.product.User.rate}</h5>
                </Col>
                <Col span={8}>
-                  <FcApproval className='popupRateIcon' /> <h5>4.5</h5>
+                  <FcApproval className='popupRateIcon' />{' '}
+                  <h5>{pin.product.qualityRate}</h5>
                </Col>
                <Col span={8}>
-                  <FcVoicePresentation className='popupRateIcon' /> <h5>69</h5>
+                  <FcVoicePresentation className='popupRateIcon' />{' '}
+                  <h5>{pin.product.productComments?.length}</h5>
                </Col>
             </Row>
             <Row className='popupProduct'>

@@ -3,6 +3,7 @@ import {
    FileProtectOutlined,
    SmileOutlined,
    UserOutlined,
+   AimOutlined,
 } from '@ant-design/icons';
 import {
    Avatar,
@@ -174,9 +175,11 @@ function ProductDetailDescription(props) {
                         >
                            Add to Cart
                         </Button>
-                        <Button onClick={() => setClickLocate(true)}>
-                           Locate
-                        </Button>
+                        <Button
+                           className='locateButton'
+                           onClick={() => setClickLocate(true)}
+                           icon={<AimOutlined />}
+                        />
                      </Space>
                   </Row>
                   <Row className='avatarGroup'>

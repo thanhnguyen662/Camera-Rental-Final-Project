@@ -6,36 +6,60 @@
       cursor: pointer;
    }
 
-   .buttonSearchGroup{
-      position: absolute;
-      top: 110px;
-      width: 100%;
-      z-index: 1;
-      margin-left: 15px;
-
-      .ant-input {
-         height: 32px;
-      }
-
-      .searchButton{
-         box-shadow: rgba(65, 65, 65, 0.35) 0px 5px 15px;
-         width: 50px;
-         height: 50px;
-         
-         .anticon svg {
-            font-size: 20px;
-            margin-top: 5px;
-         }
-      }
+   .reactMapGL{
+      box-shadow: rgba(157, 157, 163, 0.2) 0px 7px 29px 0px;
    }
 
-   .searchStatusRow{
-      .searchStatusNotification{
+
+   .sidebarMap{
+      position: absolute;
+      top: 95px;
+      left: 120px;
+      z-index: 1;
+
+      .menuList{
+         overflow: auto;
+         height: 550px;
+         &::-webkit-scrollbar {
+            display: none;
+          }
+      }
+
+      .buttonSearchGroup{
+         padding: 10px 12px;
+         margin-bottom: 10px;
          border-radius: 10px;
-         box-shadow: rgba(65, 65, 65, 0.35) 0px 5px 15px;
          background: white;
-         padding: 12px;
-         width: 320px;
+         box-shadow: rgba(157, 157, 163, 0.2) 0px 7px 29px 0px;
+   
+         
+         .ant-input {
+            height: 32px;
+         }
+   
+         .searchButton{
+            width: 35px;
+            height: 35px;
+            
+            .anticon svg {
+               font-size: 15px;
+               margin-top: 4px;
+            }
+         }
+      }
+      
+      .searchStatusRow{
+         .searchStatusNotification{
+            border-radius: 10px;
+            width: 100%;
+            margin-left: 5px;
+         }
+      }
+
+      .supportDisplayButton{
+         display: absolute;
+         top: 1000px;
+         left: 500px;
       }
    }
    .mapboxgl-popup-tip{

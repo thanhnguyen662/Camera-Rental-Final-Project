@@ -17,22 +17,32 @@
         background:#321c8a;
         color: white;
         border-radius: 9px;
-        width: 150px;
+        width: 100px;
         height: 52px;
+
+        span{
+          font-size: 13px;
+        }
+      }
+
+      .locateButton{
+        border-radius: 9px;
+        height: 52px;
+        width: 52px;
+        border-width: 2px;
       }
   
       .datePicker{
         margin-top: 2px;
-        // margin-left: 16px;
         font-size: 18px;
-        width: 325px;
+        width: 310px;
         height: 52px;
         background: white;
         border-radius: 10px;
         border-width: 2px;
-  
-        input::placeholder{
-          text-align: center;
+
+        input{
+          font-size: 13px;
         }
       }
     }
@@ -62,7 +72,6 @@
         font-weight: 500;
         font-size: 25px;
         padding-right: 3px;
-        // padding-left: 15px;
       }
 
       h2{
@@ -79,7 +88,6 @@
     }
 
     .productDescriptionRow{
-      // margin: -5px 0px 0px 18px;
       
       .productDescription{
         min-height: 120px;
@@ -102,17 +110,14 @@
     }
     
     .avatarGroup{
-      // margin: 20px 0px 0px 16px;
       margin: 12px 0px;
       h4{
         margin-top: 5px;
-        // margin-left: 10px;
         color: #43454d;
       }
     }
 
     .productDescriptionInfo{
-      // margin-top: 40px;
       margin-left: 28px;
       font-weight: 400;
 
