@@ -40,6 +40,16 @@ const orderApi = {
       const url = '/order/updateStats';
       return axiosClient.get(url, { params });
    },
+
+   countMyProductOrder: (params) => {
+      const url = '/order/countMyProductOrder';
+      return axiosClient.get(url, { params });
+   },
+
+   myProductInOrderOverview: (params) => {
+      const url = '/order/myProductInOrderOverview';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default orderApi;

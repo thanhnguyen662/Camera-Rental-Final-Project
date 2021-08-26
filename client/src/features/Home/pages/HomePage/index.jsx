@@ -5,6 +5,7 @@ import CarouselBar from '../../../../components/CarouselBar';
 import ProductCard from '../../../Product/components/ProductCard';
 import Promotion from '../../../Promotion';
 import CategoryBar from '../../components/CategoryBar';
+import NewProduct from '../../components/NewProduct';
 import './HomePage.scss';
 
 HomePage.propTypes = {};
@@ -38,12 +39,16 @@ function HomePage(props) {
             <CategoryBar categories={categories} />
          </div>
          <div>
-            <h1 style={{ marginTop: '45px' }}>Best Choice</h1>
+            <h1 style={{ marginTop: '45px' }}>Popular Products</h1>
             <ProductCard products={topRenting} />
          </div>
          <div>
             <h1 style={{ marginTop: '70px' }}>Active Promotions</h1>
             <Promotion />
+         </div>
+         <div>
+            <h1 style={{ marginTop: '70px' }}>New Products</h1>
+            <NewProduct />
          </div>
       </>
    );

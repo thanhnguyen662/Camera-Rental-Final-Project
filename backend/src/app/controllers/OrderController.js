@@ -365,6 +365,63 @@ class OrderController {
 
       res.json(updateStats);
    };
+
+   countMyProductOrder = async (req, res, next) => {
+      try {
+         const response = await prisma.order.groupBy({
+            by: ['orderStatusId'],
+            where: {
+               orderItems: {
+                  some: {
+                     Product: {
+                        User: {
+                           firebaseId: req.query.firebaseId,
+                        },
+                     },
+                  },
+               },
+            },
+            _count: {
+               _all: true,
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   myProductInOrderOverview = async (req, res, next) => {
+      try {
+         const response = await prisma.order.findMany({
+            where: {
+               AND: [
+                  {
+                     orderItems: {
+                        some: {
+                           Product: {
+                              User: {
+                                 firebaseId: req.query.firebaseId,
+                              },
+                           },
+                        },
+                     },
+                  },
+               ],
+            },
+            select: {
+               paidAt: true,
+               totalPrice: true,
+               createdAt: true,
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new OrderController();

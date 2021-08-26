@@ -10,5 +10,10 @@ router.patch('/updateOrderToBack', orderController.updateToBackStatus);
 router.delete('/deleteOrder', orderController.deleteOrder);
 router.get('/manageOrder', orderController.manageOrder);
 router.get('/myProductInOrder', orderController.myProductInOrder);
+router.get('/countMyProductOrder', orderController.countMyProductOrder);
+router.get(
+   '/myProductInOrderOverview',
+   orderController.myProductInOrderOverview
+);
 
 module.exports = router;

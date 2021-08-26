@@ -16,12 +16,13 @@ ManageShopPage.propTypes = {};
 const { Content } = Layout;
 
 function ManageShopPage(props) {
-   const [current, setCurrent] = useState('ALL');
+   const [current, setCurrent] = useState('overview');
    const [myProductInOrder, setMyProductInOrder] = useState([]);
    const [myProductInOrderOverview, setMyProductInOrderOverview] = useState([]);
    const [myProduct, setMyProduct] = useState([]);
    const [newComment, setNewComment] = useState({});
    const [page, setPage] = useState(1);
+   const [countProductInOrder, setCountProductInOrder] = useState([]);
 
    const userId = useSelector((state) => state.users.id);
    const username = useSelector((state) => state.users.username);
@@ -45,16 +46,18 @@ function ManageShopPage(props) {
 
    useEffect(() => {
       if (!userId) return;
-
       const getMyProductInOrder = async () => {
          if (current !== 'overview') return;
          try {
-            const response = await orderApi.myProductInOrder({
+            const response = await orderApi.myProductInOrderOverview({
                firebaseId: userId,
-               orderStatus: null,
             });
             setMyProductInOrderOverview(response);
-            console.log('My Product In Order: ', response);
+
+            const count = await orderApi.countMyProductOrder({
+               firebaseId: userId,
+            });
+            setCountProductInOrder(count);
          } catch (error) {
             console.log(error);
          }
@@ -85,6 +88,7 @@ function ManageShopPage(props) {
 
                return dateB - dateA;
             });
+            console.log(response);
             setMyProductInOrder((prev) => [...prev, ...sortResponse]);
          } catch (error) {
             console.log(error);
@@ -92,7 +96,6 @@ function ManageShopPage(props) {
       };
       getMyProductInOrder();
    }, [userId, current, page]);
-
    const handlePageChange = () => {
       setPage(page + 1);
    };
@@ -215,6 +218,7 @@ function ManageShopPage(props) {
                         <ManageShopOverview
                            allMyProductInOrder={myProductInOrderOverview}
                            setCurrent={setCurrent}
+                           countProductInOrder={countProductInOrder}
                         />
                      )}
                      {current === 'allProduct' && (

@@ -27,7 +27,7 @@ function ManageShopMenu(props) {
          <Menu
             className='manageShopMenuSider'
             mode='inline'
-            defaultSelectedKeys={['ALL']}
+            defaultSelectedKeys={['overview']}
             defaultOpenKeys={['sub1', 'sub2']}
             onClick={(value) => handleCurrentMenuChange(value.key)}
          >

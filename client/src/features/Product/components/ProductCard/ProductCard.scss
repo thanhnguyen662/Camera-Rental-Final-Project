@@ -3,17 +3,19 @@
    background: white;
    padding: 24px 22px 15px 22px;
    border-radius: 10px;
-   box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
+   transition: all 0.5s;
+
+   &:hover {
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+   }
 
    .productImage{
-      // margin-bottom: 5px;
       padding: 0px 7px;
    }
 
    h3{
       font-size: 10px;
       text-transform: uppercase;
-      // margin-left: -5px;
       padding-top: 2px;
       margin-bottom: 1px;
       font-weight: 700;
@@ -22,7 +24,6 @@
 
    p{
       font-size: 15px; 
-      // margin-left: -5px;
       margin-bottom: 0px;
 
       a{
@@ -43,32 +44,26 @@
       font-size: 21px;
       margin-top: 10px;
       margin-bottom: -2px;
-      // margin-left: -5px;
       color: #2E1E70;
    }
 
    .stockStatus {
       margin-top: 2px;
-      // margin-bottom: -5px;
    }
 
    h5{
       display: inline-block;
-      // color: #38b388;
       margin-left: 2px;
       font-weight: 700;
-      // cursor: pointer;
    }
 
    h6{
       display: inline-block;
-      // color: #3eb88d;
       font-size: 9.5px;
       margin-left: 3px;
    }
 
    .progressBar{
-      // margin-left: -5px;
       width: 18%;
    }
 

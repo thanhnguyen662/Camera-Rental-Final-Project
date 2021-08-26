@@ -9,6 +9,7 @@ import {
    DatePicker,
    Divider,
    Row,
+   Space,
    Table,
    Tooltip,
    Typography,
@@ -22,10 +23,12 @@ import './ManageShopOverview.scss';
 
 ManageShopOverview.propTypes = {
    allMyProductInOrder: PropTypes.array,
+   countProductInOrder: PropTypes.array,
 };
 
 ManageShopOverview.defaultProps = {
    allMyProductInOrder: [],
+   countProductInOrder: [],
 };
 
 const { Grid } = Card;
@@ -33,15 +36,16 @@ const { Title, Paragraph, Text } = Typography;
 const { RangePicker } = DatePicker;
 
 function ManageShopOverview(props) {
-   const { allMyProductInOrder, setCurrent } = props;
+   const { allMyProductInOrder, setCurrent, countProductInOrder } = props;
 
    const [datePickerRange, setDatePickerRange] = useState(['', '']);
+   const [barChart, setBarChart] = useState([]);
+   const [lineChart, setLineChart] = useState([]);
    const [pending, setPending] = useState(0);
    const [accept, setAccept] = useState(0);
    const [success, setSuccess] = useState(0);
    const [back, setBack] = useState(0);
    const [failure, setFailure] = useState(0);
-   const [lineChart, setLineChart] = useState([]);
    const [dateNow, setDateNow] = useState('');
    const [orders, setOrders] = useState([]);
 
@@ -76,40 +80,22 @@ function ManageShopOverview(props) {
    }, [datePickerRange, allMyProductInOrder]);
 
    useEffect(() => {
+      countProductInOrder.map((c) => {
+         if (c.orderStatusId === 1) setPending(c._count._all || 0);
+         if (c.orderStatusId === 5) setAccept(c._count._all || 0);
+         if (c.orderStatusId === 3) setSuccess(c._count._all || 0);
+         if (c.orderStatusId === 6) setBack(c._count._all || 0);
+         if (c.orderStatusId === 4) setFailure(c._count._all || 0);
+
+         return countProductInOrder;
+      });
+   }, [countProductInOrder]);
+
+   useEffect(() => {
       if (allMyProductInOrder.length === 0) return;
       let uniqueDate = [];
       let totalMoneyInDay = [];
       let orderInDay = 0;
-
-      setAccept(0);
-      setPending(0);
-      setSuccess(0);
-      setFailure(0);
-      setBack(0);
-
-      // eslint-disable-next-line
-      allMyProductInOrder.map((o) => {
-         switch (o.orderStatus.name) {
-            case 'PENDING':
-               setPending((prev) => prev + 1);
-               break;
-            case 'ACCEPT':
-               setAccept((prev) => prev + 1);
-               break;
-            case 'RENTED':
-               setSuccess((prev) => prev + 1);
-               break;
-            case 'BACK':
-               setBack((prev) => prev + 1);
-               break;
-            case 'FAILURE':
-               setFailure((prev) => prev + 1);
-               break;
-
-            default:
-               break;
-         }
-      });
 
       orders.map((o) => {
          return uniqueDate.push(moment(o.paidAt).format('YYYY-MM-DD'));
@@ -141,10 +127,48 @@ function ManageShopOverview(props) {
       });
    }, [orders, allMyProductInOrder]);
 
+   useEffect(() => {
+      let createdAt = [];
+      let countCreateAt = 0;
+      allMyProductInOrder?.map((o) => {
+         createdAt.push(moment(o.createdAt).format('YYYY-MM-DD'));
+         createdAt = [...new Set(createdAt)];
+         createdAt.sort((a, b) => {
+            return new Date(a) - new Date(b);
+         });
+
+         return createdAt;
+      });
+      setBarChart([]);
+      createdAt.map((c) => {
+         allMyProductInOrder?.map((o) => {
+            if (c === moment(o.createdAt).format('YYYY-MM-DD')) {
+               countCreateAt += 1;
+            }
+
+            return countCreateAt;
+         });
+         const newData = {
+            createdAt: moment(c).format('YYYY-MM-DD'),
+            countCreateAt,
+         };
+
+         setBarChart((prev) => [...prev, newData]);
+         return (countCreateAt = 0);
+      });
+   }, [allMyProductInOrder]);
+
    const columns = [
       {
          title: 'Date',
          dataIndex: ['paidAt'],
+      },
+      {
+         title: 'Paid Order',
+         dataIndex: ['orderInDay'],
+         render: (record) => (
+            <div style={{ textAlign: 'center' }}>{record}</div>
+         ),
       },
       {
          title: 'Revenue',
@@ -152,27 +176,27 @@ function ManageShopOverview(props) {
          render: (record) => <div>{priceFormat(record)}</div>,
       },
    ];
+
    const columnsOrder = [
       {
          title: 'Date',
-         dataIndex: ['paidAt'],
+         dataIndex: ['createdAt'],
+         render: (record) => <div>{String(record)}</div>,
       },
       {
-         title: 'Order',
-         dataIndex: ['orderInDay'],
-         render: (record) => <div>{record}</div>,
+         title: 'All Order',
+         dataIndex: ['countCreateAt'],
       },
    ];
 
    const calculateIncreasePercent = (today, yesterday) => {
       const result = ((today - yesterday) / yesterday) * 100;
-
       return result > 0 ? (
-         <Text className='cardRevenuePercent'>
+         <Text className='cardRevenuePercent' style={{ display: 'block' }}>
             <ArrowUpOutlined /> increase {Math.round(result)}%
          </Text>
       ) : (
-         <Text style={{ color: 'red' }}>
+         <Text style={{ color: 'red', display: 'block' }}>
             <ArrowDownOutlined /> decrease {Math.round(result) || 0}%
          </Text>
       );
@@ -192,7 +216,7 @@ function ManageShopOverview(props) {
             <Card>
                <Grid className='tableGrid' onClick={() => setCurrent('ALL')}>
                   <div className='tableGridLabel'>All Order</div>
-                  <div>{allMyProductInOrder.length}</div>
+                  <div>{pending + accept + success + back + failure}</div>
                </Grid>
                <Grid
                   className='tableGrid'
@@ -302,9 +326,14 @@ function ManageShopOverview(props) {
                                  return (
                                     <div key={item.paidAt}>
                                        <Paragraph>
-                                          <Title level={2}>
-                                             {priceFormat(revenueOfToday)}
-                                          </Title>{' '}
+                                          <Space>
+                                             <Title level={2}>
+                                                {priceFormat(revenueOfToday)}
+                                             </Title>
+                                             <Text strong={true}>
+                                                | {item.orderInDay} order
+                                             </Text>
+                                          </Space>
                                           {calculateIncreasePercent(
                                              revenueOfToday,
                                              revenueOfBeforeDay
@@ -344,7 +373,7 @@ function ManageShopOverview(props) {
 
                      return (
                         <Row>
-                           <Col flex='150px' style={{ fontStyle: 'italic' }}>
+                           <Col flex='200px' style={{ fontStyle: 'italic' }}>
                               <b>Total Revenue:</b>
                            </Col>
                            <Col>
@@ -366,24 +395,21 @@ function ManageShopOverview(props) {
                <Title level={5} style={{ marginBottom: 2 }}>
                   Order bar chart{' '}
                   {
-                     <Tooltip
-                        placement='top'
-                        title='Only include rented success order'
-                     >
+                     <Tooltip placement='top' title='Include all order'>
                         <QuestionCircleOutlined style={{ cursor: 'pointer' }} />
                      </Tooltip>
                   }
                </Title>
-               <Paragraph>Overview Order on per day</Paragraph>
+               <Paragraph>Overview All order on per day</Paragraph>
                {
                   <div className='barChartOverview'>
                      <Bar
                         data={{
-                           labels: lineChart.map(({ paidAt }) => paidAt),
+                           labels: barChart.map(({ createdAt }) => createdAt),
                            datasets: [
                               {
-                                 data: lineChart.map(
-                                    ({ orderInDay }) => orderInDay
+                                 data: barChart.map(
+                                    ({ countCreateAt }) => countCreateAt
                                  ),
                                  label: 'Order',
                                  tension: 0.1,
@@ -402,16 +428,16 @@ function ManageShopOverview(props) {
                <div className='cardOrder'>
                   <Paragraph>
                      <div className='cardOrderDescription'>
-                        Order in today "{dateNow}"
+                        All order in today "{dateNow}"
                      </div>
                      <div>
-                        {lineChart.find((date) => date.paidAt === dateNow) ? (
+                        {barChart.find((date) => date.createdAt === dateNow) ? (
                            // eslint-disable-next-line
-                           lineChart.map((item) => {
-                              if (item.paidAt === dateNow) {
+                           barChart.map((item) => {
+                              if (item.createdAt === dateNow) {
                                  return (
-                                    <Title level={2} key={item.paidAt}>
-                                       {item.orderInDay}
+                                    <Title level={2} key={item.createdAt}>
+                                       {item.countCreateAt}
                                     </Title>
                                  );
                               }
@@ -425,25 +451,29 @@ function ManageShopOverview(props) {
                <Table
                   fixed
                   className='cardOrderTable'
-                  dataSource={lineChart}
+                  dataSource={barChart}
                   columns={columnsOrder}
                   ellipsis={true}
                   pagination={false}
                   size='middle'
                   scroll={{ y: 152 }}
-                  rowKey={(record) => record.paidAt}
+                  rowKey={(record) => record.createdAt}
                   footer={(record) => {
                      let totalOrder = 0;
-                     record?.forEach(({ orderInDay }) => {
-                        totalOrder += orderInDay;
+                     record?.forEach(({ countCreateAt }) => {
+                        totalOrder += countCreateAt;
                      });
 
                      return (
                         <Row>
-                           <Col flex='150px' style={{ fontStyle: 'italic' }}>
+                           <Col
+                              flex='150px'
+                              style={{ fontStyle: 'italic' }}
+                              key='1'
+                           >
                               <b>Total Order:</b>
                            </Col>
-                           <Col>
+                           <Col key='2'>
                               <div className='totalFooterRow'>{totalOrder}</div>
                            </Col>
                         </Row>
