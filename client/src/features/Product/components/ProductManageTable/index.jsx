@@ -5,17 +5,21 @@ import {
    Divider,
    Image,
    Row,
+   Space,
    Table,
    Tag,
    Typography,
-   Space,
 } from 'antd';
+import Avatar from 'antd/lib/avatar/avatar';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import userApi from '../../../../api/userApi';
 import priceFormat from '../../../../utils/PriceFormat';
+import ManageShopModalUser from '../../../ManageShop/components/ManageShopModalUser';
 import ProductManageModalComment from '../ProductManageModalComment';
 import ProductManageModalOrder from '../ProductManageModalOrder';
 import './ProductManageTable.scss';
@@ -26,6 +30,7 @@ ProductManageTable.propTypes = {
    handleClickCommentButton: PropTypes.func,
    userPhotoURL: PropTypes.string,
    handlePageChange: PropTypes.func,
+   handleOnSubmitComment: PropTypes.func,
 };
 
 ProductManageTable.defaultProps = {
@@ -34,6 +39,7 @@ ProductManageTable.defaultProps = {
    handleClickCommentButton: null,
    userPhotoURL: '',
    handlePageChange: null,
+   handleOnSubmitComment: null,
 };
 
 const { RangePicker } = DatePicker;
@@ -47,12 +53,61 @@ function ProductManageTable(props) {
       handleClickCommentButton,
       userPhotoURL,
       handlePageChange,
+      handleOnSubmitComment,
+      newComment,
    } = props;
+   const photoURL = useSelector((state) => state.users.photoURL);
 
    const [isModalVisible, setIsModalVisible] = useState(false);
+   const [isModalUserVisible, setIsModalUserVisible] = useState(false);
+   const [userStats, setUserStats] = useState();
    const [orderDetail, setOrderDetail] = useState();
    const [commentModal, setCommentModal] = useState(false);
    const [orderItemDetail, setOrderItemDetail] = useState({});
+   const [onClickExplain, setOnClickExplain] = useState(false);
+   const [userComment, setUserComment] = useState([]);
+   const [userDetailFirebase, setUserDetailFirebase] = useState({});
+
+   useEffect(() => {
+      setOnClickExplain(false);
+      if (!orderDetail) return;
+      const getUserDetailOnFirebase = async () => {
+         try {
+            const getUserInfo = await userApi.getMe({
+               uid: orderDetail.orderItems[0]?.Product.User.firebaseId,
+            });
+            setUserDetailFirebase(getUserInfo);
+
+            const getStat = await userApi.getUserStats({
+               userId: getUserInfo.uid,
+            });
+            setUserStats(getStat);
+
+            console.log('userInfo', getUserInfo);
+            console.log('getStat', getStat);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getUserDetailOnFirebase();
+   }, [orderDetail]);
+
+   useEffect(() => {
+      if (!onClickExplain) return setUserComment([]);
+      const onClickCommentExplain = async () => {
+         try {
+            const response = await userApi.getUserComments({
+               userId: orderDetail.orderItems[0]?.Product.User.firebaseId,
+            });
+            console.log('Comment', response);
+            setUserComment(response);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      onClickCommentExplain();
+      // eslint-disable-next-line
+   }, [onClickExplain]);
 
    let columns = [
       {
@@ -143,13 +198,23 @@ function ProductManageTable(props) {
                <Col flex='auto'>
                   <Tag {...statusTagColor()}>{order.orderStatus?.name}</Tag>
                   <Divider type='vertical' />
-                  &nbsp;
-                  <Link
-                     to={`/profile/${order.orderItems[0]?.Product.User.firebaseId}`}
-                     className='productManageName'
-                  >
-                     <b>{order.orderItems[0].Product.User.username}</b>
-                  </Link>
+                  <Space size='middle'>
+                     <Avatar
+                        className='productManageAvatar'
+                        src={order.orderItems[0]?.Product.User.photoURL}
+                        size={30}
+                        onClick={() => {
+                           setOrderDetail(order);
+                           setIsModalUserVisible(true);
+                        }}
+                     />
+                     <Link
+                        to={`/profile/${order.orderItems[0]?.Product.User.firebaseId}`}
+                        className='productManageName'
+                     >
+                        <b>{order.orderItems[0].Product.User.username}</b>
+                     </Link>
+                  </Space>
                </Col>
                <Col>
                   <Space>
@@ -187,6 +252,27 @@ function ProductManageTable(props) {
 
    const handleOnClickCancelCommentModal = () => {
       setCommentModal(false);
+   };
+
+   const handleArrowOnClick = () => {
+      onClickExplain ? setOnClickExplain(false) : setOnClickExplain(true);
+   };
+
+   const handleOnClickCloseUserModal = () => {
+      setIsModalUserVisible(false);
+   };
+
+   useEffect(() => {
+      if (Object.keys(newComment).length === 0) return;
+      setUserComment((prev) => [newComment, ...prev]);
+   }, [newComment]);
+
+   const disableInput = () => {
+      const disableInput = orderDetail.isShopComment === true && {
+         disabled: true,
+      };
+
+      return disableInput;
    };
 
    return (
@@ -232,6 +318,21 @@ function ProductManageTable(props) {
             handleClickCommentButton={handleClickCommentButton}
             userPhotoURL={userPhotoURL}
             orderItemDetail={orderItemDetail}
+            orderDetail={orderDetail}
+         />
+         <ManageShopModalUser
+            isModalUserVisible={isModalUserVisible}
+            userDetailFirebase={userDetailFirebase}
+            orderDetail={orderDetail}
+            orderDetailUser={orderDetail?.orderItems[0].Product.User}
+            userStats={userStats}
+            onClickExplain={onClickExplain}
+            userComment={userComment}
+            handleArrowOnClick={handleArrowOnClick}
+            photoURL={photoURL}
+            handleOnSubmitComment={handleOnSubmitComment}
+            handleOnClickCloseUserModal={handleOnClickCloseUserModal}
+            disableInput={disableInput}
          />
       </div>
    );

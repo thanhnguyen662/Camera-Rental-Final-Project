@@ -3,7 +3,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import commentApi from '../../../../api/commentApi';
 import orderApi from '../../../../api/orderApi';
+import userApi from '../../../../api/userApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
+import openNotificationWithIcon from '../../../../components/Notification';
 import ProductManageAvatar from '../../components/ProductManageAvatar';
 import ProductManageTable from '../../components/ProductManageTable';
 import ProductManageTitle from '../../components/ProductManageTitle';
@@ -19,6 +21,7 @@ function ProductManagePage(props) {
    const [orders, setOrders] = useState([]);
    const [current, setCurrent] = useState(0);
    const [page, setPage] = useState(1);
+   const [newComment, setNewComment] = useState({});
 
    const ref = useRef(page);
 
@@ -78,7 +81,11 @@ function ProductManagePage(props) {
       }
    };
 
-   const handleClickCommentButton = async (values, orderItemDetail) => {
+   const handleClickCommentButton = async (
+      values,
+      orderItemDetail,
+      orderId
+   ) => {
       const formValues = {
          content: values.comment,
          productId: orderItemDetail.Product?.id,
@@ -89,12 +96,56 @@ function ProductManagePage(props) {
       try {
          const response = await commentApi.createComment(formValues);
 
+         const updateIsShopComment = await orderApi.updateIsComment({
+            commentId: response.id,
+            orderId: orderId,
+            type: 'isProductComment',
+         });
+
          console.log('comment created Successful: ', response);
+         console.log('updateIsProductComment: ', updateIsShopComment);
+
+         if (updateIsShopComment?.message === 'Already Comment')
+            return openNotificationWithIcon(
+               'error',
+               'Error',
+               'Already Comment'
+            );
       } catch (error) {
          console.log(error);
       }
+   };
 
-      console.log('formValues', formValues);
+   const handleOnSubmitComment = async (values) => {
+      try {
+         const response = await userApi.createUserComment({
+            content: values.content,
+            rate: values.rate,
+            userId: values.userId,
+            authorId: userId,
+            authorUsername: username,
+            authorPhotoURL: userPhotoURL,
+         });
+
+         const updateIsShopComment = await orderApi.updateIsComment({
+            commentId: response.id,
+            orderId: values.orderId,
+            type: 'isShopComment',
+         });
+
+         console.log('updateIsShopComment: ', updateIsShopComment);
+         console.log('Commented: ', response);
+
+         if (updateIsShopComment?.message === 'Already Comment')
+            return openNotificationWithIcon(
+               'error',
+               'Error',
+               'Already Comment'
+            );
+         setNewComment(response);
+      } catch (error) {
+         console.log(error);
+      }
    };
 
    return (
@@ -119,6 +170,8 @@ function ProductManagePage(props) {
                      current={current}
                      userPhotoURL={userPhotoURL}
                      handlePageChange={handlePageChange}
+                     handleOnSubmitComment={handleOnSubmitComment}
+                     newComment={newComment}
                   />
                )}
             </Col>

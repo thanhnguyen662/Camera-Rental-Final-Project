@@ -422,6 +422,101 @@ class OrderController {
          return next(error);
       }
    };
+
+   updateIsComment = async (req, res, next) => {
+      try {
+         if (req.body.type === 'isShopComment') {
+            const check = await prisma.order.findUnique({
+               where: {
+                  id: req.body.orderId,
+               },
+               select: {
+                  isShopComment: true,
+               },
+            });
+            if (check.isShopComment) {
+               await prisma.userComment.delete({
+                  where: {
+                     id: req.body.commentId,
+                  },
+               });
+               return res.status(200).send({ message: 'Already Comment' });
+            }
+
+            const response = await prisma.order.update({
+               where: {
+                  id: req.body.orderId,
+               },
+               data: {
+                  isShopComment: true,
+               },
+            });
+
+            res.status(200).send(response);
+         }
+
+         if (req.body.type === 'isUserComment') {
+            const check = await prisma.order.findUnique({
+               where: {
+                  id: req.body.orderId,
+               },
+               select: {
+                  isUserComment: true,
+               },
+            });
+            if (check.isUserComment) {
+               await prisma.userComment.delete({
+                  where: {
+                     id: req.body.commentId,
+                  },
+               });
+               return res.status(200).send({ message: 'Already Comment' });
+            }
+            const response = await prisma.order.update({
+               where: {
+                  id: req.body.orderId,
+               },
+               data: {
+                  isUserComment: true,
+               },
+            });
+
+            res.status(200).send(response);
+         }
+
+         if (req.body.type === 'isProductComment') {
+            const check = await prisma.order.findUnique({
+               where: {
+                  id: req.body.orderId,
+               },
+               select: {
+                  isProductComment: true,
+               },
+            });
+            if (check.isProductComment) {
+               await prisma.productComment.delete({
+                  where: {
+                     id: req.body.commentId,
+                  },
+               });
+               return res.status(200).send({ message: 'Already Comment' });
+            }
+
+            const response = await prisma.order.update({
+               where: {
+                  id: req.body.orderId,
+               },
+               data: {
+                  isProductComment: true,
+               },
+            });
+
+            res.status(200).send(response);
+         }
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new OrderController();

@@ -35,6 +35,7 @@ function ProductManageModalComment(props) {
       handleClickCommentButton,
       userPhotoURL,
       orderItemDetail,
+      orderDetail,
    } = props;
 
    const [form] = Form.useForm();
@@ -51,7 +52,11 @@ function ProductManageModalComment(props) {
             <Form
                form={form}
                onFinish={(values) => {
-                  handleClickCommentButton(values, orderItemDetail);
+                  handleClickCommentButton(
+                     values,
+                     orderItemDetail,
+                     orderDetail.id
+                  );
                }}
             >
                <Title level={5} className='commentModalTitle'>

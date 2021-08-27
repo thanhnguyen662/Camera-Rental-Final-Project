@@ -17,8 +17,8 @@ import {
    Row,
    Spin,
    Table,
-   Typography,
    Tooltip,
+   Typography,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -28,11 +28,13 @@ import './ManageShopModalUser.scss';
 ManageShopModalUser.propTypes = {
    setIsModalUserVisible: PropTypes.func,
    handleOnSubmitComment: PropTypes.func,
+   disableInput: PropTypes.func,
 };
 
 ManageShopModalUser.defaultProps = {
    setIsModalUserVisible: null,
    handleOnSubmitComment: null,
+   disableInput: null,
 };
 
 const { Paragraph, Text, Title } = Typography;
@@ -49,6 +51,8 @@ function ManageShopModalUser(props) {
       photoURL,
       handleOnSubmitComment,
       handleOnClickCloseUserModal,
+      orderDetailUser,
+      disableInput,
    } = props;
 
    const [inputComment, setInputComment] = useState({});
@@ -104,11 +108,11 @@ function ManageShopModalUser(props) {
                   <div className='modalInfo'>
                      <Row justify='space-around' align='middle'>
                         <Col>
-                           <Avatar src={orderDetail?.User.photoURL} size={65} />
+                           <Avatar src={orderDetailUser.photoURL} size={65} />
                         </Col>
                         <Col flex='auto' push='1'>
                            <Title level={3} className='modalUsername'>
-                              {orderDetail?.User.username}
+                              {orderDetailUser.username}
                            </Title>
                            <Text className='modalEmail'>
                               {userDetailFirebase?.email}
@@ -120,7 +124,7 @@ function ManageShopModalUser(props) {
                      <Paragraph>
                         <LikeOutlined className='modalIcon' /> &nbsp;
                         <Rate
-                           value={orderDetail?.User.rate}
+                           value={orderDetailUser.rate}
                            className='modalMoreInfoRate'
                         />
                         <br />
@@ -131,12 +135,12 @@ function ManageShopModalUser(props) {
                         <br />
                         <PhoneOutlined className='modalIcon' /> &nbsp;
                         <Text className='modalMoreInfoDescription'>
-                           {orderDetail?.User.phoneNumber}
+                           {orderDetailUser.phoneNumber}
                         </Text>
                         <br />
                         <HomeOutlined className='modalIcon' /> &nbsp;
                         <Text className='modalMoreInfoDescription'>
-                           {orderDetail?.User.address}
+                           {orderDetailUser.address}
                         </Text>
                      </Paragraph>
                   </div>
@@ -169,10 +173,10 @@ function ManageShopModalUser(props) {
                         <UpOutlined onClick={handleArrowOnClick} />
                      </div>
                   )}
-                  {onClickExplain && orderDetail?.orderStatus.name && (
+                  {onClickExplain && (
                      <>
-                        {orderDetail.orderStatus.name !== 'FAILURE' &&
-                        orderDetail.orderStatus.name !== 'BACK' ? null : (
+                        {orderDetail?.orderStatus.name !== 'FAILURE' &&
+                        orderDetail?.orderStatus.name !== 'BACK' ? null : (
                            <>
                               <Comment
                                  className='modalAreaComment'
@@ -194,9 +198,12 @@ function ManageShopModalUser(props) {
                                              handleOnSubmitComment({
                                                 ...inputComment,
                                                 content: values.target.value,
-                                                userId: orderDetail?.userId,
+                                                userId:
+                                                   orderDetailUser.firebaseId,
+                                                orderId: orderDetail.id,
                                              });
                                           }}
+                                          {...disableInput()}
                                        />
                                        <Rate
                                           onChange={(values) =>

@@ -50,6 +50,11 @@ const orderApi = {
       const url = '/order/myProductInOrderOverview';
       return axiosClient.get(url, { params });
    },
+
+   updateIsComment: (data) => {
+      const url = '/order/updateIsComment';
+      return axiosClient.patch(url, data);
+   },
 };
 
 export default orderApi;

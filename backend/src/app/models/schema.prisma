@@ -148,19 +148,22 @@ model Pin {
 }
 
 model Order {
-  id            String       @id @default(uuid())
-  address       String?
-  totalPrice    Int?
-  userId        String?
-  orderStatusId Int?
-  note          String?
-  paidAt        DateTime?
-  backAt        DateTime?
-  orderItems    OrderItem[]
-  User          User?        @relation(fields: [userId], references: [firebaseId])
-  orderStatus   OrderStatus? @relation(fields: [orderStatusId], references: [id])
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id               String       @id @default(uuid())
+  address          String?
+  totalPrice       Int?
+  userId           String?
+  orderStatusId    Int?
+  note             String?
+  paidAt           DateTime?
+  backAt           DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  isShopComment    Boolean      @default(false)
+  isUserComment    Boolean      @default(false)
+  isProductComment Boolean      @default(false)
+  orderItems       OrderItem[]
+  User             User?        @relation(fields: [userId], references: [firebaseId])
+  orderStatus      OrderStatus? @relation(fields: [orderStatusId], references: [id])
 
   @@map("Orders")
 }

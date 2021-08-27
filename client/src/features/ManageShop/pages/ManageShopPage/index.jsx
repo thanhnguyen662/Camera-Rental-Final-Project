@@ -5,6 +5,7 @@ import orderApi from '../../../../api/orderApi';
 import productApi from '../../../../api/productApi';
 import userApi from '../../../../api/userApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
+import openNotificationWithIcon from '../../../../components/Notification';
 import ManageShopMenu from '../../components/ManageShopMenu';
 import ManageShopOrder from '../../components/ManageShopOrder';
 import ManageShopOverview from '../../components/ManageShopOverview';
@@ -115,13 +116,26 @@ function ManageShopPage(props) {
             authorPhotoURL: photoURL,
          });
 
+         const updateIsShopComment = await orderApi.updateIsComment({
+            commentId: response.id,
+            orderId: values.orderId,
+            type: 'isUserComment',
+         });
+
+         console.log('updateIsShopComment: ', updateIsShopComment);
          console.log('Commented: ', response);
+
+         if (updateIsShopComment?.message === 'Already Comment')
+            return openNotificationWithIcon(
+               'error',
+               'Error',
+               'Already Comment'
+            );
          setNewComment(response);
       } catch (error) {
          console.log(error);
       }
    };
-
    const handleAcceptOrder = async (values) => {
       const response = await orderApi.updateOrder({
          orderId: values.orderId,

@@ -7,6 +7,7 @@ router.get('/updateStats', orderController.updateStats);
 router.patch('/updateOrder', orderController.updateOrder);
 router.patch('/updateOrderToPaid', orderController.updateToPaidStatus);
 router.patch('/updateOrderToBack', orderController.updateToBackStatus);
+router.patch('/updateIsComment', orderController.updateIsComment);
 router.delete('/deleteOrder', orderController.deleteOrder);
 router.get('/manageOrder', orderController.manageOrder);
 router.get('/myProductInOrder', orderController.myProductInOrder);

@@ -15,6 +15,14 @@ class AccountController {
                photoURL: String(req.body.photoURL),
                username: req.body.username,
                phoneNumber: req.body.phoneNumber,
+
+               userStats: {
+                  create: {
+                     come: 0,
+                     success: 0,
+                     totalOrder: 0,
+                  },
+               },
             },
             update: {
                age: req.body.age,
@@ -74,6 +82,9 @@ class AccountController {
             },
             include: {
                user: true,
+            },
+            orderBy: {
+               createdAt: 'desc',
             },
          });
 

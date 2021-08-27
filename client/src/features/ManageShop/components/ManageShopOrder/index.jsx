@@ -95,7 +95,7 @@ function ManageShopOrder(props) {
                userId: orderDetail?.User.firebaseId,
             });
             console.log('Comment', response);
-            setUserComment(response.reverse());
+            setUserComment(response);
          } catch (error) {
             console.log(error);
          }
@@ -289,6 +289,14 @@ function ManageShopOrder(props) {
       setIsModalVisible(false);
    };
 
+   const disableInput = () => {
+      const disableInput = orderDetail.isUserComment === true && {
+         disabled: true,
+      };
+
+      return disableInput;
+   };
+
    return (
       <>
          {myProductInOrder.length !== 0 ? (
@@ -329,6 +337,7 @@ function ManageShopOrder(props) {
             isModalUserVisible={isModalUserVisible}
             userDetailFirebase={userDetailFirebase}
             orderDetail={orderDetail}
+            orderDetailUser={orderDetail?.User}
             userStats={userStats}
             onClickExplain={onClickExplain}
             userComment={userComment}
@@ -336,6 +345,7 @@ function ManageShopOrder(props) {
             photoURL={photoURL}
             handleOnSubmitComment={handleOnSubmitComment}
             handleOnClickCloseUserModal={handleOnClickCloseUserModal}
+            disableInput={disableInput}
          />
       </>
    );
