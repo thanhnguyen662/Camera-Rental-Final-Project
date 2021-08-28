@@ -29,6 +29,9 @@ class ProductController {
                   include: {
                      user: true,
                   },
+                  orderBy: {
+                     createdAt: 'desc',
+                  },
                },
                orderItems: true,
                pins: true,

@@ -11,7 +11,7 @@ import Admin from '../features/Admin';
 import SignIn from '../features/Auth';
 import Category from '../features/Category';
 import Home from '../features/Home';
-import Lading from '../features/Lading';
+import Social from '../features/Social';
 import ManageShop from '../features/ManageShop';
 import Maps from '../features/Maps';
 import Message from '../features/Message';
@@ -50,8 +50,10 @@ function Routers(props) {
                         </Content>
                      </Route>
 
-                     <Route path='/lading'>
-                        <Lading />
+                     <Route path='/Social'>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Social />
+                        </Content>
                      </Route>
 
                      <Route path='/product'>

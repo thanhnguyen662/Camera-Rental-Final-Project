@@ -1,0 +1,36 @@
+.socialPost{
+   .post{
+      background: white;
+      border-radius: 10px;
+      
+      .postUserInfo{
+         padding: 15px 18px;
+         border-bottom: 1px solid rgb(240, 240, 240);
+         
+         .userName{
+            font-weight: 600;
+         }
+
+         .timeAgo{
+            font-size: 10px;
+         }
+
+         .ellipsisOutlinedIcon{
+            font-size: 25px;
+            transition: all 0.4s;
+            cursor: pointer;
+
+            &:hover{
+               color: #189DFF;
+            }
+         }
+      }
+
+      .postImage{
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         padding-bottom: 20px;
+      }
+   }
+}

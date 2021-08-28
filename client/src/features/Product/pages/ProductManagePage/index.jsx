@@ -17,6 +17,7 @@ function ProductManagePage(props) {
    const email = useSelector((state) => state.users.email);
    const phoneNumber = useSelector((state) => state.users.phoneNumber);
    const userPhotoURL = useSelector((state) => state.users.photoURL);
+   const name = useSelector((state) => state.users.name);
 
    const [orders, setOrders] = useState([]);
    const [current, setCurrent] = useState(0);
@@ -158,6 +159,7 @@ function ProductManagePage(props) {
                   username={username}
                   email={email}
                   phoneNumber={phoneNumber}
+                  name={name}
                />
                <ProductManageTitle handleClickTitle={handleClickTitle} />
             </Col>

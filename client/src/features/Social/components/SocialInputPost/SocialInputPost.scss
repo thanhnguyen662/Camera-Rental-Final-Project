@@ -1,0 +1,25 @@
+.socialInputPost{
+   .socialInput{
+      width: 580px;
+      height: 70px;
+      border-radius: 10px;
+      border: 0px;
+
+      .socialInputAvatar{
+         margin: 10px;
+      }
+
+      .socialInputButton{
+         margin: 10px;
+         border-radius: 10px;
+         height: 40px;
+         font-size: 14px;
+      }
+
+      .skeletonAvatar{
+         margin: 0 4px;
+         width: 40px;
+         height: 40px;
+      }
+   }
+}

@@ -45,7 +45,7 @@ function SiderBar(props) {
                <Link to='/'>Home</Link>
             </Menu.Item>
             <Menu.Item key='3' icon={<HeartOutlined />} title='Social'>
-               <Link to='/lading'>Social</Link>
+               <Link to='/social'>Social</Link>
             </Menu.Item>
             <Menu.Item key='2' icon={<BiMapPin />} title='Maps'>
                <Link to='/maps'>Maps</Link>

@@ -16,7 +16,7 @@ ProductManageAvatar.defaultProps = {
 const { Text } = Typography;
 
 function ProductManageAvatar(props) {
-   const { userAvatar, username, phoneNumber } = props;
+   const { userAvatar, username, name } = props;
 
    return (
       <div className='productManageUserInfo'>
@@ -26,9 +26,9 @@ function ProductManageAvatar(props) {
                   <Avatar src={userAvatar} size={42} />
                </Col>
                <Col className='productManageUserProfile'>
-                  <Text className='productUsername'>{username}</Text>
+                  <Text className='productUsername'>{name}</Text>
                   <br />
-                  <Text className='productUserPhoneNumber'> {phoneNumber}</Text>
+                  <Text className='productUserPhoneNumber'> {username}</Text>
                </Col>
             </Row>
          </Row>
