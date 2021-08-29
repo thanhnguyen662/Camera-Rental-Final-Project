@@ -1,0 +1,45 @@
+.socialSuggestion{
+   display: grid;
+   width: 100%;
+   position: sticky;
+   top: 20px;
+   
+   .socialNewProduct{
+      
+      .title{
+         font-weight: bold;
+         font-size: 14px;
+         color: rgb(160, 160, 160);
+         margin-bottom: 10px;
+      }
+
+      .socialNewProductCard{
+         border-radius: 10px;
+         width: 100%;
+         background: white;
+         padding: 15px 20px;
+
+         img{
+            width: 80px;
+            height: 80px;
+         }
+
+         .socialNewProductUser{
+            .username{
+               font-weight: 500;
+               font-size: 14px;
+               display: block;
+            }
+            
+            .address{
+               font-size: 12px;
+            }
+
+            .productName{
+               font-weight: 700;
+               padding-bottom: 10px;
+            }
+         }
+      }
+   }
+}

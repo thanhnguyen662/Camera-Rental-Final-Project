@@ -2,6 +2,7 @@ import { Col, Row, Space } from 'antd';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import SocialInputPost from '../../components/SocialInputPost';
+import SocialNewProduct from '../../components/SocialNewProduct';
 import SocialPost from '../../components/SocialPost';
 import SocialUserMenu from '../../components/SocialUserMenu';
 import './SocialPage.scss';
@@ -20,8 +21,8 @@ function LadingPage(props) {
    return (
       <>
          <div>
-            <Row gutter={[50, 20]} span={24}>
-               <Col span={5}>
+            <Row gutter={[25, 0]} span={24}>
+               <Col span={6}>
                   <SocialUserMenu
                      photoURL={photoURL}
                      userName={userName}
@@ -29,13 +30,15 @@ function LadingPage(props) {
                      handleChangeMenuSelected={handleChangeMenuSelected}
                   />
                </Col>
-               <Col span={12}>
-                  <Space direction='vertical' size={20}>
+               <Col span={11}>
+                  <Space direction='vertical' size={25}>
                      <SocialInputPost userName={userName} photoURL={photoURL} />
-                     <SocialPost />
+                     <SocialPost photoURL={photoURL} />
                   </Space>
                </Col>
-               <Col span={7}></Col>
+               <Col span={7}>
+                  <SocialNewProduct />
+               </Col>
             </Row>
          </div>
       </>

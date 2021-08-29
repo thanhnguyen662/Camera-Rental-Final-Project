@@ -26,24 +26,30 @@ function SocialUserMenu(props) {
          <Space direction='vertical' size={25}>
             <div className='socialUserCard'>
                <Space size={10} direction='vertical'>
-                  <Avatar src={photoURL} size={60} />
+                  <Avatar src={photoURL} size={70} />
                   <div>
                      <div className='name'>{name}</div>
                      <div className='userName'>{userName}</div>
                   </div>
                   <div className='stats'>
-                     <Row span={24} gutter={[20, 0]}>
+                     <Row span={24} gutter={[30, 0]}>
                         <Col span={8}>
-                           <div className='number'>5/5</div>
-                           <div className='title'>RATE</div>
+                           <Space direction='vertical' size={0}>
+                              <div className='number'>5/5</div>
+                              <div className='title'>RATE</div>
+                           </Space>
                         </Col>
                         <Col span={8}>
-                           <div className='number'>342</div>
-                           <div className='title'>POSTS</div>
+                           <Space direction='vertical' size={0}>
+                              <div className='number'>342</div>
+                              <div className='title'>POSTS</div>
+                           </Space>
                         </Col>
                         <Col span={8}>
-                           <div className='number'>123</div>
-                           <div className='title'>COMMENT</div>
+                           <Space direction='vertical' size={0}>
+                              <div className='number'>123</div>
+                              <div className='title'>COMMENT</div>
+                           </Space>
                         </Col>
                      </Row>
                   </div>
