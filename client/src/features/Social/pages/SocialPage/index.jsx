@@ -32,7 +32,11 @@ function LadingPage(props) {
                </Col>
                <Col span={11}>
                   <Space direction='vertical' size={25}>
-                     <SocialInputPost userName={userName} photoURL={photoURL} />
+                     <SocialInputPost
+                        userName={userName}
+                        photoURL={photoURL}
+                        name={name}
+                     />
                      <SocialPost photoURL={photoURL} />
                   </Space>
                </Col>

@@ -30,6 +30,7 @@ model Product {
   productComments ProductComment[]
   pins            Pin[]
   orderItems      OrderItem[]
+  postProducts    PostProduct[]
 
   @@map("Products")
 }
@@ -59,6 +60,8 @@ model User {
   orders          Order[]
   userStats       UserStat[]
   userComments    UserComment[]
+  posts           Post[]
+  postComments    PostComment[]
 
   @@map("Users")
 }
@@ -187,6 +190,34 @@ model OrderStatus {
   id     Int     @id @default(autoincrement())
   name   String?
   orders Order[]
+}
+
+model Post {
+  id           Int           @id @default(autoincrement())
+  caption      String?
+  like         Int           @default(0)
+  add          Int           @default(0)
+  userId       String?
+  user         User?         @relation(fields: [userId], references: [firebaseId])
+  comments     PostComment[]
+  postProducts PostProduct[]
+}
+
+model PostComment {
+  id      Int     @id @default(autoincrement())
+  content String?
+  postId  Int?
+  userId  String?
+  post    Post?   @relation(fields: [postId], references: [id])
+  user    User?   @relation(fields: [userId], references: [firebaseId])
+}
+
+model PostProduct {
+  id        Int      @id @default(autoincrement())
+  postId    Int?
+  post      Post?    @relation(fields: [postId], references: [id])
+  productId Int?
+  porduct   Product? @relation(fields: [productId], references: [id])
 }
 
 enum Role {

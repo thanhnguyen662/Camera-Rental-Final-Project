@@ -25,3 +25,54 @@
       }
    }
 }
+
+.modalCreatePost{
+   font-family: 'Roboto';
+   .ant-modal-content {
+      overflow: auto;
+      border-radius: 10px;
+   }
+   
+   .ant-modal-body{
+      padding: 20px 20px 15px 20px;
+   }
+
+   .modalTitle{
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 17px;
+   }
+   
+   .ant-modal-header{
+      padding: 14px;
+   }
+
+   .socialPostContainer{
+      display: grid;
+      width: 100%;
+      .socialPostUser{
+
+         .name{
+            font-size: 14px;
+            font-weight: bold;
+         }
+
+         .username{
+            font-size: 14px;
+         }
+      }
+
+      textarea{
+         margin-top: 10px;
+         margin-bottom: 10px;
+         width: 100%;
+         padding: 0 1px;
+         font-size: 16px;
+      }
+
+      .socialUploadPost{
+      }
+   }
+}
