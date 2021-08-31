@@ -1,4 +1,5 @@
 .socialPost{
+   margin-bottom: 20px;
    .post{
       background: white;
       border-radius: 10px;
@@ -33,6 +34,7 @@
       .postSlide{
          display: grid;
          width: 100%;
+         text-align: center;
 
          img{
             display: grid;
@@ -63,6 +65,12 @@
             cursor: pointer;
          }
 
+         .iconFilled {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ED4956;
+         }
+
          .text{
             font-size: 14px;
          }
@@ -79,7 +87,10 @@
          }
 
          .socialCommentTable{
-   
+
+            .ant-empty-normal{
+               margin: 5px 0;
+            }
             .ant-table-thead > tr > th {
                display: none;
             }

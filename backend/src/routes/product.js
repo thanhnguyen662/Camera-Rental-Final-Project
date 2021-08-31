@@ -4,6 +4,7 @@ const productController = require('../app/controllers/ProductController');
 const authMiddleware = require('../firebase/middleware/auth-middleware');
 
 router.get('/topRenting', productController.getTopRenting);
+router.get('/newProduct', productController.getNewProduct);
 router.get('/myProduct', productController.getMyProduct);
 router.get(
    '/orderItemsIncludeProduct',

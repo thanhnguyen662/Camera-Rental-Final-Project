@@ -1,11 +1,12 @@
 .socialInputPost{
    display: grid;
    width: 100%;
-   
+
    .socialInput{
       height: 70px;
       border-radius: 10px;
       border: 0px;
+      width: 100%;
 
       .socialInputAvatar{
          margin: 10px;
@@ -34,7 +35,7 @@
    }
    
    .ant-modal-body{
-      padding: 20px 20px 15px 20px;
+      padding: 20px 20px 20px 20px;
    }
 
    .modalTitle{
@@ -72,7 +73,25 @@
          font-size: 16px;
       }
 
-      .socialUploadPost{
+      .socialSelectProduct{
+         width: 100%;
+         margin-top: 3px;
+         margin-bottom: 10px;
+
+         .ant-select-selector{
+            border-radius: 8px;
+         }
+      }
+
+      .socialSubmitButton{
+         border-radius: 8px;
+         height: 35px;
+      }
+
+      .selectedTag{
+         margin-right: 3px;
+         border-radius: 6px;
+         margin-bottom: 1px;
       }
    }
 }

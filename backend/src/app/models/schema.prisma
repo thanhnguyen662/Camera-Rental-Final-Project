@@ -195,21 +195,26 @@ model OrderStatus {
 model Post {
   id           Int           @id @default(autoincrement())
   caption      String?
-  like         Int           @default(0)
+  images       String[]
+  like         String[]
   add          Int           @default(0)
   userId       String?
   user         User?         @relation(fields: [userId], references: [firebaseId])
   comments     PostComment[]
   postProducts PostProduct[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model PostComment {
-  id      Int     @id @default(autoincrement())
-  content String?
-  postId  Int?
-  userId  String?
-  post    Post?   @relation(fields: [postId], references: [id])
-  user    User?   @relation(fields: [userId], references: [firebaseId])
+  id        Int      @id @default(autoincrement())
+  content   String?
+  postId    Int?
+  userId    String?
+  post      Post?    @relation(fields: [postId], references: [id])
+  user      User?    @relation(fields: [userId], references: [firebaseId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model PostProduct {
@@ -217,7 +222,9 @@ model PostProduct {
   postId    Int?
   post      Post?    @relation(fields: [postId], references: [id])
   productId Int?
-  porduct   Product? @relation(fields: [productId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {

@@ -8,6 +8,7 @@ const orderRouter = require('./order');
 const commentRouter = require('./comment');
 const searchRouter = require('./search');
 const categoryRouter = require('./category');
+const postRouter = require('./post');
 
 function route(app) {
    app.use('/account', accountRouter);
@@ -20,6 +21,7 @@ function route(app) {
    app.use('/comment', commentRouter);
    app.use('/search', searchRouter);
    app.use('/category', categoryRouter);
+   app.use('/post', postRouter);
 }
 
 module.exports = route;

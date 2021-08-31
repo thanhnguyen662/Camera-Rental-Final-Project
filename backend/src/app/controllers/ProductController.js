@@ -186,6 +186,33 @@ class ProductController {
          return next(error);
       }
    };
+
+   getNewProduct = async (req, res, next) => {
+      try {
+         const response = await prisma.product.findMany({
+            take: 3,
+            orderBy: {
+               createdAt: 'desc',
+            },
+            select: {
+               id: true,
+               name: true,
+               productPhotoURL: true,
+               User: {
+                  select: {
+                     photoURL: true,
+                     address: true,
+                     username: true,
+                  },
+               },
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new ProductController();

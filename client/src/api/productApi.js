@@ -37,6 +37,11 @@ const productApi = {
       const url = '/product/topRenting';
       return axiosClient.get(url);
    },
+
+   newProduct: () => {
+      const url = '/product/newProduct';
+      return axiosClient.get(url);
+   },
 };
 
 export default productApi;
