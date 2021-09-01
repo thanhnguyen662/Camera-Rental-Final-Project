@@ -25,13 +25,16 @@ class PostController {
                comments: {
                   take: 3,
                   orderBy: {
-                     createdAt: 'desc',
+                     createdAt: 'asc',
                   },
                },
                postProducts: {
                   include: {
                      product: {
                         select: {
+                           id: true,
+                           productPhotoURL: true,
+                           brand: true,
                            slug: true,
                            price: true,
                            name: true,
@@ -71,13 +74,16 @@ class PostController {
                comments: {
                   take: 3,
                   orderBy: {
-                     createdAt: 'desc',
+                     createdAt: 'asc',
                   },
                },
                postProducts: {
                   include: {
                      product: {
                         select: {
+                           id: true,
+                           productPhotoURL: true,
+                           brand: true,
                            slug: true,
                            price: true,
                            name: true,

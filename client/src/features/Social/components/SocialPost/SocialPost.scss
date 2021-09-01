@@ -55,6 +55,15 @@
          .slick-slide{
             padding-left: 0.3px;
          }
+
+         .imageSpinLoading{
+            margin: 20px 0;
+            margin-bottom: 20px;
+            padding: 30px 50px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+         }
       }
 
       .socialButtonGroup{
@@ -91,6 +100,7 @@
             .ant-empty-normal{
                margin: 5px 0;
             }
+            
             .ant-table-thead > tr > th {
                display: none;
             }

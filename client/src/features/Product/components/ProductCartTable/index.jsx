@@ -45,7 +45,9 @@ function ProductCartTable(props) {
    }, [productInCart]);
 
    function disabledDate(current) {
-      return current && current < moment().endOf('day');
+      return (
+         current < moment().startOf('day') && current < moment().endOf('day')
+      );
    }
 
    const columns = [

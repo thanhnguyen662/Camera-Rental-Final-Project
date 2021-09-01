@@ -1,19 +1,25 @@
 import {
+   CameraOutlined,
    EllipsisOutlined,
    FireOutlined,
+   HeartFilled,
    HeartOutlined,
    MessageOutlined,
-   HeartFilled,
 } from '@ant-design/icons';
 import { Col, Empty, Image, Input, Row, Space, Table, Typography } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
-import PropTypes from 'prop-types';
-import React from 'react';
-import Slider from 'react-slick';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
+import cartApi from '../../../../api/cartApi';
+import SocialPostProduct from '../SocialPostProduct';
+import openNotificationWithIcon from '../../../../components/Notification';
 import './SocialPost.scss';
+import { useDispatch } from 'react-redux';
+import { addProductToCart } from '../../../Product/productSlice';
 
 SocialPost.propTypes = {
    photoURL: PropTypes.string,
@@ -36,6 +42,10 @@ const { Text } = Typography;
 function SocialPost(props) {
    const { photoURL, posts, userId, handleClickUnlike, handleClickLike } =
       props;
+
+   const dispatch = useDispatch();
+   const [isModalProductVisible, setIsModalProductVisible] = useState(false);
+   const [selectPost, setSelectPost] = useState([]);
 
    const settings = {
       dots: true,
@@ -81,6 +91,29 @@ function SocialPost(props) {
       handleClickLike(formData);
    };
 
+   const handleOnClickCancelModal = () => {
+      setIsModalProductVisible(false);
+   };
+
+   const handleOnClickAddToCart = async (formData) => {
+      try {
+         const response = await cartApi.addMoreProductToCart(formData);
+         console.log('Add product to cart: ', response);
+
+         if (response.message === 'Product already in cart')
+            return openNotificationWithIcon('error', response.message);
+
+         const action = addProductToCart(response);
+         dispatch(action);
+         openNotificationWithIcon(
+            'success',
+            'Add product to cart successfully'
+         );
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
    return (
       <>
          {posts?.map((post) => (
@@ -123,38 +156,54 @@ function SocialPost(props) {
                      )}
                   </div>
                   <div className='socialButtonGroup'>
-                     <Space size={20}>
-                        <div>
+                     <Row gutter={[60, 0]} style={{ marginRight: 0 }}>
+                        <Col flex='auto'>
                            <Space>
-                              {post.isLike ? (
-                                 <HeartFilled
-                                    className='iconFilled'
-                                    onClick={() => onClickUnlike(post.id)}
-                                 />
-                              ) : (
-                                 <HeartOutlined
-                                    className='icon'
-                                    onClick={() => onClickLike(post.id)}
-                                 />
-                              )}
-                              <Text className='text'>{post.like}</Text>
+                              <div>
+                                 <Space>
+                                    {post.isLike ? (
+                                       <HeartFilled
+                                          className='iconFilled'
+                                          onClick={() => onClickUnlike(post.id)}
+                                       />
+                                    ) : (
+                                       <HeartOutlined
+                                          className='icon'
+                                          onClick={() => onClickLike(post.id)}
+                                       />
+                                    )}
+                                    <Text className='text'>{post.like}</Text>
+                                 </Space>
+                              </div>
+                              <div>
+                                 <Space>
+                                    <MessageOutlined className='icon' />
+                                    <Text className='text'>
+                                       {post._count.comments}
+                                    </Text>
+                                 </Space>
+                              </div>
+                              <div>
+                                 <Space>
+                                    <FireOutlined className='icon' />
+                                    <Text className='text'>{post.add}</Text>
+                                 </Space>
+                              </div>
                            </Space>
-                        </div>
-                        <div>
-                           <Space>
-                              <MessageOutlined className='icon' />
-                              <Text className='text'>
-                                 {post._count.comments}
-                              </Text>
+                        </Col>
+                        <Col>
+                           <Space size={20}>
+                              <CameraOutlined
+                                 colSpan={24}
+                                 className='icon'
+                                 onClick={() => {
+                                    setIsModalProductVisible(true);
+                                    setSelectPost(post);
+                                 }}
+                              />
                            </Space>
-                        </div>
-                        <div>
-                           <Space>
-                              <FireOutlined className='icon' />
-                              <Text className='text'>{post.add}</Text>
-                           </Space>
-                        </div>
-                     </Space>
+                        </Col>
+                     </Row>
                   </div>
                   <div className='socialComment'>
                      <Text className='viewAll'>View all comment</Text>
@@ -187,6 +236,13 @@ function SocialPost(props) {
                </div>
             </div>
          ))}
+         <SocialPostProduct
+            isModalProductVisible={isModalProductVisible}
+            handleOnClickCancelModal={handleOnClickCancelModal}
+            selectPost={selectPost.postProducts}
+            userId={userId}
+            handleOnClickAddToCart={handleOnClickAddToCart}
+         />
       </>
    );
 }

@@ -7,6 +7,7 @@ import cartApi from '../../../../api/cartApi';
 import productApi from '../../../../api/productApi';
 import userApi from '../../../../api/userApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
+import openNotificationWithIcon from '../../../../components/Notification';
 import ProductDetailComment from '../../components/ProductDetailComment';
 import ProductDetailDescription from '../../components/ProductDetailDescription';
 import ProductDetailImage from '../../components/ProductDetailImage';
@@ -73,9 +74,15 @@ function ProductDetailPage(props) {
          const response = await cartApi.addMoreProductToCart(data);
          console.log('Add product to cart: ', response);
 
-         if (response.message === 'Product already in cart') return;
+         if (response.message === 'Product already in cart')
+            return openNotificationWithIcon('error', response.message);
+
          const action = addProductToCart(response);
          dispatch(action);
+         openNotificationWithIcon(
+            'success',
+            'Add product to cart successfully'
+         );
       } catch (error) {
          return console.log('Error: ', error);
       }

@@ -150,16 +150,20 @@ function LadingPage(props) {
       });
    };
 
+   const updateWhenClickHeart = (response) => {
+      setPosts((prev) => {
+         const findIndex = prev.findIndex((post) => post.id === response.id);
+         prev[findIndex].isLike = response.isLike;
+         prev[findIndex].like = response.like;
+
+         return [...prev];
+      });
+   };
+
    const handleClickLike = async (formData) => {
       try {
          const response = await postApi.likePost(formData);
-         setPosts((prev) => {
-            const findIndex = prev.findIndex((post) => post.id === response.id);
-            prev[findIndex].isLike = response.isLike;
-            prev[findIndex].like = response.like;
-
-            return [...prev];
-         });
+         updateWhenClickHeart(response);
       } catch (error) {
          console.log(error);
       }
@@ -168,13 +172,7 @@ function LadingPage(props) {
    const handleClickUnlike = async (formData) => {
       try {
          const response = await postApi.unlikePost(formData);
-         setPosts((prev) => {
-            const findIndex = prev.findIndex((post) => post.id === response.id);
-            prev[findIndex].isLike = response.isLike;
-            prev[findIndex].like = response.like;
-
-            return [...prev];
-         });
+         updateWhenClickHeart(response);
       } catch (error) {
          console.log(error);
       }
