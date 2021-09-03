@@ -1,5 +1,5 @@
 const prisma = require('../models/prisma');
-
+const moment = require('moment');
 class OrderController {
    createOrder = async (req, res, next) => {
       try {
@@ -340,6 +340,7 @@ class OrderController {
             }
          });
       });
+
       const inTimeUniqueOrder = [...new Set(inTimeArray)];
 
       const inTimeRate =
@@ -513,6 +514,281 @@ class OrderController {
 
             res.status(200).send(response);
          }
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   //////////////////////////////
+   overviewMyOrderStatus = async (req, res, next) => {
+      try {
+         const response = await prisma.order.groupBy({
+            by: ['orderStatusId'],
+            where: {
+               orderItems: {
+                  some: {
+                     Product: {
+                        User: {
+                           firebaseId: req.query.userId,
+                        },
+                     },
+                  },
+               },
+            },
+            _count: {
+               _all: true,
+            },
+         });
+
+         res.status(200).send(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   orderRevenueInTime = async (req, res, next) => {
+      try {
+         const response = await prisma.order.findMany({
+            where: {
+               AND: [
+                  {
+                     orderItems: {
+                        some: {
+                           Product: {
+                              User: {
+                                 firebaseId: req.query.userId,
+                              },
+                           },
+                        },
+                     },
+                  },
+                  {
+                     paidAt: {
+                        gte: new Date(req.query.startDate),
+                     },
+                  },
+                  {
+                     paidAt: {
+                        lte: new Date(req.query.endDate),
+                     },
+                  },
+               ],
+            },
+            orderBy: {
+               paidAt: 'desc',
+            },
+            select: {
+               id: true,
+               paidAt: true,
+               totalPrice: true,
+            },
+         });
+
+         const calculateRevenueByDay = response.reduce((unique, item) => {
+            const paidAt = moment(item.paidAt).format('YYYY-MM-DD');
+            if (unique.some((u) => u.paidAt === paidAt)) {
+               const findIndex = unique.findIndex((i) => i.paidAt === paidAt);
+               unique[findIndex].totalPrice =
+                  unique[findIndex].totalPrice + item.totalPrice;
+               unique[findIndex].orders = unique[findIndex].orders + 1;
+            } else {
+               unique.push({
+                  paidAt: paidAt,
+                  totalPrice: item.totalPrice,
+                  orders: 1,
+               });
+            }
+            return unique;
+         }, []);
+
+         calculateRevenueByDay.sort((a, b) => {
+            return new Date(a.paidAt) - new Date(b.paidAt);
+         });
+
+         res.status(200).json(calculateRevenueByDay);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   orderCreateInTime = async (req, res, next) => {
+      try {
+         const response = await prisma.order.findMany({
+            where: {
+               AND: [
+                  {
+                     orderItems: {
+                        some: {
+                           Product: {
+                              User: {
+                                 firebaseId: req.query.userId,
+                              },
+                           },
+                        },
+                     },
+                  },
+                  {
+                     createdAt: {
+                        gte: new Date(req.query.startDate),
+                     },
+                  },
+                  {
+                     createdAt: {
+                        lte: new Date(req.query.endDate),
+                     },
+                  },
+               ],
+            },
+            orderBy: {
+               createdAt: 'desc',
+            },
+            select: {
+               id: true,
+               createdAt: true,
+            },
+         });
+
+         const calculateCreateByDay = response.reduce((unique, item) => {
+            const createdAt = moment(item.createdAt).format('YYYY-MM-DD');
+            if (unique.some((u) => u.createdAt === createdAt)) {
+               const findIndex = unique.findIndex(
+                  (i) => i.createdAt === createdAt
+               );
+               unique[findIndex].orders = unique[findIndex].orders + 1;
+            } else {
+               unique.push({
+                  createdAt: createdAt,
+                  orders: 1,
+               });
+            }
+            return unique;
+         }, []);
+
+         calculateCreateByDay.sort((a, b) => {
+            return new Date(a.createdAt) - new Date(b.createdAt);
+         });
+
+         res.status(200).json(calculateCreateByDay);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getOrderByStatus = async (req, res, next) => {
+      try {
+         const response = await prisma.order.findMany({
+            where: {
+               AND: [
+                  {
+                     orderItems: {
+                        some: {
+                           Product: {
+                              User: {
+                                 firebaseId: req.query.userId,
+                              },
+                           },
+                        },
+                     },
+                  },
+                  {
+                     orderStatus: {
+                        name: req.query.statusName,
+                     },
+                  },
+               ],
+            },
+            include: {
+               orderItems: {
+                  include: {
+                     Product: {
+                        select: {
+                           productPhotoURL: true,
+                           name: true,
+                           price: true,
+                        },
+                     },
+                  },
+               },
+               User: {
+                  select: {
+                     photoURL: true,
+                     firebaseId: true,
+                     username: true,
+                  },
+               },
+               orderStatus: true,
+            },
+            orderBy: {
+               createdAt: 'desc',
+            },
+         });
+
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   updateOrderToAccept = async (req, res, next) => {
+      try {
+         const response = await prisma.order.update({
+            where: {
+               id: req.body.orderId,
+            },
+            data: {
+               orderStatusId: 5,
+               acceptAt: moment().toISOString(),
+            },
+            include: {
+               orderItems: {
+                  include: {
+                     Product: {
+                        select: {
+                           stock: true,
+                        },
+                     },
+                  },
+               },
+               orderStatus: true,
+            },
+         });
+
+         response.orderItems.map(async (item) => {
+            await prisma.product.update({
+               where: {
+                  id: item.productId,
+               },
+               data: {
+                  stock: item.Product.stock - 1,
+               },
+            });
+         });
+
+         res.status(200).json({
+            message: 'Accept Order Success',
+            id: response.id,
+         });
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   updateOrderToFailure = async (req, res, next) => {
+      try {
+         const response = await prisma.order.update({
+            where: {
+               id: req.body.orderId,
+            },
+            data: {
+               orderStatusId: 4,
+               cancelAt: moment().toISOString(),
+            },
+         });
+
+         res.status(200).json({
+            id: response.id,
+            message: 'Decide Order Success',
+         });
       } catch (error) {
          return next(error);
       }

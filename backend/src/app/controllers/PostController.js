@@ -25,7 +25,15 @@ class PostController {
                comments: {
                   take: 3,
                   orderBy: {
-                     createdAt: 'asc',
+                     createdAt: 'desc',
+                  },
+                  include: {
+                     user: {
+                        select: {
+                           firebaseId: true,
+                           username: true,
+                        },
+                     },
                   },
                },
                postProducts: {
@@ -74,7 +82,15 @@ class PostController {
                comments: {
                   take: 3,
                   orderBy: {
-                     createdAt: 'asc',
+                     createdAt: 'desc',
+                  },
+                  include: {
+                     user: {
+                        select: {
+                           firebaseId: true,
+                           username: true,
+                        },
+                     },
                   },
                },
                postProducts: {
@@ -111,6 +127,12 @@ class PostController {
                   : false;
                post.like = post.like.length;
             });
+
+         response.map((r) => {
+            r.comments.sort((a, b) => {
+               return new Date(a.createdAt) - new Date(b.createdAt);
+            });
+         });
 
          return res.status(200).json(response);
       } catch (error) {
@@ -187,6 +209,79 @@ class PostController {
          updateLikeOfPost.isLike = false;
 
          return res.status(200).json(updateLikeOfPost);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   updateAddToCartCount = async (req, res, next) => {
+      try {
+         const currentAddInPost = await prisma.post.findUnique({
+            where: {
+               id: req.body.postId,
+            },
+            select: {
+               add: true,
+            },
+         });
+
+         const response = await prisma.post.update({
+            where: {
+               id: req.body.postId,
+            },
+            data: {
+               add: parseInt(currentAddInPost.add) + 1,
+            },
+         });
+
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   createPostComment = async (req, res, next) => {
+      try {
+         const response = await prisma.postComment.create({
+            data: {
+               content: req.body.content,
+               postId: req.body.postId,
+               userId: req.body.userId,
+            },
+            include: {
+               user: {
+                  select: {
+                     username: true,
+                     firebaseId: true,
+                  },
+               },
+            },
+         });
+
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getUserSocialStats = async (req, res, next) => {
+      try {
+         const response = await prisma.user.findUnique({
+            where: {
+               firebaseId: req.query.userId,
+            },
+            include: {
+               userStats: true,
+               _count: {
+                  select: {
+                     postComments: true,
+                     posts: true,
+                  },
+               },
+            },
+         });
+
+         return res.status(200).json(response);
       } catch (error) {
          return next(error);
       }

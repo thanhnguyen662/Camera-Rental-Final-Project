@@ -162,9 +162,6 @@ class ProductController {
                   firebaseId: req.query.firebaseId,
                },
             },
-            include: {
-               User: true,
-            },
          });
          return res.status(200).json(response);
       } catch (error) {
@@ -190,7 +187,7 @@ class ProductController {
    getNewProduct = async (req, res, next) => {
       try {
          const response = await prisma.product.findMany({
-            take: 3,
+            take: 4,
             orderBy: {
                createdAt: 'desc',
             },

@@ -157,9 +157,11 @@ model Order {
   userId           String?
   orderStatusId    Int?
   note             String?
-  paidAt           DateTime?
-  backAt           DateTime?
   createdAt        DateTime     @default(now())
+  acceptAt         DateTime?
+  paidAt           DateTime?
+  cancelAt         DateTime?
+  backAt           DateTime?
   updatedAt        DateTime     @updatedAt
   isShopComment    Boolean      @default(false)
   isUserComment    Boolean      @default(false)

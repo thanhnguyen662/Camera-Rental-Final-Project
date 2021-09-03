@@ -17,4 +17,13 @@ router.get(
    orderController.myProductInOrderOverview
 );
 
+/////////////////////
+router.get('/revenue/time', orderController.orderRevenueInTime);
+router.patch('/update/accept', orderController.updateOrderToAccept);
+router.patch('/update/failure', orderController.updateOrderToFailure);
+router.get('/create/time', orderController.orderCreateInTime);
+router.get('/count', orderController.overviewMyOrderStatus);
+router.get('/status', orderController.getOrderByStatus);
+/////////////////////
+
 module.exports = router;
