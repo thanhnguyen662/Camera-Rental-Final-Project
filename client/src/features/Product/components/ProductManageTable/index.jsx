@@ -115,7 +115,11 @@ function ProductManageTable(props) {
          dataIndex: ['Product', 'productPhotoURL'],
          width: 80,
          render: (record) => (
-            <Image src={record[0]} width={80} style={{ minHeight: 80 }} />
+            <Image
+               src={record[0]}
+               width={80}
+               style={{ minHeight: 80, borderRadius: 10, objectFit: 'cover' }}
+            />
          ),
       },
       {

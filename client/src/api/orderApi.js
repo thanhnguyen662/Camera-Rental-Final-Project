@@ -55,6 +55,38 @@ const orderApi = {
       const url = '/order/updateIsComment';
       return axiosClient.patch(url, data);
    },
+
+   ////////////////////
+   countMyOrder: (params) => {
+      const url = '/order/count';
+      return axiosClient.get(url, { params });
+   },
+
+   getRevenueInTime: (params) => {
+      const url = '/order/revenue/time';
+      return axiosClient.get(url, { params });
+   },
+
+   getCreateInTime: (params) => {
+      const url = '/order/create/time';
+      return axiosClient.get(url, { params });
+   },
+
+   getOrderByStatus: (params) => {
+      const url = '/order/status';
+      return axiosClient.get(url, { params });
+   },
+
+   updateAccept: (data) => {
+      const url = '/order/update/accept';
+      return axiosClient.patch(url, data);
+   },
+
+   updateFailure: (data) => {
+      const url = '/order/update/failure';
+      return axiosClient.patch(url, data);
+   },
+   /////////////////////////////////
 };
 
 export default orderApi;

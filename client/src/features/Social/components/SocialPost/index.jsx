@@ -11,15 +11,17 @@ import Avatar from 'antd/lib/avatar/avatar';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import cartApi from '../../../../api/cartApi';
-import SocialPostProduct from '../SocialPostProduct';
+import postApi from '../../../../api/postApi';
 import openNotificationWithIcon from '../../../../components/Notification';
-import './SocialPost.scss';
-import { useDispatch } from 'react-redux';
 import { addProductToCart } from '../../../Product/productSlice';
+import SocialPostProduct from '../SocialPostProduct';
+import './SocialPost.scss';
 
 SocialPost.propTypes = {
    photoURL: PropTypes.string,
@@ -27,6 +29,8 @@ SocialPost.propTypes = {
    userId: PropTypes.string,
    handleClickLike: PropTypes.func,
    handleClickUnlike: PropTypes.func,
+   updateWhenClickAddToCart: PropTypes.func,
+   handleOnComment: PropTypes.func,
 };
 
 SocialPost.defaultProps = {
@@ -35,17 +39,29 @@ SocialPost.defaultProps = {
    userId: '',
    handleClickLike: null,
    handleClickUnlike: null,
+   updateWhenClickAddToCart: null,
+   handleOnComment: null,
 };
 
 const { Text } = Typography;
 
 function SocialPost(props) {
-   const { photoURL, posts, userId, handleClickUnlike, handleClickLike } =
-      props;
+   const {
+      photoURL,
+      posts,
+      userId,
+      handleClickUnlike,
+      handleClickLike,
+      updateWhenClickAddToCart,
+      handleOnComment,
+   } = props;
 
    const dispatch = useDispatch();
+
    const [isModalProductVisible, setIsModalProductVisible] = useState(false);
    const [selectPost, setSelectPost] = useState([]);
+   const [commentInput, setCommentInput] = useState('');
+   const [commentInputPostId, setCommentInputPostId] = useState(0);
 
    const settings = {
       dots: true,
@@ -64,9 +80,11 @@ function SocialPost(props) {
          render: (record) => {
             return (
                <>
-                  <Text className='commentTableUsername'>
-                     {record.userName}
-                  </Text>
+                  <Link to={`/profile/${record.user.firebaseId}`}>
+                     <Text className='commentTableUsername'>
+                        {record.user.username}
+                     </Text>
+                  </Link>
                   &nbsp;
                   <Text className='commentTableContent'>{record.content}</Text>
                </>
@@ -98,10 +116,14 @@ function SocialPost(props) {
    const handleOnClickAddToCart = async (formData) => {
       try {
          const response = await cartApi.addMoreProductToCart(formData);
-         console.log('Add product to cart: ', response);
 
          if (response.message === 'Product already in cart')
             return openNotificationWithIcon('error', response.message);
+
+         const updateAddCount = await postApi.updateAddCountInPost({
+            postId: selectPost.id,
+         });
+         updateWhenClickAddToCart(updateAddCount);
 
          const action = addProductToCart(response);
          dispatch(action);
@@ -112,6 +134,16 @@ function SocialPost(props) {
       } catch (error) {
          console.log(error);
       }
+   };
+
+   const onPressCommentEnter = () => {
+      const formData = {
+         content: commentInput,
+         postId: commentInputPostId,
+         userId: userId,
+      };
+
+      handleOnComment(formData);
    };
 
    return (
@@ -126,7 +158,11 @@ function SocialPost(props) {
                               <Avatar size={40} src={post.user.photoURL} />
                               <div>
                                  <div className='userName'>
-                                    {post.user.username}
+                                    <Link
+                                       to={`/profile/${post.user.firebaseId}`}
+                                    >
+                                       {post.user.username}
+                                    </Link>
                                  </div>
                                  <div className='timeAgo'>
                                     {moment(post.createdAt).fromNow()}
@@ -208,6 +244,7 @@ function SocialPost(props) {
                   <div className='socialComment'>
                      <Text className='viewAll'>View all comment</Text>
                      <Table
+                        rowKey={(record) => record.id}
                         dataSource={post.comments}
                         columns={columns}
                         pagination={false}
@@ -229,7 +266,16 @@ function SocialPost(props) {
                            <Avatar src={photoURL} size={40} />
                         </Col>
                         <Col flex='auto'>
-                           <Input placeholder='Write your comment...' />
+                           <Input
+                              value={commentInput}
+                              placeholder='Write your comment...'
+                              onChange={(e) => setCommentInput(e.target.value)}
+                              onClick={() => setCommentInputPostId(post.id)}
+                              onPressEnter={() => {
+                                 onPressCommentEnter();
+                                 setCommentInput('');
+                              }}
+                           />
                         </Col>
                      </Row>
                   </div>

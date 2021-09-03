@@ -11,7 +11,6 @@ import Admin from '../features/Admin';
 import SignIn from '../features/Auth';
 import Category from '../features/Category';
 import Home from '../features/Home';
-import Social from '../features/Social';
 import ManageShop from '../features/ManageShop';
 import Maps from '../features/Maps';
 import Message from '../features/Message';
@@ -19,7 +18,10 @@ import MessageBeta from '../features/MessageBeta';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
 import Search from '../features/Search';
+import Social from '../features/Social';
 import MainLayout from '../layouts/Main';
+import ManagesLayout from '../layouts/ManagesLayout';
+import Manages from '../features/Manages';
 
 const { Content } = Layout;
 
@@ -83,6 +85,14 @@ function Routers(props) {
                      <Route path='/profile'>
                         <Content style={{ margin: '25px 125px' }}>
                            <Profile />
+                        </Content>
+                     </Route>
+
+                     <Route path='/manages'>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <ManagesLayout>
+                              <Manages />
+                           </ManagesLayout>
                         </Content>
                      </Route>
 

@@ -20,6 +20,21 @@ const postApi = {
       const url = '/post/unlike';
       return axiosClient.patch(url, data);
    },
+
+   updateAddCountInPost: (data) => {
+      const url = '/post/update/add';
+      return axiosClient.patch(url, data);
+   },
+
+   createCommentInPost: (data) => {
+      const url = '/post/create/comment';
+      return axiosClient.post(url, data);
+   },
+
+   getUserSocialStats: (params) => {
+      const url = '/post/stats/user';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default postApi;

@@ -1,21 +1,26 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Table, Image, Button } from 'antd';
+import { Button, Table, Image } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import productApi from '../../../../api/productApi';
 import priceFormat from '../../../../utils/PriceFormat';
-import './ManageShopProductTable.scss';
-import { useHistory } from 'react-router-dom';
+import './ManageMyProduct.scss';
 
-ManageShopProductTable.propTypes = {
-   myProduct: PropTypes.array,
-};
-
-ManageShopProductTable.defaultProps = {
-   myProduct: [],
-};
-
-function ManageShopProductTable(props) {
-   const { myProduct } = props;
+function ManageMyProductPage(props) {
    const history = useHistory();
+   const userId = useSelector((state) => state.users.id);
+   const [myProduct, setMyProduct] = useState([]);
+
+   useEffect(() => {
+      if (!userId) return;
+      const getMyProduct = async () => {
+         const response = await productApi.getMyProduct({
+            firebaseId: userId,
+         });
+         setMyProduct(response);
+      };
+      getMyProduct();
+   }, [userId]);
 
    const columns = [
       {
@@ -63,17 +68,19 @@ function ManageShopProductTable(props) {
    ];
 
    return (
-      <div className='manageShopProductTable'>
-         <Table
-            className='shopProductTable'
-            dataSource={myProduct}
-            columns={columns}
-            ellipsis={true}
-            pagination={false}
-            rowKey={(record) => record.id}
-         />
-      </div>
+      <>
+         <div>
+            <Table
+               className='myProductTable'
+               dataSource={myProduct}
+               columns={columns}
+               ellipsis={true}
+               pagination={false}
+               rowKey={(record) => record.id}
+            />
+         </div>
+      </>
    );
 }
 
-export default ManageShopProductTable;
+export default ManageMyProductPage;

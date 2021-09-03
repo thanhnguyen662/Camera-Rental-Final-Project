@@ -71,6 +71,10 @@ function SiderBar(props) {
             <Menu.Item key='6' icon={<InboxOutlined />} title='Shop Management'>
                <Link to='/manage'>Shop Management</Link>
             </Menu.Item>
+
+            <Menu.Item key='7' icon={<InboxOutlined />} title='Shop Management'>
+               <Link to='/manages/shop/revenue'>Shop Management</Link>
+            </Menu.Item>
          </Menu>
       </Sider>
    );

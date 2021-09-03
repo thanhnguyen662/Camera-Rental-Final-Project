@@ -1,62 +1,71 @@
-.socialPost{
+.socialPost {
    margin-bottom: 20px;
-   .post{
+   .post {
       background: white;
       border-radius: 10px;
-      
-      .postUserInfo{
+
+      .postUserInfo {
          padding: 15px 18px;
          border-bottom: 1px solid rgb(240, 240, 240);
-         
-         .userName{
+
+         .userName {
             font-weight: 600;
+
+            a {
+               transition: all 0.3s;
+               color: black;
+
+               &:hover {
+                  color: #1890ff;
+               }
+            }
          }
 
-         .timeAgo{
+         .timeAgo {
             font-size: 10px;
          }
 
-         .ellipsisOutlinedIcon{
+         .ellipsisOutlinedIcon {
             font-size: 25px;
             transition: all 0.4s;
             cursor: pointer;
 
-            &:hover{
-               color: #189DFF;
+            &:hover {
+               color: #189dff;
             }
          }
 
-         .description{
+         .description {
             margin: 10px 2px 0px 4px;
          }
       }
 
-      .postSlide{
+      .postSlide {
          display: grid;
          width: 100%;
          text-align: center;
 
-         img{
+         img {
             display: grid;
             width: 100%;
             margin-right: 1px;
          }
-         
-         .slick-next{
+
+         .slick-next {
             left: 95%;
             z-index: 1;
          }
 
-         .slick-prev{
+         .slick-prev {
             left: 2%;
             z-index: 1;
          }
 
-         .slick-slide{
+         .slick-slide {
             padding-left: 0.3px;
          }
 
-         .imageSpinLoading{
+         .imageSpinLoading {
             margin: 20px 0;
             margin-bottom: 20px;
             padding: 30px 50px;
@@ -66,10 +75,10 @@
          }
       }
 
-      .socialButtonGroup{
+      .socialButtonGroup {
          padding: 25px 0 0 20px;
-         
-         .icon{
+
+         .icon {
             font-size: 24px;
             cursor: pointer;
          }
@@ -77,63 +86,68 @@
          .iconFilled {
             font-size: 24px;
             cursor: pointer;
-            color: #ED4956;
+            color: #ed4956;
          }
 
-         .text{
+         .text {
             font-size: 14px;
          }
       }
 
-      .socialComment{
+      .socialComment {
          margin-top: 10px;
-         
-         .viewAll{
+
+         .viewAll {
             margin-left: 22px;
             font-weight: 300;
             color: #989898;
             cursor: pointer;
          }
 
-         .socialCommentTable{
-
-            .ant-empty-normal{
+         .socialCommentTable {
+            .ant-empty-normal {
                margin: 5px 0;
             }
-            
+
             .ant-table-thead > tr > th {
                display: none;
             }
-   
+
             .ant-table-tbody > tr > td {
                border: 0px;
                padding: 5px 21px;
             }
-   
-            .commentTableUsername{
+
+            .commentTableUsername {
+               margin-left: 2px;
                font-size: 15px;
                font-weight: bold;
                cursor: pointer;
+               transition: all 0.3s;
+
+               &:hover {
+                  color: #1890ff;
+               }
             }
-            
-            .commentTableContent{
+
+            .commentTableContent {
                font-size: 14px;
             }
          }
       }
 
-      .socialCommentInput{
+      .socialCommentInput {
          margin-top: 10px;
          margin-left: 20px;
          margin-right: 20px;
          padding-bottom: 20px;
 
-         input{
+         input {
             border-radius: 10px;
             height: 40px;
             width: 100%;
 
-            &::placeholder{
+            &::placeholder {
                font-weight: 300;
             }
          }

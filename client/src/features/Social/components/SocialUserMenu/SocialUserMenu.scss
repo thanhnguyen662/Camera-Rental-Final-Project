@@ -1,11 +1,10 @@
-   .socialUserMenu{
+.socialUserMenu {
    display: grid;
    width: 100%;
    position: sticky;
    top: 20px;
 
-   .socialUserCard{
-      
+   .socialUserCard {
       border-radius: 10px;
       background: white;
       padding: 30px 0px;
@@ -13,34 +12,35 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      
-      .name{
-         font-size: 14px;
+
+      .name {
+         font-size: 17px;
          font-weight: 900;
       }
-      
-      .userName{
-         font-size: 13px;
+
+      .userName {
+         font-size: 14px;
       }
-      
-      .stats{
+
+      .stats {
          margin-top: 5px;
          text-align: center;
 
          .number {
+            font-size: 16px;
             width: auto;
             font-weight: 800;
          }
 
          .title {
+            font-size: 10px;
             width: auto;
-            font-size: 9px;
          }
       }
    }
-   
-   .socialMenuCard{
-      .menu{
+
+   .socialMenuCard {
+      .menu {
          width: auto;
          padding: 8px 0;
          border-radius: 10px;
@@ -50,7 +50,7 @@
             font-size: 18px;
             margin: 0 8px;
          }
-         
+
          .ant-menu-item:not(:last-child) {
             margin-bottom: 5px;
          }

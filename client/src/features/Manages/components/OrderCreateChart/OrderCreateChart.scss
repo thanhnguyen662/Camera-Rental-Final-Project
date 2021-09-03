@@ -1,0 +1,35 @@
+.orderCardInDay {
+   border: 2px solid #e7e9ee;
+   border-radius: 10px;
+   padding: 10px 15px;
+   margin-bottom: 20px;
+   margin-left: 18px;
+   transition: all 0.3s;
+
+   &:hover {
+      border: 2px solid #1890ff;
+   }
+}
+
+.ordersTableByDate {
+   margin-left: 18px;
+   border-radius: 10px;
+   overflow: auto;
+   border: 2px solid #e7e9ee;
+
+   transition: all 0.3s;
+
+   &:hover {
+      border: 2px solid #1890ff;
+   }
+
+   .ant-table-thead > tr > th {
+      text-align: center;
+      padding: 8px 10px;
+   }
+
+   .ant-table-tbody > tr > td {
+      text-align: center;
+      padding: 8px 10px;
+   }
+}

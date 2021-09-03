@@ -15,17 +15,19 @@ import postApi from '../../../../api/postApi';
 
 const { Text } = Typography;
 
-function LadingPage(props) {
+function SocialPage(props) {
    const photoURL = useSelector((state) => state.users.photoURL);
    const userName = useSelector((state) => state.users.username);
    const name = useSelector((state) => state.users.name);
    const userId = useSelector((state) => state.users.id);
+
    // eslint-disable-next-line
    const [current, setCurrent] = useState('');
    const [imageList, setImageList] = useState([]);
    const [myProduct, setMyProduct] = useState([]);
    const [posts, setPosts] = useState([]);
    const [newProduct, setNewProduct] = useState([]);
+   const [userStats, setUserStats] = useState({});
 
    useEffect(() => {
       if (!userId) return;
@@ -90,6 +92,22 @@ function LadingPage(props) {
       };
       getAllNewProducts();
    }, []);
+
+   useEffect(() => {
+      if (!userId) return;
+      const getMySocialStats = async () => {
+         try {
+            const response = await postApi.getUserSocialStats({
+               userId: userId,
+            });
+
+            setUserStats(response);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getMySocialStats();
+   }, [userId]);
 
    const handleChangeMenuSelected = (value) => {
       setCurrent(value.key);
@@ -160,6 +178,15 @@ function LadingPage(props) {
       });
    };
 
+   const updateWhenClickAddToCart = (response) => {
+      setPosts((prev) => {
+         const findIndex = prev.findIndex((post) => post.id === response.id);
+         prev[findIndex].add = response.add;
+
+         return [...prev];
+      });
+   };
+
    const handleClickLike = async (formData) => {
       try {
          const response = await postApi.likePost(formData);
@@ -178,6 +205,24 @@ function LadingPage(props) {
       }
    };
 
+   const handleOnComment = async (formData) => {
+      try {
+         const response = await postApi.createCommentInPost(formData);
+
+         setPosts((prev) => {
+            const findIndex = prev.findIndex(
+               (post) => post.id === response.postId
+            );
+            prev[findIndex].comments = [...prev[findIndex].comments, response];
+            prev[findIndex]._count.comments += 1;
+
+            return [...prev];
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
    return (
       <>
          <div>
@@ -188,6 +233,7 @@ function LadingPage(props) {
                      userName={userName}
                      name={name}
                      handleChangeMenuSelected={handleChangeMenuSelected}
+                     userStats={userStats}
                   />
                </Col>
                <Col span={11}>
@@ -209,6 +255,8 @@ function LadingPage(props) {
                         userId={userId}
                         handleClickUnlike={handleClickUnlike}
                         handleClickLike={handleClickLike}
+                        updateWhenClickAddToCart={updateWhenClickAddToCart}
+                        handleOnComment={handleOnComment}
                      />
                   </Space>
                </Col>
@@ -221,4 +269,4 @@ function LadingPage(props) {
    );
 }
 
-export default LadingPage;
+export default SocialPage;

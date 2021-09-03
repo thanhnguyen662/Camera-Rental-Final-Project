@@ -49,7 +49,13 @@ function SocialNewProduct(props) {
                                  </Space>
                               </Col>
                               <Col>
-                                 <Image src={product.productPhotoURL[0]} />
+                                 <Image
+                                    src={product.productPhotoURL[0]}
+                                    style={{
+                                       borderRadius: 8,
+                                       objectFit: 'cover',
+                                    }}
+                                 />
                               </Col>
                            </Row>
                         </div>
