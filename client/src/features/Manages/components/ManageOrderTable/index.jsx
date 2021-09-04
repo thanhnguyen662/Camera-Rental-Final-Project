@@ -1,11 +1,6 @@
-import {
-   CheckOutlined,
-   CloseOutlined,
-   InfoCircleOutlined,
-} from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import {
    Avatar,
-   Button,
    Col,
    DatePicker,
    Image,
@@ -18,48 +13,39 @@ import {
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
+import './ManageOrderTable.scss';
 
-ManagePendingOrder.propTypes = {
-   pendingOrder: PropTypes.array,
-   handleOnClickAcceptOrder: PropTypes.func,
-   handleOnClickDeclineOrder: PropTypes.func,
+ManageOrderTable.propTypes = {
+   dataSource: PropTypes.array,
+   tag: PropTypes.string,
+   tagColor: PropTypes.string,
+   buttonGroup: PropTypes.func,
+   handlePageChange: PropTypes.func,
 };
 
-ManagePendingOrder.defaultProps = {
-   pendingOrder: [],
-   handleOnClickAcceptOrder: null,
-   handleOnClickDeclineOrder: null,
+ManageOrderTable.defaultProps = {
+   dataSource: [],
+   buttonGroup: null,
+   tag: '',
+   tagColor: '',
+   handlePageChange: null,
 };
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 
-function ManagePendingOrder(props) {
-   const { pendingOrder, handleOnClickAcceptOrder, handleOnClickDeclineOrder } =
-      props;
-
-   const onClickAcceptButton = (orderId) => {
-      const formData = {
-         orderId: orderId,
-      };
-      handleOnClickAcceptOrder(formData);
-   };
-
-   const onClickDeclineButton = (orderId) => {
-      const formData = {
-         orderId: orderId,
-      };
-      handleOnClickDeclineOrder(formData);
-   };
+function ManageOrderTable(props) {
+   const { dataSource, buttonGroup, tag, tagColor, handlePageChange } = props;
 
    const titleOfTable = (order) => {
       return (
          <Row>
             <Col flex='auto'>
                <Space size={20}>
-                  <Tag color='blue'>PENDING</Tag>
+                  <Tag color={tagColor}>{tag}</Tag>
                   <Link to={`/profile/${order.User.firebaseId}`}>
                      <Space size={20}>
                         <Avatar src={order.User.photoURL} />
@@ -83,26 +69,7 @@ function ManagePendingOrder(props) {
    const footerOfTable = (order) => {
       return (
          <Row>
-            <Col flex='auto'>
-               <Space>
-                  <Button
-                     type='primary'
-                     className='footerButton'
-                     icon={<CheckOutlined />}
-                     onClick={() => onClickAcceptButton(order.id)}
-                  >
-                     Accept
-                  </Button>
-                  <Button
-                     type='danger'
-                     className='footerButton'
-                     icon={<CloseOutlined />}
-                     onClick={() => onClickDeclineButton(order.id)}
-                  >
-                     Decide
-                  </Button>
-               </Space>
-            </Col>
+            <Col flex='auto'>{buttonGroup(order)}</Col>
             <Col>
                <Space>
                   <Text className='footerTitle'>Total Price: </Text>
@@ -136,7 +103,6 @@ function ManagePendingOrder(props) {
       },
       {
          title: 'Date',
-         dataIndex: ['Product'],
          render: (record) => (
             <RangePicker
                disabled={true}
@@ -150,21 +116,31 @@ function ManagePendingOrder(props) {
 
    return (
       <>
-         {pendingOrder?.map((order) => (
-            <div key={order.id}>
-               <Table
-                  className='managePendingOrderTable'
-                  dataSource={order.orderItems}
-                  rowKey={(record) => record.id}
-                  pagination={false}
-                  columns={columns}
-                  title={() => titleOfTable(order)}
-                  footer={() => footerOfTable(order)}
-               />
-            </div>
-         ))}
+         {dataSource.length ? (
+            <InfiniteScroll
+               dataLength={dataSource.length}
+               next={() => handlePageChange()}
+               hasMore={true}
+            >
+               {dataSource?.map((order) => (
+                  <div key={order.id}>
+                     <Table
+                        className='managePendingOrderTable'
+                        dataSource={order.orderItems}
+                        rowKey={(record) => record.id}
+                        pagination={false}
+                        columns={columns}
+                        title={() => titleOfTable(order)}
+                        footer={() => footerOfTable(order)}
+                     />
+                  </div>
+               ))}
+            </InfiniteScroll>
+         ) : (
+            <Table hasData={false} className='managePendingOrderTable' />
+         )}
       </>
    );
 }
 
-export default ManagePendingOrder;
+export default ManageOrderTable;

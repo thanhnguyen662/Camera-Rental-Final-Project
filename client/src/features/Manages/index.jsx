@@ -3,6 +3,10 @@ import { Route, Switch, useRouteMatch } from 'react-router';
 import ManagePendingOrderPage from './pages/ManagePendingOrderPage';
 import ManageMyProductPage from './pages/ManageMyProductPage';
 import ManageRevenueOverviewPage from './pages/ManageRevenueOverviewPage';
+import ManageAcceptOrderPage from './pages/ManageAcceptOrderPage';
+import ManageRentedOrderPage from './pages/ManageRentedOrderPage';
+import ManageBackOrderPage from './pages/ManageBackOrderPage';
+import ManageFailureOrderPage from './pages/ManageFailureOrderPage';
 
 Manages.propTypes = {};
 
@@ -22,6 +26,22 @@ function Manages(props) {
          <Route
             path={`${match.url}/shop/pending`}
             component={ManagePendingOrderPage}
+         />
+         <Route
+            path={`${match.url}/shop/accept`}
+            component={ManageAcceptOrderPage}
+         />
+         <Route
+            path={`${match.url}/shop/rented`}
+            component={ManageRentedOrderPage}
+         />
+         <Route
+            path={`${match.url}/shop/back`}
+            component={ManageBackOrderPage}
+         />
+         <Route
+            path={`${match.url}/shop/failure`}
+            component={ManageFailureOrderPage}
          />
       </Switch>
    );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Space, Typography } from 'antd';
+import { useHistory } from 'react-router';
 
 RevenueOrderGrid.propTypes = {
    countMyOrder: PropTypes.array,
@@ -14,6 +15,8 @@ const { Text, Title, Paragraph } = Typography;
 
 function RevenueOrderGrid(props) {
    const { countMyOrder } = props;
+
+   const history = useHistory();
 
    const [pending, setPending] = useState(0);
    const [accept, setAccept] = useState(0);
@@ -59,7 +62,10 @@ function RevenueOrderGrid(props) {
                      <Text>{pending + accept + rented + back + failure}</Text>
                   </Space>
                </Card.Grid>
-               <Card.Grid style={gridStyle}>
+               <Card.Grid
+                  style={gridStyle}
+                  onClick={() => history.push('/manages/shop/pending')}
+               >
                   <Space direction='vertical' size={3}>
                      <Text style={titleStyle}>Pending</Text>
                      <Text>{pending}</Text>

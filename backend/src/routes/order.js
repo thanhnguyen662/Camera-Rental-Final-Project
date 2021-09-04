@@ -18,9 +18,16 @@ router.get(
 );
 
 /////////////////////
+router.patch('/update/user/come', orderController.updateUserComeStat);
+router.patch(
+   '/update/user/success',
+   orderController.updateUserOrderSuccessStat
+);
 router.get('/revenue/time', orderController.orderRevenueInTime);
+router.patch('/update/back', orderController.updateOrderToBack);
 router.patch('/update/accept', orderController.updateOrderToAccept);
 router.patch('/update/failure', orderController.updateOrderToFailure);
+router.patch('/update/rented', orderController.updateOrderToRented);
 router.get('/create/time', orderController.orderCreateInTime);
 router.get('/count', orderController.overviewMyOrderStatus);
 router.get('/status', orderController.getOrderByStatus);

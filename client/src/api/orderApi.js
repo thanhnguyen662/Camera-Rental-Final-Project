@@ -86,6 +86,26 @@ const orderApi = {
       const url = '/order/update/failure';
       return axiosClient.patch(url, data);
    },
+
+   updateRented: (data) => {
+      const url = '/order/update/rented';
+      return axiosClient.patch(url, data);
+   },
+
+   updateBack: (data) => {
+      const url = '/order/update/back';
+      return axiosClient.patch(url, data);
+   },
+
+   updateUserComeStat: (data) => {
+      const url = '/order/update/user/come';
+      return axiosClient.patch(url, data);
+   },
+
+   updateUserSuccessStat: (data) => {
+      const url = '/order/update/user/success';
+      return axiosClient.patch(url, data);
+   },
    /////////////////////////////////
 };
 

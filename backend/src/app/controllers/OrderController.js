@@ -343,6 +343,9 @@ class OrderController {
 
       const inTimeUniqueOrder = [...new Set(inTimeArray)];
 
+      console.log(inTimeUniqueOrder.length);
+      console.log(getSuccessOrder.length);
+
       const inTimeRate =
          (inTimeUniqueOrder.length / getSuccessOrder.length) * 100;
       const comeRate = (getPaidOrder.length / filterDeclineOrder.length) * 100;
@@ -676,7 +679,11 @@ class OrderController {
 
    getOrderByStatus = async (req, res, next) => {
       try {
+         const page = Number(req.query.page);
+         const take = 10;
          const response = await prisma.order.findMany({
+            take: take,
+            skip: (page - 1) * take,
             where: {
                AND: [
                   {
@@ -732,9 +739,7 @@ class OrderController {
    updateOrderToAccept = async (req, res, next) => {
       try {
          const response = await prisma.order.update({
-            where: {
-               id: req.body.orderId,
-            },
+            where: { id: req.body.orderId },
             data: {
                orderStatusId: 5,
                acceptAt: moment().toISOString(),
@@ -776,22 +781,131 @@ class OrderController {
    updateOrderToFailure = async (req, res, next) => {
       try {
          const response = await prisma.order.update({
-            where: {
-               id: req.body.orderId,
-            },
+            where: { id: req.body.orderId },
             data: {
                orderStatusId: 4,
                cancelAt: moment().toISOString(),
+               note: req.body.note,
             },
          });
 
          res.status(200).json({
             id: response.id,
-            message: 'Decide Order Success',
+            userId: response.userId,
+            message: 'Decline Order Success',
          });
       } catch (error) {
          return next(error);
       }
+   };
+
+   updateOrderToRented = async (req, res, next) => {
+      try {
+         const response = await prisma.order.update({
+            where: { id: req.body.orderId },
+            data: {
+               orderStatusId: 3,
+               paidAt: moment().toISOString(),
+            },
+         });
+
+         res.status(200).json({
+            id: response.id,
+            userId: response.userId,
+            message: 'Rented Order Success',
+         });
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   updateOrderToBack = async (req, res, next) => {
+      try {
+         const response = await prisma.order.update({
+            where: { id: req.body.orderId },
+            data: {
+               orderStatusId: 6,
+               backAt: moment().toISOString(),
+            },
+         });
+
+         res.status(200).json({
+            id: response.id,
+            userId: response.userId,
+            message: 'Back Order Success',
+         });
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   updateUserComeStat = async (req, res, next) => {
+      try {
+         const orderExcludePendingAcceptShopDecline =
+            await prisma.order.findMany({
+               where: {
+                  AND: [
+                     { userId: req.body.userId },
+                     { orderStatusId: { notIn: 1 } }, //PENDING
+                     { orderStatusId: { notIn: 5 } }, //ACCEPT
+                  ],
+               },
+            });
+
+         const filterExcludePendingAcceptShopDecline =
+            orderExcludePendingAcceptShopDecline.filter(
+               (o) => o.note !== 'Decline'
+            );
+
+         const paidAtOrder = await prisma.order.count({
+            where: {
+               AND: [{ userId: req.body.userId }, { paidAt: { not: null } }],
+            },
+         });
+
+         const calculateComeRate =
+            (paidAtOrder / filterExcludePendingAcceptShopDecline.length) * 100;
+
+         await prisma.userStat.update({
+            where: {
+               userId: req.body.userId,
+            },
+            data: {
+               come: parseFloat(calculateComeRate.toFixed(1)),
+            },
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
+   updateUserOrderSuccessStat = async (req, res, next) => {
+      const getSuccessOrder = await prisma.order.findMany({
+         where: {
+            AND: [
+               { paidAt: { not: null } },
+               { backAt: { not: null } },
+               { userId: req.body.userId },
+            ],
+         },
+         include: { orderItems: true },
+      });
+
+      const orderBackInTime = getSuccessOrder.reduce((number, item) => {
+         const endDateOfOrderItems = item.orderItems[0].endDate;
+         const backDateOfOrder = item.backAt;
+         if (moment(backDateOfOrder).isBefore(endDateOfOrderItems)) {
+            number += 1;
+         }
+         return number;
+      }, 0);
+
+      const successRate = (orderBackInTime / getSuccessOrder.length) * 100;
+
+      await prisma.userStat.update({
+         where: { userId: req.body.userId },
+         data: { success: parseInt(successRate.toFixed(1)) },
+      });
    };
 }
 
