@@ -1,6 +1,5 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import {
-   Avatar,
    Col,
    DatePicker,
    Image,
@@ -14,7 +13,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import priceFormat from '../../../../utils/PriceFormat';
 import './ManageOrderTable.scss';
 
@@ -24,6 +23,7 @@ ManageOrderTable.propTypes = {
    tagColor: PropTypes.string,
    buttonGroup: PropTypes.func,
    handlePageChange: PropTypes.func,
+   userTitleTable: PropTypes.func,
 };
 
 ManageOrderTable.defaultProps = {
@@ -32,13 +32,22 @@ ManageOrderTable.defaultProps = {
    tag: '',
    tagColor: '',
    handlePageChange: null,
+   userTitleTable: null,
 };
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 
 function ManageOrderTable(props) {
-   const { dataSource, buttonGroup, tag, tagColor, handlePageChange } = props;
+   const {
+      dataSource,
+      buttonGroup,
+      userTitleTable,
+      tag,
+      tagColor,
+      handlePageChange,
+   } = props;
+   const history = useHistory();
 
    const titleOfTable = (order) => {
       return (
@@ -46,12 +55,7 @@ function ManageOrderTable(props) {
             <Col flex='auto'>
                <Space size={20}>
                   <Tag color={tagColor}>{tag}</Tag>
-                  <Link to={`/profile/${order.User.firebaseId}`}>
-                     <Space size={20}>
-                        <Avatar src={order.User.photoURL} />
-                        <Text strong>{order.User.username}</Text>
-                     </Space>
-                  </Link>
+                  {userTitleTable(order)}
                </Space>
             </Col>
             <Col>
@@ -59,7 +63,10 @@ function ManageOrderTable(props) {
                   <Text>
                      {moment(order.createdAt).format('YYYY-MM-DD HH:mm')}
                   </Text>
-                  <InfoCircleOutlined className='orderDetailButton' />
+                  <InfoCircleOutlined
+                     className='orderDetailButton'
+                     onClick={() => history.push(`/manages/order/${order.id}`)}
+                  />
                </Space>
             </Col>
          </Row>

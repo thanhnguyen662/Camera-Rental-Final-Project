@@ -31,6 +31,7 @@ router.patch('/update/rented', orderController.updateOrderToRented);
 router.get('/create/time', orderController.orderCreateInTime);
 router.get('/count', orderController.overviewMyOrderStatus);
 router.get('/status', orderController.getOrderByStatus);
+router.get('/', orderController.getOrderById);
 /////////////////////
 
 module.exports = router;

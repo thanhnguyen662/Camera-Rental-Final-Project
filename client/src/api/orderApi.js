@@ -106,6 +106,11 @@ const orderApi = {
       const url = '/order/update/user/success';
       return axiosClient.patch(url, data);
    },
+
+   getOrderById: (params) => {
+      const url = '/order';
+      return axiosClient.get(url, { params });
+   },
    /////////////////////////////////
 };
 

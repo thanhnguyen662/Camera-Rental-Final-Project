@@ -907,6 +907,46 @@ class OrderController {
          data: { success: parseInt(successRate.toFixed(1)) },
       });
    };
+
+   getOrderById = async (req, res, next) => {
+      try {
+         const response = await prisma.order.findUnique({
+            where: { id: req.query.orderId },
+            include: {
+               orderStatus: true,
+               orderItems: {
+                  include: {
+                     Product: {
+                        include: {
+                           User: {
+                              select: {
+                                 firebaseId: true,
+                                 username: true,
+                                 phoneNumber: true,
+                                 photoURL: true,
+                              },
+                           },
+                        },
+                     },
+                  },
+               },
+               User: {
+                  include: {
+                     userStats: true,
+                     _count: {
+                        select: {
+                           orders: true,
+                        },
+                     },
+                  },
+               },
+            },
+         });
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new OrderController();

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router';
-import ManagePendingOrderPage from './pages/ManagePendingOrderPage';
+import ManageAcceptOrderPage from './pages/ForShop/ManageAcceptOrderPage';
+import ManageBackOrderPage from './pages/ForShop/ManageBackOrderPage';
+import ManageFailureOrderPage from './pages/ForShop/ManageFailureOrderPage';
+import ManagePendingOrderPage from './pages/ForShop/ManagePendingOrderPage';
+import ManageRentedOrderPage from './pages/ForShop/ManageRentedOrderPage';
+import ManageRevenueOverviewPage from './pages/ForShop/ManageRevenueOverviewPage';
+import ManageOrderDetail from './pages/ManageOrderDetailPage';
 import ManageMyProductPage from './pages/ManageMyProductPage';
-import ManageRevenueOverviewPage from './pages/ManageRevenueOverviewPage';
-import ManageAcceptOrderPage from './pages/ManageAcceptOrderPage';
-import ManageRentedOrderPage from './pages/ManageRentedOrderPage';
-import ManageBackOrderPage from './pages/ManageBackOrderPage';
-import ManageFailureOrderPage from './pages/ManageFailureOrderPage';
 
 Manages.propTypes = {};
 
@@ -42,6 +43,10 @@ function Manages(props) {
          <Route
             path={`${match.url}/shop/failure`}
             component={ManageFailureOrderPage}
+         />
+         <Route
+            path={`${match.url}/order/:orderId`}
+            component={ManageOrderDetail}
          />
       </Switch>
    );

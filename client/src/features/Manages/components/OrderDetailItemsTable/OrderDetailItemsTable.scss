@@ -1,0 +1,28 @@
+.orderItemsDetailTable {
+   border-radius: 10px;
+   overflow: auto;
+   border: 2px solid #e7e9ee;
+   margin-bottom: 20px;
+   margin-top: 20px;
+
+   .ant-table-tbody > tr > td {
+      border-bottom: 0px;
+   }
+
+   .ant-table-thead > tr > th,
+   .ant-table-tbody > tr > td,
+   .ant-table tfoot > tr > th,
+   .ant-table tfoot > tr > td {
+      padding: 10px 25px;
+   }
+
+   .footerTitle {
+      font-size: 16px;
+   }
+
+   .footerPrice {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ff4d4f;
+   }
+}

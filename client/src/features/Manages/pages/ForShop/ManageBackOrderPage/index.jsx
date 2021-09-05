@@ -1,7 +1,11 @@
+import { Avatar, Space, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import orderApi from '../../../../api/orderApi';
-import ManageOrderTable from '../../components/ManageOrderTable';
+import { Link } from 'react-router-dom';
+import orderApi from '../../../../../api/orderApi';
+import ManageOrderTable from '../../../components/ManageOrderTable';
+
+const { Text } = Typography;
 
 function ManageBackOrderPage(props) {
    const userId = useSelector((state) => state.users.id);
@@ -13,7 +17,7 @@ function ManageBackOrderPage(props) {
       const getMyOrderByStatus = async () => {
          const response = await orderApi.getOrderByStatus({
             userId: userId,
-            statusName: 'PENDING',
+            statusName: 'BACK',
             page: page,
          });
          setBackOrder((prev) => [...prev, ...response]);
@@ -29,12 +33,24 @@ function ManageBackOrderPage(props) {
       return <div></div>;
    };
 
+   const userTitleTable = (order) => {
+      return (
+         <Link to={`/profile/${order.User.firebaseId}`}>
+            <Space size={20}>
+               <Avatar src={order.User.photoURL} />
+               <Text strong>{order.User.username}</Text>
+            </Space>
+         </Link>
+      );
+   };
+
    return (
       <>
          <ManageOrderTable
             dataSource={backOrder}
             buttonGroup={buttonGroup}
             handlePageChange={handlePageChange}
+            userTitleTable={userTitleTable}
             tag='BACK'
             tagColor='purple'
          />

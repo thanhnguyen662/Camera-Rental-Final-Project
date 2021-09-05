@@ -1,0 +1,45 @@
+.orderDetailPageHeader {
+   padding: 0;
+
+   .headerDescription {
+      border: 2px solid #e7e9ee;
+      padding: 12px 0px 12px 12px;
+      border-radius: 10px;
+
+      .headerInformation {
+         font-size: 16px;
+         font-weight: 700;
+      }
+   }
+
+   .headerIcon {
+      font-size: 17px;
+      color: #6b6b6b;
+   }
+   .headerTitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b6b6b;
+   }
+
+   .headerStatus {
+      text-align: center;
+      width: 99%;
+      font-size: 14px;
+      padding: 5px 7px;
+      border-radius: 5px;
+   }
+
+   tr:last-child td {
+      padding-bottom: 0;
+   }
+
+   .content {
+      display: flex;
+   }
+   @media (max-width: 576px) {
+      .content {
+         display: inline;
+      }
+   }
+}

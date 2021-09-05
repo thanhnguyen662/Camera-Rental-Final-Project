@@ -1,0 +1,26 @@
+.orderDetailContent {
+   margin-top: 15px;
+   border: 0px;
+   border: 2px solid #e7e9ee;
+   padding: 5px 10px 10px 15px;
+   border-radius: 10px;
+
+   .ant-tabs-nav::before {
+      border-bottom: 0px solid #f0f0f0;
+   }
+
+   .stepsTitle {
+      font-size: 15px;
+      font-weight: 700;
+   }
+
+   .orderContentSteps {
+      .ant-steps-item-title {
+         font-size: 14px;
+      }
+
+      .ant-steps-item-description {
+         padding-bottom: 5px;
+      }
+   }
+}

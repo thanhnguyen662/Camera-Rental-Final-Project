@@ -2,11 +2,11 @@ import { Divider } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
-import orderApi from '../../../../api/orderApi';
-import RevenueChart from '../../components/RevenueChart';
-import RevenueOrderGrid from '../../components/RevenueOrderGird';
-import RevenueSelectDate from '../../components/RevenueSelectDate';
-import OrderCreateChart from '../../components/OrderCreateChart';
+import orderApi from '../../../../../api/orderApi';
+import RevenueChart from '../../../components/RevenueChart';
+import RevenueOrderGrid from '../../../components/RevenueOrderGird';
+import RevenueSelectDate from '../../../components/RevenueSelectDate';
+import OrderCreateChart from '../../../components/OrderCreateChart';
 
 function ManageForShop(props) {
    const userId = useSelector((state) => state.users.id);

@@ -1,10 +1,13 @@
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, Space } from 'antd';
+import { Avatar, Button, Space, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import orderApi from '../../../../api/orderApi';
-import openNotificationWithIcon from '../../../../components/Notification';
-import ManageOrderTable from '../../components/ManageOrderTable';
+import { Link } from 'react-router-dom';
+import orderApi from '../../../../../api/orderApi';
+import openNotificationWithIcon from '../../../../../components/Notification';
+import ManageOrderTable from '../../../components/ManageOrderTable';
+
+const { Text } = Typography;
 
 function ManagePendingOrderPage(props) {
    const userId = useSelector((state) => state.users.id);
@@ -75,12 +78,24 @@ function ManagePendingOrderPage(props) {
       );
    };
 
+   const userTitleTable = (order) => {
+      return (
+         <Link to={`/profile/${order.User.firebaseId}`}>
+            <Space size={20}>
+               <Avatar src={order.User.photoURL} />
+               <Text strong>{order.User.username}</Text>
+            </Space>
+         </Link>
+      );
+   };
+
    return (
       <>
          <ManageOrderTable
             dataSource={pendingOrder}
             buttonGroup={buttonGroup}
             handlePageChange={handlePageChange}
+            userTitleTable={userTitleTable}
             tag='PENDING'
             tagColor='blue'
          />

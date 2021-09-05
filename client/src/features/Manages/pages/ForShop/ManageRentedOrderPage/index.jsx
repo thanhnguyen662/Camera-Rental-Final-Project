@@ -1,10 +1,13 @@
 import { RollbackOutlined } from '@ant-design/icons';
-import { Button, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import orderApi from '../../../../api/orderApi';
-import openNotificationWithIcon from '../../../../components/Notification';
-import ManageOrderTable from '../../components/ManageOrderTable';
+import orderApi from '../../../../../api/orderApi';
+import openNotificationWithIcon from '../../../../../components/Notification';
+import ManageOrderTable from '../../../components/ManageOrderTable';
+import { Link } from 'react-router-dom';
+import { Avatar, Space, Typography, Button } from 'antd';
+
+const { Text } = Typography;
 
 function ManageRentedOrderPage(props) {
    const userId = useSelector((state) => state.users.id);
@@ -65,12 +68,24 @@ function ManageRentedOrderPage(props) {
       );
    };
 
+   const userTitleTable = (order) => {
+      return (
+         <Link to={`/profile/${order.User.firebaseId}`}>
+            <Space size={20}>
+               <Avatar src={order.User.photoURL} />
+               <Text strong>{order.User.username}</Text>
+            </Space>
+         </Link>
+      );
+   };
+
    return (
       <>
          <ManageOrderTable
             dataSource={rentedOrder}
             buttonGroup={buttonGroup}
             handlePageChange={handlePageChange}
+            userTitleTable={userTitleTable}
             tag='RENTED'
             tagColor='orange'
          />

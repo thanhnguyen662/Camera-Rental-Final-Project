@@ -9,7 +9,7 @@ function Manages({ children }) {
       <>
          <BreadcrumbBar />
          <div className='managesLayout'>
-            <Row>
+            <Row wrap={false}>
                <Col span={4}>
                   <ManagesMenu />
                </Col>

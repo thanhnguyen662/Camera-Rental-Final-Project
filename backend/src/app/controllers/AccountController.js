@@ -76,19 +76,26 @@ class AccountController {
 
    getUserComment = async (req, res, next) => {
       try {
+         const page = Number(req.query.page);
+         const take = 4;
          const response = await prisma.userComment.findMany({
+            take: take,
+            skip: (page - 1) * take,
             where: {
                userId: req.query.userId,
-            },
-            include: {
-               user: true,
             },
             orderBy: {
                createdAt: 'desc',
             },
          });
 
-         res.status(200).send(response);
+         const countComment = await prisma.userComment.count({
+            where: {
+               userId: req.query.userId,
+            },
+         });
+
+         res.status(200).send({ comments: response, count: countComment });
       } catch (error) {
          return next(error);
       }
