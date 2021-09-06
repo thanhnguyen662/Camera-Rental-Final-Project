@@ -10,6 +10,7 @@
    }
 
    .stepsTitle {
+      margin-top: 15px;
       font-size: 15px;
       font-weight: 700;
    }
@@ -22,5 +23,31 @@
       .ant-steps-item-description {
          padding-bottom: 5px;
       }
+   }
+
+   .paginationComment {
+      text-align: end;
+      margin-right: 10px;
+   }
+
+   .commentButton {
+      border-radius: 8px;
+      margin-bottom: 4px;
+   }
+}
+.modalCommentUserInput {
+   font-family: "Roboto";
+
+   .ant-modal-content {
+      overflow: auto;
+      border-radius: 10px;
+   }
+
+   .modalTitle {
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 17px;
    }
 }

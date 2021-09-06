@@ -18,6 +18,14 @@ router.get(
 );
 
 /////////////////////
+router.post(
+   '/create/comment/user/seller',
+   orderController.createUserCommentBySeller
+);
+router.post(
+   '/create/comment/user/buyer',
+   orderController.createUserCommentByBuyer
+);
 router.patch('/update/user/come', orderController.updateUserComeStat);
 router.patch(
    '/update/user/success',
@@ -30,6 +38,7 @@ router.patch('/update/failure', orderController.updateOrderToFailure);
 router.patch('/update/rented', orderController.updateOrderToRented);
 router.get('/create/time', orderController.orderCreateInTime);
 router.get('/count', orderController.overviewMyOrderStatus);
+router.get('/my', orderController.getMyOrder);
 router.get('/status', orderController.getOrderByStatus);
 router.get('/', orderController.getOrderById);
 /////////////////////

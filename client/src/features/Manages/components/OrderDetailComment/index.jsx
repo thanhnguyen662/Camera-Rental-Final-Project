@@ -28,7 +28,7 @@ function OrderDetailComment(props) {
 
    return (
       <>
-         <div style={{ margin: '0 30px 0 0' }}>
+         <div>
             <Row>
                <Col flex='auto'>
                   <Comment
@@ -43,8 +43,12 @@ function OrderDetailComment(props) {
                      }
                      content={<p>{comment.content}</p>}
                      datetime={
-                        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                           <span>{moment().fromNow()}</span>
+                        <Tooltip
+                           title={moment(comment.createdAt).format(
+                              'YYYY-MM-DD HH:mm:ss'
+                           )}
+                        >
+                           <span>{moment(comment.createdAt).fromNow()}</span>
                         </Tooltip>
                      }
                   />

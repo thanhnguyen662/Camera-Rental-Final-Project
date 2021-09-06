@@ -65,7 +65,7 @@ function ManageOrderTable(props) {
                   </Text>
                   <InfoCircleOutlined
                      className='orderDetailButton'
-                     onClick={() => history.push(`/manages/order/${order.id}`)}
+                     onClick={() => history.push(`order/${order.id}`)}
                   />
                </Space>
             </Col>

@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './OrderDetailCustomerInfo.scss';
 import { Avatar, Descriptions, Rate, Space, Typography } from 'antd';
+import PropTypes from 'prop-types';
+import React from 'react';
+import './OrderDetailCustomerInfo.scss';
 
 OrderDetailCustomerInfo.propTypes = {
    customerInfo: PropTypes.object,
@@ -19,12 +19,7 @@ function OrderDetailCustomerInfo(props) {
       <>
          <div className='orderDetailCustomerInfo'>
             <Space size={35} align='start'>
-               <Avatar
-                  shape='square'
-                  style={{ marginTop: 6 }}
-                  size={70}
-                  src={customerInfo.photoURL}
-               />
+               <Avatar shape='square' size={100} src={customerInfo.photoURL} />
                <Descriptions size='small' column={2}>
                   <Descriptions.Item>
                      <Space direction='vertical' size={0}>

@@ -77,6 +77,11 @@ const orderApi = {
       return axiosClient.get(url, { params });
    },
 
+   getMyOrder: (params) => {
+      const url = '/order/my';
+      return axiosClient.get(url, { params });
+   },
+
    updateAccept: (data) => {
       const url = '/order/update/accept';
       return axiosClient.patch(url, data);
@@ -110,6 +115,16 @@ const orderApi = {
    getOrderById: (params) => {
       const url = '/order';
       return axiosClient.get(url, { params });
+   },
+
+   createUserCommentBySeller: (data) => {
+      const url = '/order/create/comment/user/seller';
+      return axiosClient.post(url, data);
+   },
+
+   createUserCommentByBuyer: (data) => {
+      const url = '/order/create/comment/user/buyer';
+      return axiosClient.post(url, data);
    },
    /////////////////////////////////
 };

@@ -736,6 +736,58 @@ class OrderController {
       }
    };
 
+   getMyOrder = async (req, res, next) => {
+      try {
+         const page = Number(req.query.page);
+         const take = 10;
+         const response = await prisma.order.findMany({
+            take: take,
+            skip: (page - 1) * take,
+            where: {
+               AND: [
+                  { userId: req.query.userId },
+                  {
+                     orderStatus: {
+                        name: req.query.statusName,
+                     },
+                  },
+               ],
+            },
+            include: {
+               orderItems: {
+                  include: {
+                     Product: {
+                        include: {
+                           User: {
+                              select: {
+                                 photoURL: true,
+                                 firebaseId: true,
+                                 username: true,
+                              },
+                           },
+                        },
+                     },
+                  },
+               },
+               User: {
+                  select: {
+                     photoURL: true,
+                     firebaseId: true,
+                     username: true,
+                  },
+               },
+               orderStatus: true,
+            },
+            orderBy: {
+               createdAt: 'desc',
+            },
+         });
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
    updateOrderToAccept = async (req, res, next) => {
       try {
          const response = await prisma.order.update({
@@ -943,6 +995,96 @@ class OrderController {
             },
          });
          res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   createUserCommentBySeller = async (req, res, next) => {
+      try {
+         const checkShopIsComment = await prisma.order.findUnique({
+            where: { id: req.body.orderId },
+            select: { isShopComment: true },
+         });
+
+         if (checkShopIsComment.isShopComment) {
+            return res
+               .status(200)
+               .json({ message: 'Already Comment', type: 'error' });
+         }
+
+         const createCommentByShop = await prisma.userComment.create({
+            data: {
+               content: req.body.content,
+               rate: req.body.rate,
+               userId: req.body.userId,
+               authorId: req.body.authorId,
+            },
+         });
+
+         await prisma.order.update({
+            where: { id: req.body.orderId },
+            data: { isShopComment: true },
+         });
+
+         const rateAverage = await prisma.userComment.aggregate({
+            where: { userId: createCommentByShop.userId },
+            _avg: { rate: true },
+         });
+
+         await prisma.user.update({
+            where: { firebaseId: createCommentByShop.userId },
+            data: { rate: parseFloat(rateAverage._avg.rate.toFixed(1)) },
+         });
+
+         createCommentByShop.message = 'Create Success';
+         createCommentByShop.type = 'success';
+         res.status(200).json(createCommentByShop);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   createUserCommentByBuyer = async (req, res, next) => {
+      try {
+         const checkUserIsComment = await prisma.order.findUnique({
+            where: { id: req.body.orderId },
+            select: { isUserComment: true },
+         });
+
+         if (checkUserIsComment.isUserComment) {
+            return res
+               .status(200)
+               .json({ message: 'Already Comment', type: 'error' });
+         }
+
+         const createCommentByUser = await prisma.userComment.create({
+            data: {
+               content: req.body.content,
+               rate: req.body.rate,
+               userId: req.body.userId,
+               authorId: req.body.authorId,
+            },
+         });
+
+         await prisma.order.update({
+            where: { id: req.body.orderId },
+            data: { isUserComment: true },
+         });
+
+         const rateAverage = await prisma.userComment.aggregate({
+            where: { userId: createCommentByUser.userId },
+            _avg: { rate: true },
+         });
+
+         await prisma.user.update({
+            where: { firebaseId: createCommentByUser.userId },
+            data: { rate: parseFloat(rateAverage._avg.rate.toFixed(1)) },
+         });
+
+         createCommentByUser.message = 'Create Success';
+         createCommentByUser.type = 'success';
+         res.status(200).json(createCommentByUser);
       } catch (error) {
          return next(error);
       }

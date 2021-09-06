@@ -71,25 +71,37 @@ function RevenueOrderGrid(props) {
                      <Text>{pending}</Text>
                   </Space>
                </Card.Grid>
-               <Card.Grid style={gridStyle}>
+               <Card.Grid
+                  style={gridStyle}
+                  onClick={() => history.push('/manages/shop/accept')}
+               >
                   <Space direction='vertical' size={3}>
                      <Text style={titleStyle}>Accept</Text>
                      <Text>{accept}</Text>
                   </Space>
                </Card.Grid>
-               <Card.Grid style={gridStyle}>
+               <Card.Grid
+                  style={gridStyle}
+                  onClick={() => history.push('/manages/shop/rented')}
+               >
                   <Space direction='vertical' size={3}>
                      <Text style={titleStyle}>Rented</Text>
                      <Text>{rented}</Text>
                   </Space>
                </Card.Grid>
-               <Card.Grid style={gridStyle}>
+               <Card.Grid
+                  style={gridStyle}
+                  onClick={() => history.push('/manages/shop/back')}
+               >
                   <Space direction='vertical' size={3}>
                      <Text style={titleStyle}>Back</Text>
                      <Text>{back}</Text>
                   </Space>
                </Card.Grid>
-               <Card.Grid style={gridStyle}>
+               <Card.Grid
+                  style={gridStyle}
+                  onClick={() => history.push('/manages/shop/failure')}
+               >
                   <Space direction='vertical' size={3}>
                      <Text style={titleStyle}>Failure</Text>
                      <Text>{failure}</Text>

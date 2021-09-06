@@ -1,4 +1,4 @@
-import { DatePicker, Image, Table, Typography } from 'antd';
+import { Button, DatePicker, Image, Table, Typography } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -7,19 +7,21 @@ import './OrderDetailItemsTable.scss';
 
 OrderDetailItemsTable.propTypes = {
    dataSource: PropTypes.object,
+   myRole: PropTypes.string,
 };
 
 OrderDetailItemsTable.defaultProps = {
    dataSource: {},
+   myRole: '',
 };
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 
 function OrderDetailItemsTable(props) {
-   const { dataSource } = props;
+   const { dataSource, myRole } = props;
 
-   const columns = [
+   let columns = [
       {
          title: 'Image',
          dataIndex: ['Product', 'productPhotoURL'],
@@ -68,6 +70,13 @@ function OrderDetailItemsTable(props) {
          },
       },
    ];
+
+   if (myRole === 'buyer') {
+      columns.push({
+         title: 'Action',
+         render: () => <Button>Comment</Button>,
+      });
+   }
 
    const footer = () => {
       return (

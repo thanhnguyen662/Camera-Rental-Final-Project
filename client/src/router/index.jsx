@@ -11,6 +11,7 @@ import Admin from '../features/Admin';
 import SignIn from '../features/Auth';
 import Category from '../features/Category';
 import Home from '../features/Home';
+import Manages from '../features/Manages';
 import ManageShop from '../features/ManageShop';
 import Maps from '../features/Maps';
 import Message from '../features/Message';
@@ -20,8 +21,6 @@ import Profile from '../features/Profile';
 import Search from '../features/Search';
 import Social from '../features/Social';
 import MainLayout from '../layouts/Main';
-import ManagesLayout from '../layouts/ManagesLayout';
-import Manages from '../features/Manages';
 
 const { Content } = Layout;
 
@@ -90,9 +89,7 @@ function Routers(props) {
 
                      <Route path='/manages'>
                         <Content style={{ margin: '25px 125px' }}>
-                           <ManagesLayout>
-                              <Manages />
-                           </ManagesLayout>
+                           <Manages />
                         </Content>
                      </Route>
 

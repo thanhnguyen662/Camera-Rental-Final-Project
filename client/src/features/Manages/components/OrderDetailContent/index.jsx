@@ -1,4 +1,15 @@
-import { Col, Pagination, Row, Steps, Tabs } from 'antd';
+import {
+   Button,
+   Col,
+   Input,
+   Modal,
+   Pagination,
+   Row,
+   Steps,
+   Tabs,
+   Form,
+   Rate,
+} from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -10,24 +21,27 @@ import './OrderDetailContent.scss';
 OrderDetailContent.propTypes = {
    orderDetail: PropTypes.object,
    partnerId: PropTypes.string,
+   handleSubmitComment: PropTypes.func,
 };
 
 OrderDetailContent.defaultProps = {
    orderDetail: {},
    partnerId: '',
+   handleSubmitComment: null,
 };
 
 const { TabPane } = Tabs;
 const { Step } = Steps;
 
 function OrderDetailContent(props) {
-   const { orderDetail, partnerId } = props;
+   const { orderDetail, partnerId, handleSubmitComment, reloadComment } = props;
 
    const [stepData, setStepData] = useState([]);
    const [comments, setComments] = useState([]);
    const [commentsCount, setCommentsCount] = useState(0);
    const [selectTab, setSelectTab] = useState('1');
    const [page, setPage] = useState(1);
+   const [isModalVisible, setIsModalVisible] = useState(false);
 
    useEffect(() => {
       const newArray = [
@@ -68,8 +82,6 @@ function OrderDetailContent(props) {
                page: page,
                userId: partnerId,
             });
-            console.log('comment', response);
-
             setComments(response.comments);
             setCommentsCount(response.count);
          } catch (error) {
@@ -77,13 +89,27 @@ function OrderDetailContent(props) {
          }
       };
       getComments();
-   }, [page, selectTab, partnerId]);
+   }, [page, selectTab, partnerId, reloadComment]);
+
+   const onFormFinish = (data) => {
+      handleSubmitComment(data);
+      setIsModalVisible(false);
+   };
+
+   const commentDisabled = () => {
+      if (
+         orderDetail.orderStatus?.name === 'BACK' ||
+         orderDetail.orderStatus?.name === 'FAILURE'
+      )
+         return false;
+      return true;
+   };
 
    return (
       <>
          <div className='orderDetailContent'>
-            <Row style={{ minHeight: 285 }} justify='start' align='middle'>
-               <Col span={19}>
+            <Row>
+               <Col span={18}>
                   <Tabs
                      defaultActiveKey='1'
                      size='small'
@@ -95,7 +121,7 @@ function OrderDetailContent(props) {
                         />
                      </TabPane>
                      <TabPane tab={`Comment of partner`} key='2'>
-                        <div style={{ minHeight: 206 }}>
+                        <div style={{ minHeight: '210px' }}>
                            {comments?.map((comment) => (
                               <OrderDetailComment
                                  comment={comment}
@@ -103,18 +129,32 @@ function OrderDetailContent(props) {
                               />
                            ))}
                         </div>
-                        <Pagination
-                           defaultCurrent={1}
-                           total={commentsCount}
-                           pageSize={4}
-                           onChange={(value) => setPage(value)}
-                           size='small'
-                           style={{ textAlign: 'end', marginRight: 10 }}
-                        />
+                        <Row justify='center' align='middle'>
+                           <Col flex='auto'>
+                              <Button
+                                 className='commentButton'
+                                 onClick={() => setIsModalVisible(true)}
+                                 disabled={commentDisabled()}
+                              >
+                                 Write comment
+                              </Button>
+                           </Col>
+                           <Col>
+                              <Pagination
+                                 defaultCurrent={1}
+                                 total={commentsCount}
+                                 current={page}
+                                 pageSize={4}
+                                 onChange={(value) => setPage(value)}
+                                 size='small'
+                                 className='paginationComment'
+                              />
+                           </Col>
+                        </Row>
                      </TabPane>
                   </Tabs>
                </Col>
-               <Col span={5}>
+               <Col span={6} push={1}>
                   <div className='stepsTitle'>Order Time Log: </div>
                   <Steps
                      progressDot
@@ -135,6 +175,55 @@ function OrderDetailContent(props) {
                   </Steps>
                </Col>
             </Row>
+         </div>
+         <div>
+            <Modal
+               visible={isModalVisible}
+               onCancel={() => setIsModalVisible(false)}
+               footer={false}
+               width={450}
+               title={<div className='modalTitle'>Comment</div>}
+               className='modalCommentUserInput'
+            >
+               <Form
+                  name='basic'
+                  labelCol={{ span: 5 }}
+                  wrapperCol={{ span: 24 }}
+                  onFinish={onFormFinish}
+               >
+                  <Form.Item
+                     label='Comment'
+                     name='content'
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Please input your Comment!',
+                        },
+                     ]}
+                  >
+                     <Input.TextArea />
+                  </Form.Item>
+
+                  <Form.Item
+                     label='Rate'
+                     name='rate'
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Please input your Rate!',
+                        },
+                     ]}
+                  >
+                     <Rate />
+                  </Form.Item>
+
+                  <Form.Item wrapperCol={{ offset: 5, span: 16 }}>
+                     <Button type='primary' htmlType='submit'>
+                        Submit
+                     </Button>
+                  </Form.Item>
+               </Form>
+            </Modal>
          </div>
       </>
    );
