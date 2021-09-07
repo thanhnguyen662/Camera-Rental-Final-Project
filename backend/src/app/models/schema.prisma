@@ -174,16 +174,17 @@ model Order {
 }
 
 model OrderItem {
-  id                Int       @id @default(autoincrement())
-  totalPricePerHour String?
-  during            String?
-  price             Int?
-  startDate         DateTime?
-  endDate           DateTime?
-  orderId           String
-  productId         Int
-  Order             Order?    @relation(fields: [orderId], references: [id])
-  Product           Product?  @relation(fields: [productId], references: [id])
+  id                 Int       @id @default(autoincrement())
+  totalPricePerHour  String?
+  during             String?
+  price              Int?
+  startDate          DateTime?
+  endDate            DateTime?
+  orderId            String
+  productId          Int
+  isOrderItemComment Boolean   @default(false)
+  Order              Order?    @relation(fields: [orderId], references: [id])
+  Product            Product?  @relation(fields: [productId], references: [id])
 
   @@map("OrderItems")
 }

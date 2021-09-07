@@ -8,7 +8,7 @@ import {
    RollbackOutlined,
    UserOutlined,
 } from '@ant-design/icons';
-import { Descriptions, PageHeader, Space, Tag, Typography } from 'antd';
+import { Descriptions, PageHeader, Space, Tag, Typography, Button } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -17,16 +17,18 @@ import './OrderDetailHeader.scss';
 
 OrderDetailHeader.propTypes = {
    orderDetail: PropTypes.object,
+   handleDeletePendingOrder: PropTypes.func,
 };
 
 OrderDetailHeader.defaultProps = {
    orderDetail: {},
+   handleDeletePendingOrder: null,
 };
 
 const { Text } = Typography;
 
 function OrderDetailHeader(props) {
-   const { orderDetail } = props;
+   const { orderDetail, handleDeletePendingOrder } = props;
    const history = useHistory();
 
    const tagColor = () => {
@@ -64,11 +66,31 @@ function OrderDetailHeader(props) {
       return colorStyle;
    };
 
-   const extraContent = (
-      <Tag {...tagColor()} className='headerStatus'>
-         {orderDetail.orderStatus?.name}
-      </Tag>
-   );
+   const onClickDeletePendingButton = () => {
+      const formData = {
+         orderId: orderDetail.id,
+      };
+      handleDeletePendingOrder(formData);
+   };
+
+   const extraContent = () => {
+      return (
+         <Space>
+            {orderDetail.orderStatus?.name === 'PENDING' && (
+               <Button
+                  type='danger'
+                  className='deleteOrderButton'
+                  onClick={() => onClickDeletePendingButton()}
+               >
+                  Delete Order
+               </Button>
+            )}
+            <Tag {...tagColor()} className='headerStatus'>
+               {orderDetail.orderStatus?.name}
+            </Tag>
+         </Space>
+      );
+   };
 
    const renderContent = (column = 4) => (
       <Descriptions size='small' column={column} className='headerDescription'>
@@ -139,7 +161,7 @@ function OrderDetailHeader(props) {
             onBack={() => history.goBack()}
             title='Order'
             subTitle={`#${orderDetail.id}`}
-            extra={extraContent}
+            extra={extraContent()}
          >
             <div className='content'>
                <div className='main'>{renderContent()}</div>

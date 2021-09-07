@@ -61,13 +61,13 @@ function SiderBar(props) {
             >
                <Link to='/messageBeta'>Message Beta</Link>
             </Menu.Item>
-            <Menu.Item
+            {/* <Menu.Item
                key='5'
                icon={<FileTextOutlined />}
                title='Product Management'
             >
                <Link to='/product/manage'>Product Management</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item
                key='8'
                icon={<FileTextOutlined />}

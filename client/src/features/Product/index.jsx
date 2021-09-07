@@ -4,7 +4,7 @@ import ProductPage from './pages/ProductPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import ProductCartPage from './pages/ProductCartPage';
 import ProductCreatePage from './pages/ProductCreatePage';
-import ProductManagePage from './pages/ProductManagePage';
+// import ProductManagePage from './pages/ProductManagePage';
 import ProductEditPage from './pages/ProductEditPage';
 
 function Product(props) {
@@ -16,7 +16,7 @@ function Product(props) {
          <Route path={`${match.url}/edit/:slug`} component={ProductEditPage} />
          <Route path={`${match.url}/cart`} component={ProductCartPage} />
          <Route path={`${match.url}/create`} component={ProductCreatePage} />
-         <Route path={`${match.url}/manage`} component={ProductManagePage} />
+         {/* <Route path={`${match.url}/manage`} component={ProductManagePage} /> */}
          <Route path={`${match.url}/:slug`} component={ProductDetailPage} />
       </Switch>
    );

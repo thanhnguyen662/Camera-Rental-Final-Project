@@ -23,504 +23,504 @@ class OrderController {
       }
    };
 
-   manageOrder = async (req, res, next) => {
-      try {
-         const page = req.query.page;
-         const take = page ? 4 : undefined;
-         const response = await prisma.order.findMany({
-            take: take,
-            skip: (page - 1) * 4 || undefined,
-            where: {
-               AND: {
-                  userId: req.query.userId,
-                  orderStatusId: {
-                     equals: parseInt(req.query.orderStatusId) || undefined,
-                  },
-               },
-            },
-            include: {
-               orderStatus: true,
-               User: true,
-               orderItems: {
-                  include: {
-                     Product: {
-                        include: {
-                           User: true,
-                        },
-                     },
-                  },
-               },
-            },
-         });
+   // manageOrder = async (req, res, next) => {
+   //    try {
+   //       const page = req.query.page;
+   //       const take = page ? 4 : undefined;
+   //       const response = await prisma.order.findMany({
+   //          take: take,
+   //          skip: (page - 1) * 4 || undefined,
+   //          where: {
+   //             AND: {
+   //                userId: req.query.userId,
+   //                orderStatusId: {
+   //                   equals: parseInt(req.query.orderStatusId) || undefined,
+   //                },
+   //             },
+   //          },
+   //          include: {
+   //             orderStatus: true,
+   //             User: true,
+   //             orderItems: {
+   //                include: {
+   //                   Product: {
+   //                      include: {
+   //                         User: true,
+   //                      },
+   //                   },
+   //                },
+   //             },
+   //          },
+   //       });
 
-         res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   myProductInOrder = async (req, res, next) => {
-      try {
-         const page = req.query.page;
-         const take = page ? 10 : undefined;
-         const response = await prisma.order.findMany({
-            take: take,
-            skip: (page - 1) * 10 || undefined,
-            where: {
-               AND: {
-                  orderItems: {
-                     some: {
-                        Product: {
-                           User: {
-                              firebaseId: req.query.firebaseId,
-                           },
-                        },
-                     },
-                  },
-                  orderStatus: {
-                     name: req.query.orderStatus || undefined,
-                  },
-               },
-            },
-            include: {
-               User: true,
-               orderStatus: true,
-               orderItems: {
-                  include: {
-                     Product: {
-                        include: {
-                           User: true,
-                        },
-                     },
-                  },
-               },
-            },
-         });
+   // myProductInOrder = async (req, res, next) => {
+   //    try {
+   //       const page = req.query.page;
+   //       const take = page ? 10 : undefined;
+   //       const response = await prisma.order.findMany({
+   //          take: take,
+   //          skip: (page - 1) * 10 || undefined,
+   //          where: {
+   //             AND: {
+   //                orderItems: {
+   //                   some: {
+   //                      Product: {
+   //                         User: {
+   //                            firebaseId: req.query.firebaseId,
+   //                         },
+   //                      },
+   //                   },
+   //                },
+   //                orderStatus: {
+   //                   name: req.query.orderStatus || undefined,
+   //                },
+   //             },
+   //          },
+   //          include: {
+   //             User: true,
+   //             orderStatus: true,
+   //             orderItems: {
+   //                include: {
+   //                   Product: {
+   //                      include: {
+   //                         User: true,
+   //                      },
+   //                   },
+   //                },
+   //             },
+   //          },
+   //       });
 
-         res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   deleteOrder = async (req, res, next) => {
-      try {
-         const response = await prisma.order.delete({
-            where: {
-               id: req.body.orderId,
-            },
-         });
+   // deleteOrder = async (req, res, next) => {
+   //    try {
+   //       const response = await prisma.order.delete({
+   //          where: {
+   //             id: req.body.orderId,
+   //          },
+   //       });
 
-         return res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       return res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   updateOrder = async (req, res, next) => {
-      try {
-         const orderItemsBatch = req.body.orderItems;
-         const orderStatusId = req.body.orderStatusId;
+   // updateOrder = async (req, res, next) => {
+   //    try {
+   //       const orderItemsBatch = req.body.orderItems;
+   //       const orderStatusId = req.body.orderStatusId;
 
-         const response = await prisma.order.update({
-            where: {
-               id: req.body.orderId,
-            },
-            data: {
-               orderStatusId: req.body.orderStatusId,
-               note: req.body.note,
-               paidAt: new Date(req.body.paidAt),
-               backAt: new Date(req.body.backAt),
-            },
-            include: {
-               User: true,
-               orderStatus: true,
-               orderItems: {
-                  include: {
-                     Product: {
-                        include: {
-                           User: true,
-                        },
-                     },
-                  },
-               },
-            },
-         });
+   //       const response = await prisma.order.update({
+   //          where: {
+   //             id: req.body.orderId,
+   //          },
+   //          data: {
+   //             orderStatusId: req.body.orderStatusId,
+   //             note: req.body.note,
+   //             paidAt: new Date(req.body.paidAt),
+   //             backAt: new Date(req.body.backAt),
+   //          },
+   //          include: {
+   //             User: true,
+   //             orderStatus: true,
+   //             orderItems: {
+   //                include: {
+   //                   Product: {
+   //                      include: {
+   //                         User: true,
+   //                      },
+   //                   },
+   //                },
+   //             },
+   //          },
+   //       });
 
-         parseInt(orderStatusId) === 5 &&
-            orderItemsBatch.map(async (order) => {
-               await prisma.product.update({
-                  where: {
-                     id: order.Product.id,
-                  },
-                  data: {
-                     stock: parseInt(order.Product.stock) - 1,
-                  },
-               });
-            });
-         parseInt(orderStatusId) === 4 &&
-            orderItemsBatch.map(async (order) => {
-               await prisma.product.update({
-                  where: {
-                     id: order.Product.id,
-                  },
-                  data: {
-                     stock: parseInt(order.Product.stock) + 1,
-                  },
-               });
-            });
+   //       parseInt(orderStatusId) === 5 &&
+   //          orderItemsBatch.map(async (order) => {
+   //             await prisma.product.update({
+   //                where: {
+   //                   id: order.Product.id,
+   //                },
+   //                data: {
+   //                   stock: parseInt(order.Product.stock) - 1,
+   //                },
+   //             });
+   //          });
+   //       parseInt(orderStatusId) === 4 &&
+   //          orderItemsBatch.map(async (order) => {
+   //             await prisma.product.update({
+   //                where: {
+   //                   id: order.Product.id,
+   //                },
+   //                data: {
+   //                   stock: parseInt(order.Product.stock) + 1,
+   //                },
+   //             });
+   //          });
 
-         return res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       return res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   updateToPaidStatus = async (req, res, next) => {
-      try {
-         const response = await prisma.order.update({
-            where: {
-               id: req.body.orderId,
-            },
-            data: {
-               orderStatusId: req.body.orderStatusId,
-               note: req.body.note,
-               paidAt: new Date(req.body.paidAt),
-            },
-            include: {
-               User: true,
-               orderStatus: true,
-               orderItems: {
-                  include: {
-                     Product: {
-                        include: {
-                           User: true,
-                        },
-                     },
-                  },
-               },
-            },
-         });
+   // updateToPaidStatus = async (req, res, next) => {
+   //    try {
+   //       const response = await prisma.order.update({
+   //          where: {
+   //             id: req.body.orderId,
+   //          },
+   //          data: {
+   //             orderStatusId: req.body.orderStatusId,
+   //             note: req.body.note,
+   //             paidAt: new Date(req.body.paidAt),
+   //          },
+   //          include: {
+   //             User: true,
+   //             orderStatus: true,
+   //             orderItems: {
+   //                include: {
+   //                   Product: {
+   //                      include: {
+   //                         User: true,
+   //                      },
+   //                   },
+   //                },
+   //             },
+   //          },
+   //       });
 
-         return res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       return res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   updateToBackStatus = async (req, res, next) => {
-      const orderItemsBatch = req.body.orderItems;
-      const orderStatusId = req.body.orderStatusId;
-      try {
-         const response = await prisma.order.update({
-            where: {
-               id: req.body.orderId,
-            },
-            data: {
-               orderStatusId: req.body.orderStatusId,
-               backAt: new Date(req.body.backAt),
-            },
-            include: {
-               User: true,
-               orderStatus: true,
-               orderItems: {
-                  include: {
-                     Product: {
-                        include: {
-                           User: true,
-                        },
-                     },
-                  },
-               },
-            },
-         });
+   // updateToBackStatus = async (req, res, next) => {
+   //    const orderItemsBatch = req.body.orderItems;
+   //    const orderStatusId = req.body.orderStatusId;
+   //    try {
+   //       const response = await prisma.order.update({
+   //          where: {
+   //             id: req.body.orderId,
+   //          },
+   //          data: {
+   //             orderStatusId: req.body.orderStatusId,
+   //             backAt: new Date(req.body.backAt),
+   //          },
+   //          include: {
+   //             User: true,
+   //             orderStatus: true,
+   //             orderItems: {
+   //                include: {
+   //                   Product: {
+   //                      include: {
+   //                         User: true,
+   //                      },
+   //                   },
+   //                },
+   //             },
+   //          },
+   //       });
 
-         parseInt(orderStatusId) === 6 &&
-            orderItemsBatch.map(async (order) => {
-               await prisma.product.update({
-                  where: {
-                     id: order.Product.id,
-                  },
-                  data: {
-                     stock: parseInt(order.Product.stock) + 1,
-                     completed: parseInt(order.Product.completed) + 1,
-                  },
-               });
-            });
+   //       parseInt(orderStatusId) === 6 &&
+   //          orderItemsBatch.map(async (order) => {
+   //             await prisma.product.update({
+   //                where: {
+   //                   id: order.Product.id,
+   //                },
+   //                data: {
+   //                   stock: parseInt(order.Product.stock) + 1,
+   //                   completed: parseInt(order.Product.completed) + 1,
+   //                },
+   //             });
+   //          });
 
-         return res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       return res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   updateStats = async (req, res, next) => {
-      const getAllOrderOfUser = await prisma.order.findMany({
-         where: {
-            userId: req.query.userId,
-         },
-      });
+   // updateStats = async (req, res, next) => {
+   //    const getAllOrderOfUser = await prisma.order.findMany({
+   //       where: {
+   //          userId: req.query.userId,
+   //       },
+   //    });
 
-      const getOrderExcludePendingAccept = await prisma.order.findMany({
-         where: {
-            AND: [
-               {
-                  userId: req.query.userId,
-               },
-               {
-                  orderStatusId: {
-                     notIn: 1, //PENDING
-                  },
-               },
-               {
-                  orderStatusId: {
-                     notIn: 5, //ACCEPT
-                  },
-               },
-            ],
-         },
-      });
+   //    const getOrderExcludePendingAccept = await prisma.order.findMany({
+   //       where: {
+   //          AND: [
+   //             {
+   //                userId: req.query.userId,
+   //             },
+   //             {
+   //                orderStatusId: {
+   //                   notIn: 1, //PENDING
+   //                },
+   //             },
+   //             {
+   //                orderStatusId: {
+   //                   notIn: 5, //ACCEPT
+   //                },
+   //             },
+   //          ],
+   //       },
+   //    });
 
-      const filterDeclineOrder = getOrderExcludePendingAccept.filter(
-         (o) => o.note !== 'Decline'
-      );
+   //    const filterDeclineOrder = getOrderExcludePendingAccept.filter(
+   //       (o) => o.note !== 'Decline'
+   //    );
 
-      //get accept order but user come = paidAt
-      const getPaidOrder = await prisma.order.findMany({
-         where: {
-            AND: [
-               {
-                  userId: req.query.userId,
-               },
-               {
-                  paidAt: {
-                     not: null,
-                  },
-               },
-               {
-                  orderStatusId: {
-                     notIn: 4, //FAILURE
-                  },
-               },
-            ],
-         },
-      });
+   //    //get accept order but user come = paidAt
+   //    const getPaidOrder = await prisma.order.findMany({
+   //       where: {
+   //          AND: [
+   //             {
+   //                userId: req.query.userId,
+   //             },
+   //             {
+   //                paidAt: {
+   //                   not: null,
+   //                },
+   //             },
+   //             {
+   //                orderStatusId: {
+   //                   notIn: 4, //FAILURE
+   //                },
+   //             },
+   //          ],
+   //       },
+   //    });
 
-      const getSuccessOrder = await prisma.order.findMany({
-         where: {
-            AND: [
-               {
-                  paidAt: {
-                     not: null,
-                  },
-               },
-               {
-                  backAt: {
-                     not: null,
-                  },
-               },
-               {
-                  userId: req.query.userId,
-               },
-            ],
-         },
-         include: {
-            orderItems: true,
-         },
-      });
+   //    const getSuccessOrder = await prisma.order.findMany({
+   //       where: {
+   //          AND: [
+   //             {
+   //                paidAt: {
+   //                   not: null,
+   //                },
+   //             },
+   //             {
+   //                backAt: {
+   //                   not: null,
+   //                },
+   //             },
+   //             {
+   //                userId: req.query.userId,
+   //             },
+   //          ],
+   //       },
+   //       include: {
+   //          orderItems: true,
+   //       },
+   //    });
 
-      let inTimeArray = [];
-      getSuccessOrder?.map((order) => {
-         let backAt = order.backAt;
-         order.orderItems.map((item) => {
-            if (
-               new Date(item.endDate).getDate() >= new Date(backAt).getDate()
-            ) {
-               inTimeArray.push(order.id);
-            }
-         });
-      });
+   //    let inTimeArray = [];
+   //    getSuccessOrder?.map((order) => {
+   //       let backAt = order.backAt;
+   //       order.orderItems.map((item) => {
+   //          if (
+   //             new Date(item.endDate).getDate() >= new Date(backAt).getDate()
+   //          ) {
+   //             inTimeArray.push(order.id);
+   //          }
+   //       });
+   //    });
 
-      const inTimeUniqueOrder = [...new Set(inTimeArray)];
+   //    const inTimeUniqueOrder = [...new Set(inTimeArray)];
 
-      console.log(inTimeUniqueOrder.length);
-      console.log(getSuccessOrder.length);
+   //    console.log(inTimeUniqueOrder.length);
+   //    console.log(getSuccessOrder.length);
 
-      const inTimeRate =
-         (inTimeUniqueOrder.length / getSuccessOrder.length) * 100;
-      const comeRate = (getPaidOrder.length / filterDeclineOrder.length) * 100;
+   //    const inTimeRate =
+   //       (inTimeUniqueOrder.length / getSuccessOrder.length) * 100;
+   //    const comeRate = (getPaidOrder.length / filterDeclineOrder.length) * 100;
 
-      const updateStats = await prisma.userStat.upsert({
-         where: {
-            userId: req.query.userId,
-         },
-         update: {
-            come: parseFloat(comeRate.toFixed(1)),
-            success: parseFloat(inTimeRate.toFixed(1)),
-            totalOrder: parseFloat(getAllOrderOfUser.length),
-         },
-         create: {
-            userId: req.query.userId,
-            come: parseFloat(inTimeRate.toFixed(1)),
-            success: parseFloat(inTimeRate.toFixed(1)),
-            totalOrder: parseFloat(getAllOrderOfUser.length),
-         },
-      });
+   //    const updateStats = await prisma.userStat.upsert({
+   //       where: {
+   //          userId: req.query.userId,
+   //       },
+   //       update: {
+   //          come: parseFloat(comeRate.toFixed(1)),
+   //          success: parseFloat(inTimeRate.toFixed(1)),
+   //          totalOrder: parseFloat(getAllOrderOfUser.length),
+   //       },
+   //       create: {
+   //          userId: req.query.userId,
+   //          come: parseFloat(inTimeRate.toFixed(1)),
+   //          success: parseFloat(inTimeRate.toFixed(1)),
+   //          totalOrder: parseFloat(getAllOrderOfUser.length),
+   //       },
+   //    });
 
-      res.json(updateStats);
-   };
+   //    res.json(updateStats);
+   // };
 
-   countMyProductOrder = async (req, res, next) => {
-      try {
-         const response = await prisma.order.groupBy({
-            by: ['orderStatusId'],
-            where: {
-               orderItems: {
-                  some: {
-                     Product: {
-                        User: {
-                           firebaseId: req.query.firebaseId,
-                        },
-                     },
-                  },
-               },
-            },
-            _count: {
-               _all: true,
-            },
-         });
+   // countMyProductOrder = async (req, res, next) => {
+   //    try {
+   //       const response = await prisma.order.groupBy({
+   //          by: ['orderStatusId'],
+   //          where: {
+   //             orderItems: {
+   //                some: {
+   //                   Product: {
+   //                      User: {
+   //                         firebaseId: req.query.firebaseId,
+   //                      },
+   //                   },
+   //                },
+   //             },
+   //          },
+   //          _count: {
+   //             _all: true,
+   //          },
+   //       });
 
-         return res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       return res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   myProductInOrderOverview = async (req, res, next) => {
-      try {
-         const response = await prisma.order.findMany({
-            where: {
-               AND: [
-                  {
-                     orderItems: {
-                        some: {
-                           Product: {
-                              User: {
-                                 firebaseId: req.query.firebaseId,
-                              },
-                           },
-                        },
-                     },
-                  },
-               ],
-            },
-            select: {
-               paidAt: true,
-               totalPrice: true,
-               createdAt: true,
-            },
-         });
+   // myProductInOrderOverview = async (req, res, next) => {
+   //    try {
+   //       const response = await prisma.order.findMany({
+   //          where: {
+   //             AND: [
+   //                {
+   //                   orderItems: {
+   //                      some: {
+   //                         Product: {
+   //                            User: {
+   //                               firebaseId: req.query.firebaseId,
+   //                            },
+   //                         },
+   //                      },
+   //                   },
+   //                },
+   //             ],
+   //          },
+   //          select: {
+   //             paidAt: true,
+   //             totalPrice: true,
+   //             createdAt: true,
+   //          },
+   //       });
 
-         return res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       return res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
-   updateIsComment = async (req, res, next) => {
-      try {
-         if (req.body.type === 'isShopComment') {
-            const check = await prisma.order.findUnique({
-               where: {
-                  id: req.body.orderId,
-               },
-               select: {
-                  isShopComment: true,
-               },
-            });
-            if (check.isShopComment) {
-               await prisma.userComment.delete({
-                  where: {
-                     id: req.body.commentId,
-                  },
-               });
-               return res.status(200).send({ message: 'Already Comment' });
-            }
+   // updateIsComment = async (req, res, next) => {
+   //    try {
+   //       if (req.body.type === 'isShopComment') {
+   //          const check = await prisma.order.findUnique({
+   //             where: {
+   //                id: req.body.orderId,
+   //             },
+   //             select: {
+   //                isShopComment: true,
+   //             },
+   //          });
+   //          if (check.isShopComment) {
+   //             await prisma.userComment.delete({
+   //                where: {
+   //                   id: req.body.commentId,
+   //                },
+   //             });
+   //             return res.status(200).send({ message: 'Already Comment' });
+   //          }
 
-            const response = await prisma.order.update({
-               where: {
-                  id: req.body.orderId,
-               },
-               data: {
-                  isShopComment: true,
-               },
-            });
+   //          const response = await prisma.order.update({
+   //             where: {
+   //                id: req.body.orderId,
+   //             },
+   //             data: {
+   //                isShopComment: true,
+   //             },
+   //          });
 
-            res.status(200).send(response);
-         }
+   //          res.status(200).send(response);
+   //       }
 
-         if (req.body.type === 'isUserComment') {
-            const check = await prisma.order.findUnique({
-               where: {
-                  id: req.body.orderId,
-               },
-               select: {
-                  isUserComment: true,
-               },
-            });
-            if (check.isUserComment) {
-               await prisma.userComment.delete({
-                  where: {
-                     id: req.body.commentId,
-                  },
-               });
-               return res.status(200).send({ message: 'Already Comment' });
-            }
-            const response = await prisma.order.update({
-               where: {
-                  id: req.body.orderId,
-               },
-               data: {
-                  isUserComment: true,
-               },
-            });
+   //       if (req.body.type === 'isUserComment') {
+   //          const check = await prisma.order.findUnique({
+   //             where: {
+   //                id: req.body.orderId,
+   //             },
+   //             select: {
+   //                isUserComment: true,
+   //             },
+   //          });
+   //          if (check.isUserComment) {
+   //             await prisma.userComment.delete({
+   //                where: {
+   //                   id: req.body.commentId,
+   //                },
+   //             });
+   //             return res.status(200).send({ message: 'Already Comment' });
+   //          }
+   //          const response = await prisma.order.update({
+   //             where: {
+   //                id: req.body.orderId,
+   //             },
+   //             data: {
+   //                isUserComment: true,
+   //             },
+   //          });
 
-            res.status(200).send(response);
-         }
+   //          res.status(200).send(response);
+   //       }
 
-         if (req.body.type === 'isProductComment') {
-            const check = await prisma.order.findUnique({
-               where: {
-                  id: req.body.orderId,
-               },
-               select: {
-                  isProductComment: true,
-               },
-            });
-            if (check.isProductComment) {
-               await prisma.productComment.delete({
-                  where: {
-                     id: req.body.commentId,
-                  },
-               });
-               return res.status(200).send({ message: 'Already Comment' });
-            }
+   //       if (req.body.type === 'isProductComment') {
+   //          const check = await prisma.order.findUnique({
+   //             where: {
+   //                id: req.body.orderId,
+   //             },
+   //             select: {
+   //                isProductComment: true,
+   //             },
+   //          });
+   //          if (check.isProductComment) {
+   //             await prisma.productComment.delete({
+   //                where: {
+   //                   id: req.body.commentId,
+   //                },
+   //             });
+   //             return res.status(200).send({ message: 'Already Comment' });
+   //          }
 
-            const response = await prisma.order.update({
-               where: {
-                  id: req.body.orderId,
-               },
-               data: {
-                  isProductComment: true,
-               },
-            });
+   //          const response = await prisma.order.update({
+   //             where: {
+   //                id: req.body.orderId,
+   //             },
+   //             data: {
+   //                isProductComment: true,
+   //             },
+   //          });
 
-            res.status(200).send(response);
-         }
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //          res.status(200).send(response);
+   //       }
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
    //////////////////////////////
    overviewMyOrderStatus = async (req, res, next) => {
@@ -531,16 +531,12 @@ class OrderController {
                orderItems: {
                   some: {
                      Product: {
-                        User: {
-                           firebaseId: req.query.userId,
-                        },
+                        User: { firebaseId: req.query.userId },
                      },
                   },
                },
             },
-            _count: {
-               _all: true,
-            },
+            _count: { _all: true },
          });
 
          res.status(200).send(response);
@@ -558,28 +554,20 @@ class OrderController {
                      orderItems: {
                         some: {
                            Product: {
-                              User: {
-                                 firebaseId: req.query.userId,
-                              },
+                              User: { firebaseId: req.query.userId },
                            },
                         },
                      },
                   },
                   {
-                     paidAt: {
-                        gte: new Date(req.query.startDate),
-                     },
+                     paidAt: { gte: new Date(req.query.startDate) },
                   },
                   {
-                     paidAt: {
-                        lte: new Date(req.query.endDate),
-                     },
+                     paidAt: { lte: new Date(req.query.endDate) },
                   },
                ],
             },
-            orderBy: {
-               paidAt: 'desc',
-            },
+            orderBy: { paidAt: 'desc' },
             select: {
                id: true,
                paidAt: true,
@@ -623,32 +611,21 @@ class OrderController {
                      orderItems: {
                         some: {
                            Product: {
-                              User: {
-                                 firebaseId: req.query.userId,
-                              },
+                              User: { firebaseId: req.query.userId },
                            },
                         },
                      },
                   },
                   {
-                     createdAt: {
-                        gte: new Date(req.query.startDate),
-                     },
+                     createdAt: { gte: new Date(req.query.startDate) },
                   },
                   {
-                     createdAt: {
-                        lte: new Date(req.query.endDate),
-                     },
+                     createdAt: { lte: new Date(req.query.endDate) },
                   },
                ],
             },
-            orderBy: {
-               createdAt: 'desc',
-            },
-            select: {
-               id: true,
-               createdAt: true,
-            },
+            orderBy: { createdAt: 'desc' },
+            select: { id: true, createdAt: true },
          });
 
          const calculateCreateByDay = response.reduce((unique, item) => {
@@ -690,17 +667,13 @@ class OrderController {
                      orderItems: {
                         some: {
                            Product: {
-                              User: {
-                                 firebaseId: req.query.userId,
-                              },
+                              User: { firebaseId: req.query.userId },
                            },
                         },
                      },
                   },
                   {
-                     orderStatus: {
-                        name: req.query.statusName,
-                     },
+                     orderStatus: { name: req.query.statusName },
                   },
                ],
             },
@@ -725,9 +698,7 @@ class OrderController {
                },
                orderStatus: true,
             },
-            orderBy: {
-               createdAt: 'desc',
-            },
+            orderBy: { createdAt: 'desc' },
          });
 
          res.status(200).json(response);
@@ -747,9 +718,7 @@ class OrderController {
                AND: [
                   { userId: req.query.userId },
                   {
-                     orderStatus: {
-                        name: req.query.statusName,
-                     },
+                     orderStatus: { name: req.query.statusName },
                   },
                ],
             },
@@ -797,6 +766,7 @@ class OrderController {
                acceptAt: moment().toISOString(),
             },
             include: {
+               orderStatus: true,
                orderItems: {
                   include: {
                      Product: {
@@ -806,7 +776,6 @@ class OrderController {
                      },
                   },
                },
-               orderStatus: true,
             },
          });
 
@@ -879,6 +848,29 @@ class OrderController {
                orderStatusId: 6,
                backAt: moment().toISOString(),
             },
+            include: {
+               orderStatus: true,
+               orderItems: {
+                  include: {
+                     Product: {
+                        select: {
+                           stock: true,
+                        },
+                     },
+                  },
+               },
+            },
+         });
+
+         response.orderItems.map(async (item) => {
+            await prisma.product.update({
+               where: {
+                  id: item.productId,
+               },
+               data: {
+                  stock: item.Product.stock + 1,
+               },
+            });
          });
 
          res.status(200).json({
@@ -1085,6 +1077,62 @@ class OrderController {
          createCommentByUser.message = 'Create Success';
          createCommentByUser.type = 'success';
          res.status(200).json(createCommentByUser);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   createOrderItemsComment = async (req, res, next) => {
+      try {
+         const checkOrderItemsIsComment = await prisma.orderItem.findUnique({
+            where: { id: req.body.orderItemId },
+            select: { isOrderItemComment: true },
+         });
+
+         if (checkOrderItemsIsComment.isOrderItemComment) {
+            return res
+               .status(200)
+               .json({ message: 'Already Comment', type: 'error' });
+         }
+
+         const createProductComment = await prisma.productComment.create({
+            data: {
+               authorId: req.body.authorId,
+               content: req.body.content,
+               rate: req.body.rate,
+               productId: req.body.productId,
+            },
+         });
+
+         await prisma.orderItem.update({
+            where: { id: req.body.orderItemId },
+            data: { isOrderItemComment: true },
+         });
+
+         const rateAverage = await prisma.productComment.aggregate({
+            where: { productId: req.body.productId },
+            _avg: { rate: true },
+         });
+
+         await prisma.product.update({
+            where: { id: req.body.productId },
+            data: { qualityRate: parseFloat(rateAverage._avg.rate.toFixed(1)) },
+         });
+
+         createProductComment.message = 'Create Success';
+         createProductComment.type = 'success';
+         res.status(200).json(createProductComment);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   deletePendingOrder = async (req, res, next) => {
+      try {
+         const response = await prisma.order.delete({
+            where: { id: req.body.orderId },
+         });
+         res.status(200).json(response);
       } catch (error) {
          return next(error);
       }

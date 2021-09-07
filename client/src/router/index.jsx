@@ -12,7 +12,7 @@ import SignIn from '../features/Auth';
 import Category from '../features/Category';
 import Home from '../features/Home';
 import Manages from '../features/Manages';
-import ManageShop from '../features/ManageShop';
+// import ManageShop from '../features/ManageShop';
 import Maps from '../features/Maps';
 import Message from '../features/Message';
 import MessageBeta from '../features/MessageBeta';
@@ -75,11 +75,11 @@ function Routers(props) {
                         </Content>
                      </Route>
 
-                     <Route path='/manage'>
+                     {/* <Route path='/manage'>
                         <Content style={{ margin: '25px 125px' }}>
                            <ManageShop />
                         </Content>
-                     </Route>
+                     </Route> */}
 
                      <Route path='/profile'>
                         <Content style={{ margin: '25px 125px' }}>

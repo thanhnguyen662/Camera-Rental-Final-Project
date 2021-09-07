@@ -18,7 +18,7 @@ function ManagesMenuUser(props) {
          <div>
             <Menu
                onClick={handleOnClickMenuItem}
-               defaultSelectedKeys={['0']}
+               defaultSelectedKeys={['pending']}
                defaultOpenKeys={['sub1']}
                mode='inline'
                theme='light'

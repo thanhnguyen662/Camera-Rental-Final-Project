@@ -1,19 +1,9 @@
-import {
-   Button,
-   Col,
-   Input,
-   Modal,
-   Pagination,
-   Row,
-   Steps,
-   Tabs,
-   Form,
-   Rate,
-} from 'antd';
+import { Button, Col, Pagination, Row, Steps, Tabs } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import userApi from '../../../../api/userApi';
+import OrderCommentModal from '../OrderCommentModal';
 import OrderDetailComment from '../OrderDetailComment';
 import OrderDetailCustomerInfo from '../OrderDetailCustomerInfo';
 import './OrderDetailContent.scss';
@@ -93,6 +83,10 @@ function OrderDetailContent(props) {
 
    const onFormFinish = (data) => {
       handleSubmitComment(data);
+      setIsModalVisible(false);
+   };
+
+   const handleModalVisible = () => {
       setIsModalVisible(false);
    };
 
@@ -177,53 +171,11 @@ function OrderDetailContent(props) {
             </Row>
          </div>
          <div>
-            <Modal
-               visible={isModalVisible}
-               onCancel={() => setIsModalVisible(false)}
-               footer={false}
-               width={450}
-               title={<div className='modalTitle'>Comment</div>}
-               className='modalCommentUserInput'
-            >
-               <Form
-                  name='basic'
-                  labelCol={{ span: 5 }}
-                  wrapperCol={{ span: 24 }}
-                  onFinish={onFormFinish}
-               >
-                  <Form.Item
-                     label='Comment'
-                     name='content'
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Please input your Comment!',
-                        },
-                     ]}
-                  >
-                     <Input.TextArea />
-                  </Form.Item>
-
-                  <Form.Item
-                     label='Rate'
-                     name='rate'
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Please input your Rate!',
-                        },
-                     ]}
-                  >
-                     <Rate />
-                  </Form.Item>
-
-                  <Form.Item wrapperCol={{ offset: 5, span: 16 }}>
-                     <Button type='primary' htmlType='submit'>
-                        Submit
-                     </Button>
-                  </Form.Item>
-               </Form>
-            </Modal>
+            <OrderCommentModal
+               isModalVisible={isModalVisible}
+               onFormFinish={onFormFinish}
+               handleModalVisible={handleModalVisible}
+            />
          </div>
       </>
    );

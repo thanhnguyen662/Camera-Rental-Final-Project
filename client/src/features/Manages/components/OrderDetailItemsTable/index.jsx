@@ -1,25 +1,31 @@
 import { Button, DatePicker, Image, Table, Typography } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import priceFormat from '../../../../utils/PriceFormat';
+import OrderCommentModal from '../OrderCommentModal';
 import './OrderDetailItemsTable.scss';
 
 OrderDetailItemsTable.propTypes = {
    dataSource: PropTypes.object,
    myRole: PropTypes.string,
+   handleSubmitOrderItemsComment: PropTypes.func,
 };
 
 OrderDetailItemsTable.defaultProps = {
    dataSource: {},
    myRole: '',
+   handleSubmitOrderItemsComment: null,
 };
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
 
 function OrderDetailItemsTable(props) {
-   const { dataSource, myRole } = props;
+   const { dataSource, myRole, handleSubmitOrderItemsComment } = props;
+
+   const [isModalVisible, setIsModalVisible] = useState(false);
+   const [selectOrderItems, setSelectOrderItems] = useState({});
 
    let columns = [
       {
@@ -74,9 +80,43 @@ function OrderDetailItemsTable(props) {
    if (myRole === 'buyer') {
       columns.push({
          title: 'Action',
-         render: () => <Button>Comment</Button>,
+         render: (record) => {
+            return (
+               <Button
+                  disabled={disabledButton()}
+                  onClick={() => {
+                     setSelectOrderItems(record);
+                     setIsModalVisible(true);
+                  }}
+               >
+                  Comment
+               </Button>
+            );
+         },
       });
    }
+
+   const disabledButton = () => {
+      if (
+         dataSource.orderStatus.name === 'BACK' ||
+         dataSource.orderStatus.name === 'FAILURE'
+      )
+         return false;
+      return true;
+   };
+   const onFormFinish = (data) => {
+      const formData = {
+         ...data,
+         orderItemId: selectOrderItems.id,
+         productId: selectOrderItems.productId,
+      };
+      handleSubmitOrderItemsComment(formData);
+      setIsModalVisible(false);
+   };
+
+   const handleModalVisible = () => {
+      setIsModalVisible(false);
+   };
 
    const footer = () => {
       return (
@@ -99,6 +139,13 @@ function OrderDetailItemsTable(props) {
             columns={columns}
             footer={() => footer()}
          />
+         <div>
+            <OrderCommentModal
+               isModalVisible={isModalVisible}
+               onFormFinish={onFormFinish}
+               handleModalVisible={handleModalVisible}
+            />
+         </div>
       </>
    );
 }
