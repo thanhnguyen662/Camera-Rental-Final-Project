@@ -51,7 +51,7 @@ function Routers(props) {
                         </Content>
                      </Route>
 
-                     <Route path='/Social'>
+                     <Route path='/social'>
                         <Content style={{ margin: '25px 125px' }}>
                            <Social />
                         </Content>

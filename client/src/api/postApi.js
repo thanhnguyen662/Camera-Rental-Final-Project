@@ -35,6 +35,16 @@ const postApi = {
       const url = '/post/stats/user';
       return axiosClient.get(url, { params });
    },
+
+   getPostDetail: (params) => {
+      const url = '/post/detail';
+      return axiosClient.get(url, { params });
+   },
+
+   getPostComment: (params) => {
+      const url = '/post/comments';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default postApi;

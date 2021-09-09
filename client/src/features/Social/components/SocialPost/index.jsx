@@ -20,6 +20,7 @@ import cartApi from '../../../../api/cartApi';
 import postApi from '../../../../api/postApi';
 import openNotificationWithIcon from '../../../../components/Notification';
 import { addProductToCart } from '../../../Product/productSlice';
+import SocialPostDetailPage from '../../pages/SocialPostDetailPage';
 import SocialPostProduct from '../SocialPostProduct';
 import './SocialPost.scss';
 
@@ -59,7 +60,10 @@ function SocialPost(props) {
    const dispatch = useDispatch();
 
    const [isModalProductVisible, setIsModalProductVisible] = useState(false);
+   const [isModalPostDetailVisible, setIsModalPostDetailVisible] =
+      useState(false);
    const [selectPost, setSelectPost] = useState([]);
+   const [selectPostId, setSelectPostId] = useState(0);
    const [commentInput, setCommentInput] = useState('');
    const [commentInputPostId, setCommentInputPostId] = useState(0);
 
@@ -113,6 +117,10 @@ function SocialPost(props) {
       setIsModalProductVisible(false);
    };
 
+   const handleCancelPostDetailModal = () => {
+      setIsModalPostDetailVisible(false);
+   };
+
    const handleOnClickAddToCart = async (formData) => {
       try {
          const response = await cartApi.addMoreProductToCart(formData);
@@ -142,8 +150,12 @@ function SocialPost(props) {
          postId: commentInputPostId,
          userId: userId,
       };
-
       handleOnComment(formData);
+   };
+
+   const onClickViewDetailButton = (postId) => {
+      setSelectPostId(postId);
+      setIsModalPostDetailVisible(true);
    };
 
    return (
@@ -180,11 +192,16 @@ function SocialPost(props) {
                      {post.images.length > 0 && (
                         <Slider {...settings} className='postSlide'>
                            {post.images.map((image) => (
-                              <div key={image}>
+                              <div
+                                 key={image}
+                                 onClick={() =>
+                                    onClickViewDetailButton(post.id)
+                                 }
+                              >
                                  <Image
                                     src={image}
                                     alt='photos'
-                                    preview={true}
+                                    preview={false}
                                  />
                               </div>
                            ))}
@@ -192,9 +209,9 @@ function SocialPost(props) {
                      )}
                   </div>
                   <div className='socialButtonGroup'>
-                     <Row gutter={[60, 0]} style={{ marginRight: 0 }}>
-                        <Col flex='auto'>
-                           <Space>
+                     <Row style={{ marginRight: 0 }} align='middle'>
+                        <Col span={22}>
+                           <Space size={20}>
                               <div>
                                  <Space>
                                     {post.isLike ? (
@@ -213,7 +230,12 @@ function SocialPost(props) {
                               </div>
                               <div>
                                  <Space>
-                                    <MessageOutlined className='icon' />
+                                    <MessageOutlined
+                                       className='icon'
+                                       onClick={() =>
+                                          onClickViewDetailButton(post.id)
+                                       }
+                                    />
                                     <Text className='text'>
                                        {post._count.comments}
                                     </Text>
@@ -227,17 +249,15 @@ function SocialPost(props) {
                               </div>
                            </Space>
                         </Col>
-                        <Col>
-                           <Space size={20}>
-                              <CameraOutlined
-                                 colSpan={24}
-                                 className='icon'
-                                 onClick={() => {
-                                    setIsModalProductVisible(true);
-                                    setSelectPost(post);
-                                 }}
-                              />
-                           </Space>
+                        <Col span={2}>
+                           <CameraOutlined
+                              colSpan={24}
+                              className='icon'
+                              onClick={() => {
+                                 setIsModalProductVisible(true);
+                                 setSelectPost(post);
+                              }}
+                           />
                         </Col>
                      </Row>
                   </div>
@@ -289,6 +309,13 @@ function SocialPost(props) {
             userId={userId}
             handleOnClickAddToCart={handleOnClickAddToCart}
          />
+         {selectPostId > 0 && (
+            <SocialPostDetailPage
+               isModalPostDetailVisible={isModalPostDetailVisible}
+               handleCancelPostDetailModal={handleCancelPostDetailModal}
+               postId={selectPostId}
+            />
+         )}
       </>
    );
 }

@@ -1,13 +1,13 @@
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import {
    Button,
+   DatePicker,
+   Divider,
    Image,
    Modal,
    Space,
    Table,
    Typography,
-   DatePicker,
-   Divider,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';

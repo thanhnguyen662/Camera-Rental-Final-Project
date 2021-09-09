@@ -286,6 +286,67 @@ class PostController {
          return next(error);
       }
    };
+
+   getPostById = async (req, res, next) => {
+      try {
+         const response = await prisma.post.findUnique({
+            where: { id: Number(req.query.postId) },
+            include: {
+               _count: {
+                  select: { comments: true },
+               },
+               postProducts: {
+                  include: {
+                     product: {
+                        select: {
+                           id: true,
+                           productPhotoURL: true,
+                           brand: true,
+                           slug: true,
+                           price: true,
+                           name: true,
+                           categories: {
+                              select: {
+                                 name: true,
+                              },
+                           },
+                        },
+                     },
+                  },
+               },
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getCommentInPost = async (req, res, next) => {
+      try {
+         const page = Number(req.query.page);
+         const take = 5;
+         const response = await prisma.postComment.findMany({
+            take: take,
+            skip: (page - 1) * take,
+            where: { postId: Number(req.query.postId) },
+            include: {
+               user: {
+                  select: {
+                     photoURL: true,
+                     username: true,
+                     firebaseId: true,
+                  },
+               },
+            },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
 }
 
 module.exports = new PostController();

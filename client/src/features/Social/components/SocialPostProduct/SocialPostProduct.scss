@@ -1,36 +1,36 @@
-.modalPostProduct{
-   font-family: 'Roboto';
-   .divider{
+.modalPostProduct {
+   font-family: "Roboto";
+   .divider {
       margin: 0px;
    }
-   
-   .datePickerContainer{
+
+   .datePickerContainer {
       margin: 10px 20px;
       display: flex;
 
-      .datePicker{
+      .datePicker {
          border-radius: 10px;
          width: 300px;
          height: 38px;
-         border: 2px solid #D9D9D9;
+         border: 2px solid #d9d9d9;
 
-         input{
+         input {
             font-size: 14px;
          }
       }
 
-      .title{
+      .title {
          font-weight: bold;
          font-size: 16px;
          display: block;
       }
 
-      .description{
+      .description {
          font-size: 13px;
       }
    }
 
-   .modalTitle{
+   .modalTitle {
       font-weight: bold;
       display: flex;
       justify-content: center;
@@ -43,26 +43,26 @@
       border-radius: 10px;
    }
 
-   .modalTableImage{
+   .modalTableImage {
       width: 80px;
       height: 80px;
       object-fit: cover;
       border-radius: 10px;
    }
 
-   .ant-modal-body{
+   .ant-modal-body {
       padding: 5px 12px;
    }
 
-   .modalPostProductButton{
+   .modalPostProductButton {
       border-radius: 8px;
 
-      .cartIcon{
+      .cartIcon {
          font-size: 18px;
       }
    }
 
-   .modalPostProductTable{
+   .modalPostProductTable {
       .ant-table-thead > tr > th {
          display: none;
       }
@@ -72,29 +72,29 @@
          padding: 5px 20px;
       }
 
-      .ant-table-pagination.ant-pagination{
+      .ant-table-pagination.ant-pagination {
          margin: 2px 16px 20px 10px;
       }
 
-      .postProductNameTable{
-         .productBrand{
-            font-weight: 800;
+      .postProductNameTable {
+         .productBrand {
+            font-weight: bold;
          }
-         
-         .productName{
+
+         .productName {
             transition: all 0.3s;
-            &:hover{
-               color: #339DFF;
+            &:hover {
+               color: #339dff;
             }
          }
       }
 
-      .productPrice{
+      .productPrice {
          font-size: 18px;
-         font-weight: 800;
+         font-weight: bold;
       }
 
-      .productPerHour{
+      .productPerHour {
          font-size: 12px;
          font-style: italic;
       }
