@@ -295,6 +295,7 @@ class PostController {
                _count: {
                   select: { comments: true },
                },
+               user: true,
                postProducts: {
                   include: {
                      product: {

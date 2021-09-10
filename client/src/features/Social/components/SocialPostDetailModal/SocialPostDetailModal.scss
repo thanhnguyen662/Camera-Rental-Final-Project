@@ -2,33 +2,51 @@
    font-family: "Roboto";
 
    .ant-modal-content {
-      border-top-right-radius: 10px;
-      border-bottom-right-radius: 10px;
-      text-align: center;
+      border-radius: 5px;
    }
 
    .ant-modal-body {
       padding: 0px;
    }
 
-   .postDetailRow {
-      height: 640px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+   .ant-modal-close-x {
+      display: none;
    }
 
-   .postDetailComment {
-      height: 605px;
-      display: grid;
-      justify-content: start;
+   .postDetailRow {
+      height: 640px;
+      justify-content: center;
+      align-items: center;
 
-      padding: 10px;
+      .postDetailCommentCol {
+         height: 100%;
+
+         .postDetailComment {
+            padding: 20px;
+            justify-content: start;
+            height: 100%;
+            border-left: 2px solid #eee;
+         }
+      }
+
+      .postDetailImage {
+         padding-top: 5px;
+      }
    }
 
    .slick-track {
       display: flex;
       justify-content: center;
       align-items: center;
+   }
+
+   .slick-next {
+      left: 95%;
+      z-index: 1;
+   }
+
+   .slick-prev {
+      left: 2%;
+      z-index: 1;
    }
 }

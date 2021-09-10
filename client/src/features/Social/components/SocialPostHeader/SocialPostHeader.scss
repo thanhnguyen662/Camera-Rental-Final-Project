@@ -1,0 +1,34 @@
+.postUserInfo {
+   .userName {
+      font-weight: 600;
+
+      a {
+         transition: all 0.3s;
+         color: black;
+
+         &:hover {
+            color: #1890ff;
+         }
+      }
+   }
+
+   .timeAgo {
+      font-size: 10px;
+   }
+
+   .ellipsisOutlinedIcon {
+      font-size: 25px;
+      transition: all 0.4s;
+      cursor: pointer;
+
+      &:hover {
+         color: #189dff;
+      }
+   }
+
+   .description {
+      display: grid;
+      width: 100%;
+      margin: 10px 0px 0px 0px;
+   }
+}

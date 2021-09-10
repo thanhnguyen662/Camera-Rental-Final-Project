@@ -4,42 +4,6 @@
       background: white;
       border-radius: 10px;
 
-      .postUserInfo {
-         padding: 15px 18px;
-         border-bottom: 1px solid rgb(240, 240, 240);
-
-         .userName {
-            font-weight: 600;
-
-            a {
-               transition: all 0.3s;
-               color: black;
-
-               &:hover {
-                  color: #1890ff;
-               }
-            }
-         }
-
-         .timeAgo {
-            font-size: 10px;
-         }
-
-         .ellipsisOutlinedIcon {
-            font-size: 25px;
-            transition: all 0.4s;
-            cursor: pointer;
-
-            &:hover {
-               color: #189dff;
-            }
-         }
-
-         .description {
-            margin: 10px 2px 0px 4px;
-         }
-      }
-
       .postSlide {
          display: grid;
          width: 100%;
@@ -62,10 +26,6 @@
             z-index: 1;
          }
 
-         .slick-slide {
-            padding-left: 0.3px;
-         }
-
          .imageSpinLoading {
             margin: 20px 0;
             margin-bottom: 20px;
@@ -76,26 +36,12 @@
          }
       }
 
-      .socialButtonGroup {
+      .postHeader {
+         padding: 15px 18px;
+      }
+
+      .postButton {
          padding: 25px 0 0 20px;
-
-         .icon {
-            font-size: 24px;
-            cursor: pointer;
-         }
-         span {
-            color: black;
-         }
-
-         .iconFilled {
-            font-size: 24px;
-            cursor: pointer;
-            color: #ed4956;
-         }
-
-         .text {
-            font-size: 14px;
-         }
       }
 
       .socialComment {

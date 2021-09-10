@@ -1,14 +1,14 @@
 import {
-   CameraOutlined,
-   EllipsisOutlined,
-   FireOutlined,
-   HeartFilled,
-   HeartOutlined,
-   MessageOutlined,
-} from '@ant-design/icons';
-import { Col, Empty, Image, Input, Row, Space, Table, Typography } from 'antd';
+   Col,
+   Divider,
+   Empty,
+   Image,
+   Input,
+   Row,
+   Table,
+   Typography,
+} from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -20,7 +20,9 @@ import cartApi from '../../../../api/cartApi';
 import postApi from '../../../../api/postApi';
 import openNotificationWithIcon from '../../../../components/Notification';
 import { addProductToCart } from '../../../Product/productSlice';
-import SocialPostDetailPage from '../../pages/SocialPostDetailPage';
+import SocialPostButtonGroup from '../SocialPostButtonGroup';
+import SocialPostDetailModal from '../SocialPostDetailModal';
+import SocialPostHeader from '../SocialPostHeader';
 import SocialPostProduct from '../SocialPostProduct';
 import './SocialPost.scss';
 
@@ -63,7 +65,7 @@ function SocialPost(props) {
    const [isModalPostDetailVisible, setIsModalPostDetailVisible] =
       useState(false);
    const [selectPost, setSelectPost] = useState([]);
-   const [selectPostId, setSelectPostId] = useState(0);
+   const [selectPostDetail, setSelectPostDetail] = useState({});
    const [commentInput, setCommentInput] = useState('');
    const [commentInputPostId, setCommentInputPostId] = useState(0);
 
@@ -73,29 +75,28 @@ function SocialPost(props) {
       slidesToShow: 1,
       slidesToScroll: 1,
       swipe: false,
-      centerPadding: '60px',
       adaptiveHeight: true,
+      centerMode: true,
+      centerPadding: '-1px',
    };
 
-   const columns = [
-      {
-         title: 'Name',
-         key: 'name',
-         render: (record) => {
-            return (
-               <>
-                  <Link to={`/profile/${record.user.firebaseId}`}>
-                     <Text className='commentTableUsername'>
-                        {record.user.username}
-                     </Text>
-                  </Link>
-                  &nbsp;
-                  <Text className='commentTableContent'>{record.content}</Text>
-               </>
-            );
-         },
-      },
-   ];
+   const handleCancelProductDetailModal = () => {
+      setIsModalProductVisible(false);
+   };
+
+   const handleCancelPostDetailModal = () => {
+      setIsModalPostDetailVisible(false);
+   };
+
+   const handleClickCameraIcon = (post) => {
+      setIsModalProductVisible(true);
+      setSelectPost(post);
+   };
+
+   const onClickViewDetail = (post) => {
+      setSelectPostDetail(post);
+      setIsModalPostDetailVisible(true);
+   };
 
    const onClickUnlike = (postId) => {
       const formData = {
@@ -113,12 +114,13 @@ function SocialPost(props) {
       handleClickLike(formData);
    };
 
-   const handleOnClickCancelModal = () => {
-      setIsModalProductVisible(false);
-   };
-
-   const handleCancelPostDetailModal = () => {
-      setIsModalPostDetailVisible(false);
+   const onPressCommentEnter = () => {
+      const formData = {
+         content: commentInput,
+         postId: commentInputPostId,
+         userId: userId,
+      };
+      handleOnComment(formData);
    };
 
    const handleOnClickAddToCart = async (formData) => {
@@ -144,59 +146,42 @@ function SocialPost(props) {
       }
    };
 
-   const onPressCommentEnter = () => {
-      const formData = {
-         content: commentInput,
-         postId: commentInputPostId,
-         userId: userId,
-      };
-      handleOnComment(formData);
-   };
-
-   const onClickViewDetailButton = (postId) => {
-      setSelectPostId(postId);
-      setIsModalPostDetailVisible(true);
-   };
+   const columns = [
+      {
+         title: 'Name',
+         key: 'name',
+         render: (record) => {
+            return (
+               <>
+                  <Link to={`/profile/${record.user.firebaseId}`}>
+                     <Text className='commentTableUsername'>
+                        {record.user.username}
+                     </Text>
+                  </Link>
+                  &nbsp;
+                  <Text className='commentTableContent'>{record.content}</Text>
+               </>
+            );
+         },
+      },
+   ];
 
    return (
       <>
          {posts?.map((post) => (
             <div className='socialPost' key={post.id}>
                <div className='post'>
-                  <div className='postUserInfo'>
-                     <Row justify='center' align='middle'>
-                        <Col flex='auto'>
-                           <Space size={12}>
-                              <Avatar size={40} src={post.user.photoURL} />
-                              <div>
-                                 <div className='userName'>
-                                    <Link
-                                       to={`/profile/${post.user.firebaseId}`}
-                                    >
-                                       {post.user.username}
-                                    </Link>
-                                 </div>
-                                 <div className='timeAgo'>
-                                    {moment(post.createdAt).fromNow()}
-                                 </div>
-                              </div>
-                           </Space>
-                        </Col>
-                        <Col>
-                           <EllipsisOutlined className='ellipsisOutlinedIcon' />
-                        </Col>
-                     </Row>
-                     <div className='description'>{post.caption}</div>
+                  <div className='postHeader'>
+                     <SocialPostHeader postDetail={post} />
                   </div>
+                  <Divider style={{ margin: 0 }} />
                   <div>
                      {post.images.length > 0 && (
                         <Slider {...settings} className='postSlide'>
                            {post.images.map((image) => (
                               <div
                                  key={image}
-                                 onClick={() =>
-                                    onClickViewDetailButton(post.id)
-                                 }
+                                 onClick={() => onClickViewDetail(post)}
                               >
                                  <Image
                                     src={image}
@@ -208,58 +193,13 @@ function SocialPost(props) {
                         </Slider>
                      )}
                   </div>
-                  <div className='socialButtonGroup'>
-                     <Row style={{ marginRight: 0 }} align='middle'>
-                        <Col span={22}>
-                           <Space size={20}>
-                              <div>
-                                 <Space>
-                                    {post.isLike ? (
-                                       <HeartFilled
-                                          className='iconFilled'
-                                          onClick={() => onClickUnlike(post.id)}
-                                       />
-                                    ) : (
-                                       <HeartOutlined
-                                          className='icon'
-                                          onClick={() => onClickLike(post.id)}
-                                       />
-                                    )}
-                                    <Text className='text'>{post.like}</Text>
-                                 </Space>
-                              </div>
-                              <div>
-                                 <Space>
-                                    <MessageOutlined
-                                       className='icon'
-                                       onClick={() =>
-                                          onClickViewDetailButton(post.id)
-                                       }
-                                    />
-                                    <Text className='text'>
-                                       {post._count.comments}
-                                    </Text>
-                                 </Space>
-                              </div>
-                              <div>
-                                 <Space>
-                                    <FireOutlined className='icon' />
-                                    <Text className='text'>{post.add}</Text>
-                                 </Space>
-                              </div>
-                           </Space>
-                        </Col>
-                        <Col span={2}>
-                           <CameraOutlined
-                              colSpan={24}
-                              className='icon'
-                              onClick={() => {
-                                 setIsModalProductVisible(true);
-                                 setSelectPost(post);
-                              }}
-                           />
-                        </Col>
-                     </Row>
+                  <div className='postButton'>
+                     <SocialPostButtonGroup
+                        postDetail={post}
+                        handleClickCameraIcon={handleClickCameraIcon}
+                        onClickUnlike={onClickUnlike}
+                        onClickLike={onClickLike}
+                     />
                   </div>
                   <div className='socialComment'>
                      <Text className='viewAll'>View all comment</Text>
@@ -304,16 +244,16 @@ function SocialPost(props) {
          ))}
          <SocialPostProduct
             isModalProductVisible={isModalProductVisible}
-            handleOnClickCancelModal={handleOnClickCancelModal}
+            handleCancelProductDetailModal={handleCancelProductDetailModal}
             selectPost={selectPost.postProducts}
             userId={userId}
             handleOnClickAddToCart={handleOnClickAddToCart}
          />
-         {selectPostId > 0 && (
-            <SocialPostDetailPage
+         {isModalPostDetailVisible && (
+            <SocialPostDetailModal
                isModalPostDetailVisible={isModalPostDetailVisible}
                handleCancelPostDetailModal={handleCancelPostDetailModal}
-               postId={selectPostId}
+               postDetail={selectPostDetail}
             />
          )}
       </>

@@ -1,20 +1,22 @@
-import React from 'react';
+import { Col, Image, Modal, Row, Space } from 'antd';
 import PropTypes from 'prop-types';
-import { Col, Image, Modal, Row } from 'antd';
+import React from 'react';
 import Slider from 'react-slick';
+import SocialPostButtonGroup from '../SocialPostButtonGroup';
+import SocialPostHeader from '../SocialPostHeader';
 import './SocialPostDetailModal.scss';
 
 SocialPostDetailModal.propTypes = {
    isModalPostDetailVisible: PropTypes.bool,
    handleCancelPostDetailModal: PropTypes.func,
-   postDetailInfo: PropTypes.object,
+   postDetail: PropTypes.object,
    postDetailComment: PropTypes.array,
 };
 
 SocialPostDetailModal.defaultProps = {
    isModalPostDetailVisible: false,
    handleCancelPostDetailModal: null,
-   postDetailInfo: {},
+   postDetail: {},
    postDetailComment: [],
 };
 
@@ -22,7 +24,7 @@ function SocialPostDetailModal(props) {
    const {
       isModalPostDetailVisible,
       handleCancelPostDetailModal,
-      postDetailInfo,
+      postDetail,
       postDetailComment,
    } = props;
 
@@ -31,7 +33,10 @@ function SocialPostDetailModal(props) {
       slidesToShow: 1,
       slidesToScroll: 1,
       swipe: true,
-      arrows: false,
+      arrows: true,
+      centerMode: true,
+      centerPadding: '-1px',
+      className: 'postDetailImage',
    };
 
    return (
@@ -44,20 +49,27 @@ function SocialPostDetailModal(props) {
                footer={false}
                centered={true}
                className='modalPostDetail'
-               width={900}
+               width={800}
             >
-               <Row className='postDetailRow'>
-                  <Col span={12}>
+               <Row className='postDetailRow' wrap={false}>
+                  <Col span={14}>
                      <Slider {...settings}>
-                        {postDetailInfo.images?.map((image) => (
-                           <div key={image} className='postDetailImage'>
+                        {postDetail.images?.map((image) => (
+                           <div key={image}>
                               <Image src={image} alt='photos' preview={false} />
                            </div>
                         ))}
                      </Slider>
                   </Col>
-                  <Col span={12}>
-                     <div className='postDetailComment'>Hello</div>
+                  <Col span={10} className='postDetailCommentCol'>
+                     <div className='postDetailComment'>
+                        <div>
+                           <SocialPostHeader postDetail={postDetail} />
+                        </div>
+                        <div>
+                           <SocialPostButtonGroup />
+                        </div>
+                     </div>
                   </Col>
                </Row>
             </Modal>

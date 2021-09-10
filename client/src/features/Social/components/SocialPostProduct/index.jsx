@@ -20,7 +20,7 @@ const { Text } = Typography;
 
 SocialPostProduct.propTypes = {
    isModalProductVisible: PropTypes.bool,
-   handleOnClickCancelModal: PropTypes.func,
+   handleCancelProductDetailModal: PropTypes.func,
    selectPost: PropTypes.array,
    userId: PropTypes.string,
    handleOnClickAddToCart: PropTypes.func,
@@ -28,7 +28,7 @@ SocialPostProduct.propTypes = {
 
 SocialPostProduct.defaultProps = {
    isModalProductVisible: false,
-   handleOnClickCancelModal: null,
+   handleCancelProductDetailModal: null,
    selectPost: [],
    userId: '',
    handleOnClickAddToCart: null,
@@ -39,7 +39,7 @@ const { RangePicker } = DatePicker;
 function SocialPostProduct(props) {
    const {
       isModalProductVisible,
-      handleOnClickCancelModal,
+      handleCancelProductDetailModal,
       selectPost,
       userId,
       handleOnClickAddToCart,
@@ -121,7 +121,7 @@ function SocialPostProduct(props) {
       <>
          <Modal
             visible={isModalProductVisible}
-            onCancel={handleOnClickCancelModal}
+            onCancel={handleCancelProductDetailModal}
             footer={false}
             title={<Text className='modalTitle'>Taken By ✨</Text>}
             className='modalPostProduct'
