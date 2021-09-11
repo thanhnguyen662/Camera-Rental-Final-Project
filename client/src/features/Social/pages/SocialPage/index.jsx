@@ -208,7 +208,7 @@ function SocialPage(props) {
    const handleOnComment = async (formData) => {
       try {
          const response = await postApi.createCommentInPost(formData);
-
+         console.log('commented', response);
          setPosts((prev) => {
             const findIndex = prev.findIndex(
                (post) => post.id === response.postId

@@ -1,14 +1,4 @@
-import {
-   Col,
-   Divider,
-   Empty,
-   Image,
-   Input,
-   Row,
-   Table,
-   Typography,
-} from 'antd';
-import Avatar from 'antd/lib/avatar/avatar';
+import { Divider, Empty, Image, Table, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -20,6 +10,7 @@ import cartApi from '../../../../api/cartApi';
 import postApi from '../../../../api/postApi';
 import openNotificationWithIcon from '../../../../components/Notification';
 import { addProductToCart } from '../../../Product/productSlice';
+import SocialInputComment from '../SocialInputComment';
 import SocialPostButtonGroup from '../SocialPostButtonGroup';
 import SocialPostDetailModal from '../SocialPostDetailModal';
 import SocialPostHeader from '../SocialPostHeader';
@@ -61,13 +52,11 @@ function SocialPost(props) {
 
    const dispatch = useDispatch();
 
+   const [selectPost, setSelectPost] = useState([]);
+   const [selectPostDetail, setSelectPostDetail] = useState({});
    const [isModalProductVisible, setIsModalProductVisible] = useState(false);
    const [isModalPostDetailVisible, setIsModalPostDetailVisible] =
       useState(false);
-   const [selectPost, setSelectPost] = useState([]);
-   const [selectPostDetail, setSelectPostDetail] = useState({});
-   const [commentInput, setCommentInput] = useState('');
-   const [commentInputPostId, setCommentInputPostId] = useState(0);
 
    const settings = {
       dots: true,
@@ -114,12 +103,7 @@ function SocialPost(props) {
       handleClickLike(formData);
    };
 
-   const onPressCommentEnter = () => {
-      const formData = {
-         content: commentInput,
-         postId: commentInputPostId,
-         userId: userId,
-      };
+   const handleCommentInputEnter = (formData) => {
       handleOnComment(formData);
    };
 
@@ -183,11 +167,7 @@ function SocialPost(props) {
                                  key={image}
                                  onClick={() => onClickViewDetail(post)}
                               >
-                                 <Image
-                                    src={image}
-                                    alt='photos'
-                                    preview={false}
-                                 />
+                                 <Image src={image} preview={false} />
                               </div>
                            ))}
                         </Slider>
@@ -220,24 +200,13 @@ function SocialPost(props) {
                         }}
                      />
                   </div>
-                  <div className='socialCommentInput'>
-                     <Row gutter={[15, 0]}>
-                        <Col>
-                           <Avatar src={photoURL} size={40} />
-                        </Col>
-                        <Col flex='auto'>
-                           <Input
-                              value={commentInput}
-                              placeholder='Write your comment...'
-                              onChange={(e) => setCommentInput(e.target.value)}
-                              onClick={() => setCommentInputPostId(post.id)}
-                              onPressEnter={() => {
-                                 onPressCommentEnter();
-                                 setCommentInput('');
-                              }}
-                           />
-                        </Col>
-                     </Row>
+                  <div className='postInput'>
+                     <SocialInputComment
+                        photoURL={photoURL}
+                        userId={userId}
+                        postDetail={post}
+                        handleCommentInputEnter={handleCommentInputEnter}
+                     />
                   </div>
                </div>
             </div>
@@ -254,6 +223,10 @@ function SocialPost(props) {
                isModalPostDetailVisible={isModalPostDetailVisible}
                handleCancelPostDetailModal={handleCancelPostDetailModal}
                postDetail={selectPostDetail}
+               handleClickCameraIcon={handleClickCameraIcon}
+               onClickUnlike={onClickUnlike}
+               onClickLike={onClickLike}
+               photoURL={photoURL}
             />
          )}
       </>

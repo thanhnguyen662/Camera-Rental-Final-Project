@@ -26,6 +26,38 @@
             justify-content: start;
             height: 100%;
             border-left: 2px solid #eee;
+
+            .postComment {
+               overflow: auto;
+               height: 488px;
+
+               .ant-comment-inner {
+                  padding: 5px 8px 5px 0px;
+               }
+            }
+
+            .postComment::-webkit-scrollbar {
+               display: none;
+            }
+
+            .postButtonGroup {
+               margin: 14px 5px;
+            }
+
+            .buttonViewMoreComment {
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               margin: 10px;
+
+               button {
+                  color: #9b9b9b;
+                  transition: all 0.5s;
+                  &:hover {
+                     color: #1890ff;
+                  }
+               }
+            }
          }
       }
 

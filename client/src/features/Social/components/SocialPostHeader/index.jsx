@@ -21,8 +21,8 @@ function SocialPostHeader(props) {
       <>
          <div className='postUserInfo'>
             <Row span={24} justify='center' align='middle'>
-               <Col span={22}>
-                  <Space size={12}>
+               <Col flex='auto'>
+                  <Space size={11}>
                      <Avatar size={40} src={postDetail.user?.photoURL} />
                      <div>
                         <div className='userName'>

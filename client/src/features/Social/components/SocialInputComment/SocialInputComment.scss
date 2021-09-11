@@ -1,0 +1,11 @@
+.socialCommentInput {
+   input {
+      border-radius: 10px;
+      height: 40px;
+      width: 100%;
+
+      &::placeholder {
+         font-weight: 300;
+      }
+   }
+}

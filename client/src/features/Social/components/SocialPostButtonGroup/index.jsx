@@ -1,20 +1,13 @@
-import {
-   CameraOutlined,
-   FireOutlined,
-   HeartFilled,
-   HeartOutlined,
-   MessageOutlined,
-} from '@ant-design/icons';
-import {
-   BsHeart,
-   BsHeartFill,
-   BsChatSquare,
-   BsCameraVideo,
-   BsBookmarkCheck,
-} from 'react-icons/bs';
 import { Col, Row, Space, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {
+   BsBookmarkCheck,
+   BsCameraVideo,
+   BsChatSquare,
+   BsHeart,
+   BsHeartFill,
+} from 'react-icons/bs';
 import './SocialPostButtonGroup.scss';
 
 SocialPostButtonGroup.propTypes = {

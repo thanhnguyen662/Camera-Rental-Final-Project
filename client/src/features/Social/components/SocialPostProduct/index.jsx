@@ -126,6 +126,7 @@ function SocialPostProduct(props) {
             title={<Text className='modalTitle'>Taken By ✨</Text>}
             className='modalPostProduct'
             width={560}
+            zIndex={1001}
          >
             <div className='datePickerContainer'>
                <Space>
