@@ -22,7 +22,6 @@ function ProductDetailPage(props) {
 
    const [productDetail, setProductDetail] = useState();
    const [orderInToday, setOrderInToday] = useState([]);
-   const [myProduct, setMyProduct] = useState(0);
    const [myStats, setMyStats] = useState({});
 
    useEffect(() => {
@@ -30,12 +29,7 @@ function ProductDetailPage(props) {
          try {
             const response = await productApi.getProductDetail(slug);
             setProductDetail(response);
-
-            const productOfMe = await productApi.getMyProduct({
-               firebaseId: response.User.firebaseId,
-            });
-            setMyProduct(productOfMe.length);
-
+            console.log(response);
             const statsOfMe = await userApi.getUserStats({
                userId: response.User.firebaseId,
             });
@@ -94,24 +88,33 @@ function ProductDetailPage(props) {
             productName={productDetail?.name}
             className='breadcrumbBar'
          />
-         <Row span={24} gutter={[45, 0]}>
-            <Col span={11} className='rowImage'>
-               <ProductDetailImage productDetail={productDetail} />
-            </Col>
-            <Col span={13} className='product'>
-               <ProductDetailDescription
-                  productDetail={productDetail}
-                  onClickToAddProduct={handleOnClickToAddProduct}
-                  orderInToday={orderInToday}
-               />
-            </Col>
-         </Row>
-         <ProductDetailUser
-            productDetail={productDetail}
-            myProduct={myProduct}
-            myStats={myStats}
-         />
-         <ProductDetailComment productDetail={productDetail} />
+         <div>
+            <Row span={24} gutter={[40, 0]}>
+               <Col span={11} className='rowImage'>
+                  <ProductDetailImage productDetail={productDetail} />
+               </Col>
+               <Col span={13} className='product'>
+                  <ProductDetailDescription
+                     productDetail={productDetail}
+                     onClickToAddProduct={handleOnClickToAddProduct}
+                     orderInToday={orderInToday}
+                  />
+               </Col>
+            </Row>
+         </div>
+         <div>
+            <Row span={24} gutter={[40, 0]}>
+               <Col span={11} className='rowImage'>
+                  <ProductDetailUser
+                     productDetail={productDetail}
+                     myStats={myStats}
+                  />
+               </Col>
+               <Col flex='auto' className='comment'>
+                  <ProductDetailComment productDetail={productDetail} />
+               </Col>
+            </Row>
+         </div>
       </div>
    );
 }

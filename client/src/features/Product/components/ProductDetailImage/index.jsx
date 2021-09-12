@@ -32,6 +32,8 @@ function ProductDetailImage(props) {
       autoplay: true,
       autoplaySpeed: 3000,
       arrows: false,
+      centerMode: true,
+      centerPadding: '-10px',
    };
 
    return (
@@ -49,7 +51,7 @@ function ProductDetailImage(props) {
             <Col span={24}>
                <Slider
                   {...settings}
-                  style={{ width: '540px', height: '158px' }}
+                  // style={{ width: '540px', height: '158px' }}
                >
                   {productDetail.productPhotoURL?.map((product) => (
                      <div key={productDetail.productPhotoURL.indexOf(product)}>

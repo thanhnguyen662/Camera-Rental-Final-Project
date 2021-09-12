@@ -20,7 +20,7 @@ function ManagesMenu(props) {
    return (
       <>
          <Menu
-            className='manageShopMenuSider'
+            style={{ borderRadius: '10px' }}
             mode='inline'
             defaultSelectedKeys={['revenue']}
             defaultOpenKeys={['sub1', 'sub2']}

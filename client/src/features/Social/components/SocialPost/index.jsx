@@ -48,6 +48,7 @@ function SocialPost(props) {
       handleClickLike,
       updateWhenClickAddToCart,
       handleOnComment,
+      handleCommentInPostDetail,
    } = props;
 
    const dispatch = useDispatch();
@@ -179,10 +180,16 @@ function SocialPost(props) {
                         handleClickCameraIcon={handleClickCameraIcon}
                         onClickUnlike={onClickUnlike}
                         onClickLike={onClickLike}
+                        onClickViewDetail={onClickViewDetail}
                      />
                   </div>
                   <div className='socialComment'>
-                     <Text className='viewAll'>View all comment</Text>
+                     <Text
+                        className='viewAll'
+                        onClick={() => onClickViewDetail(post)}
+                     >
+                        View all comment
+                     </Text>
                      <Table
                         rowKey={(record) => record.id}
                         dataSource={post.comments}
@@ -226,7 +233,7 @@ function SocialPost(props) {
                handleClickCameraIcon={handleClickCameraIcon}
                onClickUnlike={onClickUnlike}
                onClickLike={onClickLike}
-               photoURL={photoURL}
+               handleCommentInPostDetail={handleCommentInPostDetail}
             />
          )}
       </>

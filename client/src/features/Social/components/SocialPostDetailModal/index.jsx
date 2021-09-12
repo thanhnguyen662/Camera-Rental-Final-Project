@@ -12,6 +12,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 import Slider from 'react-slick';
 import SocialInputComment from '../SocialInputComment';
 import SocialPostButtonGroup from '../SocialPostButtonGroup';
@@ -27,7 +28,7 @@ SocialPostDetailModal.propTypes = {
    handleClickCameraIcon: PropTypes.func,
    onClickLike: PropTypes.func,
    onClickUnlike: PropTypes.func,
-   photoURL: PropTypes.string,
+   handleCommentInPostDetail: PropTypes.func,
 };
 
 SocialPostDetailModal.defaultProps = {
@@ -37,10 +38,13 @@ SocialPostDetailModal.defaultProps = {
    handleClickCameraIcon: null,
    onClickLike: null,
    onClickUnlike: null,
-   photoURL: '',
+   handleCommentInPostDetail: null,
 };
 
 function SocialPostDetailModal(props) {
+   const photoURL = useSelector((state) => state.users.photoURL);
+   const userId = useSelector((state) => state.users.id);
+
    const [page, setPage] = useState(1);
    const [comments, setComments] = useState([]);
    const [show, setShow] = useState(false);
@@ -52,7 +56,7 @@ function SocialPostDetailModal(props) {
       handleClickCameraIcon,
       onClickUnlike,
       onClickLike,
-      photoURL,
+      handleCommentInPostDetail,
    } = props;
 
    const settings = {
@@ -74,6 +78,7 @@ function SocialPostDetailModal(props) {
                postId: postDetail.id,
                page: page,
             });
+            console.log(response);
             setComments((prev) => [...prev, ...response]);
             response.length >= 5 ? setShow(true) : setShow(false);
          };
@@ -82,6 +87,16 @@ function SocialPostDetailModal(props) {
          console.error(error);
       }
    }, [postDetail, page]);
+
+   const handleCommentInputEnter = async (formData) => {
+      try {
+         const response = await postApi.createCommentInPost(formData);
+         setComments((prev) => [response, ...prev]);
+         handleCommentInPostDetail(response);
+      } catch (error) {
+         console.log(error);
+      }
+   };
 
    return (
       <>
@@ -158,7 +173,12 @@ function SocialPostDetailModal(props) {
                            />
                         </div>
                         <div className='postInputComment'>
-                           <SocialInputComment photoURL={photoURL} />
+                           <SocialInputComment
+                              photoURL={photoURL}
+                              userId={userId}
+                              postDetail={postDetail}
+                              handleCommentInputEnter={handleCommentInputEnter}
+                           />
                         </div>
                      </div>
                   </Col>

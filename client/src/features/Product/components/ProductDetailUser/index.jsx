@@ -9,23 +9,20 @@ import './ProductDetailUser.scss';
 
 ProductDetailUser.propTypes = {
    productDetail: PropTypes.object,
-   myProduct: PropTypes.number,
    myStats: PropTypes.object,
 };
 
 ProductDetailUser.defaultProps = {
    productDetail: {},
-   myProduct: 0,
    myStats: {},
 };
 
 const { Text } = Typography;
 
 function ProductDetailUser(props) {
-   const { productDetail, myProduct, myStats } = props;
+   const { productDetail, myStats } = props;
 
    const userId = useSelector((state) => state.users.id);
-
    const [sendMessage, setSendMessage] = useState();
 
    const onClickSendMessage = async () => {
@@ -59,7 +56,7 @@ function ProductDetailUser(props) {
                }}
             />
          )}
-         <Row span={24} className='user' justify='space-around' align='middle'>
+         <Row span={24} className='user' align='middle'>
             {!productDetail.User?.photoURL || !productDetail.User?.username ? (
                <>
                   <Skeleton.Input
@@ -70,15 +67,22 @@ function ProductDetailUser(props) {
                </>
             ) : (
                <>
-                  <Col span={2}>
+                  <Col span={6}>
                      <Avatar
                         className='userAvatar'
                         size={82}
                         src={productDetail.User.photoURL}
                      />
                   </Col>
-                  <Col span={7} className='userInfo'>
-                     <h4>{productDetail.User.username}</h4>
+                  <Col span={18} className='userInfo'>
+                     <div style={{ marginBottom: 5 }}>
+                        <Text className='userName'>
+                           {productDetail.User.username} |{' '}
+                        </Text>
+                        <Text className='phoneNumber'>
+                           {productDetail.User.phoneNumber}
+                        </Text>
+                     </div>
                      <div className='buttonGroup'>
                         <Space size={10}>
                            <Button
@@ -98,14 +102,14 @@ function ProductDetailUser(props) {
                         </Space>
                      </div>
                   </Col>
-                  <Col span={13}>
+                  <Col span={24}>
                      <div className='infoGird'>
                         <Row className='infoRow'>
                            <Col span={8}>
                               <Space direction='vertical '>
                                  <Text className='titleRate'>Product</Text>
                                  <Text className='titleScore'>
-                                    {myProduct || 0}
+                                    {myStats.user?._count.products}
                                  </Text>
                               </Space>
                            </Col>
@@ -121,7 +125,7 @@ function ProductDetailUser(props) {
                               <Space direction='vertical '>
                                  <Text className='titleRate'>Orders</Text>
                                  <Text className='titleScore'>
-                                    {myStats.totalOrder || 0}
+                                    {myStats.user?._count.orders}
                                  </Text>
                               </Space>
                            </Col>

@@ -209,18 +209,26 @@ function SocialPage(props) {
       try {
          const response = await postApi.createCommentInPost(formData);
          console.log('commented', response);
-         setPosts((prev) => {
-            const findIndex = prev.findIndex(
-               (post) => post.id === response.postId
-            );
-            prev[findIndex].comments = [...prev[findIndex].comments, response];
-            prev[findIndex]._count.comments += 1;
-
-            return [...prev];
-         });
+         updateNewCommentToPost(response);
       } catch (error) {
          console.log(error);
       }
+   };
+
+   const handleCommentInPostDetail = async (response) => {
+      updateNewCommentToPost(response);
+   };
+
+   const updateNewCommentToPost = async (response) => {
+      setPosts((prev) => {
+         const findIndex = prev.findIndex(
+            (post) => post.id === response.postId
+         );
+         prev[findIndex].comments = [response, ...prev[findIndex].comments];
+         prev[findIndex]._count.comments += 1;
+
+         return [...prev];
+      });
    };
 
    return (
@@ -257,6 +265,7 @@ function SocialPage(props) {
                         handleClickLike={handleClickLike}
                         updateWhenClickAddToCart={updateWhenClickAddToCart}
                         handleOnComment={handleOnComment}
+                        handleCommentInPostDetail={handleCommentInPostDetail}
                      />
                   </Space>
                </Col>

@@ -66,6 +66,18 @@ class AccountController {
             where: {
                userId: req.query.userId,
             },
+            include: {
+               user: {
+                  select: {
+                     _count: {
+                        select: {
+                           orders: true,
+                           products: true,
+                        },
+                     },
+                  },
+               },
+            },
          });
 
          res.status(200).json(response);

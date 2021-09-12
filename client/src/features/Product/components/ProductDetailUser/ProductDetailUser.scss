@@ -1,30 +1,33 @@
-.productDetailCard{
-   .user{
-      margin: 17px 0px 10px 0px;
+.productDetailCard {
+   .user {
+      margin: 20px 0;
       border-radius: 10px;
       background: white;
-      width: 102%;
 
-      .userAvatar{
+      .userAvatar {
          margin: 18px;
       }
 
-      .avatarLoading{
+      .avatarLoading {
          width: 50%;
          margin: 10px 20px 10px 20px;
       }
 
-      .userInfo{
-
-         h4{
-            font-size: 17px;
+      .userInfo {
+         .userName {
+            font-size: 18px;
+            font-weight: bold;
          }
 
-         .buttonGroup{
-            button{
+         .phoneNumber {
+            font-size: 16px;
+         }
+
+         .buttonGroup {
+            button {
                width: 125px;
                border-radius: 5px;
-               span{
+               span {
                   font-size: 13.5px;
                   font-weight: 400;
                }
@@ -32,14 +35,14 @@
          }
       }
 
-      .infoGird{
-         .infoRow{
+      .infoGird {
+         .infoRow {
             text-align: center;
-            .titleRate{
+            .titleRate {
                font-weight: 700;
                font-size: 17px;
             }
-            .titleScore{
+            .titleScore {
                font-size: 14px;
                font-weight: 500;
             }

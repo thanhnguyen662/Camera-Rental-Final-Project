@@ -128,11 +128,11 @@ class PostController {
                post.like = post.like.length;
             });
 
-         response.map((r) => {
-            r.comments.sort((a, b) => {
-               return new Date(a.createdAt) - new Date(b.createdAt);
-            });
-         });
+         // response.map((r) => {
+         //    r.comments.sort((a, b) => {
+         //       return new Date(a.createdAt) - new Date(b.createdAt);
+         //    });
+         // });
 
          return res.status(200).json(response);
       } catch (error) {
@@ -253,6 +253,7 @@ class PostController {
                   select: {
                      username: true,
                      firebaseId: true,
+                     photoURL: true,
                   },
                },
             },
@@ -341,6 +342,7 @@ class PostController {
                   },
                },
             },
+            orderBy: { createdAt: 'desc' },
          });
 
          return res.status(200).json(response);

@@ -21,7 +21,7 @@ function SocialPostHeader(props) {
       <>
          <div className='postUserInfo'>
             <Row span={24} justify='center' align='middle'>
-               <Col flex='auto'>
+               <Col span={23}>
                   <Space size={11}>
                      <Avatar size={40} src={postDetail.user?.photoURL} />
                      <div>
@@ -36,7 +36,7 @@ function SocialPostHeader(props) {
                      </div>
                   </Space>
                </Col>
-               <Col span={2}>
+               <Col span={1}>
                   <EllipsisOutlined className='ellipsisOutlinedIcon' />
                </Col>
             </Row>
