@@ -1,16 +1,15 @@
 import {
+   AimOutlined,
    CheckCircleOutlined,
    FileProtectOutlined,
    SmileOutlined,
    UserOutlined,
-   AimOutlined,
 } from '@ant-design/icons';
 import {
    Avatar,
    Button,
    Col,
    DatePicker,
-   Modal,
    Row,
    Skeleton,
    Space,
@@ -43,8 +42,6 @@ function ProductDetailDescription(props) {
    const { productDetail, onClickToAddProduct, orderInToday } = props;
    const [startDate, setStartDate] = useState('');
    const [endDate, setEndDate] = useState('');
-   const [more, setMore] = useState(null);
-   const [isModalVisible, setIsModalVisible] = useState(false);
    const [clickMap, setClickMap] = useState(false);
    const [clickLocate, setClickLocate] = useState(false);
 
@@ -129,26 +126,9 @@ function ProductDetailDescription(props) {
 
                   <div className='productDescriptionRow'>
                      <div className='productDescription'>
-                        <Paragraph
-                           className='description'
-                           ellipsis={{
-                              rows: 4,
-                              onEllipsis: (ellipsis) => {
-                                 setMore(ellipsis);
-                              },
-                           }}
-                        >
+                        <Paragraph className='description'>
                            <>{parse(productDetail.description)}</>
                         </Paragraph>
-
-                        {more === true && (
-                           <h5
-                              className='readMore'
-                              onClick={() => setIsModalVisible(true)}
-                           >
-                              more details
-                           </h5>
-                        )}
                      </div>
                   </div>
                   <Row span={24} className='buttonRow'>
@@ -237,17 +217,6 @@ function ProductDetailDescription(props) {
                   </Row>
                </div>
             </>
-         )}
-
-         {more === true && (
-            <Modal
-               title='Product Description'
-               visible={isModalVisible}
-               onOk={() => setIsModalVisible(false)}
-               onCancel={() => setIsModalVisible(false)}
-            >
-               <Paragraph>{parse(productDetail.description)}</Paragraph>
-            </Modal>
          )}
       </>
    );

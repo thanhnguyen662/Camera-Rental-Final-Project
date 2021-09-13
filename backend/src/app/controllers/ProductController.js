@@ -25,14 +25,6 @@ class ProductController {
             },
             include: {
                User: true,
-               productComments: {
-                  include: {
-                     user: true,
-                  },
-                  orderBy: {
-                     createdAt: 'desc',
-                  },
-               },
                orderItems: true,
                pins: true,
                categories: true,
@@ -42,6 +34,29 @@ class ProductController {
          return res.status(200).json(getProductDetail);
       } catch (error) {
          // return res.status(404).send({ message: 'Cant find product details' });
+         return next(error);
+      }
+   };
+
+   getProductComment = async (req, res, next) => {
+      try {
+         const page = Number(req.query.page);
+         const take = 3;
+         const response = await prisma.productComment.findMany({
+            take: take,
+            skip: (page - 1) * take,
+            where: { productId: Number(req.query.productId) },
+            include: { user: true },
+            orderBy: {
+               createdAt: 'desc',
+            },
+         });
+
+         const count = await prisma.productComment.count({
+            where: { productId: Number(req.query.productId) },
+         });
+         res.status(200).json({ comments: response, count: count });
+      } catch (error) {
          return next(error);
       }
    };
@@ -206,6 +221,21 @@ class ProductController {
          });
 
          return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getOtherProductInShop = async (req, res, next) => {
+      try {
+         const response = await prisma.product.findMany({
+            where: {
+               User: { firebaseId: req.query.userId },
+            },
+            orderBy: { updatedAt: 'desc' },
+         });
+
+         res.status(200).json(response);
       } catch (error) {
          return next(error);
       }

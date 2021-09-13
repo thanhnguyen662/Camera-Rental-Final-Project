@@ -13,6 +13,11 @@ const productApi = {
       });
    },
 
+   getProductComment: (params) => {
+      const url = `/product/comments`;
+      return axiosClient.get(url, { params });
+   },
+
    createProduct: (data) => {
       const url = '/product/createProduct';
       return axiosClient.post(url, data);
@@ -41,6 +46,11 @@ const productApi = {
    newProduct: () => {
       const url = '/product/newProduct';
       return axiosClient.get(url);
+   },
+
+   otherProductInShop: (params) => {
+      const url = '/product/other';
+      return axiosClient.get(url, { params });
    },
 };
 

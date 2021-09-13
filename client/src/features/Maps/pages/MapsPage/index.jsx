@@ -63,6 +63,12 @@ function MapsPage(props) {
       if (!location || dataCollect.length === 0) return;
       const getPinByOrder = async () => {
          if (!location.state) return;
+         // console.log({
+         //    district,
+         //    district1,
+         //    district2,
+         //    productName: location.state.productDetail.name,
+         // });
          let response = [];
          try {
             if (location.state.type === 'searchNearMe') {

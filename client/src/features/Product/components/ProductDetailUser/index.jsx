@@ -1,4 +1,8 @@
-import { MessageOutlined } from '@ant-design/icons';
+import {
+   IdcardOutlined,
+   MessageOutlined,
+   PhoneOutlined,
+} from '@ant-design/icons';
 import { Avatar, Button, Col, Row, Skeleton, Space, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -32,7 +36,6 @@ function ProductDetailUser(props) {
             receiverId: productDetail.User.firebaseId,
          };
          const response = await conversationApi.createConversation(data);
-         console.log('conversation: ', response);
          setSendMessage(response);
       } catch (error) {
          console.log(error);
@@ -70,21 +73,66 @@ function ProductDetailUser(props) {
                   <Col span={6}>
                      <Avatar
                         className='userAvatar'
-                        size={82}
+                        size={78}
                         src={productDetail.User.photoURL}
                      />
                   </Col>
                   <Col span={18} className='userInfo'>
-                     <div style={{ marginBottom: 5 }}>
+                     <div>
                         <Text className='userName'>
-                           {productDetail.User.username} |{' '}
+                           {productDetail.User.username}
                         </Text>
-                        <Text className='phoneNumber'>
-                           {productDetail.User.phoneNumber}
-                        </Text>
+                        <div style={{ display: 'block' }}>
+                           <Space>
+                              <PhoneOutlined className='phoneNumber' />
+                              <Text className='phoneNumber'>
+                                 {productDetail.User.phoneNumber}
+                              </Text>
+                           </Space>
+                        </div>
+                        <div>
+                           <Space>
+                              <IdcardOutlined className='phoneNumber' />
+                              <Text className='phoneNumber'>
+                                 {productDetail.User.description}
+                              </Text>
+                           </Space>
+                        </div>
                      </div>
+                  </Col>
+                  <Col span={24}>
+                     <div className='infoGird'>
+                        <Row className='infoRow'>
+                           <Col span={8}>
+                              <Space direction='vertical' size={4}>
+                                 <Text className='titleScore'>
+                                    {myStats.user?._count.products}
+                                 </Text>
+                                 <Text className='titleRate'>Product</Text>
+                              </Space>
+                           </Col>
+                           <Col span={8}>
+                              <Space direction='vertical' size={4}>
+                                 <Text className='titleScore'>
+                                    {productDetail.User.rate || 0} / 5
+                                 </Text>
+                                 <Text className='titleRate'>Rate</Text>
+                              </Space>
+                           </Col>
+                           <Col span={8}>
+                              <Space direction='vertical' size={4}>
+                                 <Text className='titleScore'>
+                                    {myStats.user?._count.orders}
+                                 </Text>
+                                 <Text className='titleRate'>Orders</Text>
+                              </Space>
+                           </Col>
+                        </Row>
+                     </div>
+                  </Col>
+                  <Col span={24}>
                      <div className='buttonGroup'>
-                        <Space size={10}>
+                        <Space size={15}>
                            <Button
                               icon={<MessageOutlined />}
                               onClick={onClickSendMessage}
@@ -92,7 +140,7 @@ function ProductDetailUser(props) {
                            >
                               Message
                            </Button>
-                           <Button>
+                           <Button type='primary'>
                               <Link
                                  to={`/profile/${productDetail.User?.firebaseId}`}
                               >
@@ -100,36 +148,6 @@ function ProductDetailUser(props) {
                               </Link>
                            </Button>
                         </Space>
-                     </div>
-                  </Col>
-                  <Col span={24}>
-                     <div className='infoGird'>
-                        <Row className='infoRow'>
-                           <Col span={8}>
-                              <Space direction='vertical '>
-                                 <Text className='titleRate'>Product</Text>
-                                 <Text className='titleScore'>
-                                    {myStats.user?._count.products}
-                                 </Text>
-                              </Space>
-                           </Col>
-                           <Col span={8}>
-                              <Space direction='vertical '>
-                                 <Text className='titleRate'>Rate</Text>
-                                 <Text className='titleScore'>
-                                    {productDetail.User.rate || 0}
-                                 </Text>
-                              </Space>
-                           </Col>
-                           <Col span={8}>
-                              <Space direction='vertical '>
-                                 <Text className='titleRate'>Orders</Text>
-                                 <Text className='titleScore'>
-                                    {myStats.user?._count.orders}
-                                 </Text>
-                              </Space>
-                           </Col>
-                        </Row>
                      </div>
                   </Col>
                </>

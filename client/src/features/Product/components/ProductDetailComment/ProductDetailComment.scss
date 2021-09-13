@@ -5,14 +5,19 @@
 
    .productDetailComment {
       min-height: 100px;
-      padding-bottom: 15px;
 
       p {
          font-size: 13px;
       }
 
       .ant-comment-inner {
-         padding: 5px 0;
+         padding: 5px 10px 6px 0px;
+      }
+
+      .ant-comment-avatar img {
+         margin-left: 5px;
+         width: 42px;
+         height: 42px;
       }
 
       .ant-comment-actions {
@@ -21,6 +26,11 @@
 
       .ant-list-header {
          margin-bottom: 5px;
+      }
+
+      .emptyComment {
+         margin-top: 25px;
+         text-align: center;
       }
    }
 }

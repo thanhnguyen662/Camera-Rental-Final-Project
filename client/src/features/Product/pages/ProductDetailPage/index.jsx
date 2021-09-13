@@ -8,6 +8,7 @@ import productApi from '../../../../api/productApi';
 import userApi from '../../../../api/userApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import openNotificationWithIcon from '../../../../components/Notification';
+import ProductCard from '../../components/ProductCard';
 import ProductDetailComment from '../../components/ProductDetailComment';
 import ProductDetailDescription from '../../components/ProductDetailDescription';
 import ProductDetailImage from '../../components/ProductDetailImage';
@@ -23,13 +24,14 @@ function ProductDetailPage(props) {
    const [productDetail, setProductDetail] = useState();
    const [orderInToday, setOrderInToday] = useState([]);
    const [myStats, setMyStats] = useState({});
+   const [otherProducts, setOtherProducts] = useState([]);
 
    useEffect(() => {
       const getProductDetail = async () => {
          try {
             const response = await productApi.getProductDetail(slug);
             setProductDetail(response);
-            console.log(response);
+
             const statsOfMe = await userApi.getUserStats({
                userId: response.User.firebaseId,
             });
@@ -55,6 +57,17 @@ function ProductDetailPage(props) {
       };
       getOrderProductInToday();
    }, [slug]);
+
+   useEffect(() => {
+      if (!userId) return;
+      const getOtherProductInShop = async () => {
+         const response = await productApi.otherProductInShop({
+            userId: userId,
+         });
+         setOtherProducts(response);
+      };
+      getOtherProductInShop();
+   }, [userId]);
 
    const handleOnClickToAddProduct = async (product) => {
       try {
@@ -114,6 +127,10 @@ function ProductDetailPage(props) {
                   <ProductDetailComment productDetail={productDetail} />
                </Col>
             </Row>
+         </div>
+         <div>
+            <h1>Other product in shop</h1>
+            <ProductCard products={otherProducts} />
          </div>
       </div>
    );
