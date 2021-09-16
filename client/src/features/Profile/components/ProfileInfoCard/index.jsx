@@ -1,99 +1,67 @@
-import {
-   IdcardOutlined,
-   HomeOutlined,
-   ClusterOutlined,
-} from '@ant-design/icons';
-import { Avatar, Card, Typography, Row, Col, Divider, Tag, Spin } from 'antd';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import { CommentOutlined } from '@ant-design/icons';
+import { Button, Col, Image, Row, Space, Tag, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import './ProfileInfoCard.scss';
 
 const { Title, Text } = Typography;
 
 function ProfileInfoCard(props) {
-   const { email, photoURL, name, userProfile } = props;
+   const { photoURL, name, userProfile } = props;
    const [split, setSplit] = useState();
+
    useEffect(() => {
-      if (userProfile?.hasTag) {
-         const splitStr = userProfile?.hasTag.split(/[\s,]+/);
-         setSplit(splitStr);
-      } else {
-         console.log('WAIT HASTAG');
-      }
+      if (!userProfile?.hasTag) return;
+      const splitStr = userProfile?.hasTag.split(/[\s,]+/);
+      setSplit(splitStr);
    }, [userProfile?.hasTag]);
+
+   const source = {
+      header:
+         'https://images.hdqwalls.com/download/simple-blue-gradients-abstract-8k-nh-1366x768.jpg',
+   };
+
+   const tagColor = ['#f50', '#2db7f5', ' #87d068', ' #108ee9'];
+   const tag = (t) => {
+      const random = Math.floor(Math.random() * tagColor.length);
+      return (
+         <Tag color={tagColor[random]} key={t}>
+            {t}
+         </Tag>
+      );
+   };
 
    return (
       <>
-         <Card>
-            <Row justify='center'>
-               <Col>
-                  <Avatar
-                     size={80}
-                     src={photoURL}
-                     style={{ marginBottom: '10px' }}
-                  />
-               </Col>
-            </Row>
-            <Row justify='center'>
-               <Col>
-                  <Title level={4} style={{ margin: '3px 0px 1px' }}>
-                     {name}
-                  </Title>
-               </Col>
-            </Row>
-            <Row justify='center'>
-               <Col>
-                  <Text italic='true'>{email}</Text>
-               </Col>
-            </Row>
-
-            {!userProfile ? (
-               <Spin />
-            ) : (
-               <>
-                  <Row style={{ marginTop: '20px' }}>
-                     <Col flex='28px' offset={2}>
-                        <IdcardOutlined />
-                     </Col>
-                     <Col flex='auto'>
-                        <Text>{userProfile?.firebaseId}</Text>
-                     </Col>
-                  </Row>
-                  <Row>
-                     <Col flex='28px' offset={2}>
-                        <ClusterOutlined />
-                     </Col>
-                     <Col flex='auto'>
-                        <Text>{userProfile?.description}</Text>
-                     </Col>
-                  </Row>
-                  <Row>
-                     <Col flex='28px' offset={2}>
-                        <HomeOutlined />
-                     </Col>
-                     <Col flex='auto'>
-                        <Text>{userProfile?.address}</Text>
-                     </Col>
-                  </Row>
-               </>
-            )}
-
-            <Divider orientation='left'>#hastag</Divider>
-            {!split ? (
-               <></>
-            ) : (
-               split.map((hastag) => (
-                  <Tag key={split.indexOf(hastag)}>{hastag}</Tag>
-               ))
-            )}
-            <Divider orientation='left'>favourite gear</Divider>
-            <Row gutter={[24, 24]}>
-               <Col span={12}>TEST</Col>
-               <Col span={12}>TEST</Col>
-
-               <Col span={12}>TEST</Col>
-               <Col span={12}>TEST</Col>
-            </Row>
-         </Card>
+         <div className='infoCard'>
+            <div className='coverImage'>
+               <Image src={source.header} preview={false} />
+            </div>
+            <div className='avatarImage'>
+               <Image src={photoURL} />
+            </div>
+            <div className='userInfo'>
+               <Row>
+                  <Col flex='auto' offset={5}>
+                     <Title level={2} className='name'>
+                        {name}
+                     </Title>
+                     <Text className='description'>
+                        {userProfile?.description}
+                     </Text>
+                     <Text className='address'>{userProfile?.address}</Text>
+                     <div className='tag'>{split?.map((t) => tag(t))}</div>
+                  </Col>
+                  <Col flex='165px'>
+                     <Button className='sendMessage' type='primary'>
+                        <Space>
+                           <CommentOutlined />
+                           <div>Send Message</div>
+                        </Space>
+                     </Button>
+                  </Col>
+               </Row>
+            </div>
+         </div>
       </>
    );
 }

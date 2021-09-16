@@ -6,15 +6,15 @@ import ProfileRelationCard from '../../components/ProfileRelationCard';
 import userApi from '../../../../api/userApi';
 
 function ProfilePage(props) {
-   const email = useSelector((state) => state.users.email);
    const name = useSelector((state) => state.users.name);
    const photoURL = useSelector((state) => state.users.photoURL);
    const uid = useSelector((state) => state.users.id);
+
    const [userProfile, setUserProfile] = useState();
 
    useEffect(() => {
+      if (!uid) return;
       const getUserProfile = async () => {
-         if (!uid) return console.log('WAIT');
          const response = await userApi.getUserProfile({ firebaseId: uid });
          setUserProfile(response);
       };
@@ -23,17 +23,16 @@ function ProfilePage(props) {
 
    return (
       <>
-         <Row gutter={[25, 0]}>
-            <Col span={8}>
+         <Row gutter={[20, 0]}>
+            <Col span={17}>
                <ProfileInfoCard
-                  email={email}
                   photoURL={photoURL}
                   name={name}
                   userProfile={userProfile}
                />
             </Col>
-            <Col flex='auto'>
-               <ProfileRelationCard />
+            <Col span={7}>
+               <ProfileRelationCard userProfile={userProfile} />
             </Col>
          </Row>
       </>

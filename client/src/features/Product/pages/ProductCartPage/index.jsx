@@ -155,16 +155,7 @@ function ProductCardPage(props) {
                during: String(duringHoursPerRow),
             });
          });
-         console.log('filter', groupProductByUsername);
-         console.log('sumPriceArray', sumArray(sumPriceArray));
 
-         console.log('test', {
-            orderStatusId: 1,
-            address: userAddress,
-            totalPrice: sumArray(sumPriceArray),
-            userId: userId,
-            orderItem: groupProductByUsername,
-         });
          const response = await orderApi
             .createOrder({
                orderStatusId: 1,

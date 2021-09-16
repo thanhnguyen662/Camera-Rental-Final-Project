@@ -1,0 +1,44 @@
+.relationCard {
+   .title {
+      margin-bottom: 0.25em;
+   }
+   .address {
+      margin-bottom: 15px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      background: white;
+      // box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+
+      .icon {
+         font-size: 18px;
+      }
+   }
+
+   .userStats {
+      margin-bottom: 15px;
+      padding: 12px 20px 15px;
+      border-radius: 10px;
+      background: white;
+      // box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+
+      .ant-statistic {
+         line-height: 1;
+      }
+
+      .ant-statistic-content {
+         font-size: 18px;
+      }
+
+      .statsIcon {
+         margin: 0 2px -1px 0;
+      }
+   }
+
+   .userMap {
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+      margin-bottom: 15px;
+      height: 235px;
+   }
+}
