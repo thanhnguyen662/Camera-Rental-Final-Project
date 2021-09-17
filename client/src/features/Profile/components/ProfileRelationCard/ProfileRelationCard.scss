@@ -1,4 +1,6 @@
 .relationCard {
+   position: sticky;
+   top: 20px;
    .title {
       margin-bottom: 0.25em;
    }
@@ -32,13 +34,5 @@
       .statsIcon {
          margin: 0 2px -1px 0;
       }
-   }
-
-   .userMap {
-      border-radius: 10px;
-      overflow: hidden;
-      background: white;
-      margin-bottom: 15px;
-      height: 235px;
    }
 }

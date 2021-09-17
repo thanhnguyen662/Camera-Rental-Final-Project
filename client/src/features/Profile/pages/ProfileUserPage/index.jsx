@@ -1,17 +1,18 @@
-import { Button, Col, Row } from 'antd';
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, useParams } from 'react-router-dom';
 import conversationApi from '../../../../api/conversationApi';
 import userApi from '../../../../api/userApi';
 import ProfileInfoCard from '../../components/ProfileInfoCard';
+import ProfileRelationCard from '../../components/ProfileRelationCard';
 
 function ProfileUserPage(props) {
    const { firebaseId } = useParams();
-
    const userId = useSelector((state) => state.users.id);
 
-   const [userInfo, setUserInfo] = useState([]);
+   const [userInfo, setUserInfo] = useState({});
+   const [userStats, setUserStats] = useState({});
    const [userInfoFirebase, setUserInfoFirebase] = useState([]);
    const [sendMessage, setSendMessage] = useState();
 
@@ -22,7 +23,11 @@ function ProfileUserPage(props) {
                firebaseId: firebaseId,
             });
             setUserInfo(response);
-            console.log('getUserByParams', response);
+
+            const userStats = await userApi.getUserStats({
+               userId: firebaseId,
+            });
+            setUserStats(userStats);
          } catch (error) {
             return console.log('Error: ', error);
          }
@@ -46,7 +51,7 @@ function ProfileUserPage(props) {
 
    const onClickSendMessage = async () => {
       try {
-         if (!userId) return console.log('WAIT FOR REDUX');
+         if (!userId) return;
          const formValues = {
             senderId: userId,
             receiverId: firebaseId,
@@ -72,21 +77,23 @@ function ProfileUserPage(props) {
                }}
             />
          )}
-         <div style={{ minHeight: 360 }}>
-            <Row gutter={[12, 0]}>
-               <Col span={8}>
-                  <ProfileInfoCard
-                     email={userInfoFirebase?.email}
-                     photoURL={userInfo?.photoURL}
-                     name={userInfoFirebase?.displayName}
-                     userProfile={userInfo}
-                  />
-               </Col>
-               <Col flex='auto'>
-                  <Button onClick={onClickSendMessage}>Send Message</Button>
-               </Col>
-            </Row>
-         </div>
+         <Row gutter={[20, 0]}>
+            <Col span={17}>
+               <ProfileInfoCard
+                  photoURL={userInfo?.photoURL}
+                  name={userInfoFirebase?.displayName}
+                  userProfile={userInfo}
+                  userId={userId}
+                  onClickSendMessage={onClickSendMessage}
+               />
+            </Col>
+            <Col span={7}>
+               <ProfileRelationCard
+                  userProfile={userInfo}
+                  userStats={userStats}
+               />
+            </Col>
+         </Row>
       </>
    );
 }

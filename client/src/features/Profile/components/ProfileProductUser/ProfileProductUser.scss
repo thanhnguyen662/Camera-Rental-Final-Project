@@ -1,7 +1,7 @@
-.productCard {
-   min-width: 210px;
+.profileProductCard {
+   min-width: 150px;
    background: white;
-   padding: 24px 22px 15px 22px;
+   padding: 16px 12px 8px 12px;
    border-radius: 10px;
    transition: all 0.5s;
 
@@ -23,7 +23,7 @@
    }
 
    p {
-      font-size: 15px;
+      font-size: 12px;
       margin-bottom: 0px;
 
       a {
@@ -32,17 +32,17 @@
       }
    }
 
-   h4 {
-      display: inline;
-      margin-left: 15px;
-      margin-top: 10px;
+   .rateNumber {
+      font-size: 10px;
+      margin-left: 5px;
       color: #2e1e70;
+      font-weight: 500;
    }
 
    h1 {
       font-weight: 700;
-      font-size: 21px;
-      margin-top: 10px;
+      font-size: 17px;
+      margin-top: 5px;
       margin-bottom: -2px;
       color: #2e1e70;
    }
@@ -55,22 +55,16 @@
       display: inline-block;
       margin-left: 2px;
       font-weight: 700;
+      font-size: 11px;
    }
 
    h6 {
       display: inline-block;
-      font-size: 9.5px;
+      font-size: 9px;
       margin-left: 3px;
    }
 
    .progressBar {
       width: 18%;
    }
-}
-
-h1 {
-   color: #200e66;
-   font-size: 25px;
-   font-weight: 900;
-   margin-bottom: 25px;
 }

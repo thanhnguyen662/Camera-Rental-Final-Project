@@ -1,12 +1,24 @@
 import { Col, Row, Space, Statistic, Typography } from 'antd';
-import { BsCursor, BsStar, BsPersonCheck } from 'react-icons/bs';
 import React from 'react';
-import './ProfileRelationCard.scss';
+import { BsCursor, BsPersonCheck, BsStar } from 'react-icons/bs';
 import ProfileAddressMap from '../ProfileAddressMap';
+import PropTypes from 'prop-types';
+import './ProfileRelationCard.scss';
 
 const { Title, Text } = Typography;
 
+ProfileAddressMap.propTypes = {
+   userProfile: PropTypes.object,
+   userStats: PropTypes.object,
+};
+
+ProfileAddressMap.defaultProps = {
+   userProfile: {},
+   userStats: {},
+};
+
 function ProfileRelationCard(props) {
+   const { userProfile, userStats } = props;
    return (
       <>
          <div className='relationCard'>
@@ -16,13 +28,11 @@ function ProfileRelationCard(props) {
                </Title>
                <Space align='start'>
                   <BsCursor className='icon' />
-                  <Text>
-                     52 Thanh Thuy, Thanh Binh, Hai Chau, Thanh Pho Da Nang.
-                  </Text>
+                  <Text>{userProfile?.address}</Text>
                </Space>
             </div>
             <Row gutter={[15, 15]}>
-               <Col span={10}>
+               <Col span={12}>
                   <div className='userStats'>
                      <Statistic
                         title={
@@ -30,13 +40,13 @@ function ProfileRelationCard(props) {
                               User Rate
                            </Title>
                         }
-                        value={4}
+                        value={userProfile?.rate}
                         suffix={'/ 5'}
                         prefix={<BsStar className='statsIcon' />}
                      />
                   </div>
                </Col>
-               <Col span={14}>
+               <Col span={12}>
                   <div className='userStats'>
                      <Statistic
                         title={
@@ -44,7 +54,7 @@ function ProfileRelationCard(props) {
                               Success Rate
                            </Title>
                         }
-                        value={100}
+                        value={userStats?.success}
                         suffix={'%'}
                         prefix={<BsPersonCheck className='statsIcon' />}
                      />
@@ -52,7 +62,10 @@ function ProfileRelationCard(props) {
                </Col>
             </Row>
             <div className='userMap'>
-               <ProfileAddressMap />
+               <ProfileAddressMap
+                  userAddress={userProfile.address}
+                  userPhoto={userProfile.photoURL}
+               />
             </div>
          </div>
       </>

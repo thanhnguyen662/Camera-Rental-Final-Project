@@ -1,4 +1,8 @@
-import { SearchOutlined } from '@ant-design/icons';
+import {
+   SearchOutlined,
+   UserOutlined,
+   CameraOutlined,
+} from '@ant-design/icons';
 import { Col, Row, Select, Tag } from 'antd';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -11,31 +15,48 @@ function SearchBar(props) {
    const timeout = useRef(null);
 
    const [searchResult, setSearchResult] = useState([]);
+   const [searchType, setSearchType] = useState('gear');
    const history = useHistory();
 
    const handleOnSearchChange = (value) => {
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => {
          const formValues = {
-            productName: value,
+            searchKeyword: value,
          };
          onSearchForm(formValues);
       }, 400);
    };
 
    const onSearchForm = async (formValues) => {
-      if (formValues.productName === '') return;
+      if (formValues.searchKeyword === '') return;
       try {
-         const response = await searchApi.suggestion(formValues);
-         setSearchResult([
-            {
-               id: 'user input',
-               name: formValues.productName,
-               tag: 'all',
-            },
-            ...response,
-         ]);
-         console.log('Search: ', response);
+         if (searchType === 'gear') {
+            console.log(searchType);
+            const response = await searchApi.gearSuggestion(formValues);
+            setSearchResult([
+               {
+                  id: 'user input',
+                  name: formValues.searchKeyword,
+                  tag: 'all',
+               },
+               ...response,
+            ]);
+            console.log('Gear: ', response);
+         }
+
+         if (searchType === 'user') {
+            const response = await searchApi.userSuggestion(formValues);
+            const newResponse = response.reduce((array, item) => {
+               array.push({
+                  id: item.firebaseId,
+                  name: item.username,
+               });
+               return array;
+            }, []);
+            setSearchResult(newResponse);
+            console.log('User: ', response);
+         }
       } catch (error) {
          console.log(error);
       }
@@ -45,12 +66,30 @@ function SearchBar(props) {
       <>
          <div className='searchContainer'>
             <Select
+               showArrow={false}
+               defaultValue={searchType}
+               style={{ marginRight: 10 }}
+               onSelect={(value) => setSearchType(value)}
+            >
+               <Option value='gear'>
+                  <CameraOutlined />
+               </Option>
+               <Option value='user'>
+                  <UserOutlined />
+               </Option>
+            </Select>
+            <Select
                onSearch={(value) => handleOnSearchChange(value)}
                showSearch={true}
                className='headerSearchBar'
                placeholder='Search'
                suffixIcon={<SearchOutlined className='headerSearchIcon' />}
-               onSelect={(value) => history.push(`/search/${value}`)}
+               onSelect={(value, option) => {
+                  if (searchType === 'gear')
+                     return history.push(`/search/${searchType}/${value}`);
+                  if (searchType === 'user')
+                     return history.push(`/profile/${option.key}`);
+               }}
             >
                {searchResult?.map((result) => (
                   <Option

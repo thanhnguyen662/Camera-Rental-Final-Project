@@ -8,7 +8,7 @@ function Search(props) {
 
    return (
       <Switch>
-         <Route path={`${match.url}/:keyword`} component={SearchPage} />
+         <Route path={`${match.url}/:type/:keyword`} component={SearchPage} />
       </Switch>
    );
 }

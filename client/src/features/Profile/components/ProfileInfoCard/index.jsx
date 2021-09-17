@@ -1,12 +1,30 @@
-import { CommentOutlined } from '@ant-design/icons';
+import { CommentOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Row, Space, Tag, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import './ProfileInfoCard.scss';
+import { Link } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
+ProfileInfoCard.propTypes = {
+   photoURL: PropTypes.string,
+   name: PropTypes.string,
+   userId: PropTypes.string,
+   userProfile: PropTypes.object,
+   onClickSendMessage: PropTypes.func,
+};
+
+ProfileInfoCard.defaultProps = {
+   photoURL: '',
+   name: '',
+   userId: '',
+   userProfile: {},
+   onClickSendMessage: null,
+};
+
 function ProfileInfoCard(props) {
-   const { photoURL, name, userProfile } = props;
+   const { photoURL, name, userProfile, userId, onClickSendMessage } = props;
    const [split, setSplit] = useState();
 
    useEffect(() => {
@@ -20,8 +38,8 @@ function ProfileInfoCard(props) {
          'https://images.hdqwalls.com/download/simple-blue-gradients-abstract-8k-nh-1366x768.jpg',
    };
 
-   const tagColor = ['#f50', '#2db7f5', ' #87d068', ' #108ee9'];
    const tag = (t) => {
+      const tagColor = ['#f50', '#2db7f5', ' #87d068', ' #108ee9'];
       const random = Math.floor(Math.random() * tagColor.length);
       return (
          <Tag color={tagColor[random]} key={t}>
@@ -51,13 +69,28 @@ function ProfileInfoCard(props) {
                      <Text className='address'>{userProfile?.address}</Text>
                      <div className='tag'>{split?.map((t) => tag(t))}</div>
                   </Col>
-                  <Col flex='165px'>
-                     <Button className='sendMessage' type='primary'>
-                        <Space>
-                           <CommentOutlined />
-                           <div>Send Message</div>
-                        </Space>
-                     </Button>
+                  <Col flex='165px' align='middle'>
+                     {userId === userProfile?.firebaseId ? (
+                        <Link to='/profile/edit'>
+                           <Button className='sendMessage'>
+                              <Space>
+                                 <UserOutlined />
+                                 <div>Edit Profile</div>
+                              </Space>
+                           </Button>
+                        </Link>
+                     ) : (
+                        <Button
+                           className='sendMessage'
+                           type='primary'
+                           onClick={onClickSendMessage}
+                        >
+                           <Space>
+                              <CommentOutlined />
+                              <div>Send Message</div>
+                           </Space>
+                        </Button>
+                     )}
                   </Col>
                </Row>
             </div>

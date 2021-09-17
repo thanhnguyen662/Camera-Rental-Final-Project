@@ -1,21 +1,20 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, Marker } from 'react-map-gl';
-import { useSelector } from 'react-redux';
-import { RiMapPin3Fill } from 'react-icons/ri';
 import './ProfileAddressMap.scss';
+import { Avatar } from 'antd';
 
 ProfileAddressMap.propTypes = {};
 
 function ProfileAddressMap(props) {
-   const userAddress = useSelector((state) => state.users.address);
+   const { userAddress, userPhoto } = props;
    const [coordinate, setCoordinate] = useState([]);
    const [viewport, setViewport] = useState({
       width: '100%',
       height: '100%',
       latitude: 16.080361568951535,
       longitude: 108.21269906483103,
-      zoom: 9,
+      zoom: 3,
    });
 
    useEffect(() => {
@@ -61,17 +60,11 @@ function ProfileAddressMap(props) {
             >
                {coordinate?.length > 0 && (
                   <Marker
-                     offsetTop={-30}
                      longitude={coordinate[0]}
                      latitude={coordinate[1]}
                      className='icon'
                   >
-                     <RiMapPin3Fill
-                        style={{
-                           fontSize: viewport.zoom * 2,
-                           color: '#FF4D4F',
-                        }}
-                     />
+                     <Avatar src={userPhoto} size={viewport.zoom * 2.5} />
                   </Marker>
                )}
             </ReactMapGL>

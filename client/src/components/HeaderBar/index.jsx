@@ -163,7 +163,7 @@ function HeaderBar(props) {
                </Col>
             ) : (
                <>
-                  <Space size={15}>
+                  <Space size={10}>
                      <Col>
                         <SearchBar />
                      </Col>
