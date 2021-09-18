@@ -1,9 +1,9 @@
 import { CommentOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Row, Space, Tag, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import './ProfileInfoCard.scss';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './ProfileInfoCard.scss';
 
 const { Title, Text } = Typography;
 

@@ -855,6 +855,7 @@ class OrderController {
                      Product: {
                         select: {
                            stock: true,
+                           completed: true,
                         },
                      },
                   },
@@ -868,7 +869,8 @@ class OrderController {
                   id: item.productId,
                },
                data: {
-                  stock: item.Product.stock + 1,
+                  stock: parseInt(item.Product.stock) + 1,
+                  completed: parseInt(item.Product.completed) + 1,
                },
             });
          });

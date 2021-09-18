@@ -3,7 +3,9 @@ const router = express.Router();
 const productController = require('../app/controllers/ProductController');
 const authMiddleware = require('../firebase/middleware/auth-middleware');
 
-router.get('/other', productController.getOtherProductInShop);
+router.get('/shop/all', productController.getMyProductInShop);
+router.get('/shop/top', productController.getTopRentingProductInShop);
+router.get('/shop/other', productController.getOtherProductInShop);
 router.get('/comments', productController.getProductComment);
 router.get('/topRenting', productController.getTopRenting);
 router.get('/newProduct', productController.getNewProduct);

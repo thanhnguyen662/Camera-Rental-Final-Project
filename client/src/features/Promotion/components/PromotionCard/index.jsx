@@ -15,7 +15,7 @@ function PromotionCard(props) {
    return (
       <>
          <div className='promotion'>
-            <Row gutter={[30, 30]}>
+            <Row gutter={[28, 30]}>
                <Col flex='none'>
                   <div className='promotionCard'>
                      <Row span={24}>

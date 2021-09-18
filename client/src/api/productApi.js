@@ -49,7 +49,17 @@ const productApi = {
    },
 
    otherProductInShop: (params) => {
-      const url = '/product/other';
+      const url = '/product/shop/other';
+      return axiosClient.get(url, { params });
+   },
+
+   topRentingInShop: (params) => {
+      const url = '/product/shop/top';
+      return axiosClient.get(url, { params });
+   },
+
+   allProductInShop: (params) => {
+      const url = '/product/shop/all';
       return axiosClient.get(url, { params });
    },
 };

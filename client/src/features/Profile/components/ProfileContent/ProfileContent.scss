@@ -1,0 +1,18 @@
+.profileContent {
+   .title {
+      margin: 30px 0 10px;
+      font-size: 21px;
+   }
+
+   .showMoreButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 25px;
+
+      button {
+         width: 25%;
+         border-radius: 8px;
+      }
+   }
+}

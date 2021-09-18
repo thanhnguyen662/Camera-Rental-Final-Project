@@ -1,8 +1,8 @@
+import { Avatar } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import ReactMapGL, { FlyToInterpolator, Marker } from 'react-map-gl';
 import './ProfileAddressMap.scss';
-import { Avatar } from 'antd';
 
 ProfileAddressMap.propTypes = {};
 

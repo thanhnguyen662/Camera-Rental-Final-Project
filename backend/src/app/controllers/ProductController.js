@@ -229,12 +229,50 @@ class ProductController {
    getOtherProductInShop = async (req, res, next) => {
       try {
          const response = await prisma.product.findMany({
+            take: 5,
             where: {
                User: { firebaseId: req.query.userId },
             },
-            orderBy: { updatedAt: 'desc' },
+            orderBy: { createdAt: 'desc' },
          });
 
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getTopRentingProductInShop = async (req, res, next) => {
+      try {
+         const response = await prisma.product.findMany({
+            take: 5,
+            where: {
+               User: { firebaseId: req.query.userId },
+            },
+            orderBy: {
+               completed: 'desc',
+            },
+         });
+
+         res.status(200).send(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getMyProductInShop = async (req, res, next) => {
+      try {
+         const page = Number(req.query.page);
+         const take = 5;
+         const response = await prisma.product.findMany({
+            take: take,
+            skip: (page - 1) * take,
+            where: {
+               User: {
+                  firebaseId: req.query.userId,
+               },
+            },
+         });
          res.status(200).json(response);
       } catch (error) {
          return next(error);

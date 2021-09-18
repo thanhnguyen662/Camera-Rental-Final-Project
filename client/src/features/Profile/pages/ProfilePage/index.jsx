@@ -14,7 +14,11 @@ function ProfilePage(props) {
 
    const [userProfile, setUserProfile] = useState({});
    const [userStats, setUserStats] = useState({});
-   const [userProduct, setUserProduct] = useState([]);
+   const [allProductPage, setAllProductPage] = useState(1);
+   const [showButton, setShowButton] = useState(true);
+   const [newUserProduct, setNewUserProduct] = useState([]);
+   const [topUserProduct, setTopUserProduct] = useState([]);
+   const [allUserProduct, setAllUserProduct] = useState([]);
 
    useEffect(() => {
       if (!userId) return;
@@ -38,11 +42,15 @@ function ProfilePage(props) {
       if (!userId) return;
       const getUserProduct = async () => {
          try {
-            const response = await productApi.getMyProduct({
-               firebaseId: userId,
+            const newProduct = await productApi.otherProductInShop({
+               userId: userId,
             });
-            setUserProduct(response);
-            console.log(response);
+            setNewUserProduct(newProduct);
+
+            const topRenting = await productApi.topRentingInShop({
+               userId: userId,
+            });
+            setTopUserProduct(topRenting);
          } catch (error) {
             console.log(error);
          }
@@ -50,10 +58,33 @@ function ProfilePage(props) {
       getUserProduct();
    }, [userId]);
 
+   useEffect(() => {
+      if (!userId) return;
+      const getAllProduct = async () => {
+         try {
+            const userProduct = await productApi.allProductInShop({
+               userId: userId,
+               page: allProductPage,
+            });
+            userProduct.length >= 5
+               ? setShowButton(true)
+               : setShowButton(false);
+            setAllUserProduct((prev) => [...prev, ...userProduct]);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getAllProduct();
+   }, [userId, allProductPage]);
+
+   const handleShowMoreAllProduct = () => {
+      setAllProductPage(allProductPage + 1);
+   };
+
    return (
       <>
          <Row gutter={[15, 0]} wrap={false}>
-            <Col span={17}>
+            <Col span={18}>
                <ProfileInfoCard
                   photoURL={photoURL}
                   name={name}
@@ -61,10 +92,16 @@ function ProfilePage(props) {
                   userId={userId}
                />
                <div style={{ marginTop: 15 }}>
-                  <ProfileContent userProduct={userProduct} />
+                  <ProfileContent
+                     newUserProduct={newUserProduct}
+                     topUserProduct={topUserProduct}
+                     allUserProduct={allUserProduct}
+                     handleShowMoreAllProduct={handleShowMoreAllProduct}
+                     showButton={showButton}
+                  />
                </div>
             </Col>
-            <Col span={7}>
+            <Col span={6}>
                <ProfileRelationCard
                   userProfile={userProfile}
                   userStats={userStats}

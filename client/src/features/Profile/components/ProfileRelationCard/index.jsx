@@ -51,7 +51,7 @@ function ProfileRelationCard(props) {
                      <Statistic
                         title={
                            <Title level={5} className='title'>
-                              Success Rate
+                              Success
                            </Title>
                         }
                         value={userStats?.success}

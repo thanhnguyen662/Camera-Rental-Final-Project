@@ -41,8 +41,8 @@ function ProfileProductUser(props) {
                <div className='productImage'>
                   <Image
                      style={{ objectFit: 'cover' }}
-                     height={100}
-                     width={100}
+                     height={120}
+                     width={120}
                      src={product.productPhotoURL[0]}
                   />
                </div>
@@ -60,7 +60,7 @@ function ProfileProductUser(props) {
                      color: 'rgb(255, 155, 61)',
                   }}
                />
-               <Text className='rateNumber'>{product.qualityRate}</Text>
+               <Text className='rateNumber'>{product.qualityRate || 0}</Text>
             </Space>
             <h1>{priceFormat(product.price)}</h1>
             <div style={colorStatus(product.stock)}>
