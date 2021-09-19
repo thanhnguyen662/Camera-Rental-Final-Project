@@ -263,7 +263,7 @@ class ProductController {
    getMyProductInShop = async (req, res, next) => {
       try {
          const page = Number(req.query.page);
-         const take = 5;
+         const take = 10;
          const response = await prisma.product.findMany({
             take: take,
             skip: (page - 1) * take,

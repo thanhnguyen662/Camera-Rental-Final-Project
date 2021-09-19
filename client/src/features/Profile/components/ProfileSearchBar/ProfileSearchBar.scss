@@ -1,0 +1,19 @@
+.profileSearchBar {
+   padding: 5px 5px;
+   margin-top: 15px;
+   background: white;
+   border-radius: 10px 10px 10px 10px;
+
+   .menu {
+      border-radius: 10px 0px 0px 10px;
+      border-bottom: 0;
+   }
+
+   .input {
+      margin-right: 10px;
+
+      .ant-input-affix-wrapper {
+         border-radius: 7px;
+      }
+   }
+}

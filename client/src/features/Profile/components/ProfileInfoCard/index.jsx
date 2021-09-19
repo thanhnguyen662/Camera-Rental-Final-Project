@@ -2,29 +2,28 @@ import { CommentOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Row, Space, Tag, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './ProfileInfoCard.scss';
 
 const { Title, Text } = Typography;
 
 ProfileInfoCard.propTypes = {
-   photoURL: PropTypes.string,
-   name: PropTypes.string,
    userId: PropTypes.string,
    userProfile: PropTypes.object,
    onClickSendMessage: PropTypes.func,
 };
 
 ProfileInfoCard.defaultProps = {
-   photoURL: '',
-   name: '',
    userId: '',
    userProfile: {},
    onClickSendMessage: null,
 };
 
 function ProfileInfoCard(props) {
-   const { photoURL, name, userProfile, userId, onClickSendMessage } = props;
+   const loginUserId = useSelector((state) => state.users.id);
+
+   const { userProfile, onClickSendMessage } = props;
    const [split, setSplit] = useState();
 
    useEffect(() => {
@@ -55,13 +54,13 @@ function ProfileInfoCard(props) {
                <Image src={source.header} preview={false} />
             </div>
             <div className='avatarImage'>
-               <Image src={photoURL} />
+               <Image src={userProfile?.photoURL} />
             </div>
             <div className='userInfo'>
                <Row>
                   <Col flex='auto' offset={5}>
                      <Title level={2} className='name'>
-                        {name}
+                        {userProfile?.username}
                      </Title>
                      <Text className='description'>
                         {userProfile?.description}
@@ -70,7 +69,7 @@ function ProfileInfoCard(props) {
                      <div className='tag'>{split?.map((t) => tag(t))}</div>
                   </Col>
                   <Col flex='165px' align='middle'>
-                     {userId === userProfile?.firebaseId ? (
+                     {loginUserId === userProfile?.firebaseId ? (
                         <Link to='/profile/edit'>
                            <Button className='sendMessage'>
                               <Space>

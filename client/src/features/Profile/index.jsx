@@ -8,13 +8,11 @@ Profile.propTypes = {};
 
 function Profile(props) {
    const match = useRouteMatch();
-   console.log('Profile: ', { match });
 
    return (
       <Switch>
-         <Route exact path={match.url} component={ProfilePage} />
          <Route path={`${match.url}/edit`} component={ProfileEditPage} />
-         <Route path={`${match.url}/:firebaseId`} component={ProfileUserPage} />
+         <Route path={`${match.url}/:userId`} component={ProfilePage} />
       </Switch>
    );
 }

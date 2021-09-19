@@ -1,16 +1,17 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Route, useParams, useRouteMatch } from 'react-router';
+import productApi from '../../../../api/productApi';
+import userApi from '../../../../api/userApi';
+import ProfileContent from '../../components/ProfileContent';
 import ProfileInfoCard from '../../components/ProfileInfoCard';
 import ProfileRelationCard from '../../components/ProfileRelationCard';
-import userApi from '../../../../api/userApi';
-import productApi from '../../../../api/productApi';
-import ProfileContent from '../../components/ProfileContent';
+import ProfileSearchBar from '../../components/ProfileSearchBar';
 
 function ProfilePage(props) {
-   const name = useSelector((state) => state.users.name);
-   const photoURL = useSelector((state) => state.users.photoURL);
-   const userId = useSelector((state) => state.users.id);
+   const { userId } = useParams();
+
+   const match = useRouteMatch();
 
    const [userProfile, setUserProfile] = useState({});
    const [userStats, setUserStats] = useState({});
@@ -59,14 +60,13 @@ function ProfilePage(props) {
    }, [userId]);
 
    useEffect(() => {
-      if (!userId) return;
       const getAllProduct = async () => {
          try {
             const userProduct = await productApi.allProductInShop({
                userId: userId,
                page: allProductPage,
             });
-            userProduct.length >= 5
+            userProduct.length >= 10
                ? setShowButton(true)
                : setShowButton(false);
             setAllUserProduct((prev) => [...prev, ...userProduct]);
@@ -77,6 +77,11 @@ function ProfilePage(props) {
       getAllProduct();
    }, [userId, allProductPage]);
 
+   useEffect(() => {
+      setAllProductPage(1);
+      setAllUserProduct([]);
+   }, [userId]);
+
    const handleShowMoreAllProduct = () => {
       setAllProductPage(allProductPage + 1);
    };
@@ -85,19 +90,25 @@ function ProfilePage(props) {
       <>
          <Row gutter={[15, 0]} wrap={false}>
             <Col span={18}>
-               <ProfileInfoCard
-                  photoURL={photoURL}
-                  name={name}
-                  userProfile={userProfile}
-                  userId={userId}
-               />
+               <ProfileInfoCard userProfile={userProfile} userId={userId} />
+               <ProfileSearchBar />
                <div style={{ marginTop: 15 }}>
-                  <ProfileContent
-                     newUserProduct={newUserProduct}
-                     topUserProduct={topUserProduct}
-                     allUserProduct={allUserProduct}
-                     handleShowMoreAllProduct={handleShowMoreAllProduct}
-                     showButton={showButton}
+                  <Route
+                     path={`${match.url}/new`}
+                     render={() => <h1>new</h1>}
+                  />
+                  <Route
+                     exact
+                     path={`${match.url}`}
+                     render={() => (
+                        <ProfileContent
+                           newUserProduct={newUserProduct}
+                           topUserProduct={topUserProduct}
+                           allUserProduct={allUserProduct}
+                           handleShowMoreAllProduct={handleShowMoreAllProduct}
+                           showButton={showButton}
+                        />
+                     )}
                   />
                </div>
             </Col>

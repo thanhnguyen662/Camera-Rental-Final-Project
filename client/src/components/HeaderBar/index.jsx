@@ -111,7 +111,7 @@ function HeaderBar(props) {
    const menu = (
       <Menu>
          <Menu.Item key='setting:1' icon={<UserOutlined />}>
-            <Link to='/profile'>Profile</Link>
+            <Link to={`/profile/${userId}`}>Profile</Link>
          </Menu.Item>
          <Menu.Item key='setting:2' icon={<EditOutlined />}>
             <Link to='/profile/edit'>Edit</Link>
