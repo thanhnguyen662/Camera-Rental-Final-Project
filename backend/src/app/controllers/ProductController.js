@@ -228,8 +228,11 @@ class ProductController {
 
    getOtherProductInShop = async (req, res, next) => {
       try {
+         const take = Number(req.query.take) || null;
+         const page = Number(req.query.page) || 1;
          const response = await prisma.product.findMany({
-            take: 5,
+            take: take,
+            skip: (page - 1) * take,
             where: {
                User: { firebaseId: req.query.userId },
             },
@@ -244,8 +247,11 @@ class ProductController {
 
    getTopRentingProductInShop = async (req, res, next) => {
       try {
+         const take = Number(req.query.take) || null;
+         const page = Number(req.query.page) || 1;
          const response = await prisma.product.findMany({
-            take: 5,
+            take: take,
+            skip: (page - 1) * take,
             where: {
                User: { firebaseId: req.query.userId },
             },
@@ -263,7 +269,7 @@ class ProductController {
    getMyProductInShop = async (req, res, next) => {
       try {
          const page = Number(req.query.page);
-         const take = 10;
+         const take = Number(req.query.take);
          const response = await prisma.product.findMany({
             take: take,
             skip: (page - 1) * take,
@@ -271,6 +277,101 @@ class ProductController {
                User: {
                   firebaseId: req.query.userId,
                },
+            },
+         });
+         res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   countMyProductInShop = async (req, res, next) => {
+      try {
+         const response = await prisma.product.count({
+            where: {
+               User: {
+                  firebaseId: req.query.userId,
+               },
+            },
+         });
+         res.status(200).json({ _count: response });
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getProductInShopByCategory = async (req, res, next) => {
+      try {
+         const page = Number(req.query.page);
+         const take = Number(req.query.take);
+         const response = await prisma.product.findMany({
+            take: take,
+            skip: (page - 1) * take,
+            where: {
+               AND: [
+                  {
+                     User: { firebaseId: req.query.userId },
+                  },
+                  {
+                     categories: {
+                        name: {
+                           contains: req.query.categoryName,
+                           mode: 'insensitive',
+                        },
+                     },
+                  },
+               ],
+            },
+         });
+
+         const count = await prisma.product.count({
+            where: {
+               AND: [
+                  {
+                     User: { firebaseId: req.query.userId },
+                  },
+                  {
+                     categories: {
+                        name: {
+                           contains: req.query.categoryName,
+                           mode: 'insensitive',
+                        },
+                     },
+                  },
+               ],
+            },
+         });
+         res.status(200).json({ result: response, count });
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   searchInShop = async (req, res, next) => {
+      try {
+         const response = await prisma.product.findMany({
+            where: {
+               AND: [
+                  {
+                     User: { firebaseId: req.query.userId },
+                  },
+                  {
+                     OR: [
+                        {
+                           name: {
+                              contains: req.query.keyword,
+                              mode: 'insensitive',
+                           },
+                        },
+                        {
+                           brand: {
+                              contains: req.query.keyword,
+                              mode: 'insensitive',
+                           },
+                        },
+                     ],
+                  },
+               ],
             },
          });
          res.status(200).json(response);

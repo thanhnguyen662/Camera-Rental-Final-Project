@@ -7,6 +7,8 @@ import ProfileContent from '../../components/ProfileContent';
 import ProfileInfoCard from '../../components/ProfileInfoCard';
 import ProfileRelationCard from '../../components/ProfileRelationCard';
 import ProfileSearchBar from '../../components/ProfileSearchBar';
+import ProfileSearchResult from '../../components/ProfileSearchResult';
+import ProfileSearchType from '../../components/ProfileSearchType';
 
 function ProfilePage(props) {
    const { userId } = useParams();
@@ -45,12 +47,15 @@ function ProfilePage(props) {
          try {
             const newProduct = await productApi.otherProductInShop({
                userId: userId,
+               take: 5,
             });
             setNewUserProduct(newProduct);
 
             const topRenting = await productApi.topRentingInShop({
                userId: userId,
+               take: 5,
             });
+
             setTopUserProduct(topRenting);
          } catch (error) {
             console.log(error);
@@ -65,6 +70,7 @@ function ProfilePage(props) {
             const userProduct = await productApi.allProductInShop({
                userId: userId,
                page: allProductPage,
+               take: 10,
             });
             userProduct.length >= 10
                ? setShowButton(true)
@@ -94,8 +100,13 @@ function ProfilePage(props) {
                <ProfileSearchBar />
                <div style={{ marginTop: 15 }}>
                   <Route
-                     path={`${match.url}/new`}
-                     render={() => <h1>new</h1>}
+                     path={`${match.url}/:searchType/:keyword`}
+                     render={() => <ProfileSearchResult userId={userId} />}
+                  />
+                  <Route
+                     exact
+                     path={`${match.url}/:searchType`}
+                     render={() => <ProfileSearchType userId={userId} />}
                   />
                   <Route
                      exact

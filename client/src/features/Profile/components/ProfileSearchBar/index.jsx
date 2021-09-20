@@ -1,33 +1,47 @@
+import { Col, Input, Menu, Row } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-   AppstoreOutlined,
-   MailOutlined,
-   SearchOutlined,
-} from '@ant-design/icons';
-import { useHistory, useRouteMatch } from 'react-router';
-import { Col, Menu, Row, Input } from 'antd';
-import React from 'react';
-import {
-   BsGrid,
-   BsFileArrowUp,
-   BsHeart,
+   BsCameraVideo,
    BsClipboardData,
+   BsGrid,
+   BsPersonSquare,
+   BsSearch,
 } from 'react-icons/bs';
+import { useHistory, useParams, useRouteMatch } from 'react-router';
 import './ProfileSearchBar.scss';
 
 ProfileSearchBar.propTypes = {};
 
 function ProfileSearchBar(props) {
+   const { userId } = useParams();
    const history = useHistory();
    const match = useRouteMatch();
 
-   const handleOnSelect = (key) => {
-      if (key === 'overview') return history.push(`${match.url}`);
-      history.push(`${match.url}/${key}`);
-   };
+   const timeout = useRef(null);
+   const [current, setCurrent] = useState('overview');
+   const [search, setSearch] = useState('');
 
    const menuStyle = {
       marginBottom: -2.5,
       fontSize: 16,
+   };
+
+   useEffect(() => {
+      setCurrent('overview');
+   }, [userId]);
+
+   useEffect(() => {
+      if (current === 'overview') return history.push(`${match.url}`);
+      if (current === 'search') return handleOnSearchChange();
+      history.push(`${match.url}/${current}`);
+      // eslint-disable-next-line
+   }, [current, search]);
+
+   const handleOnSearchChange = (value) => {
+      if (timeout.current) clearTimeout(timeout.current);
+      timeout.current = setTimeout(() => {
+         return history.push(`${match.url}/${current}/${search || null}`);
+      }, 400);
    };
 
    return (
@@ -38,8 +52,8 @@ function ProfileSearchBar(props) {
                   <Menu
                      mode='horizontal'
                      className='menu'
-                     onSelect={(e) => handleOnSelect(e.key)}
-                     defaultSelectedKeys='overview'
+                     onSelect={(e) => setCurrent(e.key)}
+                     selectedKeys={[current]}
                   >
                      <Menu.Item
                         key='overview'
@@ -48,24 +62,43 @@ function ProfileSearchBar(props) {
                         Overview
                      </Menu.Item>
                      <Menu.Item
-                        key='new'
-                        icon={<BsFileArrowUp style={menuStyle} />}
+                        key='dslr'
+                        icon={<BsCameraVideo style={menuStyle} />}
                      >
-                        New
+                        DSLR
                      </Menu.Item>
-                     <Menu.Item key='top' icon={<BsHeart style={menuStyle} />}>
-                        Top
+                     <Menu.Item
+                        key='lens'
+                        icon={<BsPersonSquare style={menuStyle} />}
+                     >
+                        Lens
                      </Menu.Item>
-                     <Menu.Item key='all' icon={<BsGrid style={menuStyle} />}>
-                        All
+                     <Menu.Item
+                        key='accessories'
+                        icon={<BsGrid style={menuStyle} />}
+                     >
+                        Accessories
                      </Menu.Item>
+                     {current === 'search' && (
+                        <Menu.Item
+                           key='search'
+                           icon={<BsSearch style={menuStyle} />}
+                        >
+                           Result
+                        </Menu.Item>
+                     )}
                   </Menu>
                </Col>
                <Col span={6}>
                   <div className='input'>
                      <Input
-                        suffix={<SearchOutlined />}
+                        onChange={(e) => setSearch(e.target.value)}
+                        suffix={<BsSearch />}
                         placeholder='Search here'
+                        onPressEnter={() => {
+                           if (search === '') return;
+                           setCurrent('search');
+                        }}
                      />
                   </div>
                </Col>

@@ -1,0 +1,31 @@
+.profileSearchType {
+   .pagination {
+      margin: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+   .titleOfTab {
+      margin: 30px 0 10px;
+
+      .title {
+         text-transform: capitalize;
+         transition: all 0.5s;
+         color: #200e66;
+         font-size: 21px;
+         font-weight: 900;
+      }
+
+      .icon {
+         cursor: pointer;
+         transition: all 0.5s;
+         color: #200e66;
+         font-size: 21px;
+         margin-bottom: -2px;
+
+         &:hover {
+            color: #1890ff;
+         }
+      }
+   }
+}

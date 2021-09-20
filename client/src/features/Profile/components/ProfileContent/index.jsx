@@ -1,6 +1,8 @@
-import { Button, Col, Row } from 'antd';
+import { RightOutlined } from '@ant-design/icons';
+import { Button, Col, Row, Space, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useHistory, useRouteMatch } from 'react-router';
 import ProfileProductUser from '../ProfileProductUser';
 import './ProfileContent.scss';
 
@@ -20,6 +22,8 @@ ProfileContent.defaultProps = {
    showButton: true,
 };
 
+const { Text } = Typography;
+
 function ProfileContent(props) {
    const {
       newUserProduct,
@@ -28,11 +32,22 @@ function ProfileContent(props) {
       handleShowMoreAllProduct,
       showButton,
    } = props;
+   const history = useHistory();
+   const match = useRouteMatch();
+
+   const onClickTitle = (title) => {
+      return history.push(`${match.url}/${title}`);
+   };
 
    return (
       <>
          <div className='profileContent'>
-            <h1 className='title'>New Product</h1>
+            <div className='titleOfTab' onClick={() => onClickTitle('new')}>
+               <Space>
+                  <Text className='title'>New Product</Text>
+                  <RightOutlined className='icon' />
+               </Space>
+            </div>
             <Row gutter={[17, 17]}>
                {newUserProduct?.map((product) => (
                   <div key={product.id}>
@@ -42,7 +57,12 @@ function ProfileContent(props) {
                   </div>
                ))}
             </Row>
-            <h1 className='title'>Top Renting</h1>
+            <div className='titleOfTab' onClick={() => onClickTitle('top')}>
+               <Space>
+                  <Text className='title'>Top Renting</Text>
+                  <RightOutlined className='icon' />
+               </Space>
+            </div>
             <Row gutter={[17, 17]}>
                {topUserProduct?.map((product) => (
                   <div key={product.id}>
@@ -52,7 +72,12 @@ function ProfileContent(props) {
                   </div>
                ))}
             </Row>
-            <h1 className='title'>All Product</h1>
+            <div className='titleOfTab' onClick={() => onClickTitle('all')}>
+               <Space>
+                  <Text className='title'>All Product</Text>
+                  <RightOutlined className='icon' />
+               </Space>
+            </div>
             <Row gutter={[17, 17]}>
                {allUserProduct?.map((product) => (
                   <div key={product.id}>

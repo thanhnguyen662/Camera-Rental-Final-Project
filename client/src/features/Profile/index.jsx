@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import ProfilePage from './pages/ProfilePage';
 import ProfileEditPage from './pages/ProfileEditPage';
-import ProfileUserPage from './pages/ProfileUserPage';
+// import ProfileUserPage from './pages/ProfileUserPage';
 
 Profile.propTypes = {};
 

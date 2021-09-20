@@ -62,6 +62,21 @@ const productApi = {
       const url = '/product/shop/all';
       return axiosClient.get(url, { params });
    },
+
+   countMyProduct: (params) => {
+      const url = '/product/shop/count';
+      return axiosClient.get(url, { params });
+   },
+
+   searchMyProduct: (params) => {
+      const url = '/product/shop/search';
+      return axiosClient.get(url, { params });
+   },
+
+   getProductInShopByCategory: (params) => {
+      const url = '/product/shop/category';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default productApi;
