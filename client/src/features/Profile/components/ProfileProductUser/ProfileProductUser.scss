@@ -23,7 +23,7 @@
    }
 
    p {
-      font-size: 14px;
+      font-size: 13.5px;
       margin-bottom: 0px;
 
       a {
@@ -39,12 +39,12 @@
       font-weight: 500;
    }
 
-   h1 {
+   .productPrice {
       font-weight: 700;
       font-size: 17px;
-      margin-top: 5px;
-      margin-bottom: -2px;
+      margin-top: 2px;
       color: #2e1e70;
+      display: block;
    }
 
    .stockStatus {

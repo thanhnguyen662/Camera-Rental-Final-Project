@@ -62,6 +62,7 @@ function ProductDetailPage(props) {
       if (!userId) return;
       const getOtherProductInShop = async () => {
          const response = await productApi.otherProductInShop({
+            take: 5,
             userId: userId,
          });
          setOtherProducts(response);

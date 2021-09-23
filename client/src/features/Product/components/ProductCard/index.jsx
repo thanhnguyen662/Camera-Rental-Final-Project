@@ -1,4 +1,4 @@
-import { Col, Image, Rate, Row } from 'antd';
+import { Col, Image, Rate, Row, Space, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -12,6 +12,8 @@ ProductCard.propTypes = {
 ProductCard.defaultProps = {
    products: [],
 };
+
+const { Text } = Typography;
 
 const colorStatus = (stock) => {
    if (stock > 60)
@@ -49,21 +51,30 @@ function ProductCard(props) {
                         </div>
                      </Row>
                      <h3>{product.brand}</h3>
-                     <p>
-                        <Link to={`/product/${product.slug}`}>
-                           {product.name}
-                        </Link>
-                     </p>
-                     <Rate
-                        allowHalf
-                        value={product.qualityRate}
-                        style={{
-                           fontSize: '14px',
-                           color: 'rgb(255, 155, 61)',
-                        }}
-                     />
-                     <h4>{product.qualityRate}</h4>
-                     <h1>{priceFormat(product.price)}</h1>
+                     <div style={{ width: 132, height: 47 }}>
+                        <p>
+                           <Link to={`/product/${product.slug}`}>
+                              {product.name}
+                           </Link>
+                        </p>
+                     </div>
+                     <Space align='end' size={0}>
+                        <Rate
+                           allowHalf
+                           value={product.qualityRate}
+                           style={{
+                              fontSize: '14px',
+                              color: 'rgb(255, 155, 61)',
+                              marginBottom: '2px',
+                           }}
+                        />
+                        <Text className='qualityRate'>
+                           {product.qualityRate}
+                        </Text>
+                     </Space>
+                     <Text className='productPrice'>
+                        {priceFormat(product.price)}
+                     </Text>
                      <div style={colorStatus(product.stock)}>
                         <h5 style={colorStatus(product.stock)}>
                            {product.stock || 0}

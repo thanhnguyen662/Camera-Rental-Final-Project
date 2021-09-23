@@ -25,7 +25,9 @@ function ProfileSearchType(props) {
    const [countProduct, setCountProductInShop] = useState(null);
    const [countCategory, setByCountCategory] = useState(null);
 
-   console.log();
+   useEffect(() => {
+      setPage(1);
+   }, [searchType]);
 
    useEffect(() => {
       if (!userId) return;

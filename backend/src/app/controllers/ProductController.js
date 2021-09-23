@@ -5,7 +5,11 @@ const shortid = require('shortid');
 class ProductController {
    getProducts = async (req, res, next) => {
       try {
+         const page = Number(req.query.page);
+         const take = Number(req.query.take);
          const getProducts = await prisma.product.findMany({
+            take: take,
+            skip: (page - 1) * take,
             include: {
                User: true,
             },

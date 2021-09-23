@@ -23,7 +23,7 @@
    }
 
    p {
-      font-size: 15px;
+      font-size: 15.5px;
       margin-bottom: 0px;
 
       a {
@@ -32,19 +32,20 @@
       }
    }
 
-   h4 {
+   .qualityRate {
       display: inline;
       margin-left: 15px;
       margin-top: 10px;
       color: #2e1e70;
+      font-weight: 500;
    }
 
-   h1 {
+   .productPrice {
       font-weight: 700;
       font-size: 21px;
-      margin-top: 10px;
-      margin-bottom: -2px;
+      margin-top: 5px;
       color: #2e1e70;
+      display: block;
    }
 
    .stockStatus {
@@ -55,11 +56,12 @@
       display: inline-block;
       margin-left: 2px;
       font-weight: 700;
+      font-size: 13px;
    }
 
    h6 {
       display: inline-block;
-      font-size: 9.5px;
+      font-size: 10px;
       margin-left: 3px;
    }
 

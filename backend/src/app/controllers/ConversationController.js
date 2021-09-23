@@ -67,6 +67,24 @@ class ConversationController {
             },
          });
 
+         // let array = [];
+         // response.map(async (i) => {
+         //    const myId = i.members[0];
+
+         //    await prisma.user
+         //       .findUnique({
+         //          where: { firebaseId: myId },
+         //          select: { firebaseId: true },
+         //       })
+         //       .then((data) => {
+         //          array.push({
+         //             id: i.id,
+         //             myId: data.firebaseId,
+         //          });
+         //          if (array.length === response.length)
+         //             return console.log(array);
+         //       });
+         // });
          res.status(200).json(response);
       } catch (error) {
          return next(error);

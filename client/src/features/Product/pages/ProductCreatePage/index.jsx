@@ -4,15 +4,19 @@ import { useSelector } from 'react-redux';
 import productApi from '../../../../api/productApi';
 import { storage } from '../../../../firebase';
 import ProductAddressForm from '../../components/ProductAddressForm';
+import { useHistory } from 'react-router';
 import ProductCreateForm from '../../components/ProductCreateForm';
 import ProductUploadImage from '../../components/ProductUploadImage';
 import { v4 as uuidv4 } from 'uuid';
 import './ProductCreatePage.scss';
+import openNotificationWithIcon from '../../../../components/Notification';
 import categoryApi from '../../../../api/categoryApi';
 
 const { Step } = Steps;
 
 function ProductCreatePage(props) {
+   const history = useHistory();
+
    const [imageList, setImageList] = useState([]);
    const [db, setDb] = useState();
    const [currentStep, setCurrentStep] = useState(0);
@@ -62,7 +66,6 @@ function ProductCreatePage(props) {
          }
       );
    };
-   console.log('imageList', imageList);
 
    const handleOnRemove = (file) => {
       const index = imageList.indexOf(file);
@@ -130,13 +133,18 @@ function ProductCreatePage(props) {
             };
 
             const response = await productApi.createProduct(data);
-            console.log('created product: ', response);
+            openNotificationWithIcon(
+               'success',
+               'Success',
+               `Create ${response.name} successfully`
+            );
+            history.push('/manages/shop/product');
          } catch (error) {
             return console.log(error);
          }
       };
       createProductToDb();
-   }, [db, firebaseId]);
+   }, [db, firebaseId, history]);
 
    const nextStep = () => {
       setCurrentStep(currentStep + 1);

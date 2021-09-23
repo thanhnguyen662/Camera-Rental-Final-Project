@@ -48,21 +48,24 @@ function ProfileProductUser(props) {
                </div>
             </Row>
             <h3>{product.brand}</h3>
-            <p>
-               <Link to={`/product/${product.slug}`}>{product.name}</Link>
-            </p>
-            <Space size={0} align='end'>
+            <div style={{ width: 130, height: 38 }}>
+               <p>
+                  <Link to={`/product/${product.slug}`}>{product.name}</Link>
+               </p>
+            </div>
+            <Space size={2} align='end'>
                <Rate
                   allowHalf
                   value={product.qualityRate}
                   style={{
                      fontSize: '12px',
                      color: 'rgb(255, 155, 61)',
+                     marginBottom: '1px',
                   }}
                />
                <Text className='rateNumber'>{product.qualityRate || 0}</Text>
             </Space>
-            <h1>{priceFormat(product.price)}</h1>
+            <Text className='productPrice'>{priceFormat(product.price)}</Text>
             <div style={colorStatus(product.stock)}>
                <h5 style={colorStatus(product.stock)}>{product.stock || 0}</h5>
                <h6 style={colorStatus(product.stock)}>
