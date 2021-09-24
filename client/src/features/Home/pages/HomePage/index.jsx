@@ -14,9 +14,11 @@ HomePage.propTypes = {};
 function HomePage(props) {
    const [page, setPage] = useState(1);
    const [isMore, setIsMore] = useState(true);
+
    const [categories, setCategories] = useState([]);
    const [topRenting, setTopRenting] = useState([]);
    const [products, setProducts] = useState([]);
+   const [newProduct, setNewProduct] = useState([]);
 
    useEffect(() => {
       const getCategoryInDb = async () => {
@@ -37,13 +39,11 @@ function HomePage(props) {
    useEffect(() => {
       const getAllProduct = async () => {
          try {
-            console.log(page);
             const response = await productApi.getAllProducts({
                page: page,
                take: 5,
             });
             response.length ? setIsMore(true) : setIsMore(false);
-            console.log(response);
             setProducts((prev) => [...prev, ...response]);
          } catch (error) {
             console.error(error);
@@ -51,6 +51,15 @@ function HomePage(props) {
       };
       getAllProduct();
    }, [page]);
+
+   useEffect(() => {
+      const getTopRenting = async () => {
+         const response = await productApi.newProduct();
+         setNewProduct(response);
+         console.log('new', response);
+      };
+      getTopRenting();
+   }, []);
 
    const handlePageChange = () => {
       setPage(page + 1);
@@ -74,7 +83,7 @@ function HomePage(props) {
          </div>
          <div>
             <h1 style={{ marginTop: '70px' }}>New Products</h1>
-            <NewProduct />
+            <NewProduct newProduct={newProduct} />
          </div>
          <div>
             <h1 style={{ marginTop: '70px' }}>Suggestions</h1>

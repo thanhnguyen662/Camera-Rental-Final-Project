@@ -1,9 +1,18 @@
 import { Col, Image, Row, Space, Typography } from 'antd';
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import './NewProduct.scss';
 
-NewProduct.propTypes = {};
+NewProduct.propTypes = {
+   newProduct: PropTypes.array,
+};
+
+NewProduct.defaultProps = {
+   newProduct: [],
+};
 
 const images = {
    image1:
@@ -25,36 +34,104 @@ const images = {
 const { Text } = Typography;
 
 function NewProduct(props) {
+   const { newProduct } = props;
+
+   const settings = {
+      dots: false,
+      arrows: false,
+      slidesToShow: 2,
+      slidesToScroll: 1,
+      vertical: true,
+      verticalSwiping: true,
+      className: 'center',
+      centerMode: true,
+      infinite: true,
+      centerPadding: '60px 0px -120px',
+      slidesToShow: 3,
+      speed: 500,
+      slidesPerRow: 1,
+   };
+
    return (
       <>
          <div className='newProductGrid'>
+            <Row span={24} gutter={[35, 20]}>
+               <Col span={6}>
+                  <div>
+                     <Slider
+                        {...settings}
+                        style={{
+                           overflow: 'hidden',
+                           height: 745,
+                           borderRadius: 10,
+                        }}
+                     >
+                        {newProduct?.map((p) => (
+                           <div className='col1' key={p.id}>
+                              <div className='productCol1-1'>
+                                 <Image
+                                    src={p.productPhotoURL[0]}
+                                    preview={false}
+                                    width={150}
+                                    height={150}
+                                 />
+                                 <div
+                                    style={{
+                                       width: 150,
+                                       marginTop: 20,
+                                       textAlign: 'center',
+                                       display: 'flex',
+                                       justifyContent: 'center',
+                                       alignItems: 'center',
+                                    }}
+                                 >
+                                    <Text
+                                       strong
+                                       style={{
+                                          color: '#301f71',
+                                          fontSize: 16,
+                                       }}
+                                    >
+                                       {p.name}
+                                    </Text>
+                                 </div>
+                              </div>
+                           </div>
+                        ))}
+                     </Slider>
+                  </div>
+               </Col>
+            </Row>
+         </div>
+
+         {/* <div className='newProductGrid'>
             <Row span={24} gutter={[35, 20]}>
                <Col span={8}>
                   <div className='col1'>
                      <Space direction='vertical' size={35}>
                         <div className='productCol1-1'>
                            <Image
-                              src={images.image1}
+                              src={newProduct[0]?.productPhotoURL[0]}
                               preview={false}
                               width={190}
                               height={190}
                            />
                            <div className='productGirdParaGraph'>
                               <Text className='productText'>
-                                 Canon 5D Mark IV
+                                 {newProduct[0]?.name}
                               </Text>
                            </div>
                         </div>
                         <div className='productCol1-2'>
                            <Image
-                              src={images.image2}
+                              src={newProduct[1]?.productPhotoURL[0]}
                               preview={false}
-                              width={270}
-                              height={270}
+                              width={250}
+                              height={250}
                            />
                            <div className='productGirdParaGraph'>
                               <Text className='productText'>
-                                 Gimbal Zhiyun Crane 2
+                                 {newProduct[1]?.name}
                               </Text>
                            </div>
                         </div>
@@ -66,39 +143,41 @@ function NewProduct(props) {
                      <Space direction='vertical' size={32}>
                         <div className='productCol2-1'>
                            <Image
-                              src={images.image5}
+                              src={newProduct[2]?.productPhotoURL[0]}
                               preview={false}
-                              width={220}
+                              width={200}
                               height={130}
                            />
                            <div className='productGirdParaGraph'>
                               <Text className='productText'>
-                                 Rode VideoMic Pro
+                                 {newProduct[2]?.name}
                               </Text>
                            </div>
                         </div>
                         <div className='productCol2-2'>
                            <Image
-                              src={images.image4}
+                              src={newProduct[3]?.productPhotoURL[0]}
                               preview={false}
                               width={170}
                               height={170}
                            />
                            <div className='productGirdParaGraph'>
                               <Text className='productText'>
-                                 Nanlite Forza 60
+                                 {newProduct[3]?.name}
                               </Text>
                            </div>
                         </div>
                         <div className='productCol2-3'>
                            <Image
-                              src={images.image3}
+                              src={newProduct[4]?.productPhotoURL[0]}
                               preview={false}
                               width={220}
                               height={95}
                            />
                            <div className='productGirdParaGraph'>
-                              <Text className='productText'>DJI Mini SE</Text>
+                              <Text className='productText'>
+                                 {newProduct[4]?.name}
+                              </Text>
                            </div>
                         </div>
                      </Space>
@@ -135,7 +214,7 @@ function NewProduct(props) {
                   </div>
                </Col>
             </Row>
-         </div>
+         </div> */}
       </>
    );
 }

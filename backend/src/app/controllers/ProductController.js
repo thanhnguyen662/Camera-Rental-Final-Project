@@ -206,7 +206,7 @@ class ProductController {
    getNewProduct = async (req, res, next) => {
       try {
          const response = await prisma.product.findMany({
-            take: 4,
+            take: 7,
             orderBy: {
                createdAt: 'desc',
             },

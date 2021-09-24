@@ -1,7 +1,7 @@
 import { Steps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import categoryApi from '../../../../api/categoryApi';
 import productApi from '../../../../api/productApi';
@@ -9,11 +9,13 @@ import { storage } from '../../../../firebase';
 import ProductAddressForm from '../../components/ProductAddressForm';
 import ProductCreateForm from '../../components/ProductCreateForm';
 import ProductUploadImage from '../../components/ProductUploadImage';
+import openNotificationWithIcon from '../../../../components/Notification';
 
 const { Step } = Steps;
 
 function ProductEditPage(props) {
    const { slug } = useParams();
+   const history = useHistory();
    const [currentStep, setCurrentStep] = useState(0);
    const [db, setDb] = useState();
    const [productData, setProductData] = useState({});
@@ -170,15 +172,21 @@ function ProductEditPage(props) {
                ward: db.ward,
                district: db.district,
                city: db.city,
-               categoryId: db.productCategory
+               categoryId: db.productCategory,
             };
             const response = await productApi.updateProduct(data);
-            console.log('updated product: ', response);
+            openNotificationWithIcon(
+               'success',
+               'Updated',
+               `Update ${response.name} successfully`
+            );
+            history.push('/manages/shop/product');
          } catch (error) {
             return console.log(error);
          }
       };
       createProductToDb();
+      // eslint-disable-next-line
    }, [db, productData.id]);
 
    return (

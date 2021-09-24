@@ -144,7 +144,8 @@ function ProductCreatePage(props) {
          }
       };
       createProductToDb();
-   }, [db, firebaseId, history]);
+      // eslint-disable-next-line
+   }, [db, firebaseId]);
 
    const nextStep = () => {
       setCurrentStep(currentStep + 1);
