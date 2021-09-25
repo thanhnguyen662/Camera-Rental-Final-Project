@@ -214,6 +214,7 @@ class ProductController {
                id: true,
                name: true,
                productPhotoURL: true,
+               slug: true,
                User: {
                   select: {
                      photoURL: true,

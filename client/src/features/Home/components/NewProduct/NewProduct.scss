@@ -1,16 +1,11 @@
 .newProductGrid {
-   cursor: pointer;
    .col1 {
       justify-content: center;
       align-items: center;
-      height: 100%;
       .productCol1-1 {
          background: white;
-         width: 100%;
-         margin-bottom: 35px;
-         background: white;
          border-radius: 10px;
-         padding: 35px 0px;
+         margin-bottom: 25px;
 
          display: flex;
          justify-content: center;
@@ -20,15 +15,16 @@
          transition: all 0.5s;
 
          .productGirdParaGraph {
-            width: 150px;
+            width: 180px;
             text-align: center;
             display: flex;
             justify-content: center;
             align-items: center;
 
             .productText {
-               // opacity: 0;
+               opacity: 0;
                transition: all 0.5s;
+               font-size: 0;
             }
          }
 
@@ -36,23 +32,23 @@
             transition: all 0.5s;
          }
 
-         // &:hover {
-         //    box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
-         //    transform: scale(1);
+         &:hover {
+            transform: scale(1.05);
+            border-radius: 10px;
 
-         //    .productGirdParaGraph {
-         //       .productText {
-         //          opacity: 1;
-         //          font-size: 16px;
-         //          font-weight: 600;
-         //          color: #301f71;
-         //       }
-         //    }
+            .productGirdParaGraph {
+               .productText {
+                  opacity: 1;
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: #301f71;
+               }
+            }
 
-         //    img {
-         //       transform: translateY(-5px);
-         //    }
-         // }
+            img {
+               transform: translateY(-15px);
+            }
+         }
       }
 
       .productCol1-2 {

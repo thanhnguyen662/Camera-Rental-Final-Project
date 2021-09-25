@@ -1,27 +1,33 @@
-.category{
+.category {
    margin-top: 40px;
 
-   .categoryCard{
+   .categoryCard {
       background: #dfe4ee;
       padding: 13px 10px 18px 16px;
       border-radius: 10px;
       height: 170px;
       margin-bottom: 25px;
+      transition: all 0.5s;
+
+      &:hover {
+         transform: scale(1.03);
+         box-shadow: rgba(145, 145, 145, 0.25) 0px 25px 50px -12px;
+      }
    }
 
-   h1{
+   h1 {
       color: #231268;
       font-size: 20px;
    }
 
-   h4{
+   h4 {
       font-size: 13px;
       margin-top: -24px;
       color: #8582b3;
       font-weight: 400;
    }
 
-   .buttonCard{
+   .buttonCard {
       border-radius: 8px;
       color: #231268;
       font-size: 11px;
@@ -32,26 +38,26 @@
       margin-top: 12px;
       width: 65%;
 
-      &:hover{
+      &:hover {
          border: 1px solid rgb(181, 181, 209);
          box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
       }
    }
 
-   .imageCategory{
+   .imageCategory {
       width: 255px;
       margin-top: 14px;
       -webkit-filter: drop-shadow(5px 5px 5px rgb(155, 155, 155));
       filter: drop-shadow(5px 5px 5px rgb(180, 180, 180));
    }
-   .imageCategory1{
+   .imageCategory1 {
       width: 140px;
       margin-top: 26px;
       margin-left: 46px;
       -webkit-filter: drop-shadow(5px 5px 5px rgb(155, 155, 155));
       filter: drop-shadow(5px 5px 5px rgb(180, 180, 180));
    }
-   .imageCategory2{
+   .imageCategory2 {
       width: 150px;
       margin-top: 30px;
       margin-left: 44px;

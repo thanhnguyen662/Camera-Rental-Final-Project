@@ -1,5 +1,8 @@
-.categoryPage{
-   // background: white;
-   // border-radius: 10px;
-   // min-height: 520px;
+.categoryPage {
+   .categoryPagination {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
 }

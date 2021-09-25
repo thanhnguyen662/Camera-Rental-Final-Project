@@ -1,9 +1,10 @@
+import { Col, Pagination, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import categoryApi from '../../../../api/categoryApi';
 import { useParams } from 'react-router-dom';
+import categoryApi from '../../../../api/categoryApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
+import ProfileProductUser from '../../../Profile/components/ProfileProductUser';
 import './CategoryPage.scss';
-import ProductCard from '../../../Product/components/ProductCard';
 
 function CategoryPage(props) {
    const { categoryName } = useParams();
@@ -22,9 +23,25 @@ function CategoryPage(props) {
 
    return (
       <>
-         <BreadcrumbBar />
          <div className='categoryPage'>
-            <ProductCard products={category[0]?.Product} />
+            <BreadcrumbBar />
+            <Row gutter={[20, 20]}>
+               <Col span={5}>h1</Col>
+               <Col span={19}>
+                  <Row gutter={[28, 28]}>
+                     {category[0]?.Product.map((c) => (
+                        <div key={category.id}>
+                           <Col flex='none'>
+                              <ProfileProductUser product={c} />
+                           </Col>
+                        </div>
+                     ))}
+                  </Row>
+               </Col>
+            </Row>
+            <div className='categoryPagination'>
+               <Pagination defaultCurrent={1} total={50} />
+            </div>
          </div>
       </>
    );
