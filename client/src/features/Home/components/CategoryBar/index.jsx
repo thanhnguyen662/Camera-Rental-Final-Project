@@ -38,7 +38,7 @@ function CategoryBar(props) {
                               className='buttonCard'
                               onClick={() =>
                                  history.push(
-                                    `/category/${categories[0]?.name}`
+                                    `/category/${categories[0]?.name}/all`
                                  )
                               }
                            >
@@ -65,7 +65,7 @@ function CategoryBar(props) {
                               className='buttonCard'
                               onClick={() =>
                                  history.push(
-                                    `/category/${categories[1]?.name}`
+                                    `/category/${categories[1]?.name}/all`
                                  )
                               }
                            >
@@ -92,7 +92,7 @@ function CategoryBar(props) {
                               className='buttonCard'
                               onClick={() =>
                                  history.push(
-                                    `/category/${categories[2]?.name}`
+                                    `/category/${categories[2]?.name}/all`
                                  )
                               }
                            >

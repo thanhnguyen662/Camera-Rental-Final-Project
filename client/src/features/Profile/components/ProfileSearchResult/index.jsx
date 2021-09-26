@@ -47,7 +47,7 @@ function ProfileSearchResult(props) {
          )}
          <div>
             <div className='profileContent'>
-               <Row gutter={[17, 17]}>
+               <Row gutter={[20, 20]}>
                   {searchResult?.map((product) => (
                      <div key={product.id}>
                         <Col flex='none'>

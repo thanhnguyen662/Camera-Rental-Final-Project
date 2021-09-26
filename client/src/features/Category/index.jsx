@@ -7,7 +7,10 @@ function Category(props) {
 
    return (
       <Switch>
-         <Route path={`${match.url}/:categoryName`} component={CategoryPage} />
+         <Route
+            path={`${match.url}/:categoryName/:sortBy`}
+            component={CategoryPage}
+         />
       </Switch>
    );
 }

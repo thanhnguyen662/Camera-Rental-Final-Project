@@ -3,45 +3,65 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import categoryApi from '../../../../api/categoryApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
-import ProfileProductUser from '../../../Profile/components/ProfileProductUser';
+import CategoryContent from '../../components/CategoryContent';
+import CategoryMenu from '../../components/CategoryMenu';
+import CategorySidebar from '../../components/CategorySidebar';
 import './CategoryPage.scss';
 
 function CategoryPage(props) {
-   const { categoryName } = useParams();
+   const { categoryName, sortBy } = useParams();
    const [category, setCategory] = useState([]);
+   const [page, setPage] = useState(1);
 
    useEffect(() => {
       const getProductCategoryInDb = async () => {
          const response = await categoryApi.getProductInCategory({
             name: categoryName,
+            sortBy: sortBy,
+            page: page,
+            take: 10,
          });
-         console.log('category', response);
          setCategory(response);
       };
       getProductCategoryInDb();
-   }, [categoryName]);
+   }, [categoryName, sortBy, page]);
+
+   const handlePageChange = (e) => {
+      setPage(e);
+   };
+
+   const pagination = (isSimple) => {
+      return (
+         <Pagination
+            simple={isSimple}
+            total={category[0]?._count.Product}
+            pageSize={10}
+            current={page}
+            onChange={(e) => handlePageChange(e)}
+         />
+      );
+   };
 
    return (
       <>
          <div className='categoryPage'>
             <BreadcrumbBar />
-            <Row gutter={[20, 20]}>
-               <Col span={5}>h1</Col>
-               <Col span={19}>
-                  <Row gutter={[28, 28]}>
-                     {category[0]?.Product.map((c) => (
-                        <div key={category.id}>
-                           <Col flex='none'>
-                              <ProfileProductUser product={c} />
-                           </Col>
-                        </div>
-                     ))}
-                  </Row>
+            <Row gutter={[15, 15]} style={{ marginTop: 5 }}>
+               <Col span={3}>
+                  <CategorySidebar />
+               </Col>
+               <Col span={21}>
+                  <div style={{ margin: '5px 0 15px' }}>
+                     <CategoryMenu
+                        sortBy={sortBy}
+                        categoryName={categoryName}
+                        pagination={pagination}
+                     />
+                  </div>
+                  <CategoryContent categoryProduct={category[0]?.Product} />
                </Col>
             </Row>
-            <div className='categoryPagination'>
-               <Pagination defaultCurrent={1} total={50} />
-            </div>
+            <div className='categoryPagination'>{pagination(false)}</div>
          </div>
       </>
    );

@@ -104,7 +104,7 @@ function ProfileSearchType(props) {
                </div>
             ) : null}
             <div>
-               <Row gutter={[17, 17]}>
+               <Row gutter={[20, 20]}>
                   {searchByType?.map((product) => (
                      <div key={product.id}>
                         <Col flex='none'>

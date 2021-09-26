@@ -12,17 +12,61 @@ class CategoryController {
    };
 
    getProductInCategory = async (req, res, next) => {
+      const sortBy = req.query.sortBy;
+      const page = Number(req.query.page);
+      const take = Number(req.query.take);
       try {
-         const response = await prisma.category.findMany({
-            where: {
-               name: req.query.name,
-            },
-            include: {
-               Product: true,
-            },
-         });
-
-         res.status(200).json(response);
+         if (sortBy === 'all') {
+            const response = await prisma.category.findMany({
+               where: {
+                  name: req.query.name,
+               },
+               include: {
+                  Product: {
+                     take: take,
+                     skip: (page - 1) * take,
+                  },
+                  _count: true,
+               },
+            });
+            return res.status(200).json(response);
+         }
+         if (sortBy === 'popular') {
+            const response = await prisma.category.findMany({
+               where: {
+                  name: req.query.name,
+               },
+               include: {
+                  Product: {
+                     take: take,
+                     skip: (page - 1) * take,
+                     orderBy: {
+                        completed: 'desc',
+                     },
+                  },
+                  _count: true,
+               },
+            });
+            return res.status(200).json(response);
+         }
+         if (sortBy === 'newest') {
+            const response = await prisma.category.findMany({
+               where: {
+                  name: req.query.name,
+               },
+               include: {
+                  Product: {
+                     take: take,
+                     skip: (page - 1) * take,
+                     orderBy: {
+                        createdAt: 'desc',
+                     },
+                  },
+                  _count: true,
+               },
+            });
+            return res.status(200).json(response);
+         }
       } catch (error) {
          return next(error);
       }

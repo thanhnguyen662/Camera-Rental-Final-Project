@@ -3,21 +3,73 @@ const moment = require('moment');
 class OrderController {
    createOrder = async (req, res, next) => {
       try {
-         const response = await prisma.order.create({
-            data: {
-               address: req.body.address,
-               userId: req.body.userId,
-               totalPrice: Number(req.body.totalPrice),
-               orderStatusId: req.body.orderStatusId,
-               orderItems: {
-                  createMany: {
-                     data: req.body.orderItem,
+         const orderData = req.body.orderData;
+         const uniqueUsername = orderData.reduce((array, item) => {
+            array.some((username) => username === item.Product.User.username)
+               ? null
+               : array.push(item.Product.User.username);
+            return array;
+         }, []);
+
+         const filterOrderByUsername = (user) => {
+            const filter = orderData.filter(
+               (order) => user === order.Product.User.username
+            );
+            return filter;
+         };
+
+         let isEqual = true;
+         uniqueUsername.map((user) => {
+            const filterByUsername = filterOrderByUsername(user);
+            if (filterByUsername.length <= 1) return;
+            filterByUsername.map((order) => {
+               const baseStartDate = new Date(filterByUsername[0].startDate);
+               const baseEndDate = new Date(filterByUsername[0].endDate);
+               if (filterByUsername.indexOf(order) === 0) return;
+
+               !moment(order.startDate).isSame(moment(baseStartDate)) ||
+               !moment(order.endDate).isSame(moment(baseEndDate))
+                  ? (isEqual = false)
+                  : (isEqual = true);
+            });
+         });
+         if (!isEqual)
+            return res.status(200).json({ message: 'Date not equal' });
+
+         uniqueUsername.map(async (user) => {
+            let totalPrice = 0;
+            let orderItems = [];
+            const filterByUsername = filterOrderByUsername(user);
+            filterByUsername.map((order) => {
+               const startDate = moment(order.startDate);
+               const endDate = moment(order.endDate);
+               const during = endDate.diff(startDate, 'hours');
+               const pricePerRow =
+                  parseInt(order.Product.price) * parseInt(during);
+               totalPrice += pricePerRow;
+
+               return orderItems.push({
+                  productId: Number(order.Product.id),
+                  startDate: new Date(order.startDate),
+                  endDate: new Date(order.endDate),
+                  price: Number(order.Product.price),
+                  totalPricePerHour: String(pricePerRow),
+                  during: String(during),
+               });
+            });
+            await prisma.order.create({
+               data: {
+                  orderStatusId: 1,
+                  address: req.body.userAddress,
+                  userId: req.body.userId,
+                  totalPrice: totalPrice,
+                  orderItems: {
+                     createMany: { data: orderItems },
                   },
                },
-            },
+            });
          });
-
-         res.status(200).json({ ...response, message: 'success' });
+         return res.status(200).json({ message: 'Create Order Success' });
       } catch (error) {
          return next(error);
       }

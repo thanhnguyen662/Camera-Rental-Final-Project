@@ -41,8 +41,8 @@ function ProfileProductUser(props) {
                <div className='productImage'>
                   <Image
                      style={{ objectFit: 'cover' }}
-                     height={120}
-                     width={120}
+                     height={115}
+                     width={115}
                      src={product.productPhotoURL[0]}
                   />
                </div>

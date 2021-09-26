@@ -1,11 +1,11 @@
-import { Col, Image, Row, Space, Typography } from 'antd';
-import React from 'react';
+import { Col, Image, Row, Typography } from 'antd';
 import PropTypes from 'prop-types';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import './NewProduct.scss';
-import { Link } from 'react-router-dom';
 
 NewProduct.propTypes = {
    newProduct: PropTypes.array,

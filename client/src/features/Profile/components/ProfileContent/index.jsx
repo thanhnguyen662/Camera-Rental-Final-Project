@@ -48,7 +48,7 @@ function ProfileContent(props) {
                   <RightOutlined className='icon' />
                </Space>
             </div>
-            <Row gutter={[17, 17]}>
+            <Row gutter={[20, 20]}>
                {newUserProduct?.map((product) => (
                   <div key={product.id}>
                      <Col flex='none'>
@@ -63,7 +63,7 @@ function ProfileContent(props) {
                   <RightOutlined className='icon' />
                </Space>
             </div>
-            <Row gutter={[17, 17]}>
+            <Row gutter={[20, 20]}>
                {topUserProduct?.map((product) => (
                   <div key={product.id}>
                      <Col flex='none'>
@@ -78,7 +78,7 @@ function ProfileContent(props) {
                   <RightOutlined className='icon' />
                </Space>
             </div>
-            <Row gutter={[17, 17]}>
+            <Row gutter={[20, 20]}>
                {allUserProduct?.map((product) => (
                   <div key={product.id}>
                      <Col flex='none'>
