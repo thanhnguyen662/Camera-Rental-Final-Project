@@ -78,7 +78,6 @@ function HeaderBar(props) {
 
    useEffect(() => {
       if (!reduxIncomingMessage) return;
-
       const getSenderOfMessageDetail = async () => {
          try {
             const response = await userApi.getUserProfile({

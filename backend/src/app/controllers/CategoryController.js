@@ -13,8 +13,17 @@ class CategoryController {
 
    getProductInCategory = async (req, res, next) => {
       const sortBy = req.query.sortBy;
+      const searchByBrand = req.query.searchByBrand || undefined;
       const page = Number(req.query.page);
       const take = Number(req.query.take);
+      const minPrice = Number(req.query.minPrice) || undefined;
+      const maxPrice = Number(req.query.maxPrice) || undefined;
+      const city =
+         req.query.province === 'global' ? undefined : req.query.province;
+      const searchByRate =
+         req.query.searchByRate === 'All'
+            ? undefined
+            : parseFloat(req.query.searchByRate);
       try {
          if (sortBy === 'all') {
             const response = await prisma.category.findMany({
@@ -25,6 +34,37 @@ class CategoryController {
                   Product: {
                      take: take,
                      skip: (page - 1) * take,
+                     where: {
+                        AND: [
+                           {
+                              brand: {
+                                 search: searchByBrand,
+                              },
+                           },
+                           {
+                              qualityRate: {
+                                 gte: searchByRate,
+                                 lt:
+                                    typeof searchByRate === 'number'
+                                       ? searchByRate + 1
+                                       : searchByRate,
+                              },
+                           },
+                           {
+                              price: {
+                                 gte: minPrice,
+                                 lte: maxPrice,
+                              },
+                           },
+                           {
+                              pins: {
+                                 some: {
+                                    city: city,
+                                 },
+                              },
+                           },
+                        ],
+                     },
                   },
                   _count: true,
                },
@@ -40,6 +80,37 @@ class CategoryController {
                   Product: {
                      take: take,
                      skip: (page - 1) * take,
+                     where: {
+                        AND: [
+                           {
+                              brand: {
+                                 search: searchByBrand,
+                              },
+                           },
+                           {
+                              qualityRate: {
+                                 gte: searchByRate,
+                                 lt:
+                                    typeof searchByRate === 'number'
+                                       ? searchByRate + 1
+                                       : searchByRate,
+                              },
+                           },
+                           {
+                              price: {
+                                 gte: minPrice,
+                                 lte: maxPrice,
+                              },
+                           },
+                           {
+                              pins: {
+                                 some: {
+                                    city: city,
+                                 },
+                              },
+                           },
+                        ],
+                     },
                      orderBy: {
                         completed: 'desc',
                      },
@@ -58,6 +129,37 @@ class CategoryController {
                   Product: {
                      take: take,
                      skip: (page - 1) * take,
+                     where: {
+                        AND: [
+                           {
+                              brand: {
+                                 search: searchByBrand,
+                              },
+                           },
+                           {
+                              qualityRate: {
+                                 gte: searchByRate,
+                                 lt:
+                                    typeof searchByRate === 'number'
+                                       ? searchByRate + 1
+                                       : searchByRate,
+                              },
+                           },
+                           {
+                              price: {
+                                 gte: minPrice,
+                                 lte: maxPrice,
+                              },
+                           },
+                           {
+                              pins: {
+                                 some: {
+                                    city: city,
+                                 },
+                              },
+                           },
+                        ],
+                     },
                      orderBy: {
                         createdAt: 'desc',
                      },

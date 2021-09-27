@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["selectRelationCount"]
+  previewFeatures = ["selectRelationCount", "fullTextSearch"]
 }
 
 datasource db {
@@ -17,7 +17,7 @@ model Product {
   slug            String           @unique
   firebaseId      String?
   brand           String?
-  price           String?
+  price           Int?
   qualityRate     Float?
   stock           Int?
   publicStatus    Boolean?

@@ -47,7 +47,9 @@ function CategoryMenu(props) {
                      </Menu.Item>
                   </Menu>
                </Col>
-               <Col>{pagination(true)}</Col>
+               <Col>
+                  <div style={{ marginRight: 10 }}>{pagination(true)}</div>
+               </Col>
             </Row>
          </div>
       </>

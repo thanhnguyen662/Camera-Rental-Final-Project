@@ -111,7 +111,7 @@ class ProductController {
                productPhotoURL: req.body.productPhotoURL,
                slug: `${slugify(req.body.name)}-${shortid.generate()}`,
                brand: req.body.brand,
-               price: String(req.body.price),
+               price: Number(req.body.price),
                stock: Number(req.body.stock),
                categoryId: Number(req.body.categoryId),
 
@@ -145,7 +145,7 @@ class ProductController {
                description: req.body.description,
                productPhotoURL: req.body.productPhotoURL,
                brand: req.body.brand,
-               price: String(req.body.price),
+               price: Number(req.body.price),
                stock: Number(req.body.stock),
                categoryId: Number(req.body.categoryId),
 

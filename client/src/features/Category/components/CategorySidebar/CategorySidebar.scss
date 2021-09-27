@@ -1,3 +1,115 @@
 .CategorySidebar {
    height: 100%;
+   margin: 12px 0;
+
+   .title {
+      font-size: 18px;
+   }
+
+   .icon {
+      font-size: 10px;
+      margin-bottom: 8px;
+   }
+
+   .checkBox {
+      margin-top: 8px;
+
+      .subTitle {
+         color: #595b61;
+         font-weight: bold;
+         font-size: 12px;
+      }
+
+      .checkBoxGroup {
+         margin-top: 4px;
+
+         .ant-checkbox-group-item {
+            margin-bottom: 9px;
+         }
+      }
+   }
+
+   .radioBox {
+      margin-top: 8px;
+
+      .subTitle {
+         color: #595b61;
+         font-weight: bold;
+         font-size: 12px;
+      }
+
+      .radioBoxGroup {
+         margin-top: 4px;
+
+         .ant-radio {
+            margin-bottom: 9px;
+         }
+
+         span.ant-radio + * {
+            width: 30px;
+         }
+      }
+   }
+
+   .inputBox {
+      margin-top: 8px;
+      margin-bottom: 10px;
+      display: grid;
+      .subTitle {
+         color: #595b61;
+         font-weight: bold;
+         font-size: 12px;
+      }
+
+      .ant-input-number {
+         margin-top: 4px;
+         display: grid;
+         width: 100%;
+         border-radius: 5px;
+
+         input {
+            padding: 0 6px;
+         }
+      }
+
+      .ant-select-selector {
+         margin-top: 4px;
+         border-radius: 5px;
+
+         span {
+            font-size: 11px;
+         }
+
+         .ant-select-item-option-content {
+            font-size: 8px;
+         }
+      }
+
+      .clearInputIcon {
+         color: #595b61;
+         font-size: 13px;
+         transition: all 0.5s;
+         &:hover {
+            color: #ff4d4f;
+         }
+      }
+
+      .minMaxAlert {
+         margin-top: 5px;
+         font-size: 12px;
+         color: #ff4d4f;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .ant-input-number-handler-wrap {
+         display: none;
+      }
+
+      button {
+         margin-top: 8px;
+         border-radius: 5px;
+      }
+   }
 }
