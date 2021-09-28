@@ -4,11 +4,13 @@ import SearchPage from './pages/SearchPage';
 
 function Search(props) {
    const match = useRouteMatch();
-   console.log({ match });
 
    return (
       <Switch>
-         <Route path={`${match.url}/:type/:keyword`} component={SearchPage} />
+         <Route
+            path={`${match.url}/:type/:keyword/:sortBy`}
+            component={SearchPage}
+         />
       </Switch>
    );
 }

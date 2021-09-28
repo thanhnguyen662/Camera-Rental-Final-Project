@@ -4,6 +4,7 @@ import {
    HomeOutlined,
    FileTextOutlined,
    InboxOutlined,
+   ConsoleSqlOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Badge } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -81,6 +82,9 @@ function SiderBar(props) {
 
             <Menu.Item key='7' icon={<InboxOutlined />} title='Shop Management'>
                <Link to='/manages/shop/revenue'>Shop Management</Link>
+            </Menu.Item>
+            <Menu.Item key='9' icon={<ConsoleSqlOutlined />} title='Admin'>
+               <Link to='/admin'>Admin</Link>
             </Menu.Item>
          </Menu>
       </Sider>

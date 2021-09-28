@@ -42,7 +42,6 @@ function SearchBar(props) {
                },
                ...response,
             ]);
-            console.log('Gear: ', response);
          }
 
          if (searchType === 'user') {
@@ -55,7 +54,6 @@ function SearchBar(props) {
                return array;
             }, []);
             setSearchResult(newResponse);
-            console.log('User: ', response);
          }
       } catch (error) {
          console.log(error);
@@ -86,7 +84,7 @@ function SearchBar(props) {
                suffixIcon={<SearchOutlined className='headerSearchIcon' />}
                onSelect={(value, option) => {
                   if (searchType === 'gear')
-                     return history.push(`/search/${searchType}/${value}`);
+                     return history.push(`/search/${searchType}/${value}/all`);
                   if (searchType === 'user')
                      return history.push(`/profile/${option.key}`);
                }}

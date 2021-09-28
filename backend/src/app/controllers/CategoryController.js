@@ -24,6 +24,7 @@ class CategoryController {
          req.query.searchByRate === 'All'
             ? undefined
             : parseFloat(req.query.searchByRate);
+
       try {
          if (sortBy === 'all') {
             const response = await prisma.category.findMany({

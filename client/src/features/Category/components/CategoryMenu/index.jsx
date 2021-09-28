@@ -2,27 +2,25 @@ import { Col, Menu, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { BsBarChart, BsGrid, BsStar } from 'react-icons/bs';
-import { useHistory } from 'react-router';
 import './CategoryMenu.scss';
 
 CategoryMenu.propTypes = {
    sortBy: PropTypes.string,
-   categoryName: PropTypes.string,
+   handleSelectedMenuItem: PropTypes.func,
    pagination: PropTypes.func,
 };
 
 CategoryMenu.defaultProps = {
    sortBy: '',
-   categoryName: '',
+   handleSelectedMenuItem: null,
    pagination: null,
 };
 
 function CategoryMenu(props) {
-   const { sortBy, categoryName, pagination } = props;
-   const history = useHistory();
+   const { sortBy, pagination, handleSelectedMenuItem } = props;
 
    const onSelectMenuItem = (e) => {
-      history.push(`/category/${categoryName}/${e.key}`);
+      handleSelectedMenuItem(e.key);
    };
 
    return (

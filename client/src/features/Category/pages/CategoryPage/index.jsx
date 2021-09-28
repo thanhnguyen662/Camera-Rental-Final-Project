@@ -1,6 +1,6 @@
 import { Col, Pagination, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import categoryApi from '../../../../api/categoryApi';
 import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import CategoryContent from '../../components/CategoryContent';
@@ -10,6 +10,7 @@ import './CategoryPage.scss';
 
 function CategoryPage(props) {
    const { categoryName, sortBy } = useParams();
+   const history = useHistory();
 
    const [category, setCategory] = useState([]);
    const [page, setPage] = useState(1);
@@ -24,7 +25,7 @@ function CategoryPage(props) {
             name: categoryName,
             sortBy: sortBy,
             page: page,
-            take: 10,
+            take: 2,
             searchByBrand: brand,
             searchByRate: rate,
             minPrice: submitMinMax.min,
@@ -45,7 +46,7 @@ function CategoryPage(props) {
          <Pagination
             simple={isSimple}
             total={category[0]?._count.Product}
-            pageSize={10}
+            pageSize={2}
             current={page}
             onChange={(e) => handlePageChange(e)}
          />
@@ -53,20 +54,28 @@ function CategoryPage(props) {
    };
 
    const handleSelectedBrand = (selected) => {
+      setPage(1);
       setBrand(selected);
    };
 
    const handleSelectedRate = (selected) => {
+      setPage(1);
       setRate(selected);
    };
 
    const handleSubmitMinMax = (minMax) => {
+      setPage(1);
       setSubmitMinMax(minMax);
    };
 
    const handleSelectedProvince = (selected) => {
-      console.log(selected);
+      setPage(1);
       setSelectProvince(selected);
+   };
+
+   const handleSelectedMenuItem = (selected) => {
+      setPage(1);
+      history.push(`/category/${categoryName}/${selected}`);
    };
 
    return (
@@ -79,7 +88,6 @@ function CategoryPage(props) {
                      handleSelectedBrand={handleSelectedBrand}
                      handleSelectedRate={handleSelectedRate}
                      handleSubmitMinMax={handleSubmitMinMax}
-                     selectProvince={selectProvince}
                      handleSelectedProvince={handleSelectedProvince}
                   />
                </Col>
@@ -87,8 +95,8 @@ function CategoryPage(props) {
                   <div style={{ margin: '5px 0 15px' }}>
                      <CategoryMenu
                         sortBy={sortBy}
-                        categoryName={categoryName}
                         pagination={pagination}
+                        handleSelectedMenuItem={handleSelectedMenuItem}
                      />
                   </div>
                   <CategoryContent categoryProduct={category[0]?.Product} />
