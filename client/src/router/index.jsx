@@ -16,6 +16,7 @@ import Manages from '../features/Manages';
 import Maps from '../features/Maps';
 import Message from '../features/Message';
 import MessageBeta from '../features/MessageBeta';
+import MessageBeta1 from '../features/MessageBeta1';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
 import Search from '../features/Search';
@@ -105,6 +106,10 @@ function Routers(props) {
 
                      <Route path='/messageBeta'>
                         <MessageBeta />
+                     </Route>
+
+                     <Route path='/messageBeta1'>
+                        <MessageBeta1 />
                      </Route>
 
                      <Route path='/maps'>

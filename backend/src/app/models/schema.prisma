@@ -62,6 +62,8 @@ model User {
   userComments    UserComment[]
   posts           Post[]
   postComments    PostComment[]
+  membersBeta1    MemberBeta1[]
+  messagesBeta1   MessageBeta1[]
 
   @@map("Users")
 }
@@ -228,6 +230,35 @@ model PostProduct {
   product   Product? @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ConversationBeta1 {
+  id        Int            @id @default(autoincrement())
+  members   MemberBeta1[]
+  messages  MessageBeta1[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model MemberBeta1 {
+  id             Int                @id @default(autoincrement())
+  conversationId Int?
+  userId         String?
+  conversation   ConversationBeta1? @relation(fields: [conversationId], references: [id])
+  user           User?              @relation(fields: [userId], references: [firebaseId])
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model MessageBeta1 {
+  id             Int                @id @default(autoincrement())
+  content        String?
+  userId         String?
+  conversationId Int?
+  conversation   ConversationBeta1? @relation(fields: [conversationId], references: [id])
+  user           User?              @relation(fields: [userId], references: [firebaseId])
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 }
 
 enum Role {

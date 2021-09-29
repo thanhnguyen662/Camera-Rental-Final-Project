@@ -9,8 +9,10 @@ const commentRouter = require('./comment');
 const searchRouter = require('./search');
 const categoryRouter = require('./category');
 const postRouter = require('./post');
+const conversationBeta1 = require('./conversationBeta1');
 
 function route(app) {
+   app.use('/conversationBeta1', conversationBeta1);
    app.use('/account', accountRouter);
    app.use('/product', productRouter);
    app.use('/conversation', conversationRouter);

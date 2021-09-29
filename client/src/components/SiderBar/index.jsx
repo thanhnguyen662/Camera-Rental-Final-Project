@@ -62,6 +62,10 @@ function SiderBar(props) {
             >
                <Link to='/messageBeta'>Message Beta</Link>
             </Menu.Item>
+
+            <Menu.Item key='11' icon={<MessageOutlined />} title='Maps'>
+               <Link to='/messageBeta1'>Beta1</Link>
+            </Menu.Item>
             {/* <Menu.Item
                key='5'
                icon={<FileTextOutlined />}
