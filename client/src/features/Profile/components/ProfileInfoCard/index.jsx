@@ -3,7 +3,8 @@ import { Button, Col, Image, Row, Space, Tag, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import conversationBeta1Api from '../../../../api/conversationBeta1Api';
 import './ProfileInfoCard.scss';
 
 const { Title, Text } = Typography;
@@ -11,19 +12,18 @@ const { Title, Text } = Typography;
 ProfileInfoCard.propTypes = {
    userId: PropTypes.string,
    userProfile: PropTypes.object,
-   onClickSendMessage: PropTypes.func,
 };
 
 ProfileInfoCard.defaultProps = {
    userId: '',
    userProfile: {},
-   onClickSendMessage: null,
 };
 
 function ProfileInfoCard(props) {
    const loginUserId = useSelector((state) => state.users.id);
 
-   const { userProfile, onClickSendMessage } = props;
+   const { userProfile } = props;
+   const history = useHistory();
    const [split, setSplit] = useState();
 
    useEffect(() => {
@@ -45,6 +45,18 @@ function ProfileInfoCard(props) {
             {t}
          </Tag>
       );
+   };
+
+   const onClickSendMessage = async () => {
+      try {
+         const response = await conversationBeta1Api.createConversation({
+            userId1: loginUserId,
+            userId2: userProfile.firebaseId,
+         });
+         history.push(`/messageBeta1/${response.id}`);
+      } catch (error) {
+         console.log(error);
+      }
    };
 
    return (
