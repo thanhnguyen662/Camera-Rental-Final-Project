@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import conversationBeta1Api from '../../../../api/conversationBeta1Api';
-import SendImageModal from '../../../MessageBeta/components/SendImageModal';
+import SendImageModal from '../SendImageModal';
 import MessageDetail from '../MessageDetail';
 
 ChatContent.propTypes = {
