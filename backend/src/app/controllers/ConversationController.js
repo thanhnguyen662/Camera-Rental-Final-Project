@@ -67,6 +67,23 @@ class ConversationController {
             },
          });
 
+         // const getDetail = async () => {
+         //    const test = response.map(async (i) => {
+         //       const myId = i.members[0];
+         //       const detail = await prisma.user.findUnique({
+         //          where: { firebaseId: myId },
+         //          select: { firebaseId: true },
+         //       });
+         //       return detail;
+         //    });
+         //    return Promise.all(test);
+         // };
+
+         // const load = async () => {
+         //    const url = await getDetail();
+         //    console.log(url);
+         // };
+         // load();
          // let array = [];
          // response.map(async (i) => {
          //    const myId = i.members[0];

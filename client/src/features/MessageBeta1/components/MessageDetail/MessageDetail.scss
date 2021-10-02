@@ -1,0 +1,11 @@
+.messageDetail {
+   height: 475px;
+   overflow: auto;
+   display: flex;
+   flex-direction: column-reverse;
+   width: 101%;
+}
+
+.messageDetail::-webkit-scrollbar {
+   display: none;
+}

@@ -67,7 +67,6 @@ class CategoryController {
                         ],
                      },
                   },
-                  _count: true,
                },
             });
             return res.status(200).json(response);
@@ -116,7 +115,6 @@ class CategoryController {
                         completed: 'desc',
                      },
                   },
-                  _count: true,
                },
             });
             return res.status(200).json(response);
@@ -165,7 +163,6 @@ class CategoryController {
                         createdAt: 'desc',
                      },
                   },
-                  _count: true,
                },
             });
             return res.status(200).json(response);

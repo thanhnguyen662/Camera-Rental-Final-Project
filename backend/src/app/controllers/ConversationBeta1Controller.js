@@ -57,12 +57,16 @@ class ConversationBeta1Controller {
 
    getConversationMessages = async (req, res, next) => {
       try {
+         const page = Number(req.query.page);
+         const take = Number(req.query.take);
          const response = await prisma.conversationBeta1.findUnique({
             where: {
                id: Number(req.query.conversationId),
             },
             include: {
                messages: {
+                  take: take,
+                  skip: (page - 1) * take,
                   include: {
                      user: {
                         select: {
@@ -72,6 +76,7 @@ class ConversationBeta1Controller {
                         },
                      },
                   },
+                  orderBy: { createdAt: 'desc' },
                },
                members: {
                   include: {

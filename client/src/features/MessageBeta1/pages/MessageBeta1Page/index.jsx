@@ -41,7 +41,6 @@ function MessageBeta1page(props) {
             const response = await conversationBeta1Api.getConversation({
                userId: userId,
             });
-            console.log('conversation list', response);
             setConversations(response);
          } catch (error) {
             console.log(error);
@@ -55,7 +54,6 @@ function MessageBeta1page(props) {
       if (!userId) return;
       socket.current = io('ws://localhost:9900');
       socket.current.on('messageToReceiver', (message) => {
-         console.log('message from socket', message);
          const action = newMessage({
             ...message,
             id: shortid.generate(),

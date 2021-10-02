@@ -4,5 +4,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      button {
+         border-radius: 7px;
+         width: 70px;
+      }
    }
 }

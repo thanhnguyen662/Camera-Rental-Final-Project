@@ -1,4 +1,4 @@
-import { Col, Pagination, Row } from 'antd';
+import { Col, Button, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import categoryApi from '../../../../api/categoryApi';
@@ -6,6 +6,7 @@ import BreadcrumbBar from '../../../../components/BreadcrumbBar';
 import CategoryContent from '../../components/CategoryContent';
 import CategoryMenu from '../../components/CategoryMenu';
 import CategorySidebar from '../../components/CategorySidebar';
+import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import './CategoryPage.scss';
 
 function CategoryPage(props) {
@@ -18,6 +19,7 @@ function CategoryPage(props) {
    const [rate, setRate] = useState('All');
    const [submitMinMax, setSubmitMinMax] = useState({});
    const [selectProvince, setSelectProvince] = useState('global');
+   const [isMore, setIsMore] = useState(true);
 
    useEffect(() => {
       const getProductCategoryInDb = async () => {
@@ -25,31 +27,34 @@ function CategoryPage(props) {
             name: categoryName,
             sortBy: sortBy,
             page: page,
-            take: 2,
+            take: 10,
             searchByBrand: brand,
             searchByRate: rate,
             minPrice: submitMinMax.min,
             maxPrice: submitMinMax.max,
             province: selectProvince,
          });
+         console.log(response);
+         response[0].Product.length >= 10 ? setIsMore(true) : setIsMore(false);
          setCategory(response);
       };
       getProductCategoryInDb();
    }, [categoryName, sortBy, page, brand, rate, submitMinMax, selectProvince]);
 
-   const handlePageChange = (e) => {
-      setPage(e);
-   };
-
-   const pagination = (isSimple) => {
+   const pagination = () => {
       return (
-         <Pagination
-            simple={isSimple}
-            total={category[0]?._count.Product}
-            pageSize={2}
-            current={page}
-            onChange={(e) => handlePageChange(e)}
-         />
+         <Space>
+            <Button
+               onClick={() => setPage(page - 1)}
+               icon={<ArrowLeftOutlined />}
+               disabled={page <= 1 ? true : false}
+            />
+            <Button
+               disabled={!isMore ? true : false}
+               onClick={() => setPage(page + 1)}
+               icon={<ArrowRightOutlined />}
+            />
+         </Space>
       );
    };
 

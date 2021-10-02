@@ -7,11 +7,12 @@ import {
    MessageList,
 } from '@chatscope/chat-ui-kit-react';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import conversationBeta1Api from '../../../../api/conversationBeta1Api';
 import SendImageModal from '../SendImageModal';
 import MessageDetail from '../MessageDetail';
+import SidebarToolbox from '../SidebarToolbox';
 
 ChatContent.propTypes = {
    userId: PropTypes.string,
@@ -41,29 +42,47 @@ function ChatContent(props) {
       socketMessage,
    } = props;
    const { conversationId } = useParams();
+   const ref = useRef();
 
    const [conversationInfo, setConversationInfo] = useState(null);
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [messages, setMessages] = useState([]);
+   const [page, setPage] = useState(1);
    const [input, setInput] = useState('');
 
    useEffect(() => {
+      setPage(1);
+      setMessages([]);
+   }, [conversationId]);
+
+   useEffect(() => {
       if (!userId) return;
+      if (page > 1) {
+         if (ref.current === page) return;
+      }
       const getMessageInConversation = async () => {
          try {
             const response = await conversationBeta1Api.getMessage({
                userId: userId,
                conversationId: conversationId,
+               page: page,
+               take: 20,
             });
-            console.log('message list: ', response.messages);
+            response.messages.sort(
+               (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
             setConversationInfo(response.members[0]);
-            setMessages(response.messages);
+            setMessages((prev) => [...response.messages, ...prev]);
          } catch (error) {
             console.log(error);
          }
       };
       getMessageInConversation();
-   }, [conversationId, userId]);
+   }, [conversationId, userId, page]);
+
+   useEffect(() => {
+      ref.current = page;
+   }, [page]);
 
    useEffect(() => {
       if (
@@ -109,6 +128,10 @@ function ChatContent(props) {
       setIsModalVisible(false);
    };
 
+   const handlePageChange = () => {
+      setPage(page + 1);
+   };
+
    return (
       <>
          <ChatContainer>
@@ -124,7 +147,12 @@ function ChatContent(props) {
             </ConversationHeader>
             <MessageList>
                <div as='Message'>
-                  <MessageDetail messages={messages} userId={userId} />
+                  <MessageDetail
+                     messages={messages}
+                     userId={userId}
+                     handlePageChange={handlePageChange}
+                     page={page}
+                  />
                </div>
             </MessageList>
             <MessageInput
@@ -135,6 +163,7 @@ function ChatContent(props) {
                onAttachClick={() => setIsModalVisible(true)}
             />
          </ChatContainer>
+         <SidebarToolbox conversationId={conversationId} />
          <SendImageModal
             isModalVisible={isModalVisible}
             handleIsModalVisible={handleIsModalVisible}

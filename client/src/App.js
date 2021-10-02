@@ -1,12 +1,12 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userApi from './api/userApi';
 import './App.css';
-import { userInfo, getUserProfile } from './features/Auth/loginSlice';
-import { auth } from './firebase';
+import { getUserProfile, userInfo } from './features/Auth/loginSlice';
 import { getCart } from './features/Product/productSlice';
+import { auth } from './firebase';
 import Routers from './router';
-import { unwrapResult } from '@reduxjs/toolkit';
 
 function App() {
    const dispatch = useDispatch();

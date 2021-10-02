@@ -41,20 +41,7 @@ io.on('connection', (socket) => {
       const receiverSocket = getUser(clientMessage.receiver.firebaseId);
       if (!receiverSocket) return console.log('Offline');
 
-      const type = (content) => {
-         if (
-            content.split('.').length === 6 &&
-            content.split('.')[0] === 'https://firebasestorage' &&
-            content.split('.')[2] === 'com/v0/b/camera-rental-firbase'
-         ) {
-            return 'image';
-         } else {
-            return 'text';
-         }
-      };
-
       io.to(receiverSocket.socketId).emit('messageToReceiver', {
-         type: type(clientMessage.content),
          sender: clientMessage.sender,
          content: clientMessage.content,
          conversationId: clientMessage.conversationId,

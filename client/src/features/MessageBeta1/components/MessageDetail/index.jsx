@@ -1,20 +1,24 @@
-import PropTypes from 'prop-types';
 import { Avatar, Message } from '@chatscope/chat-ui-kit-react';
-import React from 'react';
 import { Image } from 'antd';
+import PropTypes from 'prop-types';
+import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import './MessageDetail.scss';
 
 MessageDetail.propTypes = {
    messages: PropTypes.array,
    userId: PropTypes.string,
+   handlePageChange: PropTypes.func,
 };
 
 MessageDetail.defaultProps = {
    messages: [],
    userId: '',
+   handlePageChange: null,
 };
 
 function MessageDetail(props) {
-   const { messages, userId } = props;
+   const { messages, userId, handlePageChange } = props;
 
    const inComingMessage = (message) => {
       return (
@@ -93,19 +97,29 @@ function MessageDetail(props) {
 
    return (
       <>
-         {messages.map((message) => {
-            if (message.user.firebaseId === userId) {
-               return isType(message.content) === 'text'
-                  ? outgoingMessage(message)
-                  : imageOutGoingMessage(message);
-            }
-            if (message.user.firebaseId !== userId) {
-               return isType(message.content) === 'text'
-                  ? inComingMessage(message)
-                  : imageInComingMessage(message);
-            }
-            return null;
-         })}
+         <div id='scrollableDiv' className='messageDetail'>
+            <InfiniteScroll
+               dataLength={messages?.length}
+               next={handlePageChange}
+               inverse={true}
+               hasMore={true}
+               scrollableTarget='scrollableDiv'
+            >
+               {messages.map((message) => {
+                  if (message.user.firebaseId === userId) {
+                     return isType(message.content) === 'text'
+                        ? outgoingMessage(message)
+                        : imageOutGoingMessage(message);
+                  }
+                  if (message.user.firebaseId !== userId) {
+                     return isType(message.content) === 'text'
+                        ? inComingMessage(message)
+                        : imageInComingMessage(message);
+                  }
+                  return null;
+               })}
+            </InfiniteScroll>
+         </div>
       </>
    );
 }
