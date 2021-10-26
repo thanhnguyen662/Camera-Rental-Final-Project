@@ -28,7 +28,7 @@ function SocialNewProduct(props) {
                      <div className='socialNewProductCard'>
                         <div className='socialNewProductUser'>
                            <Row>
-                              <Col flex='auto'>
+                              <Col span={17}>
                                  <div className='productName'>
                                     <Text className='name'>{product.name}</Text>
                                  </div>
@@ -48,7 +48,12 @@ function SocialNewProduct(props) {
                                     </div>
                                  </Space>
                               </Col>
-                              <Col>
+                              <Col
+                                 style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                 }}
+                              >
                                  <Image
                                     src={product.productPhotoURL[0]}
                                     style={{

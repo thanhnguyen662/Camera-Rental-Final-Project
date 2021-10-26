@@ -41,6 +41,7 @@ function MessageBeta1page(props) {
             const response = await conversationBeta1Api.getConversation({
                userId: userId,
             });
+            console.log('conversation: ', response);
             setConversations(response);
          } catch (error) {
             console.log(error);

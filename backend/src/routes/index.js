@@ -10,6 +10,7 @@ const searchRouter = require('./search');
 const categoryRouter = require('./category');
 const postRouter = require('./post');
 const conversationBeta1 = require('./conversationBeta1');
+const adminRouter = require('./admin');
 
 function route(app) {
    app.use('/conversationBeta1', conversationBeta1);
@@ -24,6 +25,7 @@ function route(app) {
    app.use('/search', searchRouter);
    app.use('/category', categoryRouter);
    app.use('/post', postRouter);
+   app.use('/admin', adminRouter);
 }
 
 module.exports = route;
