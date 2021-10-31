@@ -20,7 +20,7 @@ model Product {
   price           Int?
   qualityRate     Float?
   stock           Int?
-  publicStatus    Boolean?
+  publicStatus    Boolean?         
   productPhotoURL String[]
   categoryId      Int?
   completed       Int?             @default(0)

@@ -20,6 +20,7 @@ import SocialPostHeader from '../SocialPostHeader';
 import postApi from '../../../../api/postApi';
 import moment from 'moment';
 import './SocialPostDetailModal.scss';
+import { Link } from 'react-router-dom';
 
 SocialPostDetailModal.propTypes = {
    isModalPostDetailVisible: PropTypes.bool,
@@ -131,10 +132,14 @@ function SocialPostDetailModal(props) {
                                     key={comment.id}
                                     author={comment.user.username}
                                     avatar={
-                                       <Avatar
-                                          src={comment.user.photoURL}
-                                          alt={comment.user.username}
-                                       />
+                                       <Link
+                                          to={`/profile/${comment.user.firebaseId}`}
+                                       >
+                                          <Avatar
+                                             src={comment.user.photoURL}
+                                             alt={comment.user.username}
+                                          />
+                                       </Link>
                                     }
                                     content={<div>{comment.content}</div>}
                                     datetime={

@@ -1,0 +1,28 @@
+.manageProduct {
+   .manageProductTable {
+      border-radius: 10px;
+      overflow: auto;
+      margin-bottom: 20px;
+   }
+
+   .manageProductImage {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+   }
+
+   .ant-table-thead > tr > th,
+   .ant-table-tbody > tr > td,
+   .ant-table tfoot > tr > th,
+   .ant-table tfoot > tr > td {
+      padding: 12px 20px;
+   }
+
+   .input {
+      margin-right: 10px;
+
+      .ant-input-affix-wrapper {
+         border-radius: 7px;
+      }
+   }
+}

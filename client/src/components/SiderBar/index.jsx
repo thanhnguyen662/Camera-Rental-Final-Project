@@ -88,7 +88,7 @@ function SiderBar(props) {
                <Link to='/manages/shop/revenue'>Shop Management</Link>
             </Menu.Item>
             <Menu.Item key='9' icon={<ConsoleSqlOutlined />} title='Admin'>
-               <Link to='/admin'>Admin</Link>
+               <Link to='/admin/dashboard'>Admin</Link>
             </Menu.Item>
          </Menu>
       </Sider>

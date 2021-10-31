@@ -7,7 +7,7 @@ function Admin(props) {
 
    return (
       <Switch>
-         <Route exact path={`${match.url}`} component={AdminPage} />
+         <Route exact path={`${match.url}/dashboard`} component={AdminPage} />
       </Switch>
    );
 }

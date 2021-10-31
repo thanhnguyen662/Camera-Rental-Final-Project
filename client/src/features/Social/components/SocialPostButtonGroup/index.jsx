@@ -15,7 +15,6 @@ SocialPostButtonGroup.propTypes = {
    handleClickCameraIcon: PropTypes.func,
    onClickLike: PropTypes.func,
    onClickUnlike: PropTypes.func,
-   onClickViewDetail: PropTypes.func,
 };
 
 SocialPostButtonGroup.defaultProps = {
@@ -23,19 +22,13 @@ SocialPostButtonGroup.defaultProps = {
    handleClickCameraIcon: null,
    onClickLike: null,
    onClickUnlike: null,
-   onClickViewDetail: null,
 };
 
 const { Text } = Typography;
 
 function SocialPostButtonGroup(props) {
-   const {
-      postDetail,
-      handleClickCameraIcon,
-      onClickLike,
-      onClickUnlike,
-      onClickViewDetail,
-   } = props;
+   const { postDetail, handleClickCameraIcon, onClickLike, onClickUnlike } =
+      props;
 
    return (
       <>
@@ -61,10 +54,7 @@ function SocialPostButtonGroup(props) {
                      </div>
                      <div>
                         <Space>
-                           <BsChatSquare
-                              className='icon'
-                              onClick={() => onClickViewDetail(postDetail)}
-                           />
+                           <BsChatSquare className='icon' />
                            <Text className='text'>
                               {postDetail._count?.comments}
                            </Text>
