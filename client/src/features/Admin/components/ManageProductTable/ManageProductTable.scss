@@ -6,8 +6,8 @@
    }
 
    .manageProductImage {
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       object-fit: cover;
    }
 
@@ -15,14 +15,33 @@
    .ant-table-tbody > tr > td,
    .ant-table tfoot > tr > th,
    .ant-table tfoot > tr > td {
-      padding: 12px 20px;
+      padding: 15px 20px;
    }
 
    .input {
       margin-right: 10px;
+      width: 250px;
 
       .ant-input-affix-wrapper {
          border-radius: 7px;
       }
    }
+
+   .selectSearchType {
+      .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+         border-radius: 7px;
+      }
+   }
+}
+
+.productTablePagination {
+   button {
+      width: 80px;
+      border-radius: 7px;
+   }
+}
+
+.manageProductPagination {
+   display: flex;
+   justify-content: flex-end;
 }

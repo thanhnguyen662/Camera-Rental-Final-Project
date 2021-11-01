@@ -108,12 +108,40 @@ class AdminController {
 
    adminManageProduct = async (req, res, next) => {
       try {
-         // const searchKeyword = req.query.searchKeyword || undefined;
          const page = Number(req.query.page) || 1;
-         const take = req.query.take || 10;
+         const take = Number(req.query.take) || 10;
+         const type = req.query.type;
+         const keyword = req.query.keyword || undefined;
+
          const response = await prisma.product.findMany({
             take: take,
             skip: (page - 1) * take,
+            where:
+               type === 'product'
+                  ? {
+                       name: {
+                          contains: keyword,
+                          mode: 'insensitive',
+                       },
+                    }
+                  : {
+                       User: {
+                          OR: [
+                             {
+                                username: {
+                                   contains: keyword,
+                                   mode: 'insensitive',
+                                },
+                             },
+                             {
+                                firebaseId: {
+                                   contains: keyword,
+                                   mode: 'insensitive',
+                                },
+                             },
+                          ],
+                       },
+                    },
             include: {
                User: {
                   select: {

@@ -1,23 +1,31 @@
 import {
+   CameraOutlined,
    CheckOutlined,
    CloseOutlined,
    EllipsisOutlined,
+   UserOutlined,
+   ArrowRightOutlined,
+   ArrowLeftOutlined,
 } from '@ant-design/icons';
 import {
    Avatar,
    Button,
+   Col,
    Dropdown,
    Image,
    Input,
    Menu,
+   Row,
+   Select,
    Space,
    Table,
    Tag,
    Typography,
+   DatePicker,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import './ManageProductTable.scss';
 
@@ -30,10 +38,11 @@ ManageProductTable.defaultProps = {
 };
 
 const { Text } = Typography;
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 function ManageProductTable(props) {
-   const { manageProduct } = props;
-   const [search, setSearch] = useState('');
+   const { manageProduct, onSearch, onChangePage, page, isMore } = props;
    const timeout = useRef(null);
 
    const menu = () => (
@@ -48,15 +57,10 @@ function ManageProductTable(props) {
    );
 
    const handleOnSearchChange = (value) => {
-      setSearch(value);
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => {
-         return handleSearch(value);
+         return onSearch('keyword', value);
       }, 400);
-   };
-
-   const handleSearch = (value) => {
-      console.log(value);
    };
 
    const columns = [
@@ -121,7 +125,7 @@ function ManageProductTable(props) {
             };
             return (
                <Tag color={productStatus().color} style={{ borderRadius: 6 }}>
-                  <div style={{ padding: '2px 1px', fontSize: 13.5 }}>
+                  <div style={{ padding: '2.5px 1.5px', fontSize: 14 }}>
                      {productStatus().status}
                   </div>
                </Tag>
@@ -152,14 +156,64 @@ function ManageProductTable(props) {
 
    const title = () => {
       return (
-         <div className='input'>
-            <Input
-               value={search}
-               onChange={(e) => handleOnSearchChange(e.target.value)}
-               suffix={<BsSearch />}
-               placeholder='Search here'
-            />
+         <Row>
+            <Col>
+               <Space size={8}>
+                  <div className='selectSearchType'>
+                     <Select
+                        defaultValue='product'
+                        showArrow={false}
+                        onChange={(value) => onSearch('type', value)}
+                     >
+                        <Option key='product'>
+                           <CameraOutlined />
+                        </Option>
+                        <Option key='user'>
+                           <UserOutlined />
+                        </Option>
+                     </Select>
+                  </div>
+                  <div className='input'>
+                     <Input
+                        onChange={(e) => handleOnSearchChange(e.target.value)}
+                        suffix={<BsSearch />}
+                        placeholder='Search here'
+                     />
+                  </div>
+               </Space>
+            </Col>
+            <Col flex='auto'>{productTableRangePicker()}</Col>
+            <Col>{productTablePagination()}</Col>
+         </Row>
+      );
+   };
+
+   const productTablePagination = () => {
+      return (
+         <div className='productTablePagination'>
+            <Space>
+               <Button
+                  disabled={page <= 1 ? true : false}
+                  icon={<ArrowLeftOutlined />}
+                  onClick={() => onChangePage('decrease')}
+               />
+               <Button
+                  disabled={!isMore}
+                  icon={<ArrowRightOutlined />}
+                  onClick={() => onChangePage('increase')}
+               />
+            </Space>
          </div>
+      );
+   };
+
+   const productTableRangePicker = () => {
+      return (
+         <RangePicker
+            style={{ borderRadius: '7px', width: 230 }}
+            defaultValue={[moment().subtract(30, 'days'), moment()]}
+            disabledDate={(current) => current > moment().endOf('days')}
+         />
       );
    };
 
@@ -172,7 +226,11 @@ function ManageProductTable(props) {
                rowKey={(record) => record.id}
                dataSource={manageProduct}
                columns={columns}
+               pagination={false}
             />
+         </div>
+         <div className='manageProductPagination'>
+            {productTablePagination()}
          </div>
       </>
    );
