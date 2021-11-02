@@ -1,15 +1,15 @@
-import React from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import MessageBetaPage from './pages/MessageBetaPage';
+// import React from 'react';
+// import { Route, Switch, useRouteMatch } from 'react-router-dom';
+// import MessageBetaPage from './pages/MessageBetaPage';
 
-function MessageBeta(props) {
-   const match = useRouteMatch();
+// function MessageBeta(props) {
+//    const match = useRouteMatch();
 
-   return (
-      <Switch>
-         <Route exact path={match.url} component={MessageBetaPage} />
-      </Switch>
-   );
-}
+//    return (
+//       <Switch>
+//          <Route exact path={match.url} component={MessageBetaPage} />
+//       </Switch>
+//    );
+// }
 
-export default MessageBeta;
+// export default MessageBeta;

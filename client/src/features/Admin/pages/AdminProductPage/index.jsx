@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import adminApi from '../../../../api/adminApi';
 import ManageProductTable from '../../components/ManageProductTable';
+import moment from 'moment';
 
 function AdminPage(props) {
    const [manageProduct, setManageProduct] = useState([]);
@@ -9,18 +10,25 @@ function AdminPage(props) {
    const [searchFormData, setSearchFormData] = useState({
       type: 'product',
       keyword: '',
+      rangeDate: [moment().subtract(100, 'days'), moment()],
+      status: 'all',
+      sortDate: 'desc',
    });
 
    useEffect(() => {
       const getProductManage = async () => {
-         const response = await adminApi.adminManageProduct({
-            ...searchFormData,
-            page: page,
-            take: 10,
-         });
-         console.log('response: ', response);
-         response?.length < 10 ? setIsMore(false) : setIsMore(true);
-         setManageProduct(response);
+         try {
+            const response = await adminApi.adminManageProduct({
+               ...searchFormData,
+               page: page,
+               take: 10,
+            });
+            console.log('response: ', response);
+            response?.length < 10 ? setIsMore(false) : setIsMore(true);
+            setManageProduct(response);
+         } catch (error) {
+            console.log(error);
+         }
       };
       getProductManage();
    }, [searchFormData, page]);
@@ -37,6 +45,22 @@ function AdminPage(props) {
       setPage(page + 1);
    };
 
+   const handleClickActionButton = async (action, productId) => {
+      try {
+         const response = await adminApi.adminApproveProduct({
+            action,
+            productId,
+         });
+         setManageProduct((prev) => {
+            const findIndex = prev.findIndex((item) => item.id === productId);
+            prev[findIndex].publicStatus = response.publicStatus;
+            return [...prev];
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
    return (
       <>
          <div>
@@ -47,6 +71,7 @@ function AdminPage(props) {
                onChangePage={handleChangePage}
                page={page}
                isMore={isMore}
+               onClickActionButton={handleClickActionButton}
             />
          </div>
       </>

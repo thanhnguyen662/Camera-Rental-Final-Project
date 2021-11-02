@@ -1,37 +1,36 @@
 import {
-   MessageOutlined,
+   ConsoleSqlOutlined,
+   FileTextOutlined,
    HeartOutlined,
    HomeOutlined,
-   FileTextOutlined,
    InboxOutlined,
-   ConsoleSqlOutlined,
+   MessageOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Badge } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Layout, Menu } from 'antd';
+import React, { useState } from 'react';
 import { BiMapPin } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 
 function SiderBar(props) {
-   const location = useLocation();
+   // const location = useLocation();
 
    const { Sider } = Layout;
    const [collapsed, onCollapsed] = useState(true);
-   const reduxIncomingMessage = useSelector((state) => state.messages[0]);
-   const [badge, setBadge] = useState(false);
+   // const reduxIncomingMessage = useSelector((state) => state.messages[0]);
+   // const [badge, setBadge] = useState(false);
 
-   useEffect(() => {
-      reduxIncomingMessage && setBadge(true);
-   }, [reduxIncomingMessage]);
+   // useEffect(() => {
+   //    reduxIncomingMessage && setBadge(true);
+   // }, [reduxIncomingMessage]);
 
-   useEffect(() => {
-      location.pathname === '/messageBeta' && setBadge(false);
-   }, [location]);
+   // useEffect(() => {
+   //    location.pathname === '/messageBeta' && setBadge(false);
+   // }, [location]);
 
-   const badgeShow = location.pathname !== '/messageBeta' &&
-      badge && {
-         dot: true,
-      };
+   // const badgeShow = location.pathname !== '/messageBeta' &&
+   //    badge && {
+   //       dot: true,
+   //    };
 
    return (
       <Sider
@@ -51,7 +50,7 @@ function SiderBar(props) {
             <Menu.Item key='2' icon={<BiMapPin />} title='Maps'>
                <Link to='/maps'>Maps</Link>
             </Menu.Item>
-            <Menu.Item
+            {/* <Menu.Item
                key='4'
                icon={
                   <Badge {...badgeShow} size='small' offset={[5, 10]}>
@@ -61,7 +60,7 @@ function SiderBar(props) {
                title='Message Beta'
             >
                <Link to='/messageBeta'>Message Beta</Link>
-            </Menu.Item>
+            </Menu.Item> */}
 
             <Menu.Item key='11' icon={<MessageOutlined />} title='Maps'>
                <Link to='/messageBeta1'>Beta1</Link>
@@ -88,7 +87,7 @@ function SiderBar(props) {
                <Link to='/manages/shop/revenue'>Shop Management</Link>
             </Menu.Item>
             <Menu.Item key='9' icon={<ConsoleSqlOutlined />} title='Admin'>
-               <Link to='/admin/dashboard'>Admin</Link>
+               <Link to='/admin/product'>Admin</Link>
             </Menu.Item>
          </Menu>
       </Sider>

@@ -112,6 +112,15 @@ class AdminController {
          const take = Number(req.query.take) || 10;
          const type = req.query.type;
          const keyword = req.query.keyword || undefined;
+         const rangeDate = req.query.rangeDate;
+         const sortDate = req.query.sortDate;
+         const isStatus = () => {
+            const status = req.query.status;
+            if (status === 'all') return undefined;
+            if (status === 'pending') return null;
+            if (status === 'approved') return true;
+            if (status === 'declined') return false;
+         };
 
          const response = await prisma.product.findMany({
             take: take,
@@ -119,28 +128,64 @@ class AdminController {
             where:
                type === 'product'
                   ? {
-                       name: {
-                          contains: keyword,
-                          mode: 'insensitive',
-                       },
+                       AND: [
+                          {
+                             name: {
+                                contains: keyword,
+                                mode: 'insensitive',
+                             },
+                          },
+                          {
+                             AND: [
+                                {
+                                   createdAt: {
+                                      gte: new Date(rangeDate[0]),
+                                   },
+                                },
+                                {
+                                   createdAt: {
+                                      lte: new Date(rangeDate[1]),
+                                   },
+                                },
+                             ],
+                          },
+                          {
+                             publicStatus: {
+                                equals: isStatus(),
+                             },
+                          },
+                       ],
                     }
                   : {
-                       User: {
-                          OR: [
-                             {
+                       AND: [
+                          {
+                             User: {
                                 username: {
                                    contains: keyword,
                                    mode: 'insensitive',
                                 },
                              },
-                             {
-                                firebaseId: {
-                                   contains: keyword,
-                                   mode: 'insensitive',
+                          },
+                          {
+                             AND: [
+                                {
+                                   createdAt: {
+                                      gte: new Date(rangeDate[0]),
+                                   },
                                 },
-                             },
-                          ],
-                       },
+                                {
+                                   createdAt: {
+                                      lte: new Date(rangeDate[1]),
+                                   },
+                                },
+                                {
+                                   publicStatus: {
+                                      equals: isStatus(),
+                                   },
+                                },
+                             ],
+                          },
+                       ],
                     },
             include: {
                User: {
@@ -154,7 +199,23 @@ class AdminController {
                },
             },
             orderBy: {
-               createdAt: 'desc',
+               createdAt: sortDate,
+            },
+         });
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   adminApproveProduct = async (req, res, next) => {
+      try {
+         const response = await prisma.product.update({
+            where: {
+               id: req.body.productId,
+            },
+            data: {
+               publicStatus: req.body.action === 'approve' ? true : false,
             },
          });
          return res.status(200).json(response);

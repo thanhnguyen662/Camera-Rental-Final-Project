@@ -14,8 +14,8 @@ import Home from '../features/Home';
 import Manages from '../features/Manages';
 // import ManageShop from '../features/ManageShop';
 import Maps from '../features/Maps';
-import Message from '../features/Message';
-import MessageBeta from '../features/MessageBeta';
+// import Message from '../features/Message';
+// import MessageBeta from '../features/MessageBeta';
 import MessageBeta1 from '../features/MessageBeta1';
 import Product from '../features/Product';
 import Profile from '../features/Profile';
@@ -100,13 +100,13 @@ function Routers(props) {
                         </Content>
                      </Route>
 
-                     <Route path='/message'>
+                     {/* <Route path='/message'>
                         <Message />
-                     </Route>
+                     </Route> */}
 
-                     <Route path='/messageBeta'>
+                     {/* <Route path='/messageBeta'>
                         <MessageBeta />
-                     </Route>
+                     </Route> */}
 
                      <Route path='/messageBeta1'>
                         <MessageBeta1 />

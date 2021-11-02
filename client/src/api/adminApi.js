@@ -15,6 +15,11 @@ const adminApi = {
       const url = '/admin/product/manage';
       return axiosClient.get(url, { params });
    },
+
+   adminApproveProduct: (data) => {
+      const url = '/admin/product/action';
+      return axiosClient.patch(url, data);
+   },
 };
 
 export default adminApi;

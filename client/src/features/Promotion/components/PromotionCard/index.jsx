@@ -1,96 +1,105 @@
+import { Avatar, Button, Col, Row, Typography } from 'antd';
 import React from 'react';
 // import PropTypes from 'prop-types';
 import './PromotionCard.scss';
-import {
-   RiCamera2Line,
-   RiMapPin5Line,
-   RiNotification2Line,
-   RiRepeat2Fill,
-} from 'react-icons/ri';
-import { Button, Col, Row } from 'antd';
 
 PromotionCard.propTypes = {};
 
+const { Paragraph } = Typography;
+
 function PromotionCard(props) {
+   const { latestPost } = props;
+   console.log('latestPost: ', latestPost[1]?.images[0]);
+
    return (
       <>
          <div className='promotion'>
             <Row gutter={[28, 30]}>
                <Col flex='none'>
                   <div className='promotionCard'>
-                     <Row span={24}>
-                        <img
-                           src='https://www.jga-group.com/wp-content/uploads/2020/08/william-bayreuther-hfk6xOjQlFk-unsplash-1-scaled-e1597143706355.jpg'
-                           alt='photos'
-                        />
+                     <Row span={24} className='socialPostPhoto'>
+                        <img src={latestPost[0]?.images[0]} alt='photos' />
                      </Row>
-                     <Row justify='center' className='promotionTextBottom'>
-                        <RiNotification2Line className='icon' />
-                        <h1>
-                           Lorem nostrud quis excepteur aute officia ullamco.
-                        </h1>
+                     <div className='promotionTextBottom'>
+                        <div className='socialPostAvatar'>
+                           <Avatar
+                              src={latestPost[0]?.user.photoURL}
+                              size={45}
+                           />
+                        </div>
+                        <Paragraph
+                           className='socialPostCaption'
+                           ellipsis={{ rows: 3 }}
+                        >
+                           {latestPost[0]?.caption}
+                        </Paragraph>
                         <Button className='buttonCard'>Shop Now</Button>
-                     </Row>
+                     </div>
                   </div>
                </Col>
                <Col flex='none'>
                   <div className='promotionCard1'>
-                     <Row
-                        justify='center'
-                        className='promotionTextTop'
-                        span={24}
-                     >
-                        <RiMapPin5Line className='icon' />
-                        <h1>
-                           Esse do adipisicing elit ad nulla nisi voluptate ad
-                           nulla.
-                        </h1>
+                     <div className='promotionTextBottom'>
+                        <div className='socialPostAvatar'>
+                           <Avatar
+                              src={latestPost[1]?.user.photoURL}
+                              size={45}
+                           />
+                        </div>
+                        <Paragraph
+                           className='socialPostCaption'
+                           ellipsis={{ rows: 3 }}
+                        >
+                           {latestPost[1]?.caption}
+                        </Paragraph>
                         <Button className='buttonCard'>Shop Now</Button>
-                     </Row>
-                     <Row span={24}>
-                        <img
-                           src='https://images.unsplash.com/photo-1556642389-0cd5fd882f5a?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHBob3RvZ3JhcGhlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'
-                           alt='photos'
-                        />
+                     </div>
+                     <Row span={24} className='socialPostPhoto'>
+                        <img src={latestPost[1]?.images[0]} alt='photos' />
                      </Row>
                   </div>
                </Col>
                <Col flex='none'>
-                  <div className='promotionCard2'>
-                     <Row span={24}>
-                        <img
-                           src='https://images.unsplash.com/photo-1602525659170-997b350dd1c7?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzB8fHBob3RvZ3JhcGhlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'
-                           alt='photos'
-                        />
+                  <div className='promotionCard'>
+                     <Row span={24} className='socialPostPhoto'>
+                        <img src={latestPost[2]?.images[0]} alt='photos' />
                      </Row>
-                     <Row justify='center' className='promotionTextBottom'>
-                        <RiCamera2Line className='icon' />
-                        <h1>
-                           Lorem nostrud quis excepteur aute officia ullamco.
-                        </h1>
+                     <div className='promotionTextBottom'>
+                        <div className='socialPostAvatar'>
+                           <Avatar
+                              src={latestPost[2]?.user.photoURL}
+                              size={45}
+                           />
+                        </div>
+                        <Paragraph
+                           className='socialPostCaption'
+                           ellipsis={{ rows: 3 }}
+                        >
+                           {latestPost[2]?.caption}
+                        </Paragraph>
                         <Button className='buttonCard'>Shop Now</Button>
-                     </Row>
+                     </div>
                   </div>
                </Col>
                <Col flex='none'>
-                  <div className='promotionCard3'>
-                     <Row
-                        justify='center'
-                        className='promotionTextTop'
-                        span={24}
-                     >
-                        <RiRepeat2Fill className='icon' />
-                        <h1>
-                           Esse do adipisicing elit ad nulla nisi voluptate ad
-                           nulla.
-                        </h1>
+                  <div className='promotionCard1'>
+                     <div className='promotionTextBottom'>
+                        <div className='socialPostAvatar'>
+                           <Avatar
+                              src={latestPost[3]?.user.photoURL}
+                              size={45}
+                           />
+                        </div>
+                        <Paragraph
+                           className='socialPostCaption'
+                           ellipsis={{ rows: 3 }}
+                        >
+                           {latestPost[3]?.caption}
+                        </Paragraph>
                         <Button className='buttonCard'>Shop Now</Button>
-                     </Row>
-                     <Row span={24}>
-                        <img
-                           src='https://t2conline.com/wp-content/uploads/2019/09/Photography.jpg'
-                           alt='photos'
-                        />
+                     </div>
+                     <Row span={24} className='socialPostPhoto'>
+                        <img src={latestPost[3]?.images[0]} alt='photos' />
                      </Row>
                   </div>
                </Col>

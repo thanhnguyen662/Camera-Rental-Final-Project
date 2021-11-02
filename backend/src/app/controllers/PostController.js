@@ -288,42 +288,42 @@ class PostController {
       }
    };
 
-   getPostById = async (req, res, next) => {
-      try {
-         const response = await prisma.post.findUnique({
-            where: { id: Number(req.query.postId) },
-            include: {
-               _count: {
-                  select: { comments: true },
-               },
-               user: true,
-               postProducts: {
-                  include: {
-                     product: {
-                        select: {
-                           id: true,
-                           productPhotoURL: true,
-                           brand: true,
-                           slug: true,
-                           price: true,
-                           name: true,
-                           categories: {
-                              select: {
-                                 name: true,
-                              },
-                           },
-                        },
-                     },
-                  },
-               },
-            },
-         });
+   // getPostById = async (req, res, next) => {
+   //    try {
+   //       const response = await prisma.post.findUnique({
+   //          where: { id: Number(req.query.postId) },
+   //          include: {
+   //             _count: {
+   //                select: { comments: true },
+   //             },
+   //             user: true,
+   //             postProducts: {
+   //                include: {
+   //                   product: {
+   //                      select: {
+   //                         id: true,
+   //                         productPhotoURL: true,
+   //                         brand: true,
+   //                         slug: true,
+   //                         price: true,
+   //                         name: true,
+   //                         categories: {
+   //                            select: {
+   //                               name: true,
+   //                            },
+   //                         },
+   //                      },
+   //                   },
+   //                },
+   //             },
+   //          },
+   //       });
 
-         return res.status(200).json(response);
-      } catch (error) {
-         return next(error);
-      }
-   };
+   //       return res.status(200).json(response);
+   //    } catch (error) {
+   //       return next(error);
+   //    }
+   // };
 
    getCommentInPost = async (req, res, next) => {
       try {
@@ -343,6 +343,69 @@ class PostController {
                },
             },
             orderBy: { createdAt: 'desc' },
+         });
+
+         return res.status(200).json(response);
+      } catch (error) {
+         return next(error);
+      }
+   };
+
+   getLatestPost = async (req, res, next) => {
+      try {
+         const response = await prisma.post.findMany({
+            take: 4,
+            where: {
+               NOT: {
+                  images: {
+                     isEmpty: true,
+                  },
+               },
+            },
+            orderBy: {
+               updatedAt: 'desc',
+            },
+            include: {
+               user: true,
+               comments: {
+                  take: 3,
+                  orderBy: {
+                     createdAt: 'desc',
+                  },
+                  include: {
+                     user: {
+                        select: {
+                           firebaseId: true,
+                           username: true,
+                        },
+                     },
+                  },
+               },
+               postProducts: {
+                  include: {
+                     product: {
+                        select: {
+                           id: true,
+                           productPhotoURL: true,
+                           brand: true,
+                           slug: true,
+                           price: true,
+                           name: true,
+                           categories: {
+                              select: {
+                                 name: true,
+                              },
+                           },
+                        },
+                     },
+                  },
+               },
+               _count: {
+                  select: {
+                     comments: true,
+                  },
+               },
+            },
          });
 
          return res.status(200).json(response);

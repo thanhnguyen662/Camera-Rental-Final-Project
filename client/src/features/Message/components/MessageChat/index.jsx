@@ -1,26 +1,26 @@
-import { Message } from '@chatscope/chat-ui-kit-react';
-import React from 'react';
+// import { Message } from '@chatscope/chat-ui-kit-react';
+// import React from 'react';
 
-function MessageChat(props) {
-   const { message, own } = props;
+// function MessageChat(props) {
+//    const { message, own } = props;
 
-   return (
-      <Message
-         model={
-            own
-               ? {
-                    message: message.text,
-                    sentTime: message.createAt,
-                    direction: 'outgoing',
-                 }
-               : {
-                    message: message.text,
-                    sentTime: message.createAt,
-                    direction: 'incoming',
-                 }
-         }
-      />
-   );
-}
+//    return (
+//       <Message
+//          model={
+//             own
+//                ? {
+//                     message: message.text,
+//                     sentTime: message.createAt,
+//                     direction: 'outgoing',
+//                  }
+//                : {
+//                     message: message.text,
+//                     sentTime: message.createAt,
+//                     direction: 'incoming',
+//                  }
+//          }
+//       />
+//    );
+// }
 
-export default MessageChat;
+// export default MessageChat;

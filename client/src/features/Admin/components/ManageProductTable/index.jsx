@@ -1,32 +1,34 @@
 import {
+   AppstoreOutlined,
+   ArrowDownOutlined,
+   ArrowLeftOutlined,
+   ArrowRightOutlined,
+   ArrowUpOutlined,
    CameraOutlined,
    CheckOutlined,
+   ClockCircleOutlined,
    CloseOutlined,
-   EllipsisOutlined,
    UserOutlined,
-   ArrowRightOutlined,
-   ArrowLeftOutlined,
 } from '@ant-design/icons';
 import {
    Avatar,
    Button,
    Col,
-   Dropdown,
+   DatePicker,
    Image,
    Input,
-   Menu,
    Row,
    Select,
    Space,
    Table,
    Tag,
    Typography,
-   DatePicker,
 } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
 import { BsSearch } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 import './ManageProductTable.scss';
 
 ManageProductTable.propTypes = {
@@ -42,19 +44,16 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 function ManageProductTable(props) {
-   const { manageProduct, onSearch, onChangePage, page, isMore } = props;
+   const {
+      manageProduct,
+      onSearch,
+      onChangePage,
+      page,
+      isMore,
+      searchFormData,
+      onClickActionButton,
+   } = props;
    const timeout = useRef(null);
-
-   const menu = () => (
-      <Menu style={{ width: 120, borderRadius: 8 }}>
-         <Menu.Item key='1' icon={<CheckOutlined />}>
-            Approve
-         </Menu.Item>
-         <Menu.Item key='2' icon={<CloseOutlined />}>
-            Decline
-         </Menu.Item>
-      </Menu>
-   );
 
    const handleOnSearchChange = (value) => {
       if (timeout.current) clearTimeout(timeout.current);
@@ -81,10 +80,12 @@ function ManageProductTable(props) {
          width: '25%',
          render: (record) => {
             return (
-               <Space direction='vertical'>
-                  <Text style={{ fontWeight: 'bold' }}>{record.brand}</Text>
-                  <Text style={{ fontSize: 15 }}>{record.name}</Text>
-               </Space>
+               <Link to={`/product/${record.slug}`}>
+                  <Space direction='vertical'>
+                     <Text style={{ fontWeight: 'bold' }}>{record.brand}</Text>
+                     <Text style={{ fontSize: 15 }}>{record.name}</Text>
+                  </Space>
+               </Link>
             );
          },
       },
@@ -94,10 +95,12 @@ function ManageProductTable(props) {
          width: '15%',
          render: (record) => {
             return (
-               <Space direction='vertical' style={{ alignItems: 'center' }}>
-                  <Avatar src={record.photoURL} size={45} />
-                  <Text>{record.username}</Text>
-               </Space>
+               <Link to={`/profile/${record.firebaseId}`}>
+                  <Space direction='vertical' style={{ alignItems: 'center' }}>
+                     <Avatar src={record.photoURL} size={45} />
+                     <Text>{record.username}</Text>
+                  </Space>
+               </Link>
             );
          },
       },
@@ -144,47 +147,55 @@ function ManageProductTable(props) {
          key: 'operation',
          fixed: 'right',
          width: '15%',
-         render: () => {
+         render: (record) => {
             return (
-               <Dropdown overlay={menu} placement='bottomRight'>
-                  <Button icon={<EllipsisOutlined />} type='text' />
-               </Dropdown>
+               <Space>
+                  <Button
+                     icon={<CheckOutlined />}
+                     type='primary'
+                     ghost
+                     onClick={() => onClickActionButton('approve', record.id)}
+                  />
+                  <Button
+                     icon={<CloseOutlined />}
+                     type='primary'
+                     danger
+                     ghost
+                     onClick={() => onClickActionButton('decline', record.id)}
+                  />
+               </Space>
             );
          },
       },
    ];
 
-   const title = () => {
+   const productTableSearchBar = () => {
       return (
-         <Row>
-            <Col>
-               <Space size={8}>
-                  <div className='selectSearchType'>
-                     <Select
-                        defaultValue='product'
-                        showArrow={false}
-                        onChange={(value) => onSearch('type', value)}
-                     >
-                        <Option key='product'>
-                           <CameraOutlined />
-                        </Option>
-                        <Option key='user'>
-                           <UserOutlined />
-                        </Option>
-                     </Select>
-                  </div>
-                  <div className='input'>
-                     <Input
-                        onChange={(e) => handleOnSearchChange(e.target.value)}
-                        suffix={<BsSearch />}
-                        placeholder='Search here'
-                     />
-                  </div>
-               </Space>
-            </Col>
-            <Col flex='auto'>{productTableRangePicker()}</Col>
-            <Col>{productTablePagination()}</Col>
-         </Row>
+         <Space size={8}>
+            <div className='selectSearchType'>
+               <Select
+                  defaultValue={searchFormData.type}
+                  showArrow={false}
+                  onChange={(value) => onSearch('type', value)}
+                  dropdownStyle={{ borderRadius: 7 }}
+               >
+                  <Option key='product'>
+                     <CameraOutlined />
+                  </Option>
+                  <Option key='user'>
+                     <UserOutlined />
+                  </Option>
+               </Select>
+            </div>
+            <div className='input'>
+               <Input
+                  value={searchFormData.value}
+                  onChange={(e) => handleOnSearchChange(e.target.value)}
+                  suffix={<BsSearch />}
+                  placeholder={`Search ${searchFormData.type} here`}
+               />
+            </div>
+         </Space>
       );
    };
 
@@ -208,12 +219,84 @@ function ManageProductTable(props) {
    };
 
    const productTableRangePicker = () => {
+      const onDateChange = (dates, dateStrings) => {
+         onSearch('rangeDate', [dates[0].toDate(), dates[1].toDate()]);
+      };
       return (
          <RangePicker
-            style={{ borderRadius: '7px', width: 230 }}
-            defaultValue={[moment().subtract(30, 'days'), moment()]}
+            allowClear={false}
+            className='productTableRangePicker'
+            defaultValue={[
+               searchFormData.rangeDate[0],
+               searchFormData.rangeDate[1],
+            ]}
             disabledDate={(current) => current > moment().endOf('days')}
+            onChange={onDateChange}
          />
+      );
+   };
+
+   const productTableStatus = () => {
+      return (
+         <div className='selectSearchType'>
+            <Select
+               defaultValue={searchFormData.status}
+               showArrow={false}
+               onChange={(value) => onSearch('status', value)}
+               dropdownStyle={{ borderRadius: 7 }}
+            >
+               <Option key='all'>
+                  <AppstoreOutlined />
+                  &nbsp;All
+               </Option>
+               <Option key='pending'>
+                  <ClockCircleOutlined />
+                  &nbsp;Pending
+               </Option>
+               <Option key='declined'>
+                  <CloseOutlined />
+                  &nbsp;Declined
+               </Option>
+               <Option key='approved'>
+                  <CheckOutlined />
+                  &nbsp;Approved
+               </Option>
+            </Select>
+         </div>
+      );
+   };
+
+   const productCreatedDateSort = () => {
+      return (
+         <div className='selectSearchType'>
+            <Select
+               defaultValue={searchFormData.sortDate}
+               showArrow={false}
+               onChange={(value) => onSearch('sortDate', value)}
+               dropdownStyle={{ borderRadius: 7 }}
+            >
+               <Option key='desc'>
+                  <ArrowDownOutlined />
+                  &nbsp;Date descending
+               </Option>
+               <Option key='asc'>
+                  <ArrowUpOutlined />
+                  &nbsp;Date ascending
+               </Option>
+            </Select>
+         </div>
+      );
+   };
+
+   const title = () => {
+      return (
+         <Row gutter={[10, 10]}>
+            <Col>{productTableSearchBar()}</Col>
+            <Col>{productTableRangePicker()}</Col>
+            <Col>{productTableStatus()}</Col>
+            <Col flex='auto'>{productCreatedDateSort()}</Col>
+            <Col>{productTablePagination()}</Col>
+         </Row>
       );
    };
 

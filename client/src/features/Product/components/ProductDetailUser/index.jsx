@@ -5,10 +5,10 @@ import {
 } from '@ant-design/icons';
 import { Avatar, Button, Col, Row, Skeleton, Space, Typography } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import conversationApi from '../../../../api/conversationApi';
+import { Link, useHistory } from 'react-router-dom';
+import conversationBeta1Api from '../../../../api/conversationBeta1Api';
 import './ProductDetailUser.scss';
 
 ProductDetailUser.propTypes = {
@@ -25,9 +25,10 @@ const { Text } = Typography;
 
 function ProductDetailUser(props) {
    const { productDetail, myStats } = props;
+   const history = useHistory();
 
    const userId = useSelector((state) => state.users.id);
-   const [sendMessage, setSendMessage] = useState();
+   // const [sendMessage, setSendMessage] = useState();
 
    const onClickSendMessage = async () => {
       try {
@@ -35,8 +36,11 @@ function ProductDetailUser(props) {
             senderId: userId,
             receiverId: productDetail.User.firebaseId,
          };
-         const response = await conversationApi.createConversation(data);
-         setSendMessage(response);
+         const response = await conversationBeta1Api.createConversation(data);
+         // console.log('response: ', response);
+         // setSendMessage(response);
+
+         history.push(`/messageBeta1/${response.id}`);
       } catch (error) {
          console.log(error);
       }
@@ -48,7 +52,7 @@ function ProductDetailUser(props) {
 
    return (
       <>
-         {sendMessage === undefined ? null : (
+         {/* {sendMessage === undefined ? null : (
             <Redirect
                to={{
                   pathname: '/messageBeta',
@@ -58,7 +62,7 @@ function ProductDetailUser(props) {
                   },
                }}
             />
-         )}
+         )} */}
          <Row span={24} className='user' align='middle'>
             {!productDetail.User?.photoURL || !productDetail.User?.username ? (
                <>
@@ -106,7 +110,7 @@ function ProductDetailUser(props) {
                            <Col span={8}>
                               <Space direction='vertical' size={4}>
                                  <Text className='titleScore'>
-                                    {myStats.user?._count.products}
+                                    {myStats.user?._count.products || 0}
                                  </Text>
                                  <Text className='titleRate'>Product</Text>
                               </Space>
@@ -122,7 +126,7 @@ function ProductDetailUser(props) {
                            <Col span={8}>
                               <Space direction='vertical' size={4}>
                                  <Text className='titleScore'>
-                                    {myStats.user?._count.orders}
+                                    {myStats.user?._count.orders || 0}
                                  </Text>
                                  <Text className='titleRate'>Orders</Text>
                               </Space>

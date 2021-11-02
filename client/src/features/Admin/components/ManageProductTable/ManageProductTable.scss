@@ -19,7 +19,6 @@
    }
 
    .input {
-      margin-right: 10px;
       width: 250px;
 
       .ant-input-affix-wrapper {
@@ -31,6 +30,11 @@
       .ant-select:not(.ant-select-customize-input) .ant-select-selector {
          border-radius: 7px;
       }
+   }
+
+   .productTableRangePicker {
+      border-radius: 7px;
+      width: 230px;
    }
 }
 

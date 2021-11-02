@@ -36,8 +36,13 @@ const postApi = {
       return axiosClient.get(url, { params });
    },
 
-   getPostDetail: (params) => {
-      const url = '/post/detail';
+   // getPostDetail: (params) => {
+   //    const url = '/post/detail';
+   //    return axiosClient.get(url, { params });
+   // },
+
+   getLatestPost: (params) => {
+      const url = '/post/latest';
       return axiosClient.get(url, { params });
    },
 
