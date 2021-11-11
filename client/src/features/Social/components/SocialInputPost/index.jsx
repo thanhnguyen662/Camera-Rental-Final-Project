@@ -65,6 +65,7 @@ function SocialInputPost(props) {
          products: selectProduct,
       };
       handleOnClickSubmit(formData);
+      setIsModalVisible(false);
    };
 
    const selectProductRender = (props) => {

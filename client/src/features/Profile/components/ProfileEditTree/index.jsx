@@ -16,7 +16,7 @@ function ProfileEditTree(props) {
             <Spin />
          ) : (
             <>
-               <div className='avatar'>
+               <div className='avatar' style={{ borderRadius: 10 }}>
                   <Row span={24}>
                      <Col span={6}>
                         <Avatar size={40} src={photoURL} />
@@ -30,7 +30,11 @@ function ProfileEditTree(props) {
                <Row span={24}>
                   <Menu
                      onClick={(e) => handleClick(e)}
-                     style={{ marginTop: 25 }}
+                     style={{
+                        marginTop: 25,
+                        borderRadius: 10,
+                        overflow: 'hidden',
+                     }}
                      defaultSelectedKeys={['1']}
                      defaultOpenKeys={['sub1']}
                      mode='inline'

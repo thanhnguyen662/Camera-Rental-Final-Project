@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import productApi from '../../../../api/productApi';
 import userApi from '../../../../api/userApi';
@@ -17,9 +17,11 @@ import { addProductToCart } from '../../productSlice';
 
 function ProductDetailPage(props) {
    const { slug } = useParams();
+   const history = useHistory();
    const dispatch = useDispatch();
 
    const userId = useSelector((state) => state.users.id);
+   const isUserLogging = localStorage.getItem('providerData') ? true : false;
 
    const [productDetail, setProductDetail] = useState();
    const [orderInToday, setOrderInToday] = useState([]);
@@ -59,19 +61,20 @@ function ProductDetailPage(props) {
    }, [slug]);
 
    useEffect(() => {
-      if (!userId) return;
+      if (!productDetail) return;
       const getOtherProductInShop = async () => {
          const response = await productApi.otherProductInShop({
             take: 5,
-            userId: userId,
+            userId: productDetail.User.firebaseId,
          });
          setOtherProducts(response);
       };
       getOtherProductInShop();
-   }, [userId]);
+   }, [productDetail]);
 
    const handleOnClickToAddProduct = async (product) => {
       try {
+         if (isUserLogging === false) return history.push('/account/login');
          const data = {
             firebaseId: userId,
             productId: product.id,
@@ -80,7 +83,7 @@ function ProductDetailPage(props) {
          };
 
          const response = await cartApi.addMoreProductToCart(data);
-         console.log('Add product to cart: ', response);
+         // console.log('Add product to cart: ', response);
 
          if (response.message === 'Product already in cart')
             return openNotificationWithIcon('error', response.message);

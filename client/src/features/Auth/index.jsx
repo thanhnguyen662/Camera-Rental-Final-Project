@@ -2,11 +2,13 @@ import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import SignPage from './pages/SignInPage';
 import RegisterPage from './pages/RegisterPage';
+// import { Layout } from 'antd';
 import { Switch, Route } from 'react-router-dom';
+
+// const { Content } = Layout;
 
 function Auth(props) {
    const match = useRouteMatch();
-   console.log('Auth: ', { match });
 
    return (
       <Switch>

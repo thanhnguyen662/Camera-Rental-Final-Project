@@ -1,0 +1,38 @@
+.login-form {
+   .ant-input-affix-wrapper {
+      border-radius: 10px;
+      line-height: 2.8;
+   }
+
+   .login-form-button {
+      border-radius: 10px;
+      height: 50px;
+      margin-bottom: 20px;
+   }
+
+   .registerLink {
+      font-weight: 500;
+      color: #a2abbe;
+      font-size: 14px;
+   }
+
+   u {
+      font-size: 14px;
+      font-weight: 500;
+   }
+
+   .loginFormLabel {
+      margin-bottom: 6px;
+      font-weight: 500;
+      font-size: 12px;
+   }
+}
+
+.loginFormAlert {
+   margin-bottom: 15px;
+
+   .ant-alert {
+      height: 40px;
+      border-radius: 10px;
+   }
+}

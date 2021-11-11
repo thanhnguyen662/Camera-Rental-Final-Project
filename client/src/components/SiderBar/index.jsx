@@ -1,5 +1,4 @@
 import {
-   ConsoleSqlOutlined,
    FileTextOutlined,
    HeartOutlined,
    HomeOutlined,
@@ -16,6 +15,8 @@ function SiderBar(props) {
 
    const { Sider } = Layout;
    const [collapsed, onCollapsed] = useState(true);
+   const isUserLogging = localStorage.getItem('providerData') ? true : false;
+
    // const reduxIncomingMessage = useSelector((state) => state.messages[0]);
    // const [badge, setBadge] = useState(false);
 
@@ -44,9 +45,7 @@ function SiderBar(props) {
             <Menu.Item key='1' icon={<HomeOutlined />} title='Home'>
                <Link to='/'>Home</Link>
             </Menu.Item>
-            <Menu.Item key='3' icon={<HeartOutlined />} title='Social'>
-               <Link to='/social'>Social</Link>
-            </Menu.Item>
+
             <Menu.Item key='2' icon={<BiMapPin />} title='Maps'>
                <Link to='/maps'>Maps</Link>
             </Menu.Item>
@@ -61,34 +60,43 @@ function SiderBar(props) {
             >
                <Link to='/messageBeta'>Message Beta</Link>
             </Menu.Item> */}
-
-            <Menu.Item key='11' icon={<MessageOutlined />} title='Maps'>
-               <Link to='/messageBeta1'>Beta1</Link>
-            </Menu.Item>
+            {isUserLogging === true && (
+               <>
+                  <Menu.Item key='3' icon={<HeartOutlined />} title='Social'>
+                     <Link to='/social'>Social</Link>
+                  </Menu.Item>
+                  <Menu.Item key='11' icon={<MessageOutlined />} title='Maps'>
+                     <Link to='/messageBeta1'>Message</Link>
+                  </Menu.Item>
+                  <Menu.Item
+                     key='8'
+                     icon={<FileTextOutlined />}
+                     title='Product Management'
+                  >
+                     <Link to='/manages/user/pending'>Product Management</Link>
+                  </Menu.Item>
+                  <Menu.Item
+                     key='7'
+                     icon={<InboxOutlined />}
+                     title='Shop Management'
+                  >
+                     <Link to='/manages/shop/revenue'>Shop Management</Link>
+                  </Menu.Item>
+               </>
+            )}
             {/* <Menu.Item
-               key='5'
-               icon={<FileTextOutlined />}
-               title='Product Management'
-            >
-               <Link to='/product/manage'>Product Management</Link>
-            </Menu.Item> */}
-            <Menu.Item
-               key='8'
-               icon={<FileTextOutlined />}
-               title='Product Management'
-            >
-               <Link to='/manages/user/pending'>Product Management</Link>
-            </Menu.Item>
+                  key='5'
+                  icon={<FileTextOutlined />}
+                  title='Product Management'
+               >
+                  <Link to='/product/manage'>Product Management</Link>
+               </Menu.Item> */}
             {/* <Menu.Item key='6' icon={<InboxOutlined />} title='Shop Management'>
-               <Link to='/manage'>Shop Management</Link>
-            </Menu.Item> */}
-
-            <Menu.Item key='7' icon={<InboxOutlined />} title='Shop Management'>
-               <Link to='/manages/shop/revenue'>Shop Management</Link>
-            </Menu.Item>
-            <Menu.Item key='9' icon={<ConsoleSqlOutlined />} title='Admin'>
-               <Link to='/admin/product'>Admin</Link>
-            </Menu.Item>
+                  <Link to='/manage'>Shop Management</Link>
+               </Menu.Item> */}
+            {/* <Menu.Item key='9' icon={<ConsoleSqlOutlined />} title='Admin'>
+                  <Link to='/admin/product'>Admin</Link>
+               </Menu.Item> */}
          </Menu>
       </Sider>
    );

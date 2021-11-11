@@ -27,7 +27,7 @@ const { Content } = Layout;
 
 function Routers(props) {
    const { profileIsExist } = props;
-
+   const isUserLogging = localStorage.getItem('providerData') ? true : false;
    return (
       <Router>
          <Switch>
@@ -36,7 +36,7 @@ function Routers(props) {
                <Redirect
                   to={{
                      pathname: '/account/register',
-                     state: { currentStep: 2 },
+                     state: { currentStep: 1 },
                   }}
                />
             )}
@@ -51,22 +51,32 @@ function Routers(props) {
                            <Home />
                         </Content>
                      </Route>
-
-                     <Route path='/social'>
-                        <Content style={{ margin: '25px 125px' }}>
-                           <Social />
-                        </Content>
-                     </Route>
-
                      <Route path='/product'>
                         <Content style={{ margin: '25px 125px' }}>
                            <Product />
                         </Content>
                      </Route>
-
                      <Route path='/search'>
                         <Content style={{ margin: '25px 125px' }}>
                            <Search />
+                        </Content>
+                     </Route>
+                     <Route path='/category'>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Category />
+                        </Content>
+                     </Route>
+                     <Route path='/maps'>
+                        <Content style={{ minHeight: 550, overflow: 'hidden' }}>
+                           <Maps />
+                        </Content>
+                     </Route>
+                     {isUserLogging === false && (
+                        <Redirect to='/account/login' />
+                     )}
+                     <Route path='/social'>
+                        <Content style={{ margin: '25px 125px' }}>
+                           <Social />
                         </Content>
                      </Route>
 
@@ -94,12 +104,6 @@ function Routers(props) {
                         </Content>
                      </Route>
 
-                     <Route path='/category'>
-                        <Content style={{ margin: '25px 125px' }}>
-                           <Category />
-                        </Content>
-                     </Route>
-
                      {/* <Route path='/message'>
                         <Message />
                      </Route> */}
@@ -110,12 +114,6 @@ function Routers(props) {
 
                      <Route path='/messageBeta1'>
                         <MessageBeta1 />
-                     </Route>
-
-                     <Route path='/maps'>
-                        <Content style={{ minHeight: 550, overflow: 'hidden' }}>
-                           <Maps />
-                        </Content>
                      </Route>
                   </Switch>
                </MainLayout>

@@ -78,7 +78,7 @@ function HomePage(props) {
             <ProductCard products={topRenting} />
          </div>
          <div>
-            <h1 style={{ marginTop: '70px' }}>Active Promotions</h1>
+            <h1 style={{ marginTop: '70px' }}>Latest Post</h1>
             <Promotion />
          </div>
          <div>
@@ -92,7 +92,7 @@ function HomePage(props) {
                next={() => handlePageChange()}
                hasMore={isMore}
                style={{ overflow: 'hidden' }}
-               endMessage={<div>End</div>}
+               // endMessage={<div>End</div>}
             >
                <ProductCard products={products} />
             </InfiniteScroll>

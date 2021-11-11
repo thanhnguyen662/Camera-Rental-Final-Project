@@ -1,6 +1,7 @@
 import { Avatar, Button, Col, Row, Typography } from 'antd';
 import React from 'react';
 // import PropTypes from 'prop-types';
+import { useHistory } from 'react-router';
 import './PromotionCard.scss';
 
 PromotionCard.propTypes = {};
@@ -9,7 +10,7 @@ const { Paragraph } = Typography;
 
 function PromotionCard(props) {
    const { latestPost } = props;
-   console.log('latestPost: ', latestPost[1]?.images[0]);
+   const history = useHistory();
 
    return (
       <>
@@ -33,7 +34,12 @@ function PromotionCard(props) {
                         >
                            {latestPost[0]?.caption}
                         </Paragraph>
-                        <Button className='buttonCard'>Shop Now</Button>
+                        <Button
+                           className='buttonCard'
+                           onClick={() => history.push('/social')}
+                        >
+                           View Now
+                        </Button>
                      </div>
                   </div>
                </Col>
@@ -52,7 +58,12 @@ function PromotionCard(props) {
                         >
                            {latestPost[1]?.caption}
                         </Paragraph>
-                        <Button className='buttonCard'>Shop Now</Button>
+                        <Button
+                           className='buttonCard'
+                           onClick={() => history.push('/social')}
+                        >
+                           View Now
+                        </Button>
                      </div>
                      <Row span={24} className='socialPostPhoto'>
                         <img src={latestPost[1]?.images[0]} alt='photos' />
@@ -77,7 +88,12 @@ function PromotionCard(props) {
                         >
                            {latestPost[2]?.caption}
                         </Paragraph>
-                        <Button className='buttonCard'>Shop Now</Button>
+                        <Button
+                           className='buttonCard'
+                           onClick={() => history.push('/social')}
+                        >
+                           View Now
+                        </Button>
                      </div>
                   </div>
                </Col>
@@ -96,7 +112,12 @@ function PromotionCard(props) {
                         >
                            {latestPost[3]?.caption}
                         </Paragraph>
-                        <Button className='buttonCard'>Shop Now</Button>
+                        <Button
+                           className='buttonCard'
+                           onClick={() => history.push('/social')}
+                        >
+                           View Now
+                        </Button>
                      </div>
                      <Row span={24} className='socialPostPhoto'>
                         <img src={latestPost[3]?.images[0]} alt='photos' />

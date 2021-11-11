@@ -80,11 +80,6 @@ class ProductController {
                      },
                   },
                   {
-                     orderStatusId: {
-                        equals: 3,
-                     },
-                  },
-                  {
                      paidAt: {
                         gte: new Date(req.query.date),
                      },
@@ -95,7 +90,17 @@ class ProductController {
                User: true,
             },
          });
-         return res.status(200).json(response);
+
+         const usersTryItToday = response.reduce((array, item) => {
+            if (!array.some((i) => i.firebaseId === item.User.firebaseId)) {
+               array.push({
+                  firebaseId: item.User.firebaseId,
+                  photoURL: item.User.photoURL,
+               });
+            }
+            return array;
+         }, []);
+         return res.status(200).json(usersTryItToday);
       } catch (error) {
          return next(error);
       }

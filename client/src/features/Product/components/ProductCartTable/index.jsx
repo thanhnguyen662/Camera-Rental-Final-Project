@@ -57,7 +57,11 @@ function ProductCartTable(props) {
          key: productInCart.Product?.id,
          width: 100,
          render: (record) => (
-            <Image src={record[0]} width={80} style={{ minHeight: 80 }} />
+            <Image
+               src={record[0]}
+               width={80}
+               style={{ minHeight: 80, objectFit: 'cover' }}
+            />
          ),
       },
       {

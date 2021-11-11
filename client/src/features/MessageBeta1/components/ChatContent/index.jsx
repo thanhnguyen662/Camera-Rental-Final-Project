@@ -90,14 +90,31 @@ function ChatContent(props) {
          socketMessage.conversationId !== conversationId
       )
          return;
-      setMessages((prev) => [
-         ...prev,
-         {
-            ...socketMessage,
-            conversationId: Number(socketMessage.conversationId),
-            user: socketMessage.sender,
-         },
-      ]);
+
+      // setMessages((prev) => [
+      //    ...prev,
+      //    {
+      //       ...socketMessage,
+      //       conversationId: Number(socketMessage.conversationId),
+      //       user: socketMessage.sender,
+      //    },
+      // ]);
+
+      setMessages((prev) => {
+         if (prev.length > 0) {
+            if (prev[prev.length - 1].createdAt !== socketMessage.createdAt) {
+               return [
+                  ...prev,
+                  {
+                     ...socketMessage,
+                     conversationId: Number(socketMessage.conversationId),
+                     user: socketMessage.sender,
+                  },
+               ];
+            }
+         }
+         return prev;
+      });
    }, [socketMessage, conversationId]);
 
    const onSendMessage = async (imageURL) => {

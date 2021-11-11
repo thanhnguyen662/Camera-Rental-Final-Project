@@ -19,7 +19,7 @@ import parse from 'html-react-parser';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
 import './ProductDetailDescription.scss';
 
@@ -40,6 +40,10 @@ const { Paragraph, Text } = Typography;
 
 function ProductDetailDescription(props) {
    const { productDetail, onClickToAddProduct, orderInToday } = props;
+
+   const history = useHistory();
+   const isUserLogging = localStorage.getItem('providerData') ? true : false;
+
    const [startDate, setStartDate] = useState('');
    const [endDate, setEndDate] = useState('');
    const [clickMap, setClickMap] = useState(false);
@@ -108,12 +112,12 @@ function ProductDetailDescription(props) {
                      </Col>
                      <Col>
                         <div className='qualityRate'>
-                           Rented: {productDetail.completed}
+                           Rented: {productDetail.completed || 0}
                         </div>
                      </Col>
                      <Col>
                         <div className='qualityRate'>
-                           Rating: {productDetail.qualityRate}
+                           Rating: {productDetail.qualityRate || 0}
                         </div>
                      </Col>
                   </Row>
@@ -145,6 +149,10 @@ function ProductDetailDescription(props) {
                                  moment().add(1, 'days'),
                                  moment().add(31, 'days'),
                               ],
+                              // Test: [
+                              //    moment().subtract(2, 'days'),
+                              //    moment().subtract(1, 'days'),
+                              // ],
                            }}
                            showTime
                            format='YYYY/MM/DD HH:mm'
@@ -159,7 +167,11 @@ function ProductDetailDescription(props) {
                         </Button>
                         <Button
                            className='locateButton'
-                           onClick={() => setClickLocate(true)}
+                           onClick={() => {
+                              if (isUserLogging === false)
+                                 return history.push('/account/login');
+                              setClickLocate(true);
+                           }}
                            icon={<AimOutlined />}
                         />
                      </Space>
@@ -169,7 +181,7 @@ function ProductDetailDescription(props) {
                         <Avatar.Group maxCount={4}>
                            {orderInToday.length > 0 ? (
                               orderInToday.map((o) => (
-                                 <Avatar src={o.User.photoURL} key={o.id} />
+                                 <Avatar src={o.photoURL} key={o.firebaseId} />
                               ))
                            ) : (
                               <Avatar icon={<UserOutlined />} />
@@ -186,7 +198,14 @@ function ProductDetailDescription(props) {
                      style={{ marginTop: 30 }}
                   >
                      <Col>
-                        <div className='card' onClick={() => setClickMap(true)}>
+                        <div
+                           className='card'
+                           onClick={() => {
+                              if (isUserLogging === false)
+                                 return history.push('/account/login');
+                              setClickMap(true);
+                           }}
+                        >
                            <img
                               src='https://firebasestorage.googleapis.com/v0/b/camera-rental-firbase.appspot.com/o/public%2FArtboard%201.png?alt=media&token=31b68b46-a498-4179-8fce-56652d472d0f'
                               alt='photos'

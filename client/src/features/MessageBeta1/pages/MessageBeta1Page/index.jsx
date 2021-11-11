@@ -55,6 +55,7 @@ function MessageBeta1page(props) {
       if (!userId) return;
       socket.current = io('ws://localhost:9900');
       socket.current.on('messageToReceiver', (message) => {
+         console.log('message: ', message);
          const action = newMessage({
             ...message,
             id: shortid.generate(),

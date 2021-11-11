@@ -1,9 +1,4 @@
-import {
-   EditOutlined,
-   LogoutOutlined,
-   TagsOutlined,
-   UserOutlined,
-} from '@ant-design/icons';
+import { LogoutOutlined, TagsOutlined, UserOutlined } from '@ant-design/icons';
 import {
    Avatar,
    Button,
@@ -147,9 +142,6 @@ function HeaderBar(props) {
       <Menu>
          <Menu.Item key='setting:1' icon={<UserOutlined />}>
             <Link to={`/profile/${userId}`}>Profile</Link>
-         </Menu.Item>
-         <Menu.Item key='setting:2' icon={<EditOutlined />}>
-            <Link to='/profile/edit'>Edit</Link>
          </Menu.Item>
          <Menu.Item key='setting:4' icon={<TagsOutlined />}>
             <Link to='/product/create'>Create Product</Link>

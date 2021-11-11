@@ -23,7 +23,7 @@ router.post(
    productController.createNewProduct
 );
 router.patch('/update', productController.updateProduct);
-router.get('/:productSlug', authMiddleware, productController.getProductDetail);
-router.get('/', authMiddleware, productController.getProducts);
+router.get('/:productSlug', productController.getProductDetail);
+router.get('/', productController.getProducts);
 
 module.exports = router;

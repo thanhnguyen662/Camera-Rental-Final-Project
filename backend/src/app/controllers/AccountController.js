@@ -3,6 +3,15 @@ const prisma = require('../models/prisma');
 class AccountController {
    addUserInfo = async (req, res, next) => {
       try {
+         const isUsernameExist = await prisma.user.findFirst({
+            where: {
+               username: req.body.username,
+            },
+         });
+
+         // if (isUsernameExist)
+         //    return res.json({ message: 'Username already exists' });
+
          const upsertUser = await prisma.user.upsert({
             create: {
                firebaseId: req.body.firebaseId,

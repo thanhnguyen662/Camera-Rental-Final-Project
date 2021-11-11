@@ -1,11 +1,4 @@
-import {
-   CameraOutlined,
-   SmileOutlined,
-   SolutionOutlined,
-   UserAddOutlined,
-   UserOutlined,
-} from '@ant-design/icons';
-import { Button, Layout, Steps } from 'antd';
+import { Alert, Button, Col, Row, Steps, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -15,18 +8,23 @@ import ProfileEditAvatarCard from '../../../Profile/components/ProfileEditAvatar
 import ProfileEditInfoCard from '../../../Profile/components/ProfileEditInfoCard';
 import ProfileEditProfileCard from '../../../Profile/components/ProfileEditProfileCard';
 import RegisterForm from '../../components/RegisterForm';
+import './RegisterPage.scss';
 
-const { Content } = Layout;
 const { Step } = Steps;
+const { Text } = Typography;
 
 function RegisterPage(props) {
    const location = useLocation();
    const { currentStep } = location.state || false;
+   console.log('currentStep: ', currentStep);
 
    const [defaultFileList, setDefaultFileList] = useState([]);
    const [url, setUrl] = useState('');
-   const [current, setCurrent] = useState(currentStep || 1);
+   const [current, setCurrent] = useState(currentStep || 0);
    const [userProfile, setUserProfile] = useState();
+   const [responseLoginMessage, setResponseLoginMessage] = useState('');
+   const [responseUsernameExist, setResponseUsernameExist] = useState('');
+
    const userEmail = useSelector((state) => state.users.email);
    const userName = useSelector((state) => state.users.name);
    const uid = useSelector((state) => state.users.id);
@@ -51,7 +49,6 @@ function RegisterPage(props) {
    //[FIREBASE] CHANGE ACCOUNT INFORMATION
    //Handle form from account edit in firebase
    const onFinish = async (values) => {
-      console.log('Received values of form: ', values);
       const currentUser = auth.currentUser;
       currentUser
          .updateProfile({
@@ -70,7 +67,6 @@ function RegisterPage(props) {
 
    //handle event create account with email & password in Firebase
    const handleRegisterFunction = async (values) => {
-      console.log('Values Register Form: ', values);
       try {
          await auth
             .createUserWithEmailAndPassword(values.email, values.password)
@@ -83,14 +79,14 @@ function RegisterPage(props) {
             console.log('Email was sent to your email');
          });
       } catch (error) {
-         console.log(error);
+         setResponseLoginMessage(error.code);
       }
    };
 
    // [DATABASE] CHANGE USER PROFILE
    // handle form data from edit profile form and call api
    const onProfileFinish = async (values) => {
-      console.log(values);
+      // console.log(values);
       try {
          const formValues = {
             firebaseId: uid,
@@ -107,10 +103,12 @@ function RegisterPage(props) {
          };
 
          const response = await userApi.addUserInfo(formValues);
+         if (response.message === 'Username already exists')
+            return setResponseUsernameExist(response.message);
          console.log(response);
          next();
       } catch (error) {
-         return console.log('Fail: ', error);
+         console.log('Fail: ', error);
       }
    };
 
@@ -207,167 +205,199 @@ function RegisterPage(props) {
       window.open(src);
    };
 
+   const isResponseLoginFormMessage = () => {
+      if (responseLoginMessage === 'auth/email-already-in-use')
+         return 'Email already in use.';
+      // if (responseLoginMessage === 'auth/user-not-found')
+      //    return 'User not found.';
+   };
+
    return (
       <>
-         <Content style={{ margin: '0 160px' }}>
-            <div
-               className='site-layout-background'
-               style={{ padding: 27, minHeight: 360, margin: '160px' }}
-            >
-               <Steps>
-                  {(current === 1 && (
-                     <Step
-                        status='process'
-                        title='Register'
-                        icon={<UserOutlined />}
-                     />
-                  )) || (
-                     <Step
-                        status='finish'
-                        title='Register'
-                        icon={<UserOutlined />}
-                     />
-                  )}
-                  {current === 2 ? (
-                     <Step
-                        status='process'
-                        title='Information'
-                        icon={<SolutionOutlined />}
-                     />
-                  ) : current > 2 ? (
-                     <Step
-                        status='finish'
-                        title='Information'
-                        icon={<SolutionOutlined />}
-                     />
-                  ) : (
-                     <Step
-                        status='wait'
-                        title='Information'
-                        icon={<SolutionOutlined />}
-                     />
-                  )}
-                  {current === 3 ? (
-                     <Step
-                        status='process'
-                        title='Profile'
-                        icon={<UserAddOutlined />}
-                     />
-                  ) : current > 3 ? (
-                     <Step
-                        status='finish'
-                        title='Profile'
-                        icon={<UserAddOutlined />}
-                     />
-                  ) : (
-                     <Step
-                        status='wait'
-                        title='Profile'
-                        icon={<UserAddOutlined />}
-                     />
-                  )}
+         <Row span={24} className='registerPage'>
+            <Col span={12}>
+               <div className='loginFormContainer'>
+                  <div className='loginFormHeader'>
+                     <div className='loginFormTitle'>
+                        <Text>Getting Started with Camera Rental</Text>
+                     </div>
+                     <div className='loginFormSub'>
+                        <Text>Non do minim reprehenderit et laborum</Text>
+                     </div>
+                  </div>
 
-                  {current === 4 ? (
-                     <Step
-                        status='process'
-                        title='Profile'
-                        icon={<CameraOutlined />}
-                     />
-                  ) : current > 4 ? (
-                     <Step
-                        status='finish'
-                        title='Profile'
-                        icon={<CameraOutlined />}
-                     />
-                  ) : (
-                     <Step
-                        status='wait'
-                        title='Profile'
-                        icon={<CameraOutlined />}
-                     />
-                  )}
-
-                  {current === 5 ? (
-                     <Step
-                        status='process'
-                        title='Done'
-                        icon={<SmileOutlined />}
-                     />
-                  ) : current > 5 ? (
-                     <Step
-                        status='finish'
-                        title='Done'
-                        icon={<SmileOutlined />}
-                     />
-                  ) : (
-                     <Step
-                        status='wait'
-                        title='Done'
-                        icon={<SmileOutlined />}
-                     />
-                  )}
-               </Steps>
-               {current >= 5 ? (
-                  <></>
-               ) : (
-                  <Button type='primary' onClick={() => next()}>
-                     Next
-                  </Button>
-               )}
-
-               {current <= 1 ? (
-                  <></>
-               ) : (
-                  <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                     Previous
-                  </Button>
-               )}
-               <div
-                  style={{
-                     paddingTop: 24,
-                     minHeight: 360,
-                  }}
-               >
-                  {current === 1 && (
-                     <RegisterForm
-                        handleRegisterFunction={handleRegisterFunction}
-                        next={next}
-                        prev={prev}
-                        current={current}
-                     />
-                  )}
-                  {current === 2 && (
-                     <ProfileEditInfoCard
-                        userEmail={userEmail}
-                        userName={userName}
-                        uid={uid}
-                        userData={userData}
-                        onFinish={onFinish}
-                     />
-                  )}
-                  {current === 3 && (
-                     <ProfileEditProfileCard
-                        onProfileFinish={onProfileFinish}
-                        userProfile={userProfile}
-                     />
-                  )}
-                  {current === 4 && (
-                     <ProfileEditAvatarCard
-                        uploadImage={uploadImage}
-                        handleOnChange={handleOnChange}
-                        defaultFileList={defaultFileList}
-                        onPreview={onPreview}
-                        photoURL={photoURL}
-                     />
-                  )}
-                  {current === 5 && (
-                     <p>Please check Email for verify your Account</p>
-                  )}
+                  <div className='loginForm'>
+                     <div className='registerFormSteps'>
+                        <Steps current={current}>
+                           <Step title='Register' />
+                           <Step title='Info' />
+                           <Step title='Profile' />
+                           <Step title='Avatar' />
+                        </Steps>
+                     </div>
+                     {responseLoginMessage && current === 0 && (
+                        <div className='loginFormAlert'>
+                           <Alert
+                              message={isResponseLoginFormMessage()}
+                              type='error'
+                              showIcon
+                           />
+                        </div>
+                     )}
+                     {responseUsernameExist && current === 2 && (
+                        <div className='loginFormAlert'>
+                           <Alert
+                              message={responseUsernameExist}
+                              type='error'
+                              showIcon
+                           />
+                        </div>
+                     )}
+                     <div>
+                        {current === 0 && (
+                           <RegisterForm
+                              handleRegisterFunction={handleRegisterFunction}
+                              next={next}
+                              prev={prev}
+                              current={current}
+                           />
+                        )}
+                        {current === 1 && (
+                           <ProfileEditInfoCard
+                              userEmail={userEmail}
+                              userName={userName}
+                              uid={uid}
+                              userData={userData}
+                              onFinish={onFinish}
+                           />
+                        )}
+                        {current === 2 && (
+                           <ProfileEditProfileCard
+                              onProfileFinish={onProfileFinish}
+                              userProfile={userProfile}
+                           />
+                        )}
+                        {current === 3 && (
+                           <ProfileEditAvatarCard
+                              uploadImage={uploadImage}
+                              handleOnChange={handleOnChange}
+                              defaultFileList={defaultFileList}
+                              onPreview={onPreview}
+                              photoURL={photoURL}
+                           />
+                        )}
+                        {current === 4 && (
+                           <>
+                              <p>Please check Email for verify your Account</p>
+                              <Button onClick={() => (window.location = '/')}>
+                                 Go back to home page
+                              </Button>
+                           </>
+                        )}
+                     </div>
+                  </div>
                </div>
-            </div>
-         </Content>
+            </Col>
+            <Col span={12}>
+               <div className='loginImage'></div>
+            </Col>
+         </Row>
       </>
    );
 }
 
 export default RegisterPage;
+
+//  <Steps>
+//                      {(current === 1 && (
+//                         <Step
+//                            status='process'
+//                            title='Register'
+//                            icon={<UserOutlined />}
+//                         />
+//                      )) || (
+//                         <Step
+//                            status='finish'
+//                            title='Register'
+//                            icon={<UserOutlined />}
+//                         />
+//                      )}
+//                      {current === 2 ? (
+//                         <Step
+//                            status='process'
+//                            title='Information'
+//                            icon={<SolutionOutlined />}
+//                         />
+//                      ) : current > 2 ? (
+//                         <Step
+//                            status='finish'
+//                            title='Information'
+//                            icon={<SolutionOutlined />}
+//                         />
+//                      ) : (
+//                         <Step
+//                            status='wait'
+//                            title='Information'
+//                            icon={<SolutionOutlined />}
+//                         />
+//                      )}
+//                      {current === 3 ? (
+//                         <Step
+//                            status='process'
+//                            title='Profile'
+//                            icon={<UserAddOutlined />}
+//                         />
+//                      ) : current > 3 ? (
+//                         <Step
+//                            status='finish'
+//                            title='Profile'
+//                            icon={<UserAddOutlined />}
+//                         />
+//                      ) : (
+//                         <Step
+//                            status='wait'
+//                            title='Profile'
+//                            icon={<UserAddOutlined />}
+//                         />
+//                      )}
+
+//                      {current === 4 ? (
+//                         <Step
+//                            status='process'
+//                            title='Profile'
+//                            icon={<CameraOutlined />}
+//                         />
+//                      ) : current > 4 ? (
+//                         <Step
+//                            status='finish'
+//                            title='Profile'
+//                            icon={<CameraOutlined />}
+//                         />
+//                      ) : (
+//                         <Step
+//                            status='wait'
+//                            title='Profile'
+//                            icon={<CameraOutlined />}
+//                         />
+//                      )}
+
+//                      {current === 5 ? (
+//                         <Step
+//                            status='process'
+//                            title='Done'
+//                            icon={<SmileOutlined />}
+//                         />
+//                      ) : current > 5 ? (
+//                         <Step
+//                            status='finish'
+//                            title='Done'
+//                            icon={<SmileOutlined />}
+//                         />
+//                      ) : (
+//                         <Step
+//                            status='wait'
+//                            title='Done'
+//                            icon={<SmileOutlined />}
+//                         />
+//                      )}
+//                   </Steps>

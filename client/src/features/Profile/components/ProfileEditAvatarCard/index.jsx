@@ -21,7 +21,7 @@ function ProfileEditAvatarCard(props) {
    const { uploadImage, handleOnChange, defaultFileList, onPreview } = props;
    return (
       <>
-         <Card hoverable={true}>
+         <Card hoverable={true} style={{ borderRadius: 10 }}>
             <div>
                <Upload
                   accept='image/*'

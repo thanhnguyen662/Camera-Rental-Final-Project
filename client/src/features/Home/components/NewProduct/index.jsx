@@ -62,6 +62,10 @@ function NewProduct(props) {
                                        preview={false}
                                        width={150}
                                        height={150}
+                                       style={{
+                                          borderRadius: 7,
+                                          objectFit: 'cover',
+                                       }}
                                     />
                                     <div className='productGirdParaGraph'>
                                        <Text className='productText'>
@@ -97,6 +101,10 @@ function NewProduct(props) {
                                        preview={false}
                                        width={120}
                                        height={120}
+                                       style={{
+                                          borderRadius: 7,
+                                          objectFit: 'cover',
+                                       }}
                                     />
                                     <div className='productGirdParaGraph'>
                                        <Text className='productText'>
@@ -132,6 +140,10 @@ function NewProduct(props) {
                                        preview={false}
                                        width={160}
                                        height={160}
+                                       style={{
+                                          borderRadius: 7,
+                                          objectFit: 'cover',
+                                       }}
                                     />
                                     <div className='productGirdParaGraph'>
                                        <Text className='productText'>
@@ -167,6 +179,10 @@ function NewProduct(props) {
                                        preview={false}
                                        width={150}
                                        height={150}
+                                       style={{
+                                          borderRadius: 7,
+                                          objectFit: 'cover',
+                                       }}
                                     />
                                     <div className='productGirdParaGraph'>
                                        <Text className='productText'>

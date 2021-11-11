@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Form, Input, Typography } from 'antd';
+import { Button, Card, Divider, Form, Input, Typography, Select } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -11,6 +11,7 @@ ProfileEditProfileCard.defaultProps = {
 };
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 const formItemLayout = {
    labelCol: {
@@ -47,7 +48,7 @@ function ProfileEditProfileCard(props) {
 
    return (
       <>
-         <Card hoverable={true}>
+         <Card hoverable={true} style={{ borderRadius: 10 }}>
             <Title level={3}>Profile Information</Title>
             <Text>Manage your Account Profile</Text>
             <Divider />
@@ -83,7 +84,10 @@ function ProfileEditProfileCard(props) {
                      <Input />
                   </Form.Item>
                   <Form.Item name='gender' label='Gender'>
-                     <Input />
+                     <Select defaultValue='Male'>
+                        <Option value='Male'>Male</Option>
+                        <Option value='Female'>Female</Option>
+                     </Select>
                   </Form.Item>
                   <Form.Item name='address' label='Address'>
                      <Input />

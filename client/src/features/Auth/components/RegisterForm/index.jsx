@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -10,6 +10,8 @@ RegisterForm.propTypes = {
 RegisterForm.defaultProps = {
    handleRegisterFunction: null,
 };
+
+const { Text } = Typography;
 
 function RegisterForm(props) {
    const { handleRegisterFunction } = props;
@@ -26,6 +28,9 @@ function RegisterForm(props) {
             initialValues={{ remember: true }}
             onFinish={onFinish}
          >
+            <div className='loginFormLabel'>
+               <Text>Email</Text>
+            </div>
             <Form.Item
                name='email'
                hasFeedback
@@ -42,6 +47,10 @@ function RegisterForm(props) {
                   type='email'
                />
             </Form.Item>
+
+            <div className='loginFormLabel'>
+               <Text>Password</Text>
+            </div>
             <Form.Item
                name='password'
                hasFeedback
@@ -59,6 +68,9 @@ function RegisterForm(props) {
                />
             </Form.Item>
 
+            <div className='loginFormLabel'>
+               <Text>Confirm Password</Text>
+            </div>
             <Form.Item
                name='confirm'
                dependencies={['password']}
@@ -91,6 +103,7 @@ function RegisterForm(props) {
 
             <Form.Item>
                <Button
+                  block
                   type='primary'
                   htmlType='submit'
                   className='login-form-button'

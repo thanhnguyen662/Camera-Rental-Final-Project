@@ -48,7 +48,7 @@ function ProfileEditInfoCard(props) {
 
    return (
       <>
-         <Card hoverable={true}>
+         <Card hoverable={true} style={{ borderRadius: 10 }}>
             <Title level={3}>Account Information</Title>
             <Text>Manage your account</Text>
             <Divider />
@@ -71,7 +71,7 @@ function ProfileEditInfoCard(props) {
                         {!userEmail ? <Spin /> : <Input disabled />}
                      </Form.Item>
 
-                     <Form.Item name='displayName' label='Nickname'>
+                     <Form.Item name='displayName' label='Name'>
                         <Input />
                      </Form.Item>
 

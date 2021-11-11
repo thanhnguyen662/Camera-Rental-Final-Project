@@ -142,8 +142,15 @@ function MapsPage(props) {
                const uniqueSet = new Set(data);
                const backToArray = [...uniqueSet];
 
+               openNotificationWithIcon(
+                  'success',
+                  'We find you near',
+                  `${backToArray.toString().replace(/,/g, ', ')}`,
+                  5
+               );
+
                setDataCollect(backToArray);
-               // console.log('get all district near me: ', backToArray);
+               // console.log('get all district near me: ', messageLocate);
             }
          });
       };

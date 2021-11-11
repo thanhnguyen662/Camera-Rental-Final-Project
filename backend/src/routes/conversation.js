@@ -3,7 +3,11 @@ const router = express.Router();
 const conversationController = require('../app/controllers/ConversationController');
 const authMiddleware = require('../firebase/middleware/auth-middleware');
 
-router.get('/beta/:userId', conversationController.findConversationBeta);
+router.get(
+   '/beta/:userId',
+   authMiddleware,
+   conversationController.findConversationBeta
+);
 router.get('/:userId', authMiddleware, conversationController.findConversation);
 router.post('/', authMiddleware, conversationController.createConversation);
 

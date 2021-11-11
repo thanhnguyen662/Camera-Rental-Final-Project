@@ -1,0 +1,77 @@
+.registerPage {
+   height: 100vh;
+
+   .loginFormContainer {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      .loginFormHeader {
+         width: 100%;
+         margin-left: 232px;
+         margin-bottom: 30px;
+
+         .loginFormTitle {
+            font-weight: bold;
+            font-size: 32px;
+            margin-bottom: 5px;
+
+            span {
+               color: #121f3e;
+            }
+         }
+
+         .loginFormSub {
+            span {
+               color: #acb3c4;
+               font-weight: 400;
+            }
+         }
+      }
+
+      .loginForm {
+         width: 70%;
+
+         .loginFormDivider {
+            margin: 30px 0;
+
+            span {
+               color: #a6a9b1;
+               font-size: 13px;
+            }
+         }
+
+         .loginByGoogle {
+            border: 1px solid #d9d9d9;
+            border-radius: 10px;
+
+            button {
+               padding: 0 16px;
+               box-shadow: none;
+               min-height: 0;
+            }
+
+            span {
+               color: #212d4a;
+               font-weight: bold;
+            }
+         }
+
+         .registerFormSteps {
+            margin-bottom: 25px;
+
+            .ant-steps-item-title {
+               font-size: 14px;
+               font-style: italic;
+            }
+         }
+      }
+   }
+
+   .loginImage {
+      height: 100%;
+      background: #5675f5;
+   }
+}

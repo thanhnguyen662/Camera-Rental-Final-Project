@@ -44,15 +44,15 @@ function PopupContent(props) {
             <Row className='popupRateRow'>
                <Col span={8}>
                   <FcLike className='popupRateIcon' />{' '}
-                  <h5>{pin.product.User.rate}</h5>
+                  <h5>{pin.product.User.rate || 0}</h5>
                </Col>
                <Col span={8}>
                   <FcApproval className='popupRateIcon' />{' '}
-                  <h5>{pin.product.qualityRate}</h5>
+                  <h5>{pin.product.qualityRate || 0}</h5>
                </Col>
                <Col span={8}>
                   <FcVoicePresentation className='popupRateIcon' />{' '}
-                  <h5>{pin.product.productComments?.length}</h5>
+                  <h5>{pin.product.productComments?.length || 0}</h5>
                </Col>
             </Row>
             <Row className='popupProduct'>
@@ -61,7 +61,7 @@ function PopupContent(props) {
                </Col>
                <Col span={13} className='popupProductDescription'>
                   <h2>{pin.product.name}</h2>
-                  <h3>${pin.product.price}</h3>
+                  <h3>{pin.product.price}</h3>
                </Col>
             </Row>
             <Row className='popupButtonRow'>

@@ -1183,8 +1183,16 @@ class OrderController {
 
    deletePendingOrder = async (req, res, next) => {
       try {
+         await prisma.orderItem.deleteMany({
+            where: {
+               orderId: req.body.orderId,
+            },
+         });
+
          const response = await prisma.order.delete({
-            where: { id: req.body.orderId },
+            where: {
+               id: req.body.orderId,
+            },
          });
          res.status(200).json(response);
       } catch (error) {
