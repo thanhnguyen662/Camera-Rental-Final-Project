@@ -24,11 +24,12 @@ class AccountController {
                photoURL: String(req.body.photoURL),
                username: req.body.username,
                phoneNumber: req.body.phoneNumber,
+               rate: 5,
 
                userStats: {
                   create: {
-                     come: 0,
-                     success: 0,
+                     come: 100,
+                     success: 100,
                      totalOrder: 0,
                   },
                },

@@ -71,6 +71,10 @@ function Routers(props) {
                            <Maps />
                         </Content>
                      </Route>
+                     <Route path='/messageBeta1'>
+                        <MessageBeta1 />
+                     </Route>
+
                      {isUserLogging === false && (
                         <Redirect to='/account/login' />
                      )}
@@ -111,10 +115,6 @@ function Routers(props) {
                      {/* <Route path='/messageBeta'>
                         <MessageBeta />
                      </Route> */}
-
-                     <Route path='/messageBeta1'>
-                        <MessageBeta1 />
-                     </Route>
                   </Switch>
                </MainLayout>
             </Route>

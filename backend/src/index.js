@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 4000;
+// const port = 4000;
 const route = require('./routes');
 // const passport = require('passport');
 const cors = require('cors');
@@ -26,8 +26,10 @@ app.use(express.json());
 
 // app.use(passport.initialize());
 
+const PORT = process.env.PORT || 4000;
+
 route(app);
 
-app.listen(port, () => {
-   console.log(`listening on http://localhost:${port}`);
+app.listen(PORT, () => {
+   console.log(`listening on http://localhost:${PORT}`);
 });

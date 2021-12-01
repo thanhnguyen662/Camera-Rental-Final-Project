@@ -19,6 +19,7 @@ import parse from 'html-react-parser';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import priceFormat from '../../../../utils/PriceFormat';
 import './ProductDetailDescription.scss';
@@ -48,6 +49,7 @@ function ProductDetailDescription(props) {
    const [endDate, setEndDate] = useState('');
    const [clickMap, setClickMap] = useState(false);
    const [clickLocate, setClickLocate] = useState(false);
+   const currentUserId = useSelector((state) => state.users.id);
 
    const onChange = (dates, dateStrings) => {
       if (!dates || !dateStrings) return;
@@ -74,7 +76,12 @@ function ProductDetailDescription(props) {
       );
    }
 
-   const disable = (!startDate || !endDate) && { disabled: true };
+   const disableAddToCartButton = () => {
+      if (!startDate || !endDate) return { disabled: true };
+      if (currentUserId === productDetail.User.firebaseId)
+         return { disabled: true };
+   };
+
    return (
       <>
          {!productDetail.name ||
@@ -149,10 +156,10 @@ function ProductDetailDescription(props) {
                                  moment().add(1, 'days'),
                                  moment().add(31, 'days'),
                               ],
-                              // Test: [
-                              //    moment().subtract(2, 'days'),
-                              //    moment().subtract(1, 'days'),
-                              // ],
+                              Test: [
+                                 moment().subtract(2, 'days'),
+                                 moment().subtract(1, 'days'),
+                              ],
                            }}
                            showTime
                            format='YYYY/MM/DD HH:mm'
@@ -161,7 +168,7 @@ function ProductDetailDescription(props) {
                         <Button
                            className='addButton'
                            onClick={() => onClickAdd(productDetail)}
-                           {...disable}
+                           {...disableAddToCartButton()}
                         >
                            Add to Cart
                         </Button>

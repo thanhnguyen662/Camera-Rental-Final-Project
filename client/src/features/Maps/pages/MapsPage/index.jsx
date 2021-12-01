@@ -145,8 +145,7 @@ function MapsPage(props) {
                openNotificationWithIcon(
                   'success',
                   'We find you near',
-                  `${backToArray.toString().replace(/,/g, ', ')}`,
-                  5
+                  `${backToArray.toString().replace(/,/g, ', ')}`
                );
 
                setDataCollect(backToArray);

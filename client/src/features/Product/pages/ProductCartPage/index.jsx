@@ -42,7 +42,6 @@ function ProductCardPage(props) {
    const handleOnClickRemoveItem = async (product) => {
       const action = removeProductFromCart(product);
       dispatch(action);
-
       try {
          const data = {
             firebaseId: userId,
@@ -74,6 +73,7 @@ function ProductCardPage(props) {
    };
 
    const handleChangeRowSelection = (selectedRows) => {
+      // console.log('selectedRows: ', selectedRows);
       setSelectRows(selectedRows);
    };
 
@@ -91,6 +91,10 @@ function ProductCardPage(props) {
                'Created',
                'Order created successfully'
             );
+            response.deleteItemsInCart?.map((i) => {
+               const action = removeProductFromCart(i);
+               return dispatch(action);
+            });
             return history.push('/manages/user/pending');
          }
       } catch (error) {

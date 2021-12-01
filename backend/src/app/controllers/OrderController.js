@@ -69,7 +69,24 @@ class OrderController {
                },
             });
          });
-         return res.status(200).json({ message: 'Create Order Success' });
+
+         const promises = orderData.map(async (i) => {
+            const deleteData = await prisma.cart.delete({
+               where: {
+                  id: Number(i.id),
+               },
+            });
+            return deleteData;
+         });
+
+         const result = await Promise.all(promises);
+
+         return res
+            .status(200)
+            .json({
+               message: 'Create Order Success',
+               deleteItemsInCart: result,
+            });
       } catch (error) {
          return next(error);
       }

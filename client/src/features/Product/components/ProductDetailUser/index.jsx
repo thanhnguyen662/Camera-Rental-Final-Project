@@ -29,9 +29,12 @@ function ProductDetailUser(props) {
 
    const userId = useSelector((state) => state.users.id);
    // const [sendMessage, setSendMessage] = useState();
+   const isUserLogging = localStorage.getItem('providerData') ? true : false;
 
    const onClickSendMessage = async () => {
       try {
+         if (isUserLogging === false) return history.push('/account/login');
+
          const data = {
             senderId: userId,
             receiverId: productDetail.User.firebaseId,

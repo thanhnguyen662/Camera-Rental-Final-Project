@@ -1,5 +1,5 @@
 import { ExpansionPanel, Sidebar } from '@chatscope/chat-ui-kit-react';
-import { Image, Space } from 'antd';
+import { Col, Image, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { storage } from '../../../../firebase';
@@ -38,17 +38,18 @@ function SidebarToolbox(props) {
       <>
          <Sidebar position='right'>
             <ExpansionPanel title='Media' open={true}>
-               <Space>
+               <Row span={24} gutter={[2, 2]}>
                   {imageList?.map((url) => (
-                     <Image
-                        key={url}
-                        src={url}
-                        width={60}
-                        height={60}
-                        style={{ objectFit: 'cover' }}
-                     />
+                     <Col span={6} key={url}>
+                        <Image
+                           src={url}
+                           width={60}
+                           height={60}
+                           style={{ objectFit: 'cover' }}
+                        />
+                     </Col>
                   ))}
-               </Space>
+               </Row>
             </ExpansionPanel>
          </Sidebar>
       </>

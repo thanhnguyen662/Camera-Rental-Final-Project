@@ -123,7 +123,7 @@ function HeaderBar(props) {
       if (location.pathname.split('/')[1] === 'messageBeta1') return;
       openNotification(socketMessage);
       // eslint-disable-next-line
-   }, [socketMessage, location]);
+   }, [socketMessage]);
 
    async function onLogoutButtonClick() {
       try {
