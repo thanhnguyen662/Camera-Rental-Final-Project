@@ -1,4 +1,4 @@
-import { Alert, Button, Col, Row, Steps, Typography } from 'antd';
+import { Alert, Button, Col, Image, Row, Steps, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -214,7 +214,7 @@ function RegisterPage(props) {
 
    return (
       <>
-         <Row span={24} className='registerPage'>
+         <Row span={24} className='registerPage' style={{ overflow: 'hidden' }}>
             <Col span={12}>
                <div className='loginFormContainer'>
                   <div className='loginFormHeader'>
@@ -299,7 +299,12 @@ function RegisterPage(props) {
                </div>
             </Col>
             <Col span={12}>
-               <div className='loginImage'></div>
+               <Image
+                  className='loginImage'
+                  src='https://mir-s3-cdn-cf.behance.net/project_modules/fs/667234114853471.604373d7c7f6c.png'
+                  preview={false}
+                  style={{ objectFit: 'cover' }}
+               />
             </Col>
          </Row>
       </>

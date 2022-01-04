@@ -4,6 +4,7 @@ import {
    Button,
    Col,
    Dropdown,
+   Image,
    Layout,
    Menu,
    notification,
@@ -176,7 +177,13 @@ function HeaderBar(props) {
             justify='space-around'
             align='middle'
          >
-            <Col flex='auto'>LOGO</Col>
+            <Col flex='auto' style={{ display: 'flex', alignItems: 'center' }}>
+               <Image
+                  preview={false}
+                  width='180px'
+                  src='https://firebasestorage.googleapis.com/v0/b/camera-rental-firbase.appspot.com/o/logo-camera-rental.png?alt=media&token=4b701a10-7354-4509-a1bf-dea87af804c8'
+               />
+            </Col>
             {loginStatus === false ? (
                <Col>
                   <>

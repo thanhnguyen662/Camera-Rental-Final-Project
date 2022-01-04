@@ -81,12 +81,10 @@ class OrderController {
 
          const result = await Promise.all(promises);
 
-         return res
-            .status(200)
-            .json({
-               message: 'Create Order Success',
-               deleteItemsInCart: result,
-            });
+         return res.status(200).json({
+            message: 'Create Order Success',
+            deleteItemsInCart: result,
+         });
       } catch (error) {
          return next(error);
       }
@@ -980,6 +978,7 @@ class OrderController {
 
          const calculateComeRate =
             (paidAtOrder / filterExcludePendingAcceptShopDecline.length) * 100;
+         // console.log('calculateComeRate: ', calculateComeRate);
 
          await prisma.userStat.update({
             where: {
@@ -989,6 +988,8 @@ class OrderController {
                come: parseFloat(calculateComeRate.toFixed(1)),
             },
          });
+
+         return res.status(200).json({ message: 'OK' });
       } catch (error) {
          console.log(error);
       }
@@ -1021,6 +1022,7 @@ class OrderController {
          where: { userId: req.body.userId },
          data: { success: parseInt(successRate.toFixed(1)) },
       });
+      return res.status(200).json({ message: 'OK' });
    };
 
    getOrderById = async (req, res, next) => {

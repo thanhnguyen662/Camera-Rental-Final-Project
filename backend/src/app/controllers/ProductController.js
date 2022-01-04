@@ -1,6 +1,7 @@
 const prisma = require('../models/prisma');
 const slugify = require('slugify');
 const shortid = require('shortid');
+const moment = require('moment');
 
 class ProductController {
    getProducts = async (req, res, next) => {
@@ -81,7 +82,17 @@ class ProductController {
                   },
                   {
                      paidAt: {
-                        gte: new Date(req.query.date),
+                        gte: moment(
+                           new Date(
+                              new Date().getFullYear(),
+                              new Date().getMonth(),
+                              new Date().getDate()
+                           )
+                        )
+                           .utcOffset(7)
+                           .toDate(),
+                        // gte: moment(req.query.date).utcOffset(7).toDate(),
+                        // gte: new Date(req.query.date),
                      },
                   },
                ],
@@ -90,6 +101,25 @@ class ProductController {
                User: true,
             },
          });
+
+         // const testDate = moment(
+         //    new Date(
+         //       new Date().getFullYear(),
+         //       new Date().getMonth(),
+         //       new Date().getDate()
+         //    )
+         // )
+         //    .utcOffset(7)
+         //    .toDate();
+         // const newDate = moment(req.query.date).utcOffset(7).toDate();
+         // const isBefore = moment(newDate).isSame(testDate);
+
+         // console.log({
+         //    testDate,
+         //    newDate,
+         //    isBefore,
+         //    test: moment(newDate).format('DD.MM.YYYY'),
+         // });
 
          const usersTryItToday = response.reduce((array, item) => {
             if (!array.some((i) => i.firebaseId === item.User.firebaseId)) {

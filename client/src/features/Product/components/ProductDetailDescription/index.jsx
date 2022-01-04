@@ -14,6 +14,7 @@ import {
    Skeleton,
    Space,
    Typography,
+   Tooltip,
 } from 'antd';
 import parse from 'html-react-parser';
 import moment from 'moment';
@@ -41,6 +42,7 @@ const { Paragraph, Text } = Typography;
 
 function ProductDetailDescription(props) {
    const { productDetail, onClickToAddProduct, orderInToday } = props;
+   console.log('productDetail: ', productDetail);
 
    const history = useHistory();
    const isUserLogging = localStorage.getItem('providerData') ? true : false;
@@ -172,15 +174,20 @@ function ProductDetailDescription(props) {
                         >
                            Add to Cart
                         </Button>
-                        <Button
-                           className='locateButton'
-                           onClick={() => {
-                              if (isUserLogging === false)
-                                 return history.push('/account/login');
-                              setClickLocate(true);
-                           }}
-                           icon={<AimOutlined />}
-                        />
+                        <Tooltip
+                           placement='topLeft'
+                           title={`${productDetail?.pins[0].address} ${productDetail?.pins[0].ward} ${productDetail?.pins[0].district} ${productDetail?.pins[0].city}`}
+                        >
+                           <Button
+                              className='locateButton'
+                              onClick={() => {
+                                 if (isUserLogging === false)
+                                    return history.push('/account/login');
+                                 setClickLocate(true);
+                              }}
+                              icon={<AimOutlined />}
+                           />
+                        </Tooltip>
                      </Space>
                   </Row>
                   <Row className='avatarGroup'>

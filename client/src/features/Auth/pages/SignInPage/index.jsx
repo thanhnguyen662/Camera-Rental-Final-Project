@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import LoginForm from '../../components/LoginForm';
 import { auth } from '../../../../firebase';
-import { Col, Divider, Row, Typography } from 'antd';
+import { Col, Divider, Image, Row, Typography } from 'antd';
 import './SignInPage.scss';
 
 // Configure FirebaseUI.
@@ -35,7 +35,7 @@ function SignInPage(props) {
 
    return (
       <>
-         <Row span={24} className='signInPage'>
+         <Row span={24} className='signInPage' style={{ overflow: 'hidden' }}>
             <Col span={12}>
                <div className='loginFormContainer'>
                   <div className='loginFormHeader'>
@@ -66,7 +66,12 @@ function SignInPage(props) {
                </div>
             </Col>
             <Col span={12}>
-               <div className='loginImage'></div>
+               <Image
+                  className='loginImage'
+                  src='https://mir-s3-cdn-cf.behance.net/project_modules/fs/667234114853471.604373d7c7f6c.png'
+                  preview={false}
+                  style={{ objectFit: 'cover' }}
+               />
             </Col>
          </Row>
       </>
